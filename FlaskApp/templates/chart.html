@@ -14,8 +14,8 @@
 
 		data = {
                     datasets: [{
-                    	data: [1, 9, 7],
-			backgroundColor: ['red', 'green', 'blue'],
+                    	data: [1, 1, 1, 1, 1, 1, 1],
+			backgroundColor: ['red', 'green', 'blue', 'black', 'magenta', 'yellow', 'orange'],
                     }], 
 		}
 
@@ -24,8 +24,15 @@
 		}
 
     	        function changeData() {
-		    document.getElementById('container').innerHTML = 'lolol'
-    	    	    data.datasets[0]['data'] = [4, 1, 9];
+    		    data.datasets[0]['data'] = [
+		        Math.random() * 2 * data.datasets[0]['data'][0], 
+		        Math.random() * 2 * data.datasets[0]['data'][1], 
+		        Math.random() * 2 * data.datasets[0]['data'][2], 
+		        Math.random() * 2 * data.datasets[0]['data'][3], 
+		        Math.random() * 2 * data.datasets[0]['data'][4], 
+		        Math.random() * 2 * data.datasets[0]['data'][5], 
+		        Math.random() * 2 * data.datasets[0]['data'][6], 
+		    ];
 		    chart.update()
     	        }	
 	
