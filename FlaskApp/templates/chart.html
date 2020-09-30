@@ -24,7 +24,7 @@
 		}
 
     	        function changeData() {
-		    document.getElementById('container').innerHTML = 'lolol'
+                    document.getElementById('container').innerHTML = '{{ ayy }}'
     	    	    data.datasets[0]['data'] = [4, 1, 9];
 		    chart.update()
     	        }	
@@ -33,6 +33,6 @@
                 var chart = new Chart(ctx, { type: 'pie', data: data, options: options })
             </script>
         </div>
-	<button onclick="changeData()">change data</button>
+        <button onclick="changeData()">change data {{ ayy }}</button>
     </body>
 </html>
