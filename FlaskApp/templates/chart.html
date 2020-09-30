@@ -24,6 +24,7 @@
 		}
 
     	        function changeData() {
+                    document.getElementById('container').innerHTML = '{{ ayy }}'
     		    data.datasets[0]['data'] = [
 		        Math.random() * 2 * data.datasets[0]['data'][0], 
 		        Math.random() * 2 * data.datasets[0]['data'][1], 
@@ -40,6 +41,6 @@
                 var chart = new Chart(ctx, { type: 'pie', data: data, options: options })
             </script>
         </div>
-	<button onclick="changeData()">change data</button>
+        <button onclick="changeData()">change data {{ ayy }}</button>
     </body>
 </html>

@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def chart():
-    return render_template('chart.html')
+    return render_template('chart.html', **{'ayy': 'ayy'})
 
 
 if __name__ == '__main__':
