@@ -5,8 +5,8 @@ app = Flask(__name__)
 
 
 @app.route('/')
-def hello():
-    return render_template('./templates/test.html')
+def chart():
+    return render_template('chart.html')
 
 
 if __name__ == '__main__':
