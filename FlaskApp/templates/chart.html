@@ -1,11 +1,24 @@
 <html>
    <head>
        <title>mader.xyz</title>
+       <script src=https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js></script>
+       <script src=https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css></script>
    </head> 
    <body>
        Hello world!
-       <script>
-           Date()
-       </script>
+       <canvas id="chart" width=400 height=400></canvas>
+        <script>
+            ctx = document.getElementById('chart') 
+            var chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['red', 'green', 'blue'],
+                    datasets: {
+                        label: 'ayy',
+                        data: [1, 2, 3],
+                    }
+                }
+            })
+        </script>
    </body>
 </html>
