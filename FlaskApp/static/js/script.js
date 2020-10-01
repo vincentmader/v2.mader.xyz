@@ -4,8 +4,8 @@ const ctx = canvas.getContext("2d");
 const keys = [];
 
 const player = {
-  x: 0,
-  y: 0,
+  x: canvas.width / 2,
+  y: canvas.height / 2,
   width: 32,
   height: 48,
   frameX: 0,
@@ -15,7 +15,7 @@ const player = {
 };
 
 var playerSprite = new Image();
-playerSprite.src = "/static/media/sprites/henryjones.png";
+playerSprite.src = "/static/media/sprites/sallah.png";
 const background = new Image();
 background.src = "/static/media/background.png";
 
