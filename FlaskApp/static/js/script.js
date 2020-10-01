@@ -14,8 +14,8 @@ const player = {
   moving: false,
 };
 
-const playerSprite = new Image();
-playerSprite.src = "/static/media/darthvader.png";
+var playerSprite = new Image();
+playerSprite.src = "/static/media/sprites/henryjones.png";
 const background = new Image();
 background.src = "/static/media/background.png";
 
@@ -24,14 +24,23 @@ function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH) {
 }
 
 window.addEventListener("keydown", function (e) {
-  // alert(e.key);
   keys[e.keyCode] = true;
-  // alert(keys);
   player.moving = true;
 });
 window.addEventListener("keyup", function (e) {
   delete keys[e.keyCode];
   player.moving = false;
+});
+window.addEventListener("click", function (e) {
+  const characters = [
+    "darthvader",
+    "sallah",
+    "stormtrooper",
+    "henryjones",
+    "obiwan1",
+  ];
+  var random_char = characters[Math.floor(Math.random() * characters.length)];
+  playerSprite.src = "/static/media/sprites/" + random_char + ".png";
 });
 
 function movePlayer() {
@@ -61,28 +70,6 @@ function handlePlayerFrame() {
   if (player.frameX < 3 && player.moving == true) player.frameX++;
   else player.frameX = 0;
 }
-
-// playerSprite.src = "tuskenraider";
-
-// function animate() {
-//   ctx.clearRect(0, 0, canvas.width, canvas.height);
-//   ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-//   drawSprite(
-//     playerSprite,
-//     player.width * player.frameX,
-//     player.height * player.frameY,
-//     player.width,
-//     player.height,
-//     player.x,
-//     player.y,
-//     1.5 * player.width,
-//     player.height
-//   );
-//   movePlayer();
-//   handlePlayerFrame();
-//   requestAnimationFrame(animate);
-// }
-// animate();
 
 let fps, fpsInterval, startTime, now, then, elapsed;
 function startAnimating(fps) {
