@@ -4,6 +4,7 @@ const ctx = canvas.getContext("2d");
 const keys = [];
 
 const player = {
+  character: "sallah",
   x: 0,
   y: 0,
   z: 0,
@@ -31,7 +32,7 @@ const player = {
 };
 
 var playerSprite = new Image();
-playerSprite.src = "/static/media/sprites/sallah.png";
+playerSprite.src = "/static/media/sprites/" + player.character + ".png";
 const background = new Image();
 background.src = "/static/media/background.png";
 const shadow = new Image();
@@ -73,8 +74,17 @@ window.addEventListener("click", function (e) {
     "henryjones",
     "obiwan1",
   ];
-  var random_char = characters[Math.floor(Math.random() * characters.length)];
-  playerSprite.src = "/static/media/sprites/" + random_char + ".png";
+  for (let idx = 0; idx < characters.length; idx++) {
+    if (player.character == characters[idx]) {
+      if (idx + 1 < characters.length) {
+        character = characters[idx + 1];
+      } else {
+        character = characters[0];
+      }
+    }
+  }
+  player.character = character;
+  playerSprite.src = "/static/media/sprites/" + character + ".png";
 });
 
 function movePlayer() {
