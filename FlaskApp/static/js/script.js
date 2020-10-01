@@ -24,12 +24,16 @@ function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH) {
 }
 
 window.addEventListener("keydown", function (e) {
+  if (keys[37] || keys[38] || keys[39] || keys[40]) {
+    player.moving = true;
+  }
   keys[e.keyCode] = true;
-  player.moving = true;
 });
 window.addEventListener("keyup", function (e) {
+  if (keys[37] || keys[38] || keys[39] || keys[40]) {
+    player.moving = false;
+  }
   delete keys[e.keyCode];
-  player.moving = false;
 });
 window.addEventListener("click", function (e) {
   const characters = [
