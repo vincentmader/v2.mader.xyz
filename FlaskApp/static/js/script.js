@@ -34,6 +34,8 @@ var playerSprite = new Image();
 playerSprite.src = "/static/media/sprites/sallah.png";
 const background = new Image();
 background.src = "/static/media/background.png";
+const shadow = new Image();
+shadow.src = "/static/media/shadow.png";
 
 function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH) {
   ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
@@ -120,6 +122,17 @@ function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
     drawSprite(
+      shadow,
+      0,
+      0,
+      player.width,
+      player.height,
+      player.x + player.width / 4 + canvas.width / 2,
+      -(player.y - 0.8 * player.height) + canvas.height / 2,
+      player.width,
+      player.height
+    );
+    drawSprite(
       playerSprite,
       player.width * player.frameX,
       player.height * player.frameY,
@@ -127,7 +140,7 @@ function animate() {
       player.height,
       player.x + canvas.width / 2,
       -(player.y + player.z) + canvas.height / 2,
-      1.5 * player.width,
+      1.2 * player.width,
       player.height
     );
     movePlayer();
