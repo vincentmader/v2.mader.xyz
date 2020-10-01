@@ -9,15 +9,19 @@ app = Flask(__name__)
 # def chart():
 #     return render_template('chart.html', **{'ayy': 'ayy'})
 
-
 @app.route('/')
-def game():
-    # style_sheet = send_from_directory('templates', 'style.css')
-    # game = send_from_directory('templates', 'script.js')
-    # print(game)
+def index():
+    return render_template('index.html')
 
-    # return render_template('game.html', game=game, style_sheet=style_sheet)
-    return render_template('game.html')
+
+@app.route('/desert_game/')
+def desert_game():
+    return render_template('desert_game.html')
+
+
+@app.route('/solar_system/')
+def solar_system():
+    return render_template('solar_system.html')
 
 
 if __name__ == '__main__':
