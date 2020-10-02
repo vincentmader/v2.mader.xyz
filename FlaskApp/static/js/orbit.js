@@ -120,6 +120,16 @@ img_earth.src = "/static/media/earth.png";
 //   if (player.jumping) player.frameX = 1;
 // }
 
+var nuked = false;
+const img_nuke = new Image();
+let nukeFrameCounter = 0;
+window.addEventListener("keydown", function (e) {
+  if (e.key == " ") {
+    img_nuke.src = "/static/media/small_nukey.png";
+    nuked = !nuked;
+  }
+});
+
 const earth = {
   x: 1,
   y: 0,
@@ -213,6 +223,10 @@ function animate() {
     // movePlayer();
     // player.applyGravity();
     // handlePlayerFrame();
+    if (nuked) {
+      // drawImage(img_nuke, earth.x + 0.1, earth.y - 0.25, 20, 20);
+      drawImage(img_nuke, sun.x + 0.015, sun.y - 0.4, 40, 20);
+    }
     requestAnimationFrame(animate);
   }
 }
