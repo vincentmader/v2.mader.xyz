@@ -1,0 +1,41 @@
+#canvas1 {
+  width: 600px;
+  height: 600px;
+  border: 10px solid gray;
+  background: black;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#canvas2 {
+  width: 600px;
+  height: 600px;
+  border: 10px solid gray;
+  background: black;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#square_canvas {
+  width: 600px;
+  height: 600px;
+  border: 10px solid gray;
+  background: black;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#body1 {
+  background-color: #333333;
+}
+
+/* #div1 { */
+/*   background-color: red; */
+/*   border: 1px solid green; */
+/* } */
