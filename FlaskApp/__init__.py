@@ -24,5 +24,15 @@ def solar_system():
     return render_template('solar_system.html')
 
 
+@app.route('/balls/')
+def balls():
+    return render_template('balls.html')
+
+
+@app.route('/molecules/')
+def molecules():
+    return render_template('molecules.html')
+
+
 if __name__ == '__main__':
     app.run()
