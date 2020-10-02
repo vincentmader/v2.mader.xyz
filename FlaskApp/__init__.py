@@ -14,14 +14,14 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/desert_game/')
-def desert_game():
-    return render_template('desert_game.html')
+@app.route('/tatooine/')
+def tatooine():
+    return render_template('tatooine.html')
 
 
-@app.route('/solar_system/')
-def solar_system():
-    return render_template('solar_system.html')
+@app.route('/orbit/')
+def orbit():
+    return render_template('orbit.html')
 
 
 @app.route('/balls/')
@@ -29,9 +29,9 @@ def balls():
     return render_template('balls.html')
 
 
-@app.route('/molecules/')
-def molecules():
-    return render_template('molecules.html')
+@app.route('/boltzmann/')
+def boltzmann():
+    return render_template('boltzmann.html')
 
 
 if __name__ == '__main__':
