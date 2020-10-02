@@ -34,5 +34,10 @@ def boltzmann():
     return render_template('boltzmann.html')
 
 
+@app.route('/spaceship/')
+def spaceship():
+    return render_template('spaceship.html')
+
+
 if __name__ == '__main__':
     app.run()
