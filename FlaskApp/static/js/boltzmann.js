@@ -25,8 +25,8 @@ function Circle(x, y, radius, color) {
   this.radius = radius;
   this.color = color;
   this.velocity = {
-    x: (Math.random() - 0.5) * 3, // Random x value from -0.5 to 0.5
-    y: (Math.random() - 0.5) * 3, // Random y value from -0.5 to 0.5
+    x: (Math.random() - 0.5) * 5, // Random x value from -0.5 to 0.5
+    y: (Math.random() - 0.5) * 5, // Random y value from -0.5 to 0.5
   };
 }
 Circle.prototype.draw = function () {
@@ -70,7 +70,16 @@ Object.prototype.update = function () {
 function randomIntFromRange(from, to) {
   return from + Math.floor(Math.random() * (to - from));
 }
-colors = ["blue", "green", "red", "yellow", "magenta", "orange", "white"];
+colors = [
+  // "blue",
+  // "green",
+  "red",
+  // "yellow",
+  // "magenta",
+  // "orange",
+  // "white",
+  // "cyan",
+];
 
 // Implementation
 let circles = [];
@@ -78,7 +87,7 @@ function init() {
   for (let i = 0; i < 1000; i++) {
     const x = canvas.width / 2 + (Math.random() - 0.5) * canvas.width * 0.99;
     const y = canvas.height / 2 + (Math.random() - 0.5) * canvas.height * 0.99;
-    const radius = 0.5 + Math.random() * 3;
+    const radius = 1.5 + Math.random() * 2;
     const color = colors[randomIntFromRange(0, colors.length)];
     circles.push(new Circle(x, y, radius, color));
   }
