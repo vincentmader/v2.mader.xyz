@@ -39,5 +39,10 @@ def spaceship():
     return render_template('spaceship.html')
 
 
+@app.route('/solar/')
+def solar():
+    return render_template('solar.html')
+
+
 if __name__ == '__main__':
     app.run()
