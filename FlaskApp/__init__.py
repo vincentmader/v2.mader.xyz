@@ -44,5 +44,10 @@ def solar():
     return render_template('solar.html')
 
 
+@app.route('/lorentz/')
+def lorentz():
+    return render_template('lorentz.html')
+
+
 if __name__ == '__main__':
     app.run()
