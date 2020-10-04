@@ -135,11 +135,11 @@ function createBodiesFreeBody() {
 }
 
 function createBodies() {
-  // bodies = createBodiesCrowded();
+  bodies = createBodiesCrowded();
   // bodies = createBodiesThreeBodyProblem();
   // bodies = createBodiesDoubleSystem();
   // bodies = createBodiesQuartetSystem();
-  bodies = createBodiesFreeBody();
+  // bodies = createBodiesFreeBody();
 }
 
 function drawBodies(ctx) {

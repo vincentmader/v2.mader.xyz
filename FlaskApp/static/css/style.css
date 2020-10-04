@@ -34,7 +34,7 @@
 #white_square_canvas {
   width: 600px;
   height: 600px;
-  border: 10px solid gray;
+  border: 10px solid black;
   background: gray;
   position: absolute;
   top: 50%;
