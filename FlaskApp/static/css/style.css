@@ -42,6 +42,15 @@
   transform: translate(-50%, -50%);
 }
 
+#heatmapPlot {
+  border: 10px solid gray;
+  background: black;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 body {
   background-color: #333333;
 }

@@ -49,5 +49,10 @@ def lorentz():
     return render_template('lorentz.html')
 
 
+@app.route('/chart_test/')
+def chart_test():
+    return render_template('chart_test.html')
+
+
 if __name__ == '__main__':
     app.run()
