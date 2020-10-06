@@ -56,3 +56,17 @@ def chart_test():
 
 if __name__ == '__main__':
     app.run()
+
+    # the code code should make flask server auto-restart on change of
+    # templates, but doesn't apparently?
+    # restart is need only for html & css? not for py & js I believe
+
+    # extra_dirs = ['./', ]
+    # extra_files = extra_dirs[:]
+    # for extra_dir in extra_dirs:
+    #     for dirname, dirs, files in os.walk(extra_dir):
+    #         for filename in files:
+    #             filename = os.path.join(dirname, filename)
+    #             if os.path.isfile(filename):
+    #                 extra_files.append(filename)
+    # app.run(extra_files=extra_files)
