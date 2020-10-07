@@ -68,6 +68,24 @@ def bokeh():
     return render_template('bokeh.html', **kwargs)
 
 
+@app.route('/heatmap/')
+def heatmap():
+
+    values = range(64)
+    NR_OF_ROWS = 6
+    REST = len(values) % NR_OF_ROWS
+    NR_OF_COLS = int((len(values) - REST) / NR_OF_ROWS)
+    kwargs = {
+        # 'NR_OF_ROWS': NR_OF_ROWS,
+        'NR_OF_COLS': NR_OF_COLS,
+        'REST': REST,
+        'values': values,
+        'values_len': len(values),
+    }
+
+    return render_template('heatmap.html', **kwargs)
+
+
 if __name__ == '__main__':
     app.run()
 
