@@ -1,5 +1,7 @@
 bokeh
 flask
+gspread
 matplotlib
 numpy
 scipy
+oauth2client
