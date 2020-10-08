@@ -86,6 +86,11 @@ def heatmap():
     return render_template('heatmap.html', **kwargs)
 
 
+@app.route('/pendulum/')
+def pendulum():
+    return render_template('pendulum.html')
+
+
 if __name__ == '__main__':
     app.run()
 
