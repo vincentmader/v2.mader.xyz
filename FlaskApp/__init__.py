@@ -4,8 +4,6 @@ import sys
 import flask
 from flask import Flask, render_template, send_from_directory
 
-sys.path.append('/var/www/FlaskApp/FlaskApp')
-
 import chronos
 
 
@@ -18,6 +16,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
+    #return sys.executable
     return render_template('index.html')
 
 
