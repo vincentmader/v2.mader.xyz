@@ -4,25 +4,26 @@ import random
 import os
 
 import bokeh
-from bokeh.plotting import figure
 from bokeh.embed import components
+# from bokeh.io import curdoc
 from bokeh.layouts import column
 from bokeh.models import ColumnDataSource, DatetimeTickFormatter, RangeTool, Square
+from bokeh.plotting import figure
+# from bokeh.themes import built_in_themes
 import numpy as np
 
 
-def main(data):
+def main(data, itvl):
 
-    # data = []
-    # for i in range(400):
-    #     data.append({
-    #         'timestamp': (dt.now() - td(days=i)).timestamp(),
-    #         'value': random.randint(0, 10)
-    #     })
-
-    NR_OF_ROWS = 7
+    if itvl == 'weekly':
+        NR_OF_ROWS = 7
+    if itvl == 'monthly':
+        NR_OF_ROWS = 5
+    if itvl == 'yearly':
+        NR_OF_ROWS = 4
     NR_OF_COLS = len(data) // NR_OF_ROWS + 1
-    ITVL = 'weekly'
+
+    # curdoc().theme = 'dark_minimal'
 
     p = figure(
         plot_width=600, plot_height=200,
@@ -37,6 +38,7 @@ def main(data):
         ], toolbar_location=None,
         match_aspect=True,
         # tools='zoom_in,zoom_out,pan,box_zoom,reset,hover,save",
+        background_fill_color='#333333'
     )
     # p.axis.visible = False
     p.grid.grid_line_color = None
@@ -64,7 +66,7 @@ def main(data):
         d = dt.fromtimestamp(timestamp)
         date.append(d.strftime('%Y-%m-%d'))
 
-        if ITVL == 'weekly':
+        if itvl == 'weekly':
             x.append(dt.strptime(
                 (d - td(days=d.weekday())).strftime('%Y-%m-%d'), '%Y-%m-%d')
             )
@@ -75,7 +77,7 @@ def main(data):
     ))
 
     p.add_glyph(source, Square(
-        x='x', y='y', size=13, fill_color='green', fill_alpha='fill_alpha',
+        x='x', y='y', size=13, fill_color='#00FF00', fill_alpha='fill_alpha',
     ))
 
     select = figure(
@@ -83,7 +85,8 @@ def main(data):
         plot_height=30, plot_width=600, y_range=p.y_range,
         x_axis_location=None,
         x_axis_type="datetime", y_axis_type=None,
-        tools="", toolbar_location=None, background_fill_color="#efefef"
+        tools="", toolbar_location=None,
+        background_fill_color='#333333'
     )
 
     range_tool = RangeTool(x_range=p.x_range)
