@@ -35,17 +35,17 @@ def balls():
 
 @app.route('/boltzmann/')
 def boltzmann():
-        return render_template('boltzmann.html')
+    return render_template('boltzmann.html')
 
 
 @app.route('/spaceship/')
 def spaceship():
-        return render_template('spaceship.html')
+    return render_template('spaceship.html')
 
 
 @app.route('/solar/')
 def solar():
-        return render_template('solar.html')
+    return render_template('solar.html')
 
 
 @app.route('/lorentz/')
@@ -82,8 +82,13 @@ def heatmap():
         'values': values,
         'values_len': len(values),
     }
-    
+
     return render_template('heatmap.html', **kwargs)
+
+
+@app.route('/pendulum/')
+def pendulum():
+    return render_template('pendulum.html')
 
 
 if __name__ == '__main__':
