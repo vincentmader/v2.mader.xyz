@@ -1,9 +1,12 @@
 import os
+import sys
 
 import flask
 from flask import Flask, render_template, send_from_directory
 
-#import chronos
+sys.path.append('/var/www/FlaskApp/FlaskApp')
+
+import chronos
 
 
 app = Flask(__name__)
