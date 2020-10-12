@@ -16,7 +16,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return sys.executable
+    #return sys.executable
     return render_template('index.html')
 
 
