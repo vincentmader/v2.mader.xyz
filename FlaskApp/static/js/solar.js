@@ -30,7 +30,7 @@ function Body(x, y, v, angle, mass, radius) {
   this.draw = function () {
     ctx.beginPath();
     ctx.strokeStyle = "black";
-    ctx.FillStyle = "black";
+    ctx.fillStyle = "black";
     ctx.arc(
       this.x + canvas.width / 2,
       -this.y + canvas.height / 2,
@@ -135,8 +135,8 @@ function createBodiesFreeBody() {
 }
 
 function createBodies() {
-  bodies = createBodiesCrowded();
-  // bodies = createBodiesThreeBodyProblem();
+  // bodies = createBodiesCrowded();
+  bodies = createBodiesThreeBodyProblem();
   // bodies = createBodiesDoubleSystem();
   // bodies = createBodiesQuartetSystem();
   // bodies = createBodiesFreeBody();
@@ -185,7 +185,7 @@ function init() {
   setInterval(function () {
     drawBodies(ctx);
     updateSystem();
-    updateBodies(0.1);
+    updateBodies(0.2);
   }, 1);
 }
 
