@@ -60,12 +60,15 @@ def chart_test():
 
 @app.route('/bokeh/')
 def bokeh():
-    data = chronos.stats.time_series.chars_written_in_daily_log()
+    try:
+        data = chronos.stats.time_series.chars_written_in_daily_log()
 
-    script, div = chronos.plots.basic.heatmap(data)
-    kwargs = {'script': script, 'div': div}
+        script, div = chronos.plots.basic.heatmap(data)
+        kwargs = {'script': script, 'div': div}
 
-    return render_template('bokeh.html', **kwargs)
+        return render_template('bokeh.html', **kwargs)
+    except Exception:
+        return 'this needs to be fixed'
 
 
 @app.route('/heatmap/')
@@ -84,11 +87,6 @@ def heatmap():
     }
 
     return render_template('heatmap.html', **kwargs)
-
-
-@app.route('/pendulum/')
-def pendulum():
-    return render_template('pendulum.html')
 
 
 if __name__ == '__main__':
