@@ -3,7 +3,7 @@ import os
 import flask
 from flask import Flask, render_template, send_from_directory
 
-import chronos
+#import chronos
 
 
 app = Flask(__name__)
@@ -35,41 +35,22 @@ def balls():
 
 @app.route('/boltzmann/')
 def boltzmann():
-    return render_template('boltzmann.html')
+        return render_template('boltzmann.html')
 
 
 @app.route('/spaceship/')
 def spaceship():
-    return render_template('spaceship.html')
+        return render_template('spaceship.html')
 
 
 @app.route('/solar/')
 def solar():
-    return render_template('solar.html')
+        return render_template('solar.html')
 
 
 @app.route('/lorentz/')
 def lorentz():
-    return render_template('lorentz.html')
-
-
-@app.route('/chart_test/')
-def chart_test():
-    return render_template('chart_test.html')
-
-
-@app.route('/bokeh/')
-def bokeh():
-    try:
-        data = chronos.stats.time_series.chars_written_in_daily_log()
-
-        script, div = chronos.plots.basic.heatmap(data)
-        kwargs = {'script': script, 'div': div}
-
-        return render_template('bokeh.html', **kwargs)
-    except Exception:
-        return 'this needs to be fixed'
-
+        return render_template('lorentz.html')  
 
 @app.route('/heatmap/')
 def heatmap():
@@ -85,7 +66,7 @@ def heatmap():
         'values': values,
         'values_len': len(values),
     }
-
+    
     return render_template('heatmap.html', **kwargs)
 
 
