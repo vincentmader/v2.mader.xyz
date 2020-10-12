@@ -3,7 +3,7 @@ import os
 import flask
 from flask import Flask, render_template, send_from_directory
 
-import chronos
+#import chronos
 
 
 app = Flask(__name__)
@@ -58,17 +58,14 @@ def chart_test():
     return render_template('chart_test.html')
 
 
-@app.route('/bokeh/')
-def bokeh():
-    try:
-        data = chronos.stats.time_series.chars_written_in_daily_log()
-
-        script, div = chronos.plots.basic.heatmap(data)
-        kwargs = {'script': script, 'div': div}
-
-        return render_template('bokeh.html', **kwargs)
-    except Exception:
-        return 'this needs to be fixed'
+# @app.route('/bokeh/')
+# def bokeh():
+#    data = chronos.stats.time_series.chars_written_in_daily_log()
+#
+#    script, div = chronos.plots.basic.heatmap(data)
+#    kwargs = {'script': script, 'div': div}
+#
+#    return render_template('bokeh.html', **kwargs)
 
 
 @app.route('/heatmap/')
