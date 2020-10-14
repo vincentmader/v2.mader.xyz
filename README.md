@@ -34,5 +34,17 @@ After completing the installation, should take a look at the file
 
     ./FlaskApp/config.py
     
-and initialize the path variables.
+and initialize the path variables. You also need to create the file
+
+    ./.env
+
+and define your application secret key (used for encryption). 
+This file is loaded from 
+
+    ./flaskapp.wsgi
+
+and should look like this:
+
+    SECRET_KEY="<your secret key goes here>"
+    
 
