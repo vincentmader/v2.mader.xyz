@@ -10,17 +10,17 @@ To contribute, you need to install the server locally via the following steps:
 
 - create a virtual python environment 
 
-    cd mader.xyz
-    virtualenv venv
+        cd mader.xyz
+        virtualenv venv
 
 - install python dependecies
 
-    pip3 install -r requirements.txt
+        pip3 install -r requirements.txt
 
 - test-run the server
 
-    cd FlaskApp
-    python3 __init__.py
+        cd FlaskApp
+        python3 __init__.py
 
 - head to localhost:5000 in your browser and check if it work    
                                                                  
