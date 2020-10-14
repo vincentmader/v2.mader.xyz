@@ -23,3 +23,10 @@ To contribute, you need to install the server locally via the following steps:
         python3 __init__.py
 
 - head to your browser (localhost:5000) and check if it works
+
+You should then take a look at the file
+
+    ./FlaskApp/config.py
+    
+and initialize the path variables to the correct values.
+
