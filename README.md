@@ -1,4 +1,8 @@
+# mader.xyz
+
 This repo contains the code running [my website](mader.xyz).
+
+## Installation
 
 To contribute, you need to install the server locally via the following steps:
 
@@ -24,9 +28,11 @@ To contribute, you need to install the server locally via the following steps:
 
 - head to your browser (localhost:5000) and check if it works
 
-You should then take a look at the file
+## Setup
+
+After completing the installation, should take a look at the file
 
     ./FlaskApp/config.py
     
-and initialize the path variables to the correct values.
+and initialize the path variables.
 
