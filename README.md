@@ -22,7 +22,4 @@ To contribute, you need to install the server locally via the following steps:
         cd FlaskApp
         python3 __init__.py
 
-- head to localhost:5000 in your browser and check if it work    
-                                                                 
-                                                                 
-                                                                 
+- head to your browser (localhost:5000) and check if it works
