@@ -1,6 +1,6 @@
 # mader.xyz
 
-This repo contains the code running [my website](mader.xyz).
+This repo contains the code running [my website](http://mader.xyz).
 
 ## Installation
 
@@ -27,10 +27,11 @@ To contribute, you need to install the server locally via the following steps:
         python3 __init__.py
 
 - head to your browser (localhost:5000) and check if it works
+  (if not, continue with the next section and check again afterwards)
 
 ## Setup
 
-After completing the installation, should take a look at the file
+After completing the installation, you should take a look at the file
 
     ./FlaskApp/config.py
     
@@ -47,4 +48,3 @@ and should look like this:
 
     SECRET_KEY="<your secret key goes here>"
     
-
