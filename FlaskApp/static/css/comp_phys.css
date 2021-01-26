@@ -1,0 +1,49 @@
+/* .section { */
+/*   padding-left: 30%; */
+/*   padding-right: 30%; */
+/* } */
+
+#content {
+  padding-top: 7%;
+}
+
+.canvas_holder {
+  /* border: 2px solid gray; */
+  background-color: black;
+  border-radius: 20px;
+  padding: 20px;
+}
+
+#single_pendulum_canvas {
+  width: 100%;
+}
+
+#double_pendulum_canvas {
+  width: 100%;
+}
+
+.section_title {
+  margin: 0px;
+  text-align: center;
+}
+
+#two_plot_container {
+  text-align: center;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: 100%; /* of container /*
+  /* border: 1px solid blue; */
+}
+
+.button_menu {
+  text-align: center;
+}
+
+.button {
+  border-radius: 10%;
+  border: 3px solid #333333;
+  background-color: black;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif; /* ? */
+  font-size: 16px;
+}

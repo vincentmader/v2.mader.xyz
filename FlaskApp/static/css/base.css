@@ -1,0 +1,56 @@
+.body {
+  background-size: cover; /* <------ */
+  background-repeat: no-repeat;
+  /* background-position: center center; /1* optional, center the image */
+  color: white;
+  font-family: Arial, Helvetica, sans-serif; /* ? */
+}
+
+#content {
+  width: 40%;
+  margin: auto; /* center */
+  /* padding-top: 120px; */
+}
+@media only screen and (max-width: 1200px) {
+  .body {
+    padding-top: 40px;
+  }
+  #content {
+    width: 80%;
+  }
+}
+@media only screen and (max-width: 641px) {
+  .body {
+    padding-top: 20px;
+  }
+  #content {
+    width: 80%;
+  }
+}
+
+.section {
+  padding: 5%;
+  background-color: rgba(48, 48, 48, 0.7);
+  border-radius: 40px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+a.stealthy_link {
+  /* color: white; */
+  text-decoration: none;
+  width: 80%;
+  height: 80%;
+  /* font-family: "Arial"; */
+}
+
+h1.main_title {
+  /* font-family: Tahoma; */
+  text-align: center;
+  /* color: rgba(64, 64, 64, 0.7); */
+  color: green;
+  /* color: white; */
+  /* background-color: blue; */
+  /* /1* font: "80px Arial, sans-serif"; *1/ */
+  /*   /\* border: "1px solid black"; *\/ */
+}

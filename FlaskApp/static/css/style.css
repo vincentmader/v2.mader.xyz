@@ -1,61 +1,126 @@
-#canvas1 {
-  width: 600px;
-  height: 600px;
-  border: 10px solid gray;
-  background: black;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.body {
+  background-size: cover; /* <------ */
+  background-repeat: no-repeat;
+  /* background-position: center center; /1* optional, center the image */
 }
 
-#canvas2 {
-  width: 600px;
-  height: 600px;
-  border: 10px solid gray;
-  background: black;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+#content {
+  width: 60%;
+  margin: auto; /* center */
+  padding: 3%;
+  background-color: rgba(48, 48, 48, 0.7);
+  border-radius: 40px;
+}
+@media only screen and (max-width: 641px) {
+  #content {
+    width: 90%;
+  }
 }
 
-#square_canvas {
-  width: 600px;
-  height: 600px;
-  border: 10px solid gray;
-  background: black;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+a.stealthy_link {
+  /* color: white; */
+  text-decoration: none;
+  width: 80%;
+  height: 80%;
+  /* font-family: "Arial"; */
 }
 
-#white_square_canvas {
-  width: 600px;
-  height: 600px;
-  border: 10px solid black;
-  background: gray;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.bk-root {
+  /* background-color: "#333333"; */
+  /* border: 1px solid red; */
 }
 
-#heatmapPlot {
-  border: 10px solid gray;
-  background: black;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-body {
-  background-color: #333333;
-}
-
-/* #div1 { */
-/*   background-color: red; */
-/*   border: 1px solid green; */
+/* #canvas1 { */
+/*   width: 600px; */
+/*   height: 600px; */
+/*   border: 10px solid gray; */
+/*   background: black; */
+/*   position: absolute; */
+/*   top: 50%; */
+/*   left: 50%; */
+/*   transform: translate(-50%, -50%); */
 /* } */
+
+/* #canvas2 { */
+/*   width: 600px; */
+/*   height: 600px; */
+/*   border: 10px solid gray; */
+/*   background: black; */
+/*   position: absolute; */
+/*   top: 50%; */
+/*   left: 50%; */
+/*   transform: translate(-50%, -50%); */
+/* } */
+
+/* #square_canvas { */
+/*   width: 600px; */
+/*   height: 600px; */
+/*   border: 10px solid gray; */
+/*   background: black; */
+/*   position: absolute; */
+/*   top: 50%; */
+/*   left: 50%; */
+/*   transform: translate(-50%, -50%); */
+/* } */
+
+/* #white_square_canvas { */
+/*   width: 600px; */
+/*   height: 600px; */
+/*   border: 10px solid black; */
+/*   background: gray; */
+/*   position: absolute; */
+/*   top: 50%; */
+/*   left: 50%; */
+/*   transform: translate(-50%, -50%); */
+/* } */
+
+/* #heatmapPlot { */
+/*   border: 10px solid gray; */
+/*   background: black; */
+/*   position: absolute; */
+/*   top: 50%; */
+/*   left: 50%; */
+/*   transform: translate(-50%, -50%); */
+/* } */
+
+/* #mainMenuGrid { */
+/*   position: absolute; */
+/*   top: 50%; */
+/*   left: 50%; */
+/*   transform: translate(-50%, -50%); */
+/* } */
+
+/* body { */
+/*   background-color: #333333; */
+/* } */
+
+/* #bokehPlots { */
+/*   position: absolute; */
+/*   top: 50%; */
+/*   left: 50%; */
+/*   transform: translate(-50%, -50%); */
+/*   /\* background-color: #222222; /1* no effect *1/ *\/ */
+/* } */
+
+/* #bokehPlot { */
+/*   padding: 20px; */
+/*   background-color: white; */
+/* } */
+
+/* #inputForm { */
+/*   text-align: center; */
+/*   padding-top: 200px; */
+/* } */
+
+/* #chatWindow { */
+/*   background-color: blue; */
+/* } */
+
+/* td { */
+/*   border: 3px solid gray; */
+/* } */
+
+/* /\* #div1 { *\/ */
+/* /\*   background-color: red; *\/ */
+/* /\*   border: 1px solid green; *\/ */
+/* /\* } *\/ */
