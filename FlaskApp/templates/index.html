@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" type="text/css">
 
 {% endblock %}
+{% block home_button %}
+{% endblock %}
 {% block content %}
 
     {% for grid_items in nav_grid_sections %}

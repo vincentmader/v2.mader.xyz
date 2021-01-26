@@ -16,6 +16,9 @@ var frame_idx;
 var data = $("#n_body_canvas").data("ys");
 var system_state;
 var foo;
+
+const INITIAL_ZOOM_LEVEL = 70;
+var zoom_level = INITIAL_ZOOM_LEVEL;
 // // var foo, x_1, y_1, x_2, y_2;
 // // var phi_1, phi_2;
 // // var phi_1p, phi_2p, phi_1c, phi_2c;
@@ -118,19 +121,19 @@ function xy_to_canvas_coords(x, y, W, H, zoom_level) {
 }
 
 function init() {
-  console.log("hello!");
-  // canvas setup
   canvas = document.getElementById("n_body_canvas");
   W = canvas.getBoundingClientRect().width;
   H = W;
+  // canvas_holder = document.getElementById("n_body_canvas_holder");
+  // canvas_holder.width = W;
+  // canvas_holder.height = W;
   canvas.width = W;
   canvas.height = W;
   ctx = canvas.getContext("2d");
-
-  // ctx.lineWidth = line_width;
-
   o_x = W / 2;
   o_y = H / 2;
+
+  // ctx.lineWidth = line_width;
 
   frame_idx = 0;
   setInterval(function () {
@@ -149,7 +152,6 @@ function init() {
       u = system_state[8 * idx + 4];
       v = system_state[8 * idx + 5];
       console.log(x);
-      var zoom_level = 70;
       foo = xy_to_canvas_coords(x, y, W, H, zoom_level);
       x = foo[0];
       y = foo[1];
@@ -157,9 +159,15 @@ function init() {
     }
 
     frame_idx += 1;
-
     document.getElementById("restart").addEventListener("click", function () {
       frame_idx = 0;
+      zoom_level = INITIAL_ZOOM_LEVEL;
+    });
+    document.getElementById("zoom_in").addEventListener("click", function () {
+      zoom_level += 0.1;
+    });
+    document.getElementById("zoom_out").addEventListener("click", function () {
+      zoom_level -= 0.1;
     });
   }, 20);
 }

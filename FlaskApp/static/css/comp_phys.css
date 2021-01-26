@@ -4,7 +4,7 @@
 /* } */
 
 #content {
-  padding-top: 7%;
+  padding-top: 3%;
 }
 
 .canvas_holder {
@@ -19,6 +19,10 @@
 }
 
 #double_pendulum_canvas {
+  width: 100%;
+}
+
+#n_body_canvas {
   width: 100%;
 }
 

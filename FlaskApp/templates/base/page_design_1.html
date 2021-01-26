@@ -19,6 +19,14 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 
+    {% block home_button %}
+        <a href="/"><img 
+            id="home_button" 
+            src="{{ url_for('static', filename='media/house_icon.png') }}" 
+            alt="Home"
+        ></a>
+    {% endblock %}
+
     <!-- <div class="content navbar"> -->
     <!--     <a class="stealthy_link" href="/"> -->
     <!--         <h1 class="main_title"> -->

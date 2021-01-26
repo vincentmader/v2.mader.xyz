@@ -1,0 +1,99 @@
+\documentclass[11 pt]{article}
+
+\usepackage{caption}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{tikz}
+
+
+\begin{document}
+
+    \begin{figure}[h!]
+        \centering
+        \begin{tikzpicture}
+            \draw (0.1, 0.1) -- (2, 2);
+            \draw (0.1, -0.1) -- (2, -2);
+            \draw (-0.1, 0.1) -- (-2, 2);
+            \draw (-0.1, -0.1) -- (-2, -2);
+        \end{tikzpicture}
+        % \caption*{hello}
+        \label{}
+    \end{figure}
+
+    \noindent
+    Conservation of energy:
+    \begin{equation}
+        \frac{m_1}{2}\textbf{v}_1^2+\frac{m_2}{2}\textbf{v}_2^2
+        =\frac{m_1}{2}\textbf{u}_1^2+\frac{m_2}{2}\textbf{u}_2^2
+    \end{equation}
+    \begin{equation}
+        \Rightarrow\textbf{u}_2^2
+        =\textbf{v}_2^2+\frac{m_1}{m_2}\cdot(\textbf{v}_1^2-\textbf{u}_1^2)
+    \end{equation}
+    Conservation of momentum:
+    \begin{equation}
+        m_1\textbf{v}_1+m_2\textbf{v}_2= m_1\textbf{u}_1+m_2\textbf{u}_2
+    \end{equation}
+    % \begin{equation}
+    %     \Rightarrow\textbf{u}_2
+    %     =\textbf{v}_2+\frac{m_1}{m_2}\cdot(\textbf{v}_1-\textbf{u}_1)
+    % \end{equation}
+    \begin{equation}
+        \Rightarrow\textbf{u}_2^2
+        =\textbf{v}_2^2+\bigg(\frac{m_1}{m_2}\bigg)^2(\textbf{v}_1-\textbf{u}_1)^2
+        +2\textbf{v}_2\cdot\frac{m_1}{m_2}(\textbf{v}_1-\textbf{u}_1)
+    \end{equation}
+    It follows (with $\mu=\frac{m_1}{m_2}$):
+    % \begin{equation}
+    %     \textbf{v}_2^2+\frac{m_1}{m_2}\cdot(\textbf{v}_1^2-\textbf{u}_1^2)
+    %     =\textbf{v}_2^2+\bigg(\frac{m_1}{m_2}\bigg)^2(\textbf{v}_1-\textbf{u}_1)^2
+    %     +2\textbf{v}_2\cdot\frac{m_1}{m_2}(\textbf{v}_1-\textbf{u}_1)
+    % \end{equation}
+    % \begin{equation}
+    %     (\textbf{v}_1^2-\textbf{u}_1^2)
+    %     =\frac{m_1}{m_2}(\textbf{v}_1-\textbf{u}_1)^2
+    %     +2\textbf{v}_2\cdot(\textbf{v}_1-\textbf{u}_1)
+    % \end{equation}
+    % \begin{equation}
+    %     \Rightarrow\textbf{v}_1^2-\textbf{u}_1^2
+    %     =\frac{m_1}{m_2}(\textbf{v}_1^2-\textbf{u}_1^2+2\textbf{v}_1\textbf{u}_1)
+    %     +2\textbf{v}_2\cdot(\textbf{v}_1-\textbf{u}_1)
+    % \end{equation}
+    \begin{equation}
+        \Rightarrow0
+        =(1-\mu)\textbf{u}_1^2
+        +2(\mu\textbf{v}_1-\textbf{v}_2)\textbf{u}_1
+        +2\textbf{v}_2\cdot\textbf{v}_1+(\mu-1)\textbf{v}_1^2
+    \end{equation}
+    Let $a=1-\mu$, $b=2(\mu\textbf{v}_1-\textbf{v}_2)$, and
+    $c=2\textbf{v}_2\cdot\textbf{v}_1+(\mu-1)\textbf{v}_1^2$. \\
+    With $x=|\textbf{u}_1|$, the solutions are given by 
+    \begin{equation}
+        x_{\pm}=\frac{-b\pm\sqrt{b^2-4ac}}{2a}
+        \label{}
+    \end{equation}
+
+    \newpage \noindent
+    Energy per particle:
+    \begin{equation}
+        E_i=\frac{m}{2}\textbf{v}_i^2
+    \end{equation}
+    Total internal energy:
+    \begin{equation}
+        U=N\cdot E_i=pV\ \ \ \Rightarrow\ \ \ p=\frac{N\cdot E_i}{V}
+    \end{equation}
+    % Ideal gas law:
+    % \begin{equation}
+    %     pV=Nk_BT\ \ \ \Rightarrow\ \ \ p = \frac{N}{V}k_BT
+    % \end{equation}
+    Momentum transfer per collision of ball with wall:
+    \begin{equation}
+        \Delta p=m\cdot \Delta v
+    \end{equation}
+    average force per area (pressure):
+    \begin{equation}
+        p=\frac{F}{A}=\frac{\Delta p}{A\Delta t}
+        \label{}
+    \end{equation}
+
+
+\end{document}

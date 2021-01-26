@@ -6,12 +6,12 @@ import flask
 from flask import Flask, render_template, send_from_directory, request
 import numpy as np
 
-import chronos
-from chronos import plots, stats
+# import chronos
+# from chronos import plots, stats
 import config
 from config import PATH_TO_STATIC
 
-import comp_phys
+# import comp_phys
 
 
 # initialize app
@@ -49,23 +49,23 @@ def index():
         [
             {'id': 'double_pendulum', 'link': '/comp_phys/double_pendulum'},
             {'id': 'n_body', 'link': '/comp_phys/n_body'},
-            {'id': 'gas_in_a_box'},
+            # {'id': 'gas_in_a_box'},
             # {'id': 'bokeh'},
-            {'id': 'lissajous'},
-            {'id': 'bachelor_thesis'},
+            # {'id': 'lissajous'},
+            # {'id': 'bachelor_thesis'},
             # {'id': 'spotify'},
             # {'id': 'pyplot'},
             # {'id': 'factfulness'},
-            {'id': 'boltzmann', 'link': '/comp_phys/boltzmann'},
-        ], [
-            {'id': 'testing_bokeh', 'link': '/chronos/testing/bokeh'},
-            {'id': 'testing_chartjs', 'link': '/chronos/testing/chartjs'},
-            {'id': 'testing_pyplot', 'link': '/chronos/testing/pyplots'},
-            # {'id': 'orbit'},
-            # {'id': 'solar'},
-            # {'id': 'tatooine'},
-            # {'id': 'solar'},
-            # {'id': 'tatooine'},
+            # {'id': 'boltzmann', 'link': '/comp_phys/boltzmann'},
+            # ], [
+            #     {'id': 'testing_bokeh', 'link': '/chronos/testing/bokeh'},
+            #     {'id': 'testing_chartjs', 'link': '/chronos/testing/chartjs'},
+            #     {'id': 'testing_pyplot', 'link': '/chronos/testing/pyplots'},
+            #     # {'id': 'orbit'},
+            #     # {'id': 'solar'},
+            #     # {'id': 'tatooine'},
+            #     # {'id': 'solar'},
+            #     # {'id': 'tatooine'},
         ]
     ]
 
@@ -76,13 +76,13 @@ def index():
     )
 
 
-@app.route('/chronos/testing/chartjs')
+@ app.route('/chronos/testing/chartjs')
 def testing_chartjs():
 
     return render_template('chronos/testing/chartjs.html')
 
 
-@app.route('/comp_phys/double_pendulum')
+@ app.route('/comp_phys/double_pendulum')
 def comp_phys_double_pendulum():
 
     # th_1, th_2, p_1, p_2 = 0, 0, 1, 1
@@ -102,7 +102,7 @@ def comp_phys_double_pendulum():
     return render_template('comp_phys/layout1.html', props=props)
 
 
-@app.route('/comp_phys/n_body')
+@ app.route('/comp_phys/n_body')
 def comp_phys_n_body():
 
     system_states = np.loadtxt('./comp_phys/n_body/out/ys.txt')
@@ -119,7 +119,7 @@ def comp_phys_n_body():
 #     return [1, 3, 4]
 
 
-@app.route('/chronos/testing/pyplot')
+@ app.route('/chronos/testing/pyplot')
 def pyplot():
 
     images = []
@@ -138,7 +138,7 @@ def pyplot():
     )
 
 
-@app.route('/chronos/testing/bokeh')
+@ app.route('/chronos/testing/bokeh')
 def testing_bokeh(lolol='Test'):
 
     plot_functions = [
@@ -172,7 +172,7 @@ def testing_bokeh(lolol='Test'):
     return render_template('chronos/testing/bokeh.html', scripts=scripts, divs=divs)
 
 
-@app.route('/chronos/testing/bokeh', methods=['POST'])
+@ app.route('/chronos/testing/bokeh', methods=['POST'])
 def testing_bokeh_post():
     textfield_1 = request.form['textfield_1']
     return test(textfield_1)
@@ -184,71 +184,71 @@ def testing_bokeh_post():
 # main sections
 
 
-@app.route('/minipages/<page_name>')
+@ app.route('/minipages/<page_name>')
 def minipages(page_name):
     return page_name
 
 
 # debugging
-@app.route('/exec/')
+@ app.route('/exec/')
 def python_executable():
     return sys.executable
 
 
 # minipages
-@app.route('/tatooine/')
+@ app.route('/tatooine/')
 def tatooine():
     return render_template('tatooine.html')
 
 
-@app.route('/orbit/')
+@ app.route('/orbit/')
 def orbit():
     return render_template('orbit.html')
 
 
-@app.route('/balls/')
+@ app.route('/balls/')
 def balls():
     return render_template('balls.html')
 
 
-@app.route('/boltzmann/')
+@ app.route('/boltzmann/')
 def boltzmann():
     return render_template('boltzmann.html')
 
 
-@app.route('/spaceship/')
+@ app.route('/spaceship/')
 def spaceship():
     return render_template('spaceship.html')
 
 
-@app.route('/solar/')
+@ app.route('/solar/')
 def solar():
     return render_template('solar.html')
 
 
-@app.route('/solar_binary/')
+@ app.route('/solar_binary/')
 def solar_binary():
     return render_template('solar_binary.html')
 
 
-@app.route('/lorentz/')
+@ app.route('/lorentz/')
 def lorentz():
     return render_template('lorentz.html')
 
 
-@app.route('/chart_test/')
+@ app.route('/chart_test/')
 def chart_test():
     return render_template('chart_test.html')
 
 
-@app.route('/bokeh/')
+@ app.route('/bokeh/')
 def bokeh():
     scripts, divs = [], []
     kwargs = {'scripts': scripts, 'divs': divs}
     return render_template('bokeh.html', **kwargs)
 
 
-@app.route('/bokeh/', methods=['POST'])
+@ app.route('/bokeh/', methods=['POST'])
 def bokeh_post():
     plot_name = request.form['text']
 
@@ -280,14 +280,14 @@ def bokeh_post():
     return render_template('bokeh.html', **kwargs)
 
 
-@app.route('/messages/')
+@ app.route('/messages/')
 def messages():
     scripts, divs = [], []
     kwargs = {'scripts': scripts, 'divs': divs}
     return render_template('bokeh.html', **kwargs)
 
 
-@app.route('/messages/', methods=['POST'])
+@ app.route('/messages/', methods=['POST'])
 def messages_post():
     scripts, divs = [], []
     query = request.form['text']
@@ -300,7 +300,7 @@ def messages_post():
     return render_template('bokeh.html', **kwargs)
 
 
-@app.route('/heatmap/')
+@ app.route('/heatmap/')
 def heatmap():
 
     values = range(64)
@@ -318,7 +318,7 @@ def heatmap():
     return render_template('heatmap.html', **kwargs)
 
 
-@app.route('/pendulum/')
+@ app.route('/pendulum/')
 def pendulum():
     return render_template('pendulum.html')
 
