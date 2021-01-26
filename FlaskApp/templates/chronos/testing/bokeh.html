@@ -1,0 +1,40 @@
+{% extends "base/page_design_1.html" %}
+
+{% block title %}
+    Testing Bokeh 
+{% endblock %}
+
+{% block head %}
+
+    {{ super() }}
+    <style type="text/css">
+        .important { color: #336699; }
+    </style>
+
+    <script src="https://cdn.bokeh.org/bokeh/release/bokeh-2.2.3.min.js"></script>
+    <script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.2.3.min.js"></script>
+    <script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.2.3.min.js"></script>
+    <script src="https://cdn.bokeh.org/bokeh/release/bokeh-api-2.2.3.min.js"></script>
+
+    {% for script in scripts %}
+        {{ script | safe }}
+    {% endfor %}
+
+{% endblock %}
+{% block content %}
+
+    <div class="section">
+    <h1>Testing bokeh</h1>
+    <p class="important">Welcome on my awesooome homepage.</p>
+    {% for div in divs %}
+        {{ div | safe }}
+    {% endfor %}
+
+    <form method="POST">
+        <input name="textfield_1">
+        <input type="submit">
+    </form>
+    </div>
+
+{% endblock %}
+

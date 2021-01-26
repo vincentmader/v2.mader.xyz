@@ -1,47 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Funky!</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/gradient_colored_list.css') }}" type="text/css">
-</head>
-<body>
-    <ul>
-        <li>
-            <a class="stealthyLink" href="tatooine">tatooine</a>
-        </li>
-        <li>
-            <a class="stealthyLink" href="orbit">orbit</a>
-        </li>
-        <li>
-            <a class="stealthyLink" href="boltzmann">boltzmann</a>
-        </li>
-        <li>
-            <a class="stealthyLink" href="balls">balls</a>
-        </li>
-        <li>
-            <a class="stealthyLink" href="spaceship">spaceship</a>
-        </li>
-        <li>
-            <a class="stealthyLink" href="solar">solar</a>
-        </li>
-        <li>
-            <a class="stealthyLink" href="lorentz">lorentz</a>
-        </li>
-        <li>
-            <a class="stealthyLink" href="chart_test">chart_test</a>
-        </li>
-        <li>
-            <a class="stealthyLink" href="bokeh">bokeh</a>
-        </li>
-        <li>
-            <a class="stealthyLink" href="heatmap">heatmap</a>
-        </li>
-        <li>
-            <a class="stealthyLink" href="pendulum">pendulum</a>
-        </li>
-    </ul>
-</body>
-</html>
+{% extends "base/page_design_1.html" %}
+
+{% block title %}
+    Index
+{% endblock %}
+{% block head %}
+
+    {{ super() }}
+    <style type="text/css">
+        .important { color: #336699; }
+    </style>
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}" type="text/css"> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" type="text/css">
+
+{% endblock %}
+{% block content %}
+
+    {% for grid_items in nav_grid_sections %}
+    <div class="section">
+    <div class="nav_grid">
+    {% for grid_item in grid_items %}
+        <a class="nav_grid_cell" href="{{ grid_item['link'] }}">
+            <div class="nav_grid_thumbnail_frame">
+                <img class="nav_grid_thumbnail"
+                    src="{{ 
+                        url_for(
+                            'static', 
+                            filename='media/thumbnails/' + 
+                            grid_item['id'] + '.png'
+                        ) 
+                    }}" 
+                >
+            </div>
+        </a>
+    {% endfor %}
+    </div>
+    </div>
+    {% endfor %}
+
+{% endblock %}

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    {% block head %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}" type="text/css">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='media/bohr_atom.png') }}"/>
+    <title>
+        {% block title %}{% endblock %} - mader.xyz
+    </title>
+    {% endblock %}
+
+</head>
+<!-- <body class="body" style="background-image: url({{ url_for('static', filename='media/wallpapers/sickel.jpg') }})"> -->
+<body class="body" style="background-color: black">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+    <!-- <div class="content navbar"> -->
+    <!--     <a class="stealthy_link" href="/"> -->
+    <!--         <h1 class="main_title"> -->
+    <!--             mader.xyz -->
+    <!--         </h1> -->
+    <!--     </a> -->
+    <!-- </div> -->
+
+    <div id="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <div id="footer">
+        {% block footer %}
+        <!-- &copy; Copyright 2010 by <a href="http://domain.invalid/">you</a>. -->
+        {% endblock %}
+    </div>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html> -->
+<!-- <head> -->
+<!-- </head> -->
+<!-- <body> -->
+<!--     <!-1- <table id="mainMenuGrid"> -1-> -->
+<!--     <!-1-     <tr> -1-> -->
+<!--     <!-1-         <td><a class="stealthy_link" href="/chronos/test"> -1-> -->
+<!--     <!-1-             <img src="{{ url_for('static', filename='media/thumbnails/boltzmann.png') }}" width="200px" height="200px"> -1-> -->
+<!--     <!-1-         </a></td> -1-> -->
+<!--     <!-1-     </tr> -1-> -->
+<!--         <!-1- <tr> -1-> -->
+<!--             <!-1- <td><a class="stealthyLink" href="boltzmann"> -1-> -->
+<!--             <!-1-     <img src="{{ url_for('static', filename='media/thumbnails/boltzmann.png') }}" width="200px" height="200px"> -1-> -->
+<!--             <!-1- </a></td> -1-> -->
+<!-- <!-1-             <td><a class="stealthyLink" href="orbit"> -1-> -->
+<!-- <!-1-                 <img src="{{ url_for('static', filename='media/thumbnails/orbit.png') }}" width="200px" height="200px"> -1-> -->
+<!-- <!-1-             </a></td> -1-> -->
+<!-- <!-1-             <td><a class="stealthyLink" href="tatooine"> -1-> -->
+<!-- <!-1-                 <img src="{{ url_for('static', filename='media/thumbnails/tatooine.png') }}" width="200px" height="200px"> -1-> -->
+<!-- <!-1-             </a></td> -1-> -->
+<!-- <!-1-             <td><a class="stealthyLink" href="lorentz"> -1-> -->
+<!-- <!-1-                 <img src="{{ url_for('static', filename='media/thumbnails/lorentz.png') }}" width="200px" height="200px"> -1-> -->
+<!-- <!-1-             </a></td> -1-> -->
+<!--         <!-1- </tr> -1-> -->
+<!-- <!-1-         <tr> -1-> -->
+<!-- <!-1-             <td><a class="stealthyLink" href="solar"> -1-> -->
+<!-- <!-1-                 <img src="{{ url_for('static', filename='media/thumbnails/solar.png') }}" width="200px" height="200px"> -1-> -->
+<!-- <!-1-             </a></td> -1-> -->
+<!-- <!-1-             <td><a class="stealthyLink" href="solar_binary"> -1-> -->
+<!-- <!-1-                 <img src="{{ url_for('static', filename='media/thumbnails/solar.png') }}" width="200px" height="200px"> -1-> -->
+<!-- <!-1-             </a></td> -1-> -->
+<!-- <!-1-             <td><a class="stealthyLink" href="pendulum"> -1-> -->
+<!-- <!-1-                 <img src="{{ url_for('static', filename='media/thumbnails/pendulum.png') }}" width="200px" height="200px"> -1-> -->
+<!-- <!-1-             </a></td> -1-> -->
+<!-- <!-1-             <td><a class="stealthyLink" href="balls"> -1-> -->
+<!-- <!-1-                 <img src="{{ url_for('static', filename='media/thumbnails/balls.png') }}" width="200px" height="200px"> -1-> -->
+<!-- <!-1-             </a></td> -1-> -->
+<!-- <!-1-         </tr> -1-> -->
+<!-- <!-1-         <tr> -1-> -->
+<!-- <!-1-             <td><a class="stealthyLink" href="bokeh"> -1-> -->
+<!-- <!-1-                 <img src="{{ url_for('static', filename='media/thumbnails/bokeh.png') }}" width="200px" height="200px"> -1-> -->
+<!-- <!-1-             </a></td> -1-> -->
+<!-- <!-1-         </tr> -1-> -->
+<!--     <!-1- </table> -1-> -->
+<!-- </body> -->
+<!-- </html> -->
+
+
+<!-- <!-1- <\!--     <ul> -\-> -1-> -->
+<!-- <!-1- <\!--         <li> -\-> -1-> -->
+<!-- <!-1- <\!--             <a class="stealthyLink" href="tatooine">tatooine</a> -\-> -1-> -->
+<!-- <!-1- <\!--         </li> -\-> -1-> -->
+<!-- <!-1- <\!--         <li> -\-> -1-> -->
+<!-- <!-1- <\!--             <a class="stealthyLink" href="orbit">orbit</a> -\-> -1-> -->
+<!-- <!-1- <\!--         </li> -\-> -1-> -->
+<!-- <!-1- <\!--         <li> -\-> -1-> -->
+<!-- <!-1- <\!--             <a class="stealthyLink" href="boltzmann">boltzmann</a> -\-> -1-> -->
+<!-- <!-1- <\!--         </li> -\-> -1-> -->
+<!-- <!-1- <\!--         <li> -\-> -1-> -->
+<!-- <!-1- <\!--             <a class="stealthyLink" href="balls">balls</a> -\-> -1-> -->
+<!-- <!-1- <\!--         </li> -\-> -1-> -->
+<!-- <!-1- <\!--         <li> -\-> -1-> -->
+<!-- <!-1- <\!--             <a class="stealthyLink" href="spaceship">spaceship</a> -\-> -1-> -->
+<!-- <!-1- <\!--         </li> -\-> -1-> -->
+<!-- <!-1- <\!--         <li> -\-> -1-> -->
+<!-- <!-1- <\!--             <a class="stealthyLink" href="solar">solar</a> -\-> -1-> -->
+<!-- <!-1- <\!--         </li> -\-> -1-> -->
+<!-- <!-1- <\!--         <li> -\-> -1-> -->
+<!-- <!-1- <\!--             <a class="stealthyLink" href="lorentz">lorentz</a> -\-> -1-> -->
+<!-- <!-1- <\!--         </li> -\-> -1-> -->
+<!-- <!-1- <\!--         <li> -\-> -1-> -->
+<!-- <!-1- <\!--             <a class="stealthyLink" href="chart_test">chart_test</a> -\-> -1-> -->
+<!-- <!-1- <\!--         </li> -\-> -1-> -->
+<!-- <!-1- <\!--         <li> -\-> -1-> -->
+<!-- <!-1- <\!--             <a class="stealthyLink" href="bokeh">bokeh</a> -\-> -1-> -->
+<!-- <!-1- <\!--         </li> -\-> -1-> -->
+<!-- <!-1- <\!--         <li> -\-> -1-> -->
+<!-- <!-1- <\!--             <a class="stealthyLink" href="heatmap">heatmap</a> -\-> -1-> -->
+<!-- <!-1- <\!--         </li> -\-> -1-> -->
+<!-- <!-1- <\!--         <li> -\-> -1-> -->
+<!-- <!-1- <\!--             <a class="stealthyLink" href="pendulum">pendulum</a> -\-> -1-> -->
+<!-- <!-1- <\!--         </li> -\-> -1-> -->
+<!-- <!-1- <\!--     </ul> -\-> -1-> -->

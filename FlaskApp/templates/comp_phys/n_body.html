@@ -1,0 +1,35 @@
+{% extends "base/page_design_1.html" %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+{% block head %}
+
+    {{ super() }}
+    <style type="text/css">
+        .important { color: #336699; }
+    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/comp_phys.css') }}" type="text/css">
+
+{% endblock %}
+{% block content %}
+
+    <h2 class="section_title">
+        n body solver
+    </h2>
+    <div class="section">
+        <div class="canvas_holder">
+            <canvas id="n_body_canvas" data-ys={{ props['ys']|tojson }}></canvas>
+            <script type="module" src="{{ url_for('static', filename='js/comp_phys/n_body.js') }}"></script>
+        </div>
+    </div>
+        <div class="button_menu">
+            <button class="button" id="restart">
+                restart
+            </button>
+    </div>
+
+    <script type="module" src="{{ url_for('static', filename='js/comp_phys/a.js') }}"></script>
+
+{% endblock %}
