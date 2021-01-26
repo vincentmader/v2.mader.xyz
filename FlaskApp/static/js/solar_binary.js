@@ -136,8 +136,8 @@ function createBodiesFreeBody() {
 
 function createBodies() {
   // bodies = createBodiesCrowded();
-  bodies = createBodiesThreeBodyProblem();
-  // bodies = createBodiesDoubleSystem();
+  // bodies = createBodiesThreeBodyProblem();
+  bodies = createBodiesDoubleSystem();
   // bodies = createBodiesQuartetSystem();
   // bodies = createBodiesFreeBody();
 }

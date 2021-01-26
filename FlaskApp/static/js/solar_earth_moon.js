@@ -61,7 +61,7 @@ function Tail(maxLength) {
   this.draw = function () {
     // console.log(this.points);
     for (let i = 1; i < Math.min(this.maxLength, this.points.length); i++) {
-      // console.log(i);
+      console.log(i);
       // console.log(idx);
       ctx.beginPath();
       ctx.moveTo(this.points[i - 1].x, this.points[i - 1].y);

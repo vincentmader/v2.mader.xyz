@@ -1,48 +1,68 @@
+// get canvas from html
 const canvas = document.getElementById("square_canvas");
 const c = canvas.getContext("2d");
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+// canvas.width = window.innerWidth;
+// canvas.height = window.innerHeight;
+width = canvas.parentElement.clientWidth;
+// height = canvas.parentElement.clientHeight;
+canvas.width = width;
+// canvas.height = height;
+canvas.height = width;
 
-const mouse = {
-  x: undefined,
-  y: undefined,
-};
+// simulation options
 var gravity_switch = 1;
+var paused = false;
 
 // Event Listeners
+// ============================================================================
+
+// get position from mouse on move
+const mouse = { x: undefined, y: undefined };
 addEventListener("mousemove", (event) => {
   mouse.x = event.clientX;
   mouse.y = event.clientY;
 });
+
+// update canvas on window resize
 addEventListener("resize", () => {
-  canvas.width = innerWidth;
-  canvas.height = innerHeight;
+  // canvas.width = innerWidth;
+  // canvas.height = innerHeight;
+  canvas.width = width;
+  // canvas.height = height;
+  canvas.height = width;
   init();
 });
+
+// flip gravity on space key press
 addEventListener("keydown", (e) => {
   if (e.key === " ") {
     gravity_switch *= -1;
   }
 });
-// window.addEventListener("keydown", function (e) {
-//   keys[e.keyCode] = true;
-//   if (keys[37] || keys[38] || keys[39] || keys[40]) {
-//     player.moving = true;
+
+// TODO: pause simulation on space key press (change gravity to g key)
+// addEventListener("keydown", (e) => {
+//   if (e.key === " ") {
+//     paused = !paused;
 //   }
-//   if (keys[32]) {
-//     player.jump();
-//   }
-// Objects
+// });
+
+// define circle object & methods (draw/update)
+// ============================================================================
+
 function Circle(x, y, radius, color) {
   this.x = x;
   this.y = y;
   this.radius = radius;
   this.color = color;
   this.velocity = {
-    x: -20 + 13 * Math.random(), // Random x value from -0.5 to 0.5
-    y: -15 + 13 * Math.random(), // Random y value from -0.5 to 0.5
+    // Math.random() gives value from [-0.5, 0.5]
+    x: -20 + 13 * Math.random(),
+    y: -15 + 13 * Math.random(),
   };
 }
+
+// method for drawing circle
 Circle.prototype.draw = function () {
   c.beginPath();
   c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
@@ -50,6 +70,8 @@ Circle.prototype.draw = function () {
   c.fill();
   c.closePath();
 };
+
+// method for updating state variables (pos/vel for next time step, dt=1)
 Object.prototype.update = function () {
   this.velocity.y += gravity_switch * 0.5;
   this.draw();
@@ -69,6 +91,7 @@ Object.prototype.update = function () {
     this.velocity.y *= -0.5;
     // } else this.velocity.y = 0;
   }
+  // TODO: implement elastic collisions with each other
   // for (let idx = 0; idx < circles.length; idx++) {
   //   let otherCircle = circles[idx];
   //   if (otherCircle == this) continue;
@@ -82,16 +105,22 @@ Object.prototype.update = function () {
   //     otherCircle.velocity.y *= -1; // * (1 + (Math.random() * 0.05 - 0.025));
   //   }
   // }
+  // update position
   this.x += this.velocity.x; // Move x coordinate
   this.y += this.velocity.y; // Move y coordinate
 };
 
+// create list of circle object instances
+// ============================================================================
+
+// choose random ball color
 function randomIntFromRange(from, to) {
   return from + Math.floor(Math.random() * (to - from));
 }
-colors = ["white"];
+// colors = ["white"];
+colors = ["blue", "red", "green", "orange", "purple", "yellow", "cyan"];
 
-// Implementation
+// create list
 let circles = [];
 // function init() {
 //   for (let i = 0; i < 5; i++) {
@@ -103,19 +132,25 @@ let circles = [];
 // }
 // }
 
-// Animation Loop
+// animation Loop
+// ============================================================================
+
 function animate() {
   requestAnimationFrame(animate); // Create an animation loop
   c.clearRect(0, 0, canvas.width, canvas.height); // Erase whole canvas
 
   const x = 0.98 * canvas.width - Math.random() * 10;
   const y = 0.5 * canvas.height - Math.random() * 10;
-  const radius = 6.5 + Math.random() * 1;
+  const radius = 8.5 + Math.random() * 4;
   const color = colors[randomIntFromRange(0, colors.length)];
+
   circles.push(new Circle(x, y, radius, color));
   circles.forEach((circle) => {
     circle.update();
   });
+  while (paused) {
+    pass;
+  }
 }
 
 // init();
