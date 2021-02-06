@@ -82,6 +82,7 @@ function init() {
     // draw
     draw_bodies(system_state, nr_of_bodies);
     draw_tails(ctx, nr_of_bodies, frame_idx, tail_length);
+    frame_idx += 1;
     // event listeners
     document.getElementById("restart").addEventListener("click", function () {
       frame_idx = 0;
@@ -93,7 +94,6 @@ function init() {
     document.getElementById("zoom_out").addEventListener("click", function () {
       zoom_level -= 0.1;
     });
-    frame_idx += 1;
   }, 20);
 }
 
