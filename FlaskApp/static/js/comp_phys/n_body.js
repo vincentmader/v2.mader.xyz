@@ -1,17 +1,17 @@
 import { draw_line, draw_point } from "../utils/drawing_utils.js";
 
-const tail_length = 300;
+const tail_length = 100;
 const line_width = 3;
 
-var canvas, ctx, frame_idx;
+var frame_idx;
 var W, H, o_x, o_y, zoom_level;
-var system_states = $("#canvas").data("system_states");
-var system_state;
+var system_state, system_states;
 var nr_of_bodies;
 
 function draw_tails(ctx, system_states, nr_of_bodies, frame_idx, tail_length) {
   var current_system_state, previous_system_state;
   var coords_p, coords_c, x_p, y_p, x_c, y_c;
+  var color, alpha;
   for (const idx of Array(tail_length).keys()) {
     // get current & previous system state
     current_system_state = system_states[Math.max(0, frame_idx - idx)];
@@ -29,6 +29,9 @@ function draw_tails(ctx, system_states, nr_of_bodies, frame_idx, tail_length) {
       y_p = coords_p[1];
       x_c = coords_c[0];
       y_c = coords_c[1];
+      // calculate alpha value
+      // alpha = 1 - idx / tail_length;
+      // color = "rgba(255, 1, 255, " + alpha + ")";
       // draw line between previous & current position
       draw_line(ctx, x_p, y_p, x_c, y_c, "white");
     }
@@ -39,7 +42,7 @@ function xy_to_canvas_coords(x, y, W, H, zoom_level) {
   return [x / zoom_level + o_x, y / zoom_level + o_y];
 }
 
-function draw_bodies(system_state, nr_of_bodies) {
+function draw_bodies(ctx, system_state, nr_of_bodies) {
   var m, R, x, y, u, v;
   var coords;
   for (let idx = 0; idx < nr_of_bodies; idx++) {
@@ -55,22 +58,26 @@ function draw_bodies(system_state, nr_of_bodies) {
     x = coords[0];
     y = coords[1];
     // draw body
-    draw_point(ctx, x, y, 3); // TODO: make radius variable
+    draw_point(ctx, x, y, 6); // TODO: make radius variable
+    console.log(system_state);
   }
 }
 
-export function init() {
-  canvas = document.getElementById("canvas");
+export function init(canvas_name) {
+  // canvas
+  const canvas = document.getElementById(canvas_name);
+  const ctx = canvas.getContext("2d");
   W = canvas.getBoundingClientRect().width;
   H = W;
   canvas.width = W;
   canvas.height = W;
-  ctx = canvas.getContext("2d");
   ctx.lineWidth = line_width;
   // define coordinate origin on screen
   o_x = W / 2;
   o_y = H / 2;
   zoom_level = 2 / W;
+
+  system_states = $("#" + canvas_name).data("system_states");
 
   frame_idx = 0;
   setInterval(function () {
@@ -80,7 +87,7 @@ export function init() {
     system_state = system_states[frame_idx];
     nr_of_bodies = system_state.length / 6;
     // draw
-    draw_bodies(system_state, nr_of_bodies);
+    draw_bodies(ctx, system_state, nr_of_bodies);
     draw_tails(ctx, system_states, nr_of_bodies, frame_idx, tail_length);
     frame_idx += 1;
     // event listeners
@@ -94,7 +101,5 @@ export function init() {
     // document.getElementById("zoom_out").addEventListener("click", function () {
     //   zoom_level -= 0.1;
     // });
-  }, 20);
+  }, 60);
 }
-
-init();

@@ -1,9 +1,5 @@
 {% extends "base/page_design_1.html" %}
 
-{% block title %}
-    Index
-{% endblock %}
-
 {% block head %}
 
     {{ super() }}
@@ -15,27 +11,31 @@
 {% endblock %}
 {% block content %}
 
-    <h2 class="section_title">
-        n body solver
-    </h2>
-    <div class="section">
-        <div class="canvas_holder">
-            <canvas id="n_body_canvas" data-ys={{ props['ys']|tojson }}></canvas>
-            <script type="module" src="{{ url_for('static', filename='js/comp_phys/n_body.js') }}"></script>
-        </div>
-    </div>
-        <div class="button_menu">
-            <button class="button" id="restart">
-                restart
-            </button>
-            <button class="button" id="zoom_in">
-                zoom in
-            </button>
-            <button class="button" id="zoom_out">
-                zoom out
-            </button>
-    </div>
+    {% for sim in props['simulations'] %}
 
-    <script type="module" src="{{ url_for('static', filename='js/comp_phys/a.js') }}"></script>
+        <h2 class="section_title">
+            {{ sim['sim_id'] }}
+        </h2>
+        <div class="section">
+            <div class="canvas_holder">
+                <canvas class="canvas" id="canvas_{{ sim['sim_idx'] }}" data-system_states={{ sim['system_states']|tojson }}></canvas>
+                <script type="module">
+                    import { init } from "{{ url_for('static', filename='js/comp_phys/n_body.js') }}";
+                    init("canvas_{{ sim['sim_idx'] }}");
+                </script>
+            </div>
+        </div>
+    {% endfor %}
+        <!-- <div class="button_menu"> -->
+        <!--     <button class="button" id="restart"> -->
+        <!--         restart -->
+        <!--     </button> -->
+        <!--     <button class="button" id="zoom_in"> -->
+        <!--         zoom in -->
+        <!--     </button> -->
+        <!--     <button class="button" id="zoom_out"> -->
+        <!--         zoom out -->
+        <!--     </button> -->
+    <!-- </div> -->
 
 {% endblock %}

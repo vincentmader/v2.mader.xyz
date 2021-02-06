@@ -1,9 +1,5 @@
 {% extends "base/page_design_1.html" %}
 
-{% block title %}
-    Index
-{% endblock %}
-
 {% block head %}
 
     {{ super() }}
@@ -20,7 +16,7 @@
     </h2>
     <div class="section">
         <div class="canvas_holder">
-            <canvas id="double_pendulum_canvas" data-ys={{ props['ys']|tojson }}></canvas>
+            <canvas class="canvas" id="double_pendulum_canvas" data-ys={{ props['ys']|tojson }}></canvas>
             <script type="module" src="{{ url_for('static', filename='js/comp_phys/double_pendulum.js') }}"></script>
         </div>
     </div>
@@ -34,11 +30,9 @@
     <div class="section">
         <!-- {{ props['description'] }} -->
         <div class="canvas_holder">
-            <canvas id="single_pendulum_canvas"></canvas>
+            <canvas class="canvas" id="single_pendulum_canvas"></canvas>
             <script type="module" src="{{ url_for('static', filename='js/comp_phys/single_pendulum.js') }}"></script>
         </div>
     </div>
-
-    <script type="module" src="{{ url_for('static', filename='js/comp_phys/a.js') }}"></script>
 
 {% endblock %}

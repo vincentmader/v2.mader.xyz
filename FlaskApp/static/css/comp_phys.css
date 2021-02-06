@@ -14,15 +14,7 @@
   padding: 20px;
 }
 
-#single_pendulum_canvas {
-  width: 100%;
-}
-
-#double_pendulum_canvas {
-  width: 100%;
-}
-
-#n_body_canvas {
+.canvas {
   width: 100%;
 }
 

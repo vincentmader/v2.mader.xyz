@@ -20,11 +20,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 
     {% block home_button %}
-        <a href="/"><img 
-            id="home_button" 
-            src="{{ url_for('static', filename='media/house_icon.png') }}" 
-            alt="Home"
-        ></a>
+        <div id="home_div">
+            <a id="home_link" href="/">
+                mader.xyz
+            </a>
+        </div>
     {% endblock %}
 
     <!-- <div class="content navbar"> -->
@@ -45,6 +45,8 @@
         <!-- &copy; Copyright 2010 by <a href="http://domain.invalid/">you</a>. -->
         {% endblock %}
     </div>
+
+    <script type="module" src="{{ url_for('static', filename='js/utils/drawing_utils.js') }}"></script>
 
 </body>
 </html>
