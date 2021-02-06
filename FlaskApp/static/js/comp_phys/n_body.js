@@ -5,17 +5,17 @@ const line_width = 3;
 
 var canvas, ctx, frame_idx;
 var W, H, o_x, o_y, zoom_level;
-var data = $("#canvas").data("ys");
+var system_states = $("#canvas").data("system_states");
 var system_state;
 var nr_of_bodies;
 
-function draw_tails(ctx, nr_of_bodies, frame_idx, tail_length) {
+function draw_tails(ctx, system_states, nr_of_bodies, frame_idx, tail_length) {
   var current_system_state, previous_system_state;
   var coords_p, coords_c, x_p, y_p, x_c, y_c;
   for (const idx of Array(tail_length).keys()) {
     // get current & previous system state
-    current_system_state = data[Math.max(0, frame_idx - idx)];
-    previous_system_state = data[Math.max(0, frame_idx - idx - 1)];
+    current_system_state = system_states[Math.max(0, frame_idx - idx)];
+    previous_system_state = system_states[Math.max(0, frame_idx - idx - 1)];
     for (let idx = 0; idx < nr_of_bodies; idx++) {
       // get information about body in previous & current timestep
       x_p = previous_system_state[6 * idx + 2];
@@ -59,7 +59,7 @@ function draw_bodies(system_state, nr_of_bodies) {
   }
 }
 
-function init() {
+export function init() {
   canvas = document.getElementById("canvas");
   W = canvas.getBoundingClientRect().width;
   H = W;
@@ -76,24 +76,24 @@ function init() {
   setInterval(function () {
     // clear screen
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // get data about n body system
-    system_state = data[frame_idx];
+    // get system_states about n body system
+    system_state = system_states[frame_idx];
     nr_of_bodies = system_state.length / 6;
     // draw
     draw_bodies(system_state, nr_of_bodies);
-    draw_tails(ctx, nr_of_bodies, frame_idx, tail_length);
+    draw_tails(ctx, system_states, nr_of_bodies, frame_idx, tail_length);
     frame_idx += 1;
     // event listeners
-    document.getElementById("restart").addEventListener("click", function () {
-      frame_idx = 0;
-      // zoom_level = W / 2;
-    });
-    document.getElementById("zoom_in").addEventListener("click", function () {
-      zoom_level += 0.1;
-    });
-    document.getElementById("zoom_out").addEventListener("click", function () {
-      zoom_level -= 0.1;
-    });
+    // document.getElementById("restart").addEventListener("click", function () {
+    //   frame_idx = 0;
+    //   // zoom_level = W / 2;
+    // });
+    // document.getElementById("zoom_in").addEventListener("click", function () {
+    //   zoom_level += 0.1;
+    // });
+    // document.getElementById("zoom_out").addEventListener("click", function () {
+    //   zoom_level -= 0.1;
+    // });
   }, 20);
 }
 

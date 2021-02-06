@@ -1,19 +1,16 @@
-import { draw_line } from "./a.js";
+import { draw_line } from "../utils/drawing_utils.js";
 
 const π = Math.PI;
 const line_width = 2;
 const dt = 1;
 const g = 1;
-const R = 20;
 const tail_length = 20;
 
 var canvas, ctx;
-var W, H;
-var L;
-var circle_radius;
-var o_x, o_y;
-var ys = [];
+var W, H, o_x, o_y;
 var frame_idx;
+var ys = [];
+var L, r;
 
 function Pendulum(o_x, o_y, φ) {
   // set coords of pivot origin
@@ -34,25 +31,16 @@ function Pendulum(o_x, o_y, φ) {
   this.draw = () => {
     let p_x = o_x + L * Math.sin(this.φ); // cart. coords of pendulum mass
     let p_y = o_y + L * Math.cos(this.φ);
-
-    ctx.beginPath();
-    ctx.strokeStyle = "white";
-    ctx.fillStyle = "white";
-    // draw mass
-    ctx.arc(p_x, p_y, circle_radius, 0, 2 * Math.PI);
-    // ctx.stroke();
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.arc(o_x, o_x, circle_radius, 0, 2 * Math.PI);
-    // ctx.stroke();
-    ctx.fill();
-
     // draw rod
+    draw_line(ctx, o_x, o_y, p_x, p_y, "white");
+    // draw mass
     ctx.beginPath();
-    ctx.moveTo(o_x, o_y);
-    ctx.lineTo(p_x, p_y);
-    ctx.stroke();
+    ctx.arc(p_x, p_y, r, 0, 2 * Math.PI);
+    ctx.fill();
+    // draw hinge
+    ctx.beginPath();
+    ctx.arc(o_x, o_x, r, 0, 2 * Math.PI);
+    ctx.fill();
   };
 }
 
@@ -63,11 +51,12 @@ function draw_tail(ctx, frame_idx, tail_length) {
     φ_c = ys[Math.max(0, frame_idx - idx)];
     φ_p = ys[Math.max(0, frame_idx - idx - 1)];
 
+    // previous cart. coords of pendulum mass
     let p_x = o_x + L * Math.sin(φ_p);
-    let p_y = o_y + L * Math.cos(φ_p); // cart. coords of pendulum mass
-
+    let p_y = o_y + L * Math.cos(φ_p);
+    // current cart. coords of pendulum mass
     let q_x = o_x + L * Math.sin(φ_c);
-    let q_y = o_y + L * Math.cos(φ_c); // cart. coords of pendulum mass
+    let q_y = o_y + L * Math.cos(φ_c);
 
     draw_line(ctx, p_x, p_y, q_x, q_y, "green");
   }
@@ -75,7 +64,6 @@ function draw_tail(ctx, frame_idx, tail_length) {
 
 const init = () => {
   canvas = document.getElementById("single_pendulum_canvas");
-  // W = canvas.parentElement.clientWidth;
   W = canvas.getBoundingClientRect().width;
   H = W;
   canvas.width = W;
@@ -86,9 +74,11 @@ const init = () => {
 
   ctx = canvas.getContext("2d");
   ctx.lineWidth = line_width;
+  ctx.strokeStyle = "white";
+  ctx.fillStyle = "white";
 
   L = W / 4 - 10;
-  circle_radius = W / 100;
+  r = W / 100;
 
   frame_idx = 0;
   const p = new Pendulum(W / 2, H / 2, 0.99 * π);
