@@ -12,6 +12,23 @@
 {% block content %}
 
     <h2 class="section_title">
+        single pendulum  <!-- {{ props['title'] }} -->
+    </h2>
+    <div class="section">
+        <div class="canvas_holder">
+            <canvas class="canvas" id="single_pendulum_canvas"></canvas>
+            <script type="module" src="{{ url_for('static', filename='js/comp_phys/single_pendulum.js') }}"></script>
+        </div>
+        <div class="latex">  <!-- {{ props['description'] }} -->
+            The period of swing of a simple gravity pendulum
+            mainly on its length \(l\) and the local strength of 
+            gravity \(g\). It is independent of the pendulum mass.
+                $$T=\sqrt{\frac{l}{g} }$$
+            For small amplitudes, i.e. small maximum angles,
+            the pendulum approximates the harmonical oscillator.
+        </div>
+    </div>
+    <h2 class="section_title">
         double pendulum
     </h2>
     <div class="section">
@@ -19,19 +36,45 @@
             <canvas class="canvas" id="double_pendulum_canvas" data-ys={{ props['ys']|tojson }}></canvas>
             <script type="module" src="{{ url_for('static', filename='js/comp_phys/double_pendulum.js') }}"></script>
         </div>
-    </div>
-
-
-    <h2 class="section_title">
-        <!-- {{ props['title'] }} -->
-        single pendulum
-    </h2>
-    <!-- <p>Welcome on my awesome homepage.</p> -->
-    <div class="section">
-        <!-- {{ props['description'] }} -->
-        <div class="canvas_holder">
-            <canvas class="canvas" id="single_pendulum_canvas"></canvas>
-            <script type="module" src="{{ url_for('static', filename='js/comp_phys/single_pendulum.js') }}"></script>
+        <div class="button_menu">
+            <button class="button" id="restart_double_pendulum">
+                restart
+            </button>
+            <button class="button" id="play/pause_double_pendulum">
+                play/pause
+            </button>
+        </div>
+        <div class="latex">
+            The kinetic & potential energies of the system are 
+            given by
+                $$T=\frac{m}{2}\bigg(v_1^2+v_2^2\bigg)+\frac{I}{2}
+                    \bigg(\dot{\theta}_1^2+\dot{\theta}_2^2\bigg),$$
+                $$\text{and}$$
+                $$V=mg(y_1+y_2),$$ respectively.
+            From this, we can construct the Lagrangian 
+                $$\mathcal{L}=T-V.$$
+            The Euler-Lagrange equation reads
+                $$\frac{\partial\mathcal L}{\partial q}-\frac{d}{dt}
+                    \frac{\partial\mathcal L}{\partial\dot q}=0$$
+            and leads to the following equations of motion:
+                $$\dot{\theta}_1=\frac{6}{ml^2}\cdot
+                    \frac{2p_{\theta_1}-3\cos(\theta_1-\theta_2)
+                    \cdot p_{\theta_2} }{16-9\cos^2(\theta_1-\theta_2}$$
+                $$\dot{\theta}_2=\frac{6}{ml^2}\cdot
+                    \frac{8p_{\theta_2}-3\cos(\theta_1-\theta_2)
+                    \cdot p_{\theta_1} }{16-9\cos^2(\theta_1-\theta_2}$$
+                $$\dot{p}_{\theta_1}=
+                    -\frac{ml^2}{2}
+                    \bigg(\dot{\theta}_1\dot{\theta}_2
+                    \sin(\theta_1-\theta_2)
+                    +3\frac{g}{l}\sin(\theta_1)\bigg)$$
+                $$\dot{p}_{\theta_1}=
+                    -\frac{ml^2}{2}
+                    \bigg(-\dot{\theta}_1\dot{\theta}_2
+                    \sin(\theta_1-\theta_2)
+                    +\frac{g}{l}\sin(\theta_2)\bigg)$$
+            For the above animation, these equations were 
+            integrated utilizing a 4th order Runge-Kutta scheme.
         </div>
     </div>
 

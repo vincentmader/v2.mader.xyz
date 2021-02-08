@@ -4,7 +4,7 @@ import { draw_point } from "../utils/drawing_utils.js";
 const line_width = 2;
 const tail_length = 150;
 
-var canvas, ctx;
+var paused = true;
 var frame_idx;
 var W, H, o_x, o_y;
 
@@ -73,7 +73,7 @@ function draw_double_pendulum(ctx, frame_idx) {
 }
 
 const init = () => {
-  canvas = document.getElementById("double_pendulum_canvas");
+  const canvas = document.getElementById("double_pendulum_canvas");
   W = canvas.getBoundingClientRect().width;
   H = W;
   canvas.width = W;
@@ -94,7 +94,21 @@ const init = () => {
   setInterval(function () {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     draw_double_pendulum(ctx, frame_idx);
-    frame_idx += 1;
+    if (!paused) {
+      frame_idx += 1;
+    }
+    // event listeners
+    document
+      .getElementById("restart_double_pendulum")
+      .addEventListener("click", function () {
+        frame_idx = 0;
+        // zoom_level = W / 2;
+      });
+    document
+      .getElementById("play/pause_double_pendulum")
+      .addEventListener("click", function () {
+        paused = !paused;
+      });
   }, 20);
 };
 
