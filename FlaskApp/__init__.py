@@ -107,7 +107,7 @@ def comp_phys_n_body(subdir_name):
     return render_template('comp_phys/n_body.html', props=props)
 
 
-@app.route('/comp_phys/flowers')
+@app.route('/comp_phys/n_body_flowers')
 def comp_phys_n_body_flowers():
 
     props = {}
