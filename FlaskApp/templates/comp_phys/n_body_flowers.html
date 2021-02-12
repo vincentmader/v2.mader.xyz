@@ -1,0 +1,51 @@
+{% extends "base/page_design_1.html" %}
+
+{% block head %}
+
+    {{ super() }}
+    <style type="text/css">
+        .important { color: #336699; }
+    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/comp_phys.css') }}" type="text/css">
+
+{% endblock %}
+{% block content %}
+
+
+    <h2 class="section_title">
+        test
+    </h2>
+    <div class="section">
+        <div class="canvas_holder">
+            <canvas 
+                class="canvas" 
+                id="canvas_n_body_flowers" 
+            ></canvas>
+            <script type=module>
+                import { main } from "{{ url_for('static', filename='js/comp_phys/n_body/flowers.js') }}"
+                // get canvas from unique canvas_name
+                const canvas_id = 'canvas_n_body_flowers'
+                const canvas = document.getElementById(canvas_id);
+                const ctx = canvas.getContext("2d");
+
+                main(canvas, ctx, canvas_id);
+            </script>
+        </div>
+        <div class="button_menu">
+            <button class="button" id="play/pause">
+                play/pause
+            </button>
+            <input type="text" value="4" name="nr of bodies" id="nr_of_bodies_textfield"/>
+            <button class="button" id="toggle_eccentricity">
+                ecc.
+            </button>
+            <!-- <button class="button" id="zoom_in"> -->
+            <!--     zoom in -->
+            <!-- </button> -->
+            <!-- <button class="button" id="zoom_out"> -->
+            <!--     zoom out -->
+            <!-- </button> -->
+        </div>
+    </div>
+
+{% endblock %}

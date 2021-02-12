@@ -4,7 +4,7 @@ const π = Math.PI;
 const line_width = 2;
 const dt = 1;
 const g = 1;
-const tail_length = 20;
+const tail_length = 40;
 
 var canvas, ctx;
 var W, H, o_x, o_y;
@@ -47,6 +47,7 @@ function Pendulum(o_x, o_y, φ) {
 function draw_tail(ctx, frame_idx, tail_length) {
   var φ_c, φ_p;
 
+  var alpha, green;
   for (const idx of Array(tail_length).keys()) {
     φ_c = ys[Math.max(0, frame_idx - idx)];
     φ_p = ys[Math.max(0, frame_idx - idx - 1)];
@@ -58,7 +59,10 @@ function draw_tail(ctx, frame_idx, tail_length) {
     let q_x = o_x + L * Math.sin(φ_c);
     let q_y = o_y + L * Math.cos(φ_c);
 
-    draw_line(ctx, p_x, p_y, q_x, q_y, "green");
+    alpha = 1 - idx / tail_length;
+    green = "rgba(0, 255, 0, " + String(alpha) + ")";
+
+    draw_line(ctx, p_x, p_y, q_x, q_y, green);
   }
 }
 

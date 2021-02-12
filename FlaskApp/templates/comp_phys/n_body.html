@@ -14,28 +14,43 @@
     {% for sim in props['simulations'] %}
 
         <h2 class="section_title">
-            {{ sim['sim_id'] }}
+            {{ sim['outfile_name'] }}
         </h2>
         <div class="section">
             <div class="canvas_holder">
-                <canvas class="canvas" id="canvas_{{ sim['sim_idx'] }}" data-system_states={{ sim['system_states']|tojson }}></canvas>
-                <script type="module">
-                    import { init } from "{{ url_for('static', filename='js/comp_phys/n_body.js') }}";
-                    init("canvas_{{ sim['sim_idx'] }}");
+                <canvas 
+                    class="canvas" 
+                    id="canvas_{{ sim['sim_idx'] }}" 
+                    data-system_states={{ sim['system_states']|tojson }}
+                ></canvas>
+                <script type=module>
+                    import { main } from "{{ url_for('static', filename='js/comp_phys/n_body.js') }}"
+                    // get canvas from unique canvas_name
+                    const canvas_id = 'canvas_{{ sim['sim_idx'] }}'
+                    const canvas = document.getElementById(canvas_id);
+                    const ctx = canvas.getContext("2d");
+                    // load simulation data from canvas html tag attribute data
+                    const system_states = $("#" + canvas_id).data("system_states");
+
+                    main(canvas, ctx, canvas_id, system_states);
                 </script>
             </div>
+            <div class="button_menu">
+                <button class="button" id="restart_canvas_{{ sim['sim_idx'] }}">
+                    restart
+                </button>
+                <button class="button" id="play/pause_canvas_{{ sim['sim_idx'] }}">
+                    play/pause
+                </button>
+                <!-- <button class="button" id="zoom_in"> -->
+                <!--     zoom in -->
+                <!-- </button> -->
+                <!-- <button class="button" id="zoom_out"> -->
+                <!--     zoom out -->
+                <!-- </button> -->
+            </div>
         </div>
+        <!-- <div class="divider"></div> -->
     {% endfor %}
-        <!-- <div class="button_menu"> -->
-        <!--     <button class="button" id="restart"> -->
-        <!--         restart -->
-        <!--     </button> -->
-        <!--     <button class="button" id="zoom_in"> -->
-        <!--         zoom in -->
-        <!--     </button> -->
-        <!--     <button class="button" id="zoom_out"> -->
-        <!--         zoom out -->
-        <!--     </button> -->
-    <!-- </div> -->
 
 {% endblock %}

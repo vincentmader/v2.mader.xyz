@@ -2,7 +2,7 @@ import { draw_line } from "../utils/drawing_utils.js";
 import { draw_point } from "../utils/drawing_utils.js";
 
 const line_width = 2;
-const tail_length = 150;
+const tail_length = 175;
 
 var paused = true;
 var frame_idx;
@@ -26,10 +26,12 @@ function get_positions_from_angles(phi_1, phi_2) {
 
 function draw_tails(ctx, frame_idx, tail_length) {
   var current_system_state, previous_system_state;
+  var alpha, green, red, fancy_variable_name;
 
   for (const idx of Array(tail_length).keys()) {
-    current_system_state = data[Math.max(0, frame_idx - idx)];
-    previous_system_state = data[Math.max(0, frame_idx - idx - 1)];
+    fancy_variable_name = frame_idx - tail_length + idx;
+    current_system_state = data[Math.max(0, fancy_variable_name)];
+    previous_system_state = data[Math.max(0, fancy_variable_name - 1)];
 
     phi_1p = previous_system_state[0];
     phi_2p = previous_system_state[1];
@@ -47,8 +49,11 @@ function draw_tails(ctx, frame_idx, tail_length) {
     x_2c = cartesian_coords[2];
     y_2c = cartesian_coords[3];
 
-    draw_line(ctx, x_1p, y_1p, x_1c, y_1c, "green");
-    draw_line(ctx, x_2p, y_2p, x_2c, y_2c, "red");
+    alpha = idx / tail_length;
+    green = "rgba(0, 255, 0, " + String(alpha) + ")";
+    red = "rgba(255, 0, 0, " + String(alpha) + ")";
+    draw_line(ctx, x_1p, y_1p, x_1c, y_1c, green);
+    draw_line(ctx, x_2p, y_2p, x_2c, y_2c, red);
   }
 }
 
