@@ -1,7 +1,7 @@
-import { draw_tails } from "./n_body/drawing_utils.js";
-import { draw_bodies } from "./n_body/drawing_utils.js";
-import { draw_velocities } from "./n_body/drawing_utils.js";
-import { kepler_velocity } from "./n_body/physics_utils.js";
+import { draw_tails } from "./drawing_utils.js";
+import { draw_bodies } from "./drawing_utils.js";
+import { draw_velocities } from "./drawing_utils.js";
+import { kepler_velocity } from "./physics_utils.js";
 
 const line_width = 3;
 const tail_length = 200;
