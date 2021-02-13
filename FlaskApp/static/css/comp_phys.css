@@ -29,6 +29,12 @@
 .button_menu {
   /* text-align: center; */
   padding-top: 15px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: 100%;
+}
+
+.button_menu p {
 }
 
 .button {

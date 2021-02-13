@@ -19,6 +19,22 @@
             <canvas class="canvas" id="canvas"></canvas>
             <script type="module" src="{{ url_for('static', filename='js/comp_phys/ising.js') }}"></script>
         </div>
+        <div class="button_menu">
+            <!-- <p>Temperature:</p> -->
+            <div id="temperature_display"></div>
+            <input 
+                type="range" 
+                class="slider" id="temperature_slider"
+                min="-100" max="100" value="0" 
+            >
+            <!-- <p>Magnetic field strength:</p> -->
+            <div id="Bfield_display"></div>
+            <input 
+                type="range" 
+                class="slider" id="Bfield_slider"
+                min="-10" max="10" value="0" 
+            >
+        </div>
     </div>
 
 {% endblock %}

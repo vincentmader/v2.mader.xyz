@@ -1,16 +1,14 @@
-import { draw_line } from "../utils/drawing_utils.js";
+import { get_boltzmann_probability } from "./physics_utils.js";
+import { apply_periodic_bounds } from "./physics_utils.js";
 
-const π = Math.PI;
 const line_width = 2;
-const J = 1,
-  k_B = 1,
-  T = 0.5;
+const J = 1;
+// const T = 3;
+var T;
+var B;
 
 var canvas, ctx;
-var W, H, o_x, o_y;
-var frame_idx;
-var ys = [];
-var L, r;
+var W, H;
 
 function initialize_spin_grid(N) {
   var grid, row, random_spin;
@@ -35,36 +33,29 @@ function draw_grid(grid) {
 
   for (let i = 0; i < N; i++) {
     for (let j = 0; j < N; j++) {
+      // get position and geometry of cell
+      x = (W / N) * i;
+      y = (H / N) * j;
+      w = (W / N) * 0.7;
+      h = (H / N) * 0.7;
+      // get color for cell
       if (grid[i][j] == -1) {
-        color = "#333333";
+        color = "black";
       } else if (grid[i][j] == +1) {
         color = "white";
       }
-
-      x = (W / N) * i;
-      y = (H / N) * j;
-      w = (W / N) * .8
-      h = (H / N) * .8
-
       ctx.fillStyle = color;
+      // draw rect
       ctx.fillRect(x, y, w, h);
     }
   }
 }
 
-function apply_periodic_bounds(cell_idx, N) {
-  if (cell_idx >= N) {
-    cell_idx -= N;
-  } else if (cell_idx < 0) {
-    cell_idx += N;
-  }
-  return cell_idx;
-}
-
 function get_flip_energy(grid, i, j) {
-  var i_neighbor, j_neighbor, s_neighbor;
   const N = grid.length;
   const s_flip = grid[i][j];
+
+  var i_neighbor, j_neighbor, s_neighbor;
   var dE = 0;
   for (const di of [-1, 0, +1]) {
     for (const dj of [-1, 0, +1]) {
@@ -80,6 +71,8 @@ function get_flip_energy(grid, i, j) {
       }
     }
   }
+  dE -= B * s_flip;
+  dE += B * -s_flip;
   return dE;
 }
 
@@ -93,26 +86,18 @@ function flip_spin(grid, i, j) {
   return grid;
 }
 
-function get_boltzmann_probability(dE, T) {
-  const beta = 1 / (k_B * T);
-  return Math.exp(-beta * dE);
-}
-
 function flip_random_spin(grid) {
   const N = grid.length;
-
+  // choose random grid cell
   const i = Math.floor(N * Math.random());
   const j = Math.floor(N * Math.random());
-
-  const spin = grid[i][j];
-
+  // flip if E_flip<0, else only with probability e^(-E_flip/kT)
   const dE = get_flip_energy(grid, i, j);
   if (dE <= 0) {
     grid = flip_spin(grid, i, j);
   } else if (Math.random() < get_boltzmann_probability(dE, T)) {
     grid = flip_spin(grid, i, j);
   }
-
   return grid;
 }
 
@@ -123,28 +108,38 @@ const init = () => {
   canvas.width = W;
   canvas.height = W;
 
-  o_x = W / 2;
-  o_y = H / 2;
-
   ctx = canvas.getContext("2d");
   ctx.lineWidth = line_width;
   ctx.strokeStyle = "white";
   ctx.fillStyle = "white";
 
-  L = W / 4 - 10;
-  r = W / 100;
-
   const N = 100;
+  const flips_before_draw = 500;
   var grid = initialize_spin_grid(N);
+  var temperature_slider, Bfield_slider;
 
-  frame_idx = 0;
   setInterval(function () {
+    temperature_slider = document.getElementById("temperature_slider");
+    T = 10 ** Number(temperature_slider.value / 60);
+    document.getElementById("temperature_display").innerHTML =
+      // "$$T=" +
+      "T = " + T.toFixed(3);
+    // + "$$";
+    // MathJax.Hub.Queue(["Typeset", MathJax.Hub, temperature_slider]);
+
+    Bfield_slider = document.getElementById("Bfield_slider");
+    B = Number(Bfield_slider.value);
+    document.getElementById("Bfield_display").innerHTML =
+      // "$$B=" +
+      "B = " + B.toFixed(3);
+    // + "$$";
+    // MathJax.Hub.Queue(["Typeset", MathJax.Hub, "Bfield_slider"]);
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (let i = 0; i < 500; i++) {
+    for (let i = 0; i < flips_before_draw; i++) {
       grid = flip_random_spin(grid);
     }
     draw_grid(grid);
-    frame_idx += 1;
   }, 1);
 };
 
