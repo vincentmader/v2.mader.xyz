@@ -24,11 +24,17 @@ def index():
 
     nav_grid_sections = [
         [
-            {'id': 'n_body', 'link': '/comp_phys/n_body_flowers'},
+            {'id': 'n_body_flowers', 'link': '/comp_phys/n_body_flowers'},
             # {'id': 'n_body_sym', 'link': '/comp_phys/n_body/sym'},
-            {'id': 'n_body_3_body', 'link': '/comp_phys/n_body/3_body'},
+            # {'id': 'n_body', 'link': ''},
+            {'id': 'n_body', 'link': '/comp_phys/n_body/3body'},
+            {'id': 'n_body_3_body', 'link': '/comp_phys/n_body/3body_fig8'},
+        ], [
             {'id': 'double_pendulum', 'link': '/comp_phys/pendulum'},
+        ], [
             {'id': 'gas_in_a_box', 'link': '/comp_phys/gas_in_a_box'},
+        ], [
+            {'id': 'ising', 'link': '/comp_phys/ising'},
             # {'id': 'bokeh'},
             # {'id': 'lissajous'},
             # {'id': 'bachelor_thesis'},
@@ -99,7 +105,6 @@ def comp_phys_n_body(subdir_name):
         return simulations
 
     simulations = get_n_body_simulations(subdir_name)
-
     # return props directory
     props = {
         'simulations': simulations,
@@ -112,6 +117,12 @@ def comp_phys_n_body_flowers():
 
     props = {}
     return render_template('comp_phys/n_body_flowers.html', props=props)
+
+
+@app.route('/comp_phys/ising')
+def comp_phys_ising():
+    props = {}
+    return render_template('comp_phys/ising.html', props=props)
 
 
 @app.route('/comp_phys/pendulum')
