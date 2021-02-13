@@ -31,9 +31,7 @@ def index():
             {'id': 'n_body_3_body', 'link': '/comp_phys/n_body/3body_fig8'},
         ], [
             {'id': 'double_pendulum', 'link': '/comp_phys/pendulum'},
-        ], [
             {'id': 'gas_in_a_box', 'link': '/comp_phys/gas_in_a_box'},
-        ], [
             {'id': 'ising', 'link': '/comp_phys/ising'},
             # {'id': 'bokeh'},
             # {'id': 'lissajous'},

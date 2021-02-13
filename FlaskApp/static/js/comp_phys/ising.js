@@ -36,15 +36,15 @@ function draw_grid(grid) {
   for (let i = 0; i < N; i++) {
     for (let j = 0; j < N; j++) {
       if (grid[i][j] == -1) {
-        color = "blue";
+        color = "#333333";
       } else if (grid[i][j] == +1) {
-        color = "red";
+        color = "white";
       }
 
       x = (W / N) * i;
       y = (H / N) * j;
-      w = (W / N) * 0.8;
-      h = (H / N) * 0.8;
+      w = (W / N) * .8
+      h = (H / N) * .8
 
       ctx.fillStyle = color;
       ctx.fillRect(x, y, w, h);
