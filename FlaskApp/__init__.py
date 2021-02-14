@@ -28,7 +28,7 @@ def index():
             # {'id': 'n_body_sym', 'link': '/comp_phys/n_body/sym'},
             # {'id': 'n_body', 'link': ''},
             # {'id': 'n_body', 'link': '/comp_phys/n_body/3body'},
-            {'id': 'n_body_3_body', 'link': '/comp_phys/n_body/3body_fig8'},
+            {'id': '3body_fig8', 'link': '/comp_phys/3body_fig8'},
             {'id': 'double_pendulum', 'link': '/comp_phys/pendulum'},
             {'id': 'gas_in_a_box', 'link': '/comp_phys/gas_in_a_box'},
             {'id': 'ising', 'link': '/comp_phys/ising'},
@@ -70,8 +70,34 @@ def comp_phys_gas_in_a_box():
     return render_template('comp_phys/gas_in_a_box.html', props=props)
 
 
-# @app.route('/comp_phys/n_body/3body')
-# def comp_phys_n_body():
+@app.route('/comp_phys/n_body_flowers')
+def comp_phys_n_body_flowers():
+
+    props = {}
+    return render_template('comp_phys/n_body_flowers.html', props=props)
+
+
+@app.route('/comp_phys/3body_fig8')
+def comp_phys_3body_fig8():
+
+    # load output data
+    path_to_output_file = './comp_phys/n_body/out/3body_fig8/system_states.txt'
+    system_states = [list(i) for i in np.loadtxt(path_to_output_file)]
+    # append dict containing simulation info to list
+    simulations = [{
+        'system_states': json.dumps(system_states),
+        'sim_id': '3body_fig8',
+        'sim_idx': 0,
+    }]
+    # return props directory
+    props = {
+        'simulations': simulations,
+    }
+    return render_template('comp_phys/n_body.html', props=props)
+
+
+# @app.route('/comp_phys/n_body/<subdir_name>')
+# def comp_phys_n_body(subdir_name):
 
 #     def get_n_body_simulations(subdir_name):
 
@@ -101,7 +127,6 @@ def comp_phys_gas_in_a_box():
 
 #         return simulations
 
-#     subdir_name = '3body'
 #     simulations = get_n_body_simulations(subdir_name)
 #     # return props directory
 #     props = {
@@ -110,20 +135,13 @@ def comp_phys_gas_in_a_box():
 #     return render_template('comp_phys/n_body.html', props=props)
 
 
-@app.route('/comp_phys/n_body_flowers')
-def comp_phys_n_body_flowers():
-
-    props = {}
-    return render_template('comp_phys/n_body_flowers.html', props=props)
-
-
-@app.route('/comp_phys/ising')
+@ app.route('/comp_phys/ising')
 def comp_phys_ising():
     props = {}
     return render_template('comp_phys/ising.html', props=props)
 
 
-@app.route('/comp_phys/pendulum')
+@ app.route('/comp_phys/pendulum')
 def comp_phys_pendulum():
 
     system_states = np.loadtxt('./comp_phys/double_pendulum/out/ys.txt')
@@ -139,13 +157,13 @@ def comp_phys_pendulum():
 
 # ===================================
 
-@app.route('/chronos/testing/chartjs')
+@ app.route('/chronos/testing/chartjs')
 def testing_chartjs():
 
     return render_template('chronos/testing/chartjs.html')
 
 
-@app.route('/chronos/testing/pyplot')
+@ app.route('/chronos/testing/pyplot')
 def pyplot():
 
     images = []
