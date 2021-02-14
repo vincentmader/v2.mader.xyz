@@ -27,7 +27,7 @@ def index():
             {'id': 'n_body_flowers', 'link': '/comp_phys/n_body_flowers'},
             # {'id': 'n_body_sym', 'link': '/comp_phys/n_body/sym'},
             # {'id': 'n_body', 'link': ''},
-            {'id': 'n_body', 'link': '/comp_phys/n_body/3body'},
+            # {'id': 'n_body', 'link': '/comp_phys/n_body/3body'},
             {'id': 'n_body_3_body', 'link': '/comp_phys/n_body/3body_fig8'},
             {'id': 'double_pendulum', 'link': '/comp_phys/pendulum'},
             {'id': 'gas_in_a_box', 'link': '/comp_phys/gas_in_a_box'},
@@ -70,43 +70,44 @@ def comp_phys_gas_in_a_box():
     return render_template('comp_phys/gas_in_a_box.html', props=props)
 
 
-@app.route('/comp_phys/n_body/<subdir_name>')
-def comp_phys_n_body(subdir_name):
+# @app.route('/comp_phys/n_body/3body')
+# def comp_phys_n_body():
 
-    def get_n_body_simulations(subdir_name):
+#     def get_n_body_simulations(subdir_name):
 
-        # get output file names
-        path_to_output_files = os.path.join(
-            f'./comp_phys/n_body/out/{subdir_name}'
-        )
-        sorted_output_files = sorted(os.listdir(path_to_output_files))
+#         # get output file names
+#         path_to_output_files = os.path.join(
+#             f'./comp_phys/n_body/out/{subdir_name}'
+#         )
+#         sorted_output_files = sorted(os.listdir(path_to_output_files))
 
-        simulations = []
-        for sim_idx, output_file in enumerate(sorted_output_files):
-            # skip directories
-            path_to_output_file = os.path.join(
-                path_to_output_files, output_file)
-            if os.path.isdir(path_to_output_file):
-                continue
-            # load output data
-            system_states = np.loadtxt(path_to_output_file)
-            system_states = [list(i) for i in system_states]
-            # append dict containing simulation info to list
-            simulations.append({
-                'system_states': json.dumps(system_states),
-                'sim_id': output_file[:-4],
-                'sim_idx': sim_idx,
-                'outfile_name': output_file,
-            })
+#         simulations = []
+#         for sim_idx, output_file in enumerate(sorted_output_files):
+#             # skip directories
+#             path_to_output_file = os.path.join(
+#                 path_to_output_files, output_file)
+#             if os.path.isdir(path_to_output_file):
+#                 continue
+#             # load output data
+#             system_states = np.loadtxt(path_to_output_file)
+#             system_states = [list(i) for i in system_states]
+#             # append dict containing simulation info to list
+#             simulations.append({
+#                 'system_states': json.dumps(system_states),
+#                 'sim_id': output_file[:-4],
+#                 'sim_idx': sim_idx,
+#                 'outfile_name': output_file,
+#             })
 
-        return simulations
+#         return simulations
 
-    simulations = get_n_body_simulations(subdir_name)
-    # return props directory
-    props = {
-        'simulations': simulations,
-    }
-    return render_template('comp_phys/n_body.html', props=props)
+#     subdir_name = '3body'
+#     simulations = get_n_body_simulations(subdir_name)
+#     # return props directory
+#     props = {
+#         'simulations': simulations,
+#     }
+#     return render_template('comp_phys/n_body.html', props=props)
 
 
 @app.route('/comp_phys/n_body_flowers')
