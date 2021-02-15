@@ -29,14 +29,18 @@ def index():
             # {'id': 'n_body', 'link': ''},
             # {'id': 'n_body', 'link': '/comp_phys/n_body/3body'},
             {'id': '3body_fig8', 'link': '/comp_phys/n_body/3body_fig8'},
-        ], [
+            {'id': 'n_body', 'link': '/comp_phys/n_body/3body_moon'},
+            # ^ TODO: change to 3body_moon
+        # ], [
             {'id': 'gas_in_a_box', 'link': '/comp_phys/gas_in_a_box/thermal_motion'},
             {'id': 'brownian_motion', 'link': '/comp_phys/gas_in_a_box/brownian_motion'},
             {'id': 'ising', 'link': '/comp_phys/ising'},
-        ], [
+        # ], [
             {'id': 'double_pendulum', 'link': '/comp_phys/pendulum'},
             # {'id': 'bokeh'},
-            # {'id': 'lissajous'},
+            {'id': 'lissajous', 'link': '/comp_phys/lissajous'},
+        ], [
+            {'id': 'mc_pi_darts', 'link': '/comp_phys/mc_pi_darts'},
             # {'id': 'bachelor_thesis'},
             # {'id': 'spotify'},
             # {'id': 'pyplot'},
@@ -48,7 +52,7 @@ def index():
             #     {'id': 'testing_pyplot', 'link': '/chronos/testing/pyplots'},
             #     # {'id': 'orbit'},
             #     # {'id': 'solar'},
-            #     # {'id': 'tatooine'},
+            # {'id': 'tatooine'},
             #     # {'id': 'solar'},
             #     # {'id': 'tatooine'},
         ]
@@ -105,6 +109,25 @@ def comp_phys_3body_fig8():
         'simulations': simulations,
     }
     return render_template('comp_phys/n_body.html', props=props)
+
+
+@app.route('/comp_phys/n_body/3body_moon')
+def comp_phys_3body_moon():
+
+    props = {}
+    return render_template('comp_phys/n_body/3body_moon.html', props=props)
+
+
+@app.route('/comp_phys/lissajous')
+def comp_phys_lissajous():
+    props = {}
+    return render_template('comp_phys/lissajous.html', props=props)
+
+
+@app.route('/comp_phys/mc_pi_darts')
+def comp_phys_mc_pi_darts():
+    props = {}
+    return render_template('comp_phys/mc_pi_darts.html', props=props)
 
 
 # @app.route('/comp_phys/n_body/<subdir_name>')
