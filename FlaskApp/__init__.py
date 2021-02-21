@@ -34,11 +34,13 @@ def index():
         # ], [
             {'id': 'gas_in_a_box', 'link': '/comp_phys/gas_in_a_box/thermal_motion'},
             {'id': 'brownian_motion', 'link': '/comp_phys/gas_in_a_box/brownian_motion'},
-            {'id': 'ising', 'link': '/comp_phys/ising'},
         # ], [
             {'id': 'double_pendulum', 'link': '/comp_phys/pendulum'},
             # {'id': 'bokeh'},
             {'id': 'lissajous', 'link': '/comp_phys/lissajous'},
+        ], [
+            {'id': 'ising', 'link': '/comp_phys/ising'},
+            {'id': 'game_of_life', 'link': '/comp_phys/game_of_life'},
         ], [
             {'id': 'mc_pi_darts', 'link': '/comp_phys/mc_pi_darts'},
             # {'id': 'bachelor_thesis'},
@@ -122,6 +124,12 @@ def comp_phys_3body_moon():
 def comp_phys_lissajous():
     props = {}
     return render_template('comp_phys/lissajous.html', props=props)
+
+
+@app.route('/comp_phys/game_of_life')
+def comp_phys_game_of_life():
+    props = {}
+    return render_template('comp_phys/game_of_life.html', props=props)
 
 
 @app.route('/comp_phys/mc_pi_darts')

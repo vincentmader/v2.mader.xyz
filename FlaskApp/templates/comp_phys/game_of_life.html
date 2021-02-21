@@ -1,0 +1,41 @@
+{% extends "base/page_design_1.html" %}
+
+{% block head %}
+
+    {{ super() }}
+    <style type="text/css">
+        .important { color: #336699; }
+    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/comp_phys.css') }}" type="text/css">
+
+{% endblock %}
+{% block content %}
+
+    <h2 class="section_title">
+        Conway's Game Of Life
+    </h2>
+    <div class="section">
+        <div class="canvas_holder">
+            <canvas class="canvas" id="canvas"></canvas>
+            <script type="module" src="{{ url_for('static', filename='js/comp_phys/game_of_life.js') }}"></script>
+        </div>
+        <div class="button_menu">
+            <button class="button" id="play/pause">Pause</button>
+        <!--     <!-1- <p>Temperature:</p> -1-> -->
+        <!--     <div id="temperature_display"></div> -->
+        <!--     <input --> 
+        <!--         type="range" --> 
+        <!--         class="slider" id="temperature_slider" -->
+        <!--         min="-100" max="100" value="0" --> 
+        <!--     > -->
+        <!--     <!-1- <p>Magnetic field strength:</p> -1-> -->
+        <!--     <div id="Bfield_display"></div> -->
+        <!--     <input --> 
+        <!--         type="range" --> 
+        <!--         class="slider" id="Bfield_slider" -->
+        <!--         min="-10" max="10" value="0" --> 
+        <!--     > -->
+        </div>
+    </div>
+
+{% endblock %}
