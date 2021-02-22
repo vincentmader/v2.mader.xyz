@@ -41,6 +41,8 @@ def index():
         ], [
             {'id': 'ising', 'link': '/comp_phys/ising'},
             {'id': 'game_of_life', 'link': '/comp_phys/game_of_life'},
+            {'id': 'forest_fire', 'link': '/comp_phys/forest_fire'},
+            {'id': 'rock_paper_scissors', 'link': '/comp_phys/rock_paper_scissors'},
         ], [
             {'id': 'mc_pi_darts', 'link': '/comp_phys/mc_pi_darts'},
             # {'id': 'bachelor_thesis'},
@@ -130,6 +132,18 @@ def comp_phys_lissajous():
 def comp_phys_game_of_life():
     props = {}
     return render_template('comp_phys/game_of_life.html', props=props)
+
+
+@app.route('/comp_phys/forest_fire')
+def comp_phys_forest_fire():
+    props = {}
+    return render_template('comp_phys/forest_fire.html', props=props)
+
+
+@app.route('/comp_phys/rock_paper_scissors')
+def comp_phys_rock_paper_scissors():
+    props = {}
+    return render_template('comp_phys/rock_paper_scissors.html', props=props)
 
 
 @app.route('/comp_phys/mc_pi_darts')
