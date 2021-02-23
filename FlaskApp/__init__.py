@@ -23,43 +23,63 @@ app = Flask(__name__)
 def index():
 
     nav_grid_sections = [
-        [
-            {'id': 'n_body_flowers', 'link': '/comp_phys/n_body/flowers'},
-            # {'id': 'n_body_sym', 'link': '/comp_phys/n_body/sym'},
-            # {'id': 'n_body', 'link': ''},
-            # {'id': 'n_body', 'link': '/comp_phys/n_body/3body'},
-            {'id': '3body_fig8', 'link': '/comp_phys/n_body/3body_fig8'},
-            {'id': 'n_body', 'link': '/comp_phys/n_body/3body_moon'},
-            # ^ TODO: change to 3body_moon
-        # ], [
-            {'id': 'gas_in_a_box', 'link': '/comp_phys/gas_in_a_box/thermal_motion'},
-            {'id': 'brownian_motion', 'link': '/comp_phys/gas_in_a_box/brownian_motion'},
-        # ], [
-            {'id': 'double_pendulum', 'link': '/comp_phys/pendulum'},
-            # {'id': 'bokeh'},
-            {'id': 'lissajous', 'link': '/comp_phys/lissajous'},
-        ], [
-            {'id': 'ising', 'link': '/comp_phys/ising'},
-            {'id': 'game_of_life', 'link': '/comp_phys/game_of_life'},
-            {'id': 'forest_fire', 'link': '/comp_phys/forest_fire'},
-            {'id': 'rock_paper_scissors', 'link': '/comp_phys/rock_paper_scissors'},
-        ], [
-            {'id': 'mc_pi_darts', 'link': '/comp_phys/mc_pi_darts'},
-            # {'id': 'bachelor_thesis'},
-            # {'id': 'spotify'},
+        {
+            'title': 'n-body dynamics',
+            'pages': [
+                {'id': 'n_body_flowers', 'link': '/comp_phys/n_body/flowers'},
+                # {'id': 'n_body_sym', 'link': '/comp_phys/n_body/sym'},
+                # {'id': 'n_body', 'link': ''},
+                # {'id': 'n_body', 'link': '/comp_phys/n_body/3body'},
+                {'id': '3body_fig8', 'link': '/comp_phys/n_body/3body_fig8'},
+                {'id': 'n_body', 'link': '/comp_phys/n_body/3body_moon'},
+                # ^ TODO: change to 3body_moon
+            ]
+        }, {
+            'title': 'harmonical oscillators',
+            'pages': [
+                {'id': 'double_pendulum', 'link': '/comp_phys/pendulum'},
+                {'id': 'lissajous', 'link': '/comp_phys/lissajous'},
+            ]
+        }, {
+            'title': 'cellular automata',
+            'pages': [
+                {'id': 'game_of_life', 'link': '/comp_phys/game_of_life'},
+                {'id': 'rock_paper_scissors', 'link': '/comp_phys/rock_paper_scissors'},
+                {'id': 'forest_fire', 'link': '/comp_phys/forest_fire'},
+            ]
+        }, {
+            'title': 'statistical physics',
+            'pages': [
+                {'id': 'ising', 'link': '/comp_phys/ising'},
+                {'id': 'gas_in_a_box', 'link': '/comp_phys/gas_in_a_box/thermal_motion'},
+                {'id': 'brownian_motion', 'link': '/comp_phys/gas_in_a_box/brownian_motion'},
+            ]
+        }, {
+            'title': 'Monte Carlo',
+            'pages': [
+                {'id': 'mc_pi_darts', 'link': '/comp_phys/mc_pi_darts'},
+            ]
+        }, {
+            'title': 'stuff',
+            'pages': [
+                {'id': 'tatooine', 'link': '/tatooine'},
+                {'id': 'lorentz', 'link': '/lorentz'},
+            ]
+        }, {
+            'title': 'unfinished',
+            'pages': [
+                {'id': 'testing_bokeh', 'link': '/chronos/testing/bokeh'},
+                {'id': 'testing_chartjs', 'link': '/chronos/testing/chartjs'},
+                {'id': 'testing_pyplot', 'link': '/chronos/testing/pyplots'},
+            ]
+            # {'id': 'orbit'},
+            # {'id': 'solar'},
             # {'id': 'pyplot'},
             # {'id': 'factfulness'},
+            # {'id': 'bachelor_thesis'},
+            # {'id': 'spotify'},
             # {'id': 'boltzmann', 'link': '/comp_phys/boltzmann'},
-            # ], [
-            #     {'id': 'testing_bokeh', 'link': '/chronos/testing/bokeh'},
-            #     {'id': 'testing_chartjs', 'link': '/chronos/testing/chartjs'},
-            #     {'id': 'testing_pyplot', 'link': '/chronos/testing/pyplots'},
-            #     # {'id': 'orbit'},
-            #     # {'id': 'solar'},
-            # {'id': 'tatooine'},
-            #     # {'id': 'solar'},
-            #     # {'id': 'tatooine'},
-        ]
+        }
     ]
 
     return render_template(
@@ -297,7 +317,7 @@ def python_executable():
 # minipages
 @app.route('/tatooine/')
 def tatooine():
-    return render_template('tatooine.html')
+    return render_template('old/tatooine.html')
 
 
 @app.route('/orbit/')
@@ -332,7 +352,7 @@ def solar_binary():
 
 @app.route('/lorentz/')
 def lorentz():
-    return render_template('lorentz.html')
+    return render_template('old/lorentz.html')
 
 
 @app.route('/chart_test/')

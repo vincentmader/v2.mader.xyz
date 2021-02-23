@@ -3,6 +3,7 @@ import { apply_periodic_bounds } from "./physics_utils.js";
 
 const line_width = 2;
 const J = 1;
+const mu = 1;
 // const T = 3;
 var T;
 var B;
@@ -71,8 +72,8 @@ function get_flip_energy(grid, i, j) {
       }
     }
   }
-  dE -= B * s_flip;
-  dE += B * -s_flip;
+  dE -= -B * mu * s_flip;  // subtract current state's energy
+  dE += -B * mu * -s_flip;  // add new state's energy
   return dE;
 }
 

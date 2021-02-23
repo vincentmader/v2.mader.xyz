@@ -10,6 +10,7 @@ const m = 1;
 const E = 6;
 const B = 1;
 const dt = 1;
+var W, H, canvas, ctx;
 
 // // // Objects
 // function Circle(x, y, radius, color) {
@@ -198,10 +199,12 @@ const dt = 1;
 
 // animate();
 
-const canvas = document.getElementById("square_canvas");
-const c = canvas.getContext("2d");
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+canvas = document.getElementById("canvas");
+ctx = canvas.getContext("2d");
+W = canvas.getBoundingClientRect().width;
+H = W;
+canvas.width = W;
+canvas.height = W;
 
 // function randomIntFromRange(from, to) {
 //   return from + Math.floor(Math.random() * (to - from));
@@ -211,16 +214,16 @@ canvas.height = window.innerHeight;
 function Circle(x, y, radius, color) {
   this.x = canvas.width / 2;
   this.y = canvas.height;
-  this.radius = 5;
+  this.radius = 1;
   this.vx = 0;
   // this.vy = -velocities[randomIntFromRange(0, velocities.length)];
   this.vy = -6 + 0.5 * (Math.random() - 0.5);
   this.draw = function () {
-    c.beginPath();
-    c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-    c.fillStyle = this.color;
-    c.fill();
-    c.closePath();
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+    ctx.fillStyle = this.color;
+    ctx.fill();
+    ctx.closePath();
   };
   this.color = "white";
   if (Math.abs(-this.vy - 6) <= 0.001) {
@@ -243,9 +246,9 @@ function Circle(x, y, radius, color) {
 let circles = [];
 function animate() {
   requestAnimationFrame(animate); // Create an animation loop
-  c.clearRect(0, 0, canvas.width, canvas.height); // Erase whole canvas
+  ctx.clearRect(0, 0, canvas.width, canvas.height); // Erase whole canvas
 
-  for (let idx = 0; idx < 10; idx++) {
+  for (let idx = 0; idx < 30; idx++) {
     circles.push(new Circle());
   }
   circles.forEach((circle) => {

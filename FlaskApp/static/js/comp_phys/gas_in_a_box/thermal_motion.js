@@ -1,12 +1,12 @@
 // import { draw_line } from "./a.js";
-import { draw_point } from "../utils/drawing_utils.js";
+import { draw_point } from "../../utils/drawing_utils.js";
 
 const INITIAL_ZOOM_LEVEL = 70;
 
 var canvas, ctx;
 var W, H, o_x, o_y;
 
-var data = $("#gas_in_a_box_canvas").data("ys");
+var data = $("#canvas").data("ys");
 var system_state;
 var frame_idx;
 
@@ -61,7 +61,7 @@ function xy_to_canvas_coords(x, y, W, H, zoom_level) {
 }
 
 function init() {
-  canvas = document.getElementById("gas_in_a_box_canvas");
+  canvas = document.getElementById("canvas");
   W = canvas.getBoundingClientRect().width;
   H = W;
   canvas.width = W;
@@ -93,16 +93,6 @@ function init() {
     }
 
     frame_idx += 1;
-    document.getElementById("restart").addEventListener("click", function () {
-      frame_idx = 0;
-      zoom_level = INITIAL_ZOOM_LEVEL;
-    });
-    document.getElementById("zoom_in").addEventListener("click", function () {
-      zoom_level += 0.1;
-    });
-    document.getElementById("zoom_out").addEventListener("click", function () {
-      zoom_level -= 0.1;
-    });
   }, 20);
 }
 

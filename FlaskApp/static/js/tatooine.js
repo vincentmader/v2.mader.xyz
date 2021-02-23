@@ -1,5 +1,9 @@
-const canvas = document.getElementById("canvas1");
-const ctx = canvas.getContext("2d");
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
+W = canvas.getBoundingClientRect().width;
+H = W;
+canvas.width = W;
+canvas.height = W;
 
 const keys = [];
 

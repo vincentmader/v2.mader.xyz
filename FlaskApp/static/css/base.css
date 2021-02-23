@@ -6,11 +6,13 @@
   font-family: Arial, Helvetica, sans-serif; /* ? */
   /* text-align: center; */
   margin: 0px;
+  overflow-x: hidden;
 }
 
 #content {
   width: 40%;
-  margin: auto; /* center */
+  margin-right: auto; /* center */
+  margin-left: auto; /* center */
   /* padding-top: 120px; */
 }
 @media only screen and (max-width: 1200px) {
@@ -71,7 +73,7 @@ a.stealthy_link {
   /* margin-top: 80px; */
   /* border: 1px solid red; */
   font-size: 24px;
-  height: 1.3em;
+  height: 2em;
   display: flex;
   /* justify-content: center; */
   align-items: center;
@@ -81,9 +83,10 @@ a.stealthy_link {
 #home_link {
   color: white;
   text-decoration: none;
-  text-align: left;
-  /* padding-left: 100px; */
-  /* padding-top: 10px; */
+  text-align: right;
+  padding-right: 0.7em;
+  padding-top: 0.2em;
+  width: 100%;
 }
 
 .divider {

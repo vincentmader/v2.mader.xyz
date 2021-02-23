@@ -1,7 +1,7 @@
 import { draw_tails } from "./drawing_utils.js";
 import { draw_bodies } from "./drawing_utils.js";
 import { draw_velocities } from "./drawing_utils.js";
-import { kepler_velocity } from "./physics_utils.js";
+import { kepler_velocity } from "../physics_utils.js";
 
 const line_width = 3;
 const tail_length = 200;
@@ -127,7 +127,6 @@ export function main(canvas, ctx, canvas_id) {
     }
   }, 1);
   document.getElementById("play/pause").addEventListener("click", function () {
-    k;
     paused = !paused;
   });
   document
