@@ -9,7 +9,7 @@ import numpy as np
 
 from .config import PATH_TO_STATIC
 from .config import PATH_TO_PROJECT
-from .chronos import plots, stats
+# from .chronos import plots, stats
 
 
 # initialize app
@@ -201,66 +201,66 @@ def comp_phys_monte_carlo(subdir):
         return render_template(template, props=props)
 
 
-@app.route('/chronos/testing/<subdir>')
-def chronos_testing(subdir, lolol=0):
+# @app.route('/chronos/testing/<subdir>')
+# def chronos_testing(subdir, lolol=0):
 
-    if subdir in ['chartjs']:
-        return render_template(f'chronos/testing/{subdir}.html')
+#     if subdir in ['chartjs']:
+#         return render_template(f'chronos/testing/{subdir}.html')
 
-    if subdir == 'pyplot':
-        images = []
+#     if subdir == 'pyplot':
+#         images = []
 
-        path_to_pyplots = os.path.join(PATH_TO_STATIC, 'media/pyplots')
-        for filename in os.listdir(path_to_pyplots):
-            image = {
-                'filepath': os.path.join('media/pyplots', filename)
-            }
-            images.append(image)
-        print(images)
+#         path_to_pyplots = os.path.join(PATH_TO_STATIC, 'media/pyplots')
+#         for filename in os.listdir(path_to_pyplots):
+#             image = {
+#                 'filepath': os.path.join('media/pyplots', filename)
+#             }
+#             images.append(image)
+#         print(images)
 
-        return render_template(
-            'chronos/testing/pyplot.html',
-            images=images
-        )
+#         return render_template(
+#             'chronos/testing/pyplot.html',
+#             images=images
+#         )
 
-    if subdir == 'bokeh':
-        plot_functions = [
-            plots.bokeh.google_takeout.gmap,
-        ]
+#     if subdir == 'bokeh':
+#         plot_functions = [
+#             plots.bokeh.google_takeout.gmap,
+#         ]
 
-        scripts, divs = [], []
-        for f in plot_functions:
-            script, div = f()
-            scripts.append(script)
-            divs.append(div)
+#         scripts, divs = [], []
+#         for f in plot_functions:
+#             script, div = f()
+#             scripts.append(script)
+#             divs.append(div)
 
-        script, div = plots.bokeh.google_takeout.bar_plot_search_hits(
-            'youtube')
-        scripts.append(script)
-        divs.append(div)
+#         script, div = plots.bokeh.google_takeout.bar_plot_search_hits(
+#             'youtube')
+#         scripts.append(script)
+#         divs.append(div)
 
-        x, y = stats.time_series.avg_grades()
-        # x, y = np.array(list(foo.keys())), np.array(list(foo.values()))
-        # x, y = stats.time_series.avg_grades()
-        script, div = plots.bokeh.basic.time_series(x, y)
-        scripts.append(script)
-        divs.append(div)
+#         x, y = stats.time_series.avg_grades()
+#         # x, y = np.array(list(foo.keys())), np.array(list(foo.values()))
+#         # x, y = stats.time_series.avg_grades()
+#         script, div = plots.bokeh.basic.time_series(x, y)
+#         scripts.append(script)
+#         divs.append(div)
 
-        # x, y = stats.time_series.chars_written_in_daily_log()
-        # x, y = np.array(list(foo.keys())), np.array(list(foo.values()))
-        # x, y = stats.time_series.avg_grades()
-        # script, div = plots.bokeh.basic.time_series(x, y)
-        # scripts.append(script)
-        # divs.append(div)
+#         # x, y = stats.time_series.chars_written_in_daily_log()
+#         # x, y = np.array(list(foo.keys())), np.array(list(foo.values()))
+#         # x, y = stats.time_series.avg_grades()
+#         # script, div = plots.bokeh.basic.time_series(x, y)
+#         # scripts.append(script)
+#         # divs.append(div)
 
-        template = 'chronos/testing/bokeh.html'
-        return render_template(template, scripts=scripts, divs=divs)
+#         template = 'chronos/testing/bokeh.html'
+#         return render_template(template, scripts=scripts, divs=divs)
 
 
-@app.route('/chronos/testing/<subdir>', methods=['POST'])
-def testing_bokeh_post(subdir):
-    textfield_1 = request.form['textfield_1']
-    return chronos_testing(subdir, textfield_1)
+# @app.route('/chronos/testing/<subdir>', methods=['POST'])
+# def testing_bokeh_post(subdir):
+#     textfield_1 = request.form['textfield_1']
+#     return chronos_testing(subdir, textfield_1)
 
 
 @app.route('/old/<subdir>')
