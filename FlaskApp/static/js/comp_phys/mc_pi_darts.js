@@ -10,6 +10,8 @@ var paused = false;
 var x, y, r, canvas_coords, color;
 var dart_hits, dart_throws, pi;
 
+var chart, ctx2, canvas2, W2;
+
 // convert (x,y) \in [0,1]^2 -> (x,y) \in [-W,W]x[-H,H]
 const get_canvas_coords = (x, y) => {
   const canvas_x = (W / 2) * (1 + x * zoom_level);
@@ -71,6 +73,54 @@ const init = () => {
   canvas.width = W;
   canvas.height = W;
 
+  // ctx2 = document.getElementById("canvas_pi_chart").getContext("2d");
+  canvas2 = document.getElementById("canvas_pi_chart");
+  ctx2 = canvas2.getContext("2d");
+  W2 = canvas2.getBoundingClientRect().width;
+  canvas2.height = W2 / 2;
+
+  chart = new Chart(ctx2, {
+    type: "line",
+    data: {
+      datasets: [
+        {
+          borderColor: "green",
+          pointRadius: 0,
+          data: [],
+          showLine: true, // overrides the `line` dataset default
+          label: "pi",
+        },
+        // ], [
+        // {
+        //   borderColor: "red",
+        //   pointRadius: 0,
+        //   data: [],
+        //   showLine: true, // overrides the `line` dataset default
+        //   label: "error [%]",
+        // },
+        // {
+        //   type: "scatter", // 'line' dataset default does not affect this dataset since it's a 'scatter'
+        //   data: [1, 1],
+        // },
+      ],
+    },
+    options: {
+      // scales: {
+      //   xAxes: [
+      //     {
+      //       display: true,
+      //     },
+      //   ],
+      //   yAxes: [
+      //     {
+      //       display: true,
+      //       type: "logarithmic",
+      //     },
+      //   ],
+      // },
+    },
+  });
+
   // run handle method for reset button to initialize canvas
   handle_button_click_reset();
   // setup buttons & event listeners
@@ -84,6 +134,7 @@ const init = () => {
   // run infinite loop
   setInterval(function () {
     if (paused) return;
+
     // throw dart, i.e. choose random point from interval [0,1]^2
     x = 2 * Math.random() - 1;
     y = 2 * Math.random() - 1;
@@ -99,9 +150,24 @@ const init = () => {
     // draw point
     canvas_coords = get_canvas_coords(x, y);
     draw_point(ctx, canvas_coords[0], canvas_coords[1], 1, color, color);
+
     // calculate pi
-    pi = ((dart_hits / dart_throws) * 4).toFixed(2);
-    document.getElementById("textfield_pi").innerHTML = "Pi ~= " + pi;
+    pi = (dart_hits / dart_throws) * 4;
+    document.getElementById("textfield_pi").innerHTML =
+      "pi ~= " + pi.toFixed(2);
+    // if (!(dart_throws % 100)) {
+    //   var label = dart_throws;
+    // } else {
+    //   var label = "";
+    // }
+    var label = "";
+    chart.data.labels.push(label);
+    chart.data.datasets[0].data.push(pi);
+    // chart.data.datasets[1].data.push(Math.abs(Math.PI - pi) / Math.PI);
+    // chart.data.datasets.forEach((dataset) => {
+    //   dataset.data.push(Math.abs(Math.PI - pi) / Math.PI);
+    // });
+    chart.update();
   }, 1);
 };
 

@@ -11,9 +11,9 @@
 {% endblock %}
 {% block content %}
 
-    <h2 class="section_title">
+    <h4 class="section_title">
         single pendulum  <!-- {{ props['title'] }} -->
-    </h2>
+    </h4>
     <div class="section">
         <div class="canvas_holder">
             <canvas class="canvas" id="single_pendulum_canvas"></canvas>
@@ -28,9 +28,9 @@
             the pendulum approximates a harmonical oscillator.
         </div>
     </div>
-    <h2 class="section_title">
+    <h4 class="section_title">
         double pendulum
-    </h2>
+    </h4>
     <div class="section">
         <div class="canvas_holder">
             <canvas class="canvas" id="double_pendulum_canvas" data-ys={{ props['ys']|tojson }}></canvas>
