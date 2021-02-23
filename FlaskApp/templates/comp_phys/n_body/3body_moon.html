@@ -1,0 +1,40 @@
+{% extends "base/page_design_1.html" %}
+
+{% block head %}
+
+    {{ super() }}
+    <style type="text/css">
+        .important { color: #336699; }
+    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/comp_phys.css') }}" type="text/css">
+
+{% endblock %}
+{% block content %}
+
+    <h2 class="section_title">
+        moon
+    </h2>
+    <div class="section">
+        <div class="canvas_holder">
+            <canvas class="canvas" id="canvas"></canvas>
+            <script type=module>
+                import { main } from "{{ url_for('static', filename='js/comp_phys/n_body/3body_moon.js') }}"
+                // get canvas from unique canvas_name
+                const canvas = document.getElementById("canvas");
+                const ctx = canvas.getContext("2d");
+
+                main(canvas, ctx);
+            </script>
+        </div>
+        <div class="button_menu">
+            <button class="button" id="button_toggle_draw_tails">
+                Draw tails
+            </button>
+        </div>
+        <div class="latex">
+            Radius of the Hill sphere:
+            $$r_H\approx a\cdot\sqrt{\frac{m}{3M}}$$
+        </div>
+    </div>
+
+{% endblock %}

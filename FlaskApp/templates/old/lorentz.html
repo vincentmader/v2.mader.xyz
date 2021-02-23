@@ -1,15 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Funky!</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" type="text/css">
-</head>
-<body id="body1">
-    <div id="div1">
-        <canvas id="square_canvas"></canvas>
-        <script src="{{ url_for('static', filename='js/lorentz.js') }}"></script>
+{% extends "base/page_design_1.html" %}
+
+{% block head %}
+
+    {{ super() }}
+    <style type="text/css">
+        .important { color: #336699; }
+    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/comp_phys.css') }}" type="text/css">
+
+{% endblock %}
+{% block content %}
+
+    <h2 class="section_title">
+        Wien filter
+    </h2>
+    <div class="section">
+        <div class="canvas_holder">
+            <canvas class="canvas" id="canvas"></canvas>
+            <script type="module" src="{{ url_for('static', filename='js/lorentz.js') }}"></script>
+        </div>
     </div>
-</body>
-</html>
+
+{% endblock %}
