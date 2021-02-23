@@ -7,28 +7,30 @@
         .important { color: #336699; }
     </style>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/comp_phys.css') }}" type="text/css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
 
 {% endblock %}
 {% block content %}
 
-    <h2 class="section_title">
+
+    <h4 class="section_title">
       Monte Carlo Calculation of Pi
-    </h2>
+    </h4>
     <div class="section">
         <div class="canvas_holder">
             <canvas class="canvas" id="canvas"></canvas>
-            <script type="module" src="{{ url_for('static', filename='js/comp_phys/mc_pi_darts.js') }}"></script>
         </div>
-        <div id="textfield_pi"></div>
-        <!-- <div class="button_menu"> -->
-        <!--     <\!-- <p>Magnetic field strength:</p> -\-> -->
-        <!--     <div id="Bfield_display"></div> -->
-        <!--     <input  -->
-        <!--         type="range"  -->
-        <!--         class="slider" id="Bfield_slider" -->
-        <!--         min="-10" max="10" value="0"  -->
-        <!--     > -->
-        <!-- </div> -->
+        <div class="button_menu">
+            <button class="button" id="play/pause">Pause</button>
+            <button class="button" id="reset">Reset</button>
+        </div>
+        <div class="latex" style="text-align: center;" id="textfield_pi"></div>
     </div>
+    <div class="section">
+        <div class="canvas_holder">
+            <canvas class="canvas" id="canvas_pi_chart"></canvas>
+        </div>
+    </div>
+    <script type="module" src="{{ url_for('static', filename='js/comp_phys/mc_pi_darts.js') }}"></script>
 
 {% endblock %}

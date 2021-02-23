@@ -12,9 +12,9 @@
 {% block content %}
 
 
-    <h2 class="section_title">
-        test
-    </h2>
+    <h4 class="section_title">
+        Symmetric satelite constellation
+    </h4>
     <div class="section">
         <div class="canvas_holder">
             <canvas 
@@ -35,9 +35,8 @@
             <button class="button" id="play/pause">
                 play/pause
             </button>
-            <input type="text" value="4" name="nr of bodies" id="nr_of_bodies_textfield"/>
             <button class="button" id="toggle_eccentricity">
-                ecc.
+                toggle ecc.
             </button>
             <!-- <button class="button" id="zoom_in"> -->
             <!--     zoom in -->
@@ -45,6 +44,14 @@
             <!-- <button class="button" id="zoom_out"> -->
             <!--     zoom out -->
             <!-- </button> -->
+        </div>
+        <div class="button_menu" style="grid-template-columns: repeat(1, 1fr)">
+            <input 
+                type="text" 
+                value="4" 
+                name="nr of bodies" 
+                id="nr_of_bodies_textfield"
+            />
         </div>
     </div>
 

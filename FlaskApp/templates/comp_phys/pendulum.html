@@ -11,26 +11,26 @@
 {% endblock %}
 {% block content %}
 
-    <h2 class="section_title">
+    <h4 class="section_title">
         single pendulum  <!-- {{ props['title'] }} -->
-    </h2>
+    </h4>
     <div class="section">
         <div class="canvas_holder">
             <canvas class="canvas" id="single_pendulum_canvas"></canvas>
             <script type="module" src="{{ url_for('static', filename='js/comp_phys/single_pendulum.js') }}"></script>
         </div>
         <div class="latex">  <!-- {{ props['description'] }} -->
-            The period of swing of a simple gravity pendulum
+            The period of swing of a simple gravity pendulum depends
             mainly on its length \(l\) and the local strength of 
             gravity \(g\). It is independent of the pendulum mass.
-                $$T=2\pi\sqrt{\frac{l}{g} }$$
+                $$T=2\pi\cdot\sqrt{\frac{l}{g} }$$
             For small amplitudes, i.e. small maximum angles,
             the pendulum approximates a harmonical oscillator.
         </div>
     </div>
-    <h2 class="section_title">
+    <h4 class="section_title">
         double pendulum
-    </h2>
+    </h4>
     <div class="section">
         <div class="canvas_holder">
             <canvas class="canvas" id="double_pendulum_canvas" data-ys={{ props['ys']|tojson }}></canvas>

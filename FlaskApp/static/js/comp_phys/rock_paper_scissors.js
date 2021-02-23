@@ -1,5 +1,6 @@
 const line_width = 2;
-const colors = ["black", "white", "red"];
+const colors = ["#333333", "white", "red"];
+const threshold = 3;
 
 var canvas, ctx;
 var W, H;
@@ -50,21 +51,19 @@ function get_next_grid_state(N, grid) {
   var new_row = [];
   var entry, new_entry;
   var neighbors, neighbor, k_bc, l_bc;
+  var counts, add_neighbor;
 
   for (let i = 0; i < N; i++) {
     new_row = [];
     for (let j = 0; j < N; j++) {
       entry = grid[i][j];
 
-      new_entry = 1;
       neighbors = [];
       // for (let k = Math.max(i - 1, 0); k <= Math.min(i + 1, N - 1); k++) {
       //   for (let l = Math.max(j - 1, 0); l <= Math.min(j + 1, N - 1); l++) {
       for (let k = i - 1; k <= i + 1; k++) {
         for (let l = j - 1; l <= j + 1; l++) {
-          if (i == k && l == j) {
-            continue;
-          }
+          if (i == k && l == j) continue;
           // apply bounds
           if (k < 0) k_bc = k + N;
           else if (k >= N) k_bc = k - N;
@@ -72,18 +71,50 @@ function get_next_grid_state(N, grid) {
           if (l < 0) l_bc = l + N;
           else if (l >= N) l_bc = l - N;
           else l_bc = l;
-
           neighbors.push(grid[k_bc][l_bc]);
           // neighbors.push(grid[k][l]);
         }
       }
-      neighbor = neighbors[Math.floor(8 * Math.random())];
-      // new_entry = counts.indexOf(Math.max(...counts));
-      if ((entry == 2 && neighbor == 0) || (entry == 0 && neighbor == 2)) {
-        new_entry = 0;
-      } else {
-        new_entry = Math.max(entry, neighbor);
+
+      counts = {};
+      for (const n of neighbors) {
+        if (n == -1) continue;
+        if (n in counts) {
+          counts[n] += 1;
+        } else counts[n] = 1;
       }
+
+      new_entry = entry;
+      for (const c in counts) {
+        if (c == entry) continue;
+        if (counts[c] < threshold) continue;
+        if (c > entry && !(entry == 0 && c == 2)) {
+          new_entry = c;
+        } else if (c == 0 && entry == 2) {
+          new_entry = c;
+        }
+      }
+
+      // if (n == neighbors[-1]) {
+      //   if (n == 0) {
+      //   }
+      // }
+      // if (add_neighbor) {
+      // }
+      // }
+      // new_entry = entry;
+      // for (let n in counts) {
+      //   if (counts[n] > threshold) {
+      //     new_entry = n;
+      //   }
+      // }
+      // neighbor = neighbors[Math.floor(8 * Math.random())];
+      // new_entry = counts.indexOf(Math.max(...counts));
+      // if ((entry == 2 && neighbor == 0) || (entry == 0 && neighbor == 2)) {
+      //   new_entry = 0;
+      // } else {
+      //   new_entry = Math.max(entry, neighbor);
+      // }
       new_row.push(new_entry);
     }
     new_grid.push(new_row);
@@ -140,7 +171,7 @@ const init = () => {
     grid = flip_grid_entry(N, grid, pos[0], pos[1]);
   });
 
-  const N = 120;
+  const N = 250;
   var grid = initialize_grid(N);
 
   var frame_idx = 0;
@@ -153,7 +184,7 @@ const init = () => {
     }
     if (paused) document.getElementById("play/pause").innerHTML = "Unpause";
     if (!paused) document.getElementById("play/pause").innerHTML = "Pause";
-  }, 150);
+  }, 1);
 };
 
 init();

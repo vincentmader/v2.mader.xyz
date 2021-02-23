@@ -17,3 +17,8 @@ env
 .venv
 **pyplots**
 config.py
+media/wallpapers
+
+stocks.pdf
+net_worth.pdf
+search_history.db

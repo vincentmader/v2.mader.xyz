@@ -177,7 +177,7 @@ const init = () => {
     }
     if (paused) document.getElementById("play/pause").innerHTML = "Unpause";
     if (!paused) document.getElementById("play/pause").innerHTML = "Pause";
-  }, 150);
+  }, 1);
 };
 
 init();

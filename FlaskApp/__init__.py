@@ -7,8 +7,9 @@ from flask import Flask
 from flask import render_template, send_from_directory, request
 import numpy as np
 
-import config
-from config import PATH_TO_STATIC
+# import .config
+from .config import PATH_TO_STATIC
+from .config import PATH_TO_PROJECT
 
 
 # initialize app
@@ -23,43 +24,63 @@ app = Flask(__name__)
 def index():
 
     nav_grid_sections = [
-        [
-            {'id': 'n_body_flowers', 'link': '/comp_phys/n_body/flowers'},
-            # {'id': 'n_body_sym', 'link': '/comp_phys/n_body/sym'},
-            # {'id': 'n_body', 'link': ''},
-            # {'id': 'n_body', 'link': '/comp_phys/n_body/3body'},
-            {'id': '3body_fig8', 'link': '/comp_phys/n_body/3body_fig8'},
-            {'id': 'n_body', 'link': '/comp_phys/n_body/3body_moon'},
-            # ^ TODO: change to 3body_moon
-        # ], [
-            {'id': 'gas_in_a_box', 'link': '/comp_phys/gas_in_a_box/thermal_motion'},
-            {'id': 'brownian_motion', 'link': '/comp_phys/gas_in_a_box/brownian_motion'},
-        # ], [
-            {'id': 'double_pendulum', 'link': '/comp_phys/pendulum'},
-            # {'id': 'bokeh'},
-            {'id': 'lissajous', 'link': '/comp_phys/lissajous'},
-        ], [
-            {'id': 'ising', 'link': '/comp_phys/ising'},
-            {'id': 'game_of_life', 'link': '/comp_phys/game_of_life'},
-            {'id': 'forest_fire', 'link': '/comp_phys/forest_fire'},
-            {'id': 'rock_paper_scissors', 'link': '/comp_phys/rock_paper_scissors'},
-        ], [
-            {'id': 'mc_pi_darts', 'link': '/comp_phys/mc_pi_darts'},
-            # {'id': 'bachelor_thesis'},
-            # {'id': 'spotify'},
+        {
+            'title': 'n-body dynamics',
+            'pages': [
+                {'id': 'n_body_flowers', 'link': '/comp_phys/n_body/flowers'},
+                # {'id': 'n_body_sym', 'link': '/comp_phys/n_body/sym'},
+                # {'id': 'n_body', 'link': ''},
+                # {'id': 'n_body', 'link': '/comp_phys/n_body/3body'},
+                {'id': '3body_fig8', 'link': '/comp_phys/n_body/3body_fig8'},
+                {'id': 'n_body', 'link': '/comp_phys/n_body/3body_moon'},
+                # ^ TODO: change to 3body_moon
+            ]
+        }, {
+            'title': 'harmonical oscillators',
+            'pages': [
+                {'id': 'double_pendulum', 'link': '/comp_phys/pendulum'},
+                {'id': 'lissajous', 'link': '/comp_phys/lissajous'},
+            ]
+        }, {
+            'title': 'cellular automata',
+            'pages': [
+                {'id': 'game_of_life', 'link': '/comp_phys/game_of_life'},
+                {'id': 'rock_paper_scissors', 'link': '/comp_phys/rock_paper_scissors'},
+                {'id': 'forest_fire', 'link': '/comp_phys/forest_fire'},
+            ]
+        }, {
+            'title': 'statistical physics',
+            'pages': [
+                {'id': 'ising', 'link': '/comp_phys/ising'},
+                {'id': 'gas_in_a_box', 'link': '/comp_phys/gas_in_a_box/thermal_motion'},
+                {'id': 'brownian_motion', 'link': '/comp_phys/gas_in_a_box/brownian_motion'},
+            ]
+        }, {
+            'title': 'Monte Carlo',
+            'pages': [
+                {'id': 'mc_pi_darts', 'link': '/comp_phys/mc_pi_darts'},
+            ]
+        }, {
+            'title': 'stuff',
+            'pages': [
+                {'id': 'tatooine', 'link': '/tatooine'},
+                {'id': 'lorentz', 'link': '/lorentz'},
+            ]
+        }, {
+            'title': 'unfinished',
+            'pages': [
+                {'id': 'testing_bokeh', 'link': '/chronos/testing/bokeh'},
+                {'id': 'testing_chartjs', 'link': '/chronos/testing/chartjs'},
+                {'id': 'testing_pyplot', 'link': '/chronos/testing/pyplots'},
+            ]
+            # {'id': 'orbit'},
+            # {'id': 'solar'},
             # {'id': 'pyplot'},
             # {'id': 'factfulness'},
+            # {'id': 'bachelor_thesis'},
+            # {'id': 'spotify'},
             # {'id': 'boltzmann', 'link': '/comp_phys/boltzmann'},
-            # ], [
-            #     {'id': 'testing_bokeh', 'link': '/chronos/testing/bokeh'},
-            #     {'id': 'testing_chartjs', 'link': '/chronos/testing/chartjs'},
-            #     {'id': 'testing_pyplot', 'link': '/chronos/testing/pyplots'},
-            #     # {'id': 'orbit'},
-            #     # {'id': 'solar'},
-            # {'id': 'tatooine'},
-            #     # {'id': 'solar'},
-            #     # {'id': 'tatooine'},
-        ]
+        }
     ]
 
     return render_template(
@@ -72,7 +93,7 @@ def index():
 @app.route('/comp_phys/gas_in_a_box/thermal_motion')
 def comp_phys_gas_in_a_box_thermal_motion():
 
-    system_states = np.loadtxt('./comp_phys/gas_in_a_box/out/ys.txt')
+    system_states = np.loadtxt(PATH_TO_PROJECT + 'comp_phys/gas_in_a_box/out/ys.txt')
     system_states = [list(i) for i in system_states]
 
     props = {
@@ -100,7 +121,7 @@ def comp_phys_n_body_flowers():
 def comp_phys_3body_fig8():
 
     # load output data
-    path_to_output_file = './comp_phys/n_body/out/3body_fig8/system_states.txt'
+    path_to_output_file = PATH_TO_PROJECT + 'comp_phys/n_body/out/3body_fig8/system_states.txt'
     system_states = [list(i) for i in np.loadtxt(path_to_output_file)]
     # append dict containing simulation info to list
     simulations = [{
@@ -200,7 +221,7 @@ def comp_phys_ising():
 @ app.route('/comp_phys/pendulum')
 def comp_phys_pendulum():
 
-    system_states = np.loadtxt('./comp_phys/double_pendulum/out/ys.txt')
+    system_states = np.loadtxt(PATH_TO_PROJECT + 'comp_phys/double_pendulum/out/ys.txt')
     system_states = [list(i) for i in system_states]
 
     props = {
@@ -297,7 +318,7 @@ def python_executable():
 # minipages
 @app.route('/tatooine/')
 def tatooine():
-    return render_template('tatooine.html')
+    return render_template('old/tatooine.html')
 
 
 @app.route('/orbit/')
@@ -332,7 +353,7 @@ def solar_binary():
 
 @app.route('/lorentz/')
 def lorentz():
-    return render_template('lorentz.html')
+    return render_template('old/lorentz.html')
 
 
 @app.route('/chart_test/')

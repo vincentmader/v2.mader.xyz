@@ -1,7 +1,7 @@
 import { draw_tails } from "./drawing_utils.js";
 import { draw_bodies } from "./drawing_utils.js";
 import { draw_velocities } from "./drawing_utils.js";
-import { kepler_velocity } from "./physics_utils.js";
+import { kepler_velocity } from "../physics_utils.js";
 
 const line_width = 3;
 const tail_length = 200;
@@ -88,6 +88,16 @@ export function main(canvas, ctx, canvas_id) {
   o_y = H / 2;
   zoom_level = 2 / W;
 
+  document.getElementById("play/pause").addEventListener("click", function () {
+    paused = !paused;
+  });
+  document
+    .getElementById("toggle_eccentricity")
+    .addEventListener("click", function () {
+      orbits_are_eccentric = !orbits_are_eccentric;
+      reset_canvas();
+    });
+
   reset_canvas();
 
   setInterval(function () {
@@ -126,14 +136,4 @@ export function main(canvas, ctx, canvas_id) {
       frame_idx += 1;
     }
   }, 1);
-  document.getElementById("play/pause").addEventListener("click", function () {
-    k;
-    paused = !paused;
-  });
-  document
-    .getElementById("toggle_eccentricity")
-    .addEventListener("click", function () {
-      orbits_are_eccentric = !orbits_are_eccentric;
-      reset_canvas();
-    });
 }
