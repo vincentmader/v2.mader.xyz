@@ -7,8 +7,8 @@ from flask import Flask
 from flask import render_template, send_from_directory, request
 import numpy as np
 
-import config
-from config import PATH_TO_STATIC
+# import .config
+from .config import PATH_TO_STATIC
 
 
 # initialize app
@@ -92,7 +92,7 @@ def index():
 @app.route('/comp_phys/gas_in_a_box/thermal_motion')
 def comp_phys_gas_in_a_box_thermal_motion():
 
-    system_states = np.loadtxt('./comp_phys/gas_in_a_box/out/ys.txt')
+    system_states = np.loadtxt('./FlaskApp/comp_phys/gas_in_a_box/out/ys.txt')
     system_states = [list(i) for i in system_states]
 
     props = {
@@ -120,7 +120,7 @@ def comp_phys_n_body_flowers():
 def comp_phys_3body_fig8():
 
     # load output data
-    path_to_output_file = './comp_phys/n_body/out/3body_fig8/system_states.txt'
+    path_to_output_file = './FlaskApp/comp_phys/n_body/out/3body_fig8/system_states.txt'
     system_states = [list(i) for i in np.loadtxt(path_to_output_file)]
     # append dict containing simulation info to list
     simulations = [{
@@ -220,7 +220,7 @@ def comp_phys_ising():
 @ app.route('/comp_phys/pendulum')
 def comp_phys_pendulum():
 
-    system_states = np.loadtxt('./comp_phys/double_pendulum/out/ys.txt')
+    system_states = np.loadtxt('./FlaskApp/comp_phys/double_pendulum/out/ys.txt')
     system_states = [list(i) for i in system_states]
 
     props = {
