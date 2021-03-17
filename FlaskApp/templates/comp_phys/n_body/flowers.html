@@ -3,17 +3,13 @@
 {% block head %}
 
     {{ super() }}
-    <style type="text/css">
-        .important { color: #336699; }
-    </style>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/comp_phys.css') }}" type="text/css">
 
 {% endblock %}
 {% block content %}
 
-
     <h4 class="section_title">
-        Symmetric satelite constellation
+        n-body orbits - symmetric satelite constellation
     </h4>
     <div class="section">
         <div class="canvas_holder">
@@ -38,12 +34,6 @@
             <button class="button" id="toggle_eccentricity">
                 toggle ecc.
             </button>
-            <!-- <button class="button" id="zoom_in"> -->
-            <!--     zoom in -->
-            <!-- </button> -->
-            <!-- <button class="button" id="zoom_out"> -->
-            <!--     zoom out -->
-            <!-- </button> -->
         </div>
         <div class="button_menu" style="grid-template-columns: repeat(1, 1fr)">
             <input 

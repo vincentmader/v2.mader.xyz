@@ -2,8 +2,8 @@ const line_width = 2;
 
 var canvas, ctx;
 var W, H;
-var paused = true;
-var currently_selected_color = 4;
+var paused = false;
+var currently_selected_color = 3;
 
 function initialize_grid(N) {
   var grid, row, random_entry;
@@ -40,14 +40,14 @@ function draw_grid(grid) {
       if (cell_value == 1) {
         color = "green";
       } else if (cell_value == 2) {
-        color = "red";
-      } else if (cell_value == 3) {
-        color = "black";
-      } else if (cell_value == 4) {
         color = "blue";
+      } else if (cell_value == 3) {
+        color = "red";
+      } else if (cell_value == 4) {
+        color = "black";
       }
       // draw rect
-      var z = 0.1;
+      var z = 0.2;
       ctx.fillStyle = "#333333";
       ctx.fillRect(x - z * w, y - z * h, (1 + z) * w, (1 + z) * h);
       ctx.fillStyle = color;
@@ -86,14 +86,14 @@ function get_next_grid_state(N, grid) {
           // neighbor = grid[k_bc][l_bc];
           neighbor = grid[k][l];
           if (entry == 1) {
-            if (neighbor == 2) {
-              if (Math.random() < 0.5) new_entry = 2;
+            if (neighbor == 3) {
+              if (Math.random() < 0.5) new_entry = 3;
               break;
             }
           } else if (entry == 2) {
-            new_entry = 3;
+            new_entry = 2;
           } else if (entry == 3) {
-            new_entry = 3;
+            new_entry = 4;
           } else if (entry == 4) {
             new_entry = 4;
           }
@@ -110,13 +110,12 @@ function flip_grid_entry(N, grid, x, y) {
   const i = Math.floor((x / W) * N);
   const j = Math.floor((y / H) * N);
   var draw_radius;
-  if (currently_selected_color == 2) {
+  if (currently_selected_color == 3) {
     draw_radius = 1;
   } else {
     draw_radius = 20;
   }
   for (let k = i - draw_radius; k < i + draw_radius; k++) {
-    // for (let l = -Math.sqrt(1 - k ** 2); l < 1 - Math.sqrt(1 - k ** 2); k++) {
     for (let l = j - draw_radius; l < j + draw_radius; l++) {
       grid[k][l] = currently_selected_color;
     }
@@ -156,18 +155,14 @@ const init = () => {
   document.getElementById("button_3").addEventListener("click", function () {
     currently_selected_color = 3;
   });
-  document.getElementById("button_4").addEventListener("click", function () {
-    currently_selected_color = 4;
-  });
   canvas.addEventListener("mousedown", function (e) {
     const pos = getCursorPosition(canvas, e);
     grid = flip_grid_entry(N, grid, pos[0], pos[1]);
   });
 
-  const N = 200;
+  const N = 150;
   var grid = initialize_grid(N);
 
-  var frame_idx = 0;
   setInterval(function () {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     draw_grid(grid);
@@ -177,7 +172,7 @@ const init = () => {
     }
     if (paused) document.getElementById("play/pause").innerHTML = "Unpause";
     if (!paused) document.getElementById("play/pause").innerHTML = "Pause";
-  }, 1);
+  }, 80);
 };
 
 init();

@@ -4,11 +4,11 @@ const threshold = 3;
 
 var canvas, ctx;
 var W, H;
-var paused = true;
+var paused = false;
 var currently_selected_color = 1;
 
 function initialize_grid(N) {
-  var grid, row, random_entry;
+  var grid, row;
   grid = [];
   for (let i = 0; i < N; i++) {
     row = [];
@@ -94,27 +94,6 @@ function get_next_grid_state(N, grid) {
           new_entry = c;
         }
       }
-
-      // if (n == neighbors[-1]) {
-      //   if (n == 0) {
-      //   }
-      // }
-      // if (add_neighbor) {
-      // }
-      // }
-      // new_entry = entry;
-      // for (let n in counts) {
-      //   if (counts[n] > threshold) {
-      //     new_entry = n;
-      //   }
-      // }
-      // neighbor = neighbors[Math.floor(8 * Math.random())];
-      // new_entry = counts.indexOf(Math.max(...counts));
-      // if ((entry == 2 && neighbor == 0) || (entry == 0 && neighbor == 2)) {
-      //   new_entry = 0;
-      // } else {
-      //   new_entry = Math.max(entry, neighbor);
-      // }
       new_row.push(new_entry);
     }
     new_grid.push(new_row);
@@ -125,7 +104,7 @@ function get_next_grid_state(N, grid) {
 function flip_grid_entry(N, grid, x, y) {
   const i = Math.floor((x / W) * N);
   const j = Math.floor((y / H) * N);
-  var draw_radius = 5;
+  var draw_radius = 2;
   for (let k = i - draw_radius; k < i + draw_radius; k++) {
     for (let l = j - draw_radius; l < j + draw_radius; l++) {
       grid[k][l] = currently_selected_color;
@@ -171,10 +150,9 @@ const init = () => {
     grid = flip_grid_entry(N, grid, pos[0], pos[1]);
   });
 
-  const N = 250;
+  const N = 100;
   var grid = initialize_grid(N);
 
-  var frame_idx = 0;
   setInterval(function () {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     draw_grid(grid);
@@ -184,7 +162,7 @@ const init = () => {
     }
     if (paused) document.getElementById("play/pause").innerHTML = "Unpause";
     if (!paused) document.getElementById("play/pause").innerHTML = "Pause";
-  }, 1);
+  }, 30);
 };
 
 init();

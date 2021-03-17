@@ -76,7 +76,7 @@ export function main(canvas, ctx, canvas_id, system_states) {
   o_y = H / 2;
   zoom_level = 2 / W;
 
-  paused = true;
+  paused = false;
   frame_idx = 0;
   setInterval(function () {
     // clear screen
@@ -94,6 +94,10 @@ export function main(canvas, ctx, canvas_id, system_states) {
     draw_tails(ctx, system_states, nr_of_bodies, frame_idx, tail_length);
     if (!paused) {
       frame_idx += 1;
+    }
+    if (frame_idx == 844) {
+      // TODO: find out optimal index (as close to 1 period as possible)
+      frame_idx = 422;
     }
     // event listeners
     document
@@ -113,5 +117,5 @@ export function main(canvas, ctx, canvas_id, system_states) {
     // document.getElementById("zoom_out").addEventListener("click", function () {
     //   zoom_level -= 0.1;
     // });
-  }, 50);
+  }, 4);
 }

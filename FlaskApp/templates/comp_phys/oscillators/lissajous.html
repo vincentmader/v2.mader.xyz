@@ -3,16 +3,13 @@
 {% block head %}
 
     {{ super() }}
-    <style type="text/css">
-        .important { color: #336699; }
-    </style>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/comp_phys.css') }}" type="text/css">
 
 {% endblock %}
 {% block content %}
 
     <h4 class="section_title">
-        Lissajous
+        Lissajous figures
     </h4>
     <div class="section">
         <div class="canvas_holder">
@@ -20,7 +17,6 @@
             <script type="module" src="{{ url_for('static', filename='js/comp_phys/lissajous.js') }}"></script>
         </div>
         <div class="button_menu">
-        <!--     <\!-- <p>Temperature:</p> -\-> -->
             <div id="display_a_x"></div>
             <input
                 type="range" min="0" max="4000" value="2500"
@@ -51,13 +47,6 @@
                 type="range" min="0" max="3000" value="3000"
                 class="slider" id="slider_tail_length"
             >
-        <!--     <\!-- <p>Magnetic field strength:</p> -\-> -->
-        <!--     <div id="Bfield_display"></div> -->
-        <!--     <input  -->
-        <!--         type="range"  -->
-        <!--         class="slider" id="Bfield_slider" -->
-        <!--         min="-10" max="10" value="0"  -->
-        <!--     > -->
         </div>
     </div>
 

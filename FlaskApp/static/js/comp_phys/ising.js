@@ -11,6 +11,8 @@ var B;
 var canvas, ctx;
 var W, H;
 
+var canvas2, ctx2, W2, chart;
+
 function initialize_spin_grid(N) {
   var grid, row, random_spin;
 
@@ -72,8 +74,8 @@ function get_flip_energy(grid, i, j) {
       }
     }
   }
-  dE -= -B * mu * s_flip;  // subtract current state's energy
-  dE += -B * mu * -s_flip;  // add new state's energy
+  dE -= -B * mu * s_flip; // subtract current state's energy
+  dE += -B * mu * -s_flip; // add new state's energy
   return dE;
 }
 
@@ -102,6 +104,66 @@ function flip_random_spin(grid) {
   return grid;
 }
 
+function create_chart() {
+  canvas2 = document.getElementById("canvas_pi_chart");
+  ctx2 = canvas2.getContext("2d");
+  W2 = canvas2.getBoundingClientRect().width;
+  canvas2.height = W2 / 2;
+
+  chart = new Chart(ctx2, {
+    type: "line",
+    data: {
+      datasets: [
+        {
+          borderColor: "white",
+          pointRadius: 0,
+          data: [],
+          showLine: true, // overrides the `line` dataset default
+          label: "magnetization",
+        },
+        // ], [
+        // {
+        //   borderColor: "red",
+        //   pointRadius: 0,
+        //   data: [],
+        //   showLine: true, // overrides the `line` dataset default
+        //   label: "error [%]",
+        // },
+        // {
+        //   type: "scatter", // 'line' dataset default does not affect this dataset since it's a 'scatter'
+        //   data: [1, 1],
+        // },
+      ],
+    },
+    options: {
+      // scales: {
+      //   yAxes: [
+      //     {
+      //       display: true,
+      //       ticks: {
+      // suggestedMax: 1,
+      // suggestedMin: -1,
+      // beginAtZero: true   // minimum value will be 0.
+      // type: "logarithmic",
+      // },
+      // },
+      // ],
+      // },
+    },
+  });
+}
+
+const get_magnetization = (grid) => {
+  var N = grid.length;
+  var magnetization = 0;
+  for (let i = 0; i < grid.length; i++) {
+    for (let j = 0; j < grid[i].length; j++) {
+      magnetization += grid[i][j];
+    }
+  }
+  return magnetization / N ** 2;
+};
+
 const init = () => {
   canvas = document.getElementById("canvas");
   W = canvas.getBoundingClientRect().width;
@@ -114,10 +176,12 @@ const init = () => {
   ctx.strokeStyle = "white";
   ctx.fillStyle = "white";
 
-  const N = 100;
+  const N = 75;
   const flips_before_draw = 500;
   var grid = initialize_spin_grid(N);
   var temperature_slider, Bfield_slider;
+
+  create_chart();
 
   setInterval(function () {
     temperature_slider = document.getElementById("temperature_slider");
@@ -141,6 +205,12 @@ const init = () => {
       grid = flip_random_spin(grid);
     }
     draw_grid(grid);
+
+    var label = "";
+    var magnetization = get_magnetization(grid);
+    chart.data.labels.push(label);
+    chart.data.datasets[0].data.push(magnetization);
+    chart.update();
   }, 1);
 };
 

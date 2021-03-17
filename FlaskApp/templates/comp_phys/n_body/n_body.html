@@ -3,9 +3,6 @@
 {% block head %}
 
     {{ super() }}
-    <style type="text/css">
-        .important { color: #336699; }
-    </style>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/comp_phys.css') }}" type="text/css">
 
 {% endblock %}
@@ -14,8 +11,9 @@
     {% for sim in props['simulations'] %}
 
         <h4 class="section_title">
-            {{ sim['outfile_name'] }}
+            {{ sim['sim_title'] }}
         </h4>
+
         <div class="section">
             <div class="canvas_holder">
                 <canvas 
@@ -50,7 +48,7 @@
                 <!-- </button> -->
             </div>
         </div>
-        <!-- <div class="divider"></div> -->
+
     {% endfor %}
 
 {% endblock %}

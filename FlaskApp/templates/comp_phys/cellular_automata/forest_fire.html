@@ -3,9 +3,6 @@
 {% block head %}
 
     {{ super() }}
-    <style type="text/css">
-        .important { color: #336699; }
-    </style>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/comp_phys.css') }}" type="text/css">
 
 {% endblock %}
@@ -21,24 +18,9 @@
         </div>
         <div class="button_menu">
             <button class="button" id="play/pause">Pause</button>
-            <button class="button" id="button_1">1</button>
-            <button class="button" id="button_2">2</button>
-            <button class="button" id="button_3">3</button>
-            <button class="button" id="button_4">4</button>
-        <!--     <!-1- <p>Temperature:</p> -1-> -->
-        <!--     <div id="temperature_display"></div> -->
-        <!--     <input --> 
-        <!--         type="range" --> 
-        <!--         class="slider" id="temperature_slider" -->
-        <!--         min="-100" max="100" value="0" --> 
-        <!--     > -->
-        <!--     <!-1- <p>Magnetic field strength:</p> -1-> -->
-        <!--     <div id="Bfield_display"></div> -->
-        <!--     <input --> 
-        <!--         type="range" --> 
-        <!--         class="slider" id="Bfield_slider" -->
-        <!--         min="-10" max="10" value="0" --> 
-        <!--     > -->
+            <button class="button" id="button_1">Place grass</button>
+            <button class="button" id="button_2">Place water</button>
+            <button class="button" id="button_3">Place fire</button>
         </div>
     </div>
 
