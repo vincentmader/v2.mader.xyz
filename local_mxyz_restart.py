@@ -4,7 +4,7 @@ import time
 # restart local maderxyz server
 
 # 1. get process ID
-os.system('ps aux | grep local_mxyz_run >> server_process_id.txt')
+os.system('ps aux | grep local_mxyz >> server_process_id.txt')
 with open('./server_process_id.txt') as fp:
     lines = fp.readlines()
     first_line = lines[0]
