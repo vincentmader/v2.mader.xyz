@@ -24,12 +24,16 @@
             <button class="button" id="button_place_food">Place food</button>
             <button class="button" id="button_place_walls">Place/Remove Walls</button>
         </div>
+        <div class="button_menu">
+            <button class="button" id="button_place_phA">Place pheromone A</button>
+            <button class="button" id="button_place_phB">Place pheromone B</button>
+        </div>
     </div>
     <div class="section">
         <div class="canvas_holder">
             <canvas class="canvas" id="canvas"></canvas>
         </div>
     </div>
-    <script type="module" src="{{ url_for('static', filename='js/comp_phys/monte_carlo/ants.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/comp_phys/monte_carlo/ants/main.js') }}"></script>
 
 {% endblock %}

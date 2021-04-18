@@ -100,8 +100,6 @@ class Ant {
     var pheromone_strength, delta_x, delta_y, r, phi;
     var weights = [0, 0, 0]
 
-    // TODO: create list of positions beforehand from angle/radius -> floor
-
     for (let y = y_min; y < y_max; y++) {
       for (let x = x_min; x < x_max; x++) {
 
@@ -123,6 +121,17 @@ class Ant {
 
         var weight_idx = Math.floor(3 * (phi % (2*Math.PI) + Math.PI) / ant_pov)
         weights[weight_idx] += pheromone_strength
+
+        // assign sector & increase weight
+        // if (-ant_pov/6 <= phi <= ant_pov/6) {
+        //   weights_center += pheromone_strength
+        // } else if (ant_pov/6 < phi <= ant_pov/2) {
+        //   weights_right += pheromone_strength
+        // } else if (-ant_pov/6 > phi >= -ant_pov/2) {
+        //   weights_left += pheromone_strength
+        // }
+        // var sector_idx = Math.floor((phi + this.theta) / (2*Math.PI) * 10)
+        // sectors[sector_idx] += pheromone_strength // TODO: visualize (pie chart?)
 
         // show registered pheromones
         if (colony_size < 10) {
