@@ -6,7 +6,7 @@ var canvas, ctx;
 var W, H;
 // drawing
 const colony_radius = 20;
-const ant_drawing_radius = 2;
+const ant_drawing_radius = 1;
 const food_drawing_radius = 4;
 const pheromone_drawing_radius = 2;
 const min_pheromone_amount = 0.05
@@ -15,25 +15,31 @@ var placement_select = "food";
 var paused = false;
 // world
 var world;
-var world_size = [400, 400];
-const colony_size = 9;
-const colony_pos = [2 * colony_radius, 2 * colony_radius] // [world_size[0] / 6, world_size[1] / 6];
-const ants = [];
+var world_size = [500, 500];
+const colony_size = 1000;
+const colony_pos = [10 * colony_radius, 10 * colony_radius] // [world_size[0] / 6, world_size[1] / 6];
+var ants = [];
 // ants
 const ant_speed = 1;
 const sensor_radius = 10;
 const ant_eating_radius = 3;
-const probability_for_random_ant_turn = 0.05;
-const ant_random_turn_angle = Math.PI / 6;
+const probability_for_random_ant_turn = 0.3;
+const max_ant_random_turn_angle = Math.PI / 4;
 const pheromone_amount = 1; // amount of pheromone distributed by ant each turn
 const pheromone_A_evaporation_rate = 0.99 // 1 - 1 / world_size[0]**2;
 const pheromone_B_evaporation_rate = 0.99 // 1 - 1 / world_size[0]**2;
-const ant_pov = 2/3*Math.PI // 6/5*Math.PI
+const ant_pov = 5/6*Math.PI // 2*Math.PI
 // stats
 var time_step = 0;
 var delivered_food = 0;
 var fps;
 var fps_values = []
+
+var time_01 = []
+var time_02 = []
+var time_03 = []
+
+// const foo0 = [0]
 
 // CLASS DEFINITIONS
 
@@ -64,11 +70,12 @@ class Ant {
     this.v = ant_speed * Math.sin(this.theta);
   }
   turn_randomly() {
-    const turning_angle = ant_random_turn_angle * 2 * (Math.random() - 0.5);
+    const turning_angle = max_ant_random_turn_angle * 2 * (Math.random() - 0.5);
     this.theta += turning_angle;
     this.update_velocity_values();
   }
   distribute_pheromone() {
+    if (!(time_step % 4 == 0)) {return}
     var pheromone;
     if (this.is_carrying_food) {
       pheromone = 1;
@@ -107,6 +114,7 @@ class Ant {
         delta_x = x - this.x
         delta_y = y - this.y
         phi = Math.atan2(delta_y, delta_x) - this.theta;
+        // foo0.push((phi % (2 * Math.PI) + Math.PI) / Math.PI)
 
         // skip cell if it is outside of ant PoV
         if (phi % (2*Math.PI) >= ant_pov/2 || phi % (2*Math.PI) <= -ant_pov/2) continue;
@@ -119,7 +127,11 @@ class Ant {
         pheromone_strength = pheromone_strengths[y][x];
         if (pheromone_strength <= min_pheromone_amount) continue;
 
-        var weight_idx = Math.floor(3 * (phi % (2*Math.PI) + Math.PI) / ant_pov)
+        while (phi < -Math.PI) {phi += 2*Math.PI}
+        while (phi > Math.PI) {phi -= 2*Math.PI}
+        var weight_idx = Math.floor(3 * (phi / ant_pov + 0.5))
+        // console.log(weight_idx)
+        // console.log(weight_idx)
         weights[weight_idx] += pheromone_strength
 
         // assign sector & increase weight
@@ -134,7 +146,7 @@ class Ant {
         // sectors[sector_idx] += pheromone_strength // TODO: visualize (pie chart?)
 
         // show registered pheromones
-        if (colony_size < 10) {
+        if (colony_size < 100) {
           ctx.fillStyle = "white"
           ctx.strokeStyle = "white"
           // console.log(weights_center)
@@ -148,15 +160,12 @@ class Ant {
         }
       }
     }
-    // console.log(Math.max(weights_left, weights_center, weights_right))
-    // console.log(argmax([weights_right, weights_center, weights_left]) - 1) // TODO: why only -1?
 
     var delta_theta;
-    if (Math.max(weights[2], weights[1], weights[0]) == 0) {
+    if (Math.max(weights[0], weights[1], weights[2]) == 0) {
       delta_theta = 0
     } else {
-      // console.log('aaaaaaaa')
-      delta_theta = (argmax([weights[0], weights[1], weights[2]]) - 1) * Math.PI/10 + ant_pov/6 - Math.PI/4
+      delta_theta = (argmax([weights[0], weights[1], weights[2]]) - 1) * ant_pov/3
     }
 
     // const delta_theta = 2*Math.PI * (argmax(sectors) / 10)
@@ -231,17 +240,19 @@ class Ant {
     const new_x = this.x + 2 * this.u;
     const new_y = this.y + 2 * this.v;
     if (world.has_wall_at_position([new_x, new_y])) {
-      // this.theta += 2 / 3 * Math.PI * (Math.random(0, 1) - 0.5)
-      this.theta -= Math.PI + (Math.random() - 0.5) * Math.PI/4;
+      // this.theta += Math.PI * (Math.random() - 0.5) // TODO: improve?
+      this.theta = 2 * Math.PI * Math.random()
+      // this.theta -= Math.PI + (Math.random() - 0.5) * Math.PI/4;
       this.update_velocity_values();
-      // if (!(this.detect_walls())) {
-      //   return false
-      // } else return true
+      if (!(this.detect_walls())) {
+        return false
+      } else return true
     }
   }
   draw() {
     const ctx_coords = get_ctx_coords([this.x, this.y]);
     ctx.fillStyle = "white";
+    ctx.strokeStyle = "white"
     const ctx_radius = get_ctx_coords([
       ant_drawing_radius,
       ant_drawing_radius,
@@ -280,11 +291,13 @@ class Ant {
     if (!this.is_carrying_food) {
       this.detect_food();
     }
-    if (!this.has_detected_food) {
-      this.detect_pheromones();
-    }
-    if (Math.random() < probability_for_random_ant_turn) {
+    if (Math.random() < probability_for_random_ant_turn) { /// TODO: prob = 1, remove
       this.turn_randomly();
+    } else {
+    // if (Math.random() < 0.2) {
+      if (!this.has_detected_food) {
+        this.detect_pheromones();
+      }
     }
     this.detect_walls();
     this.deliver_food();
@@ -494,6 +507,11 @@ const argmax = (arr) => {
 
   return maxIndex;
 };
+const min_from_1D_array = (arr) => {
+  return arr.reduce(function (a, b) {
+    return Math.min(a, b);
+  });
+};
 const max_from_1D_array = (arr) => {
   return arr.reduce(function (a, b) {
     return Math.max(a, b);
@@ -517,6 +535,32 @@ const sigmoid = (x) => {
 const round = (num, acc) => {
   return Math.round((num + Number.EPSILON) * 10**acc) / 10**acc
 }
+const add_info_text = () => {
+  ctx.font = "30px Arial";
+  ctx.fillText("t = " + time_step, 10, 50);
+};
+const sleep = (ms) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
+const sleepFor = (ms) => {
+  var now = new Date().getTime();
+  while (new Date().getTime() < now + ms) {
+    /* do nothing */
+  }
+}
+const remove_from_array = (arr, item) => {
+  const index = arr.indexOf(item);
+  if (index > -1) {
+    arr.splice(index, 1);
+  }
+}
+const mean = (arr) => {
+  var sum = 0
+  for (let i of arr) {
+    sum += i
+  }
+  return sum / arr.length
+}
 const add_event_listeners = () => {
   canvas.addEventListener("mousedown", function (e) {
     const ctx_coords = getCursorPosition(canvas, e);
@@ -524,7 +568,7 @@ const add_event_listeners = () => {
     const col_idx = Math.floor(map_coords[0]);
     const row_idx = Math.floor(map_coords[1]);
     if (placement_select === "food") {
-      world.food_sources[row_idx][col_idx] += 100;
+      world.food_sources[row_idx][col_idx] += 2000;
     } else if (placement_select === "pheromone_A") {
       world.pheromone_strengths[0][row_idx][col_idx] += 100;
       world.active_grid_cells.push([row_idx, col_idx])
@@ -553,7 +597,8 @@ const add_event_listeners = () => {
   document
     .getElementById("button_reset")
     .addEventListener("click", function () {
-      console.log("ayyy");
+      // animate()
+      init()
     });
   document
     .getElementById("button_place_food")
@@ -576,32 +621,6 @@ const add_event_listeners = () => {
       placement_select = "pheromone_B";
     });
 };
-const add_info_text = () => {
-  ctx.font = "30px Arial";
-  ctx.fillText("t = " + time_step, 10, 50);
-};
-const sleep = (ms) => {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-};
-const sleepFor = (ms) => {
-  var now = new Date().getTime();
-  while (new Date().getTime() < now + ms) {
-    /* do nothing */
-  }
-}
-const remove_from_array = (arr, item) => {
-  const index = arr.indexOf(item);
-  if (index > -1) {
-    arr.splice(index, 1);
-  }
-}
-const mean = (arr) => {
-  var sum = 0
-  for (let i of arr) {
-    sum += i
-  }
-  return sum / arr.length
-}
 
 // ANIMATION LOOP
 // ============================================================================
@@ -612,45 +631,47 @@ async function animate() {
   // get fps data
   var new_start_time = new Date();
   var fps = 1000 / (new_start_time - iteration_start_time)
-  // fps_values.push(fps);
-  // if (fps_values.length > 10) {fps_values.pop(0)}
-  // console.log(fps_values)
+  fps_values.push(fps);
+  if (fps_values.length > 100) {fps_values.shift()}
   iteration_start_time = new_start_time;
-
-  // var old_date = new Date();
 
   // Create an animation loop
   requestAnimationFrame(animate);
+  if (paused) {return}
 
   if (time_step % 2 == 0)  {
     // Update world
     world.update();
   }
 
-  // var new_date = new Date();
-  // console.log("evap:" + (new_date - old_date))
-  // var old_date = new_date
+  var foo = new Date();
+  time_01.push(foo - iteration_start_time)
+  if (time_01.length > 20) {time_01.shift()}
 
   if (time_step % 2 == 0)  {
-    // Erase whole canvas
+  //   // Erase whole canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // draw pheromones
-    world.draw_pheromones();
+  //   // draw pheromones
+    // world.draw_pheromones();
   }
 
-  // var new_date = new Date();
-  // console.log("draw ph: " + (new_date - old_date))
-  // var old_date = new_date
+  var foo2 = new Date();
+  time_02.push(foo2 - foo)
+  if (time_02.length > 20) {time_02.shift()}
 
   // Update ants
   ants.forEach((ant) => {
     ant.update();
-    if (colony_size < 20) {
+    if (colony_size < 100) {
       ant.draw_sensor_radius();
       ant.draw_velocity_vector();
     }
-    // ant.draw();
+    ant.draw();
   });
+
+  var foo3 = new Date();
+  time_03.push(foo3 - foo2)
+  if (time_03.length > 20) {time_03.shift()}
 
   // var new_date = new Date();
   // console.log("ants: " + (new_date - old_date))
@@ -658,6 +679,9 @@ async function animate() {
 
   world.draw_ant_colonies();
   world.draw_food_sources();
+
+  // var foo4 = new Date();
+  // var time_04 = foo4 - foo3
 
   // var new_date = new Date();
   // console.log("col/food: " + (new_date - old_date))
@@ -676,7 +700,12 @@ async function animate() {
   ctx.font = "18px Arial";
   ctx.fillStyle = "white";
   // var fps = mean(fps_values)
-  ctx.fillText("fps = " + round(fps, 0), 0.8*W, 0.99*H);
+  ctx.fillText("fps = " + round(mean(fps_values), 0), 0.8*W, 0.99*H);
+  ctx.fillText("world: " + round(mean(time_01), 1), 0.79*W, 0.94*H);
+  ctx.fillText("draw: "   + round(mean(time_02), 1), 0.79*W, 0.89*H);
+  ctx.fillText("ants: "  + round(mean(time_03), 1), 0.79*W, 0.84*H);
+
+  // console.log(min_from_1D_array(foo0), max_from_1D_array(foo0))
 }
 
 // INITIALIZATION
@@ -696,6 +725,7 @@ const init = () => {
   world = new World(world_size);
 
   // setup ants
+  ants = []
   var phi, ant_spawn_pos
   for (let idx = 0; idx < colony_size; idx++) {
     phi = 2 * Math.PI * Math.random()
