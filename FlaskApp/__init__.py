@@ -1,21 +1,18 @@
 import json
 import os
-import sys
-
-import flask
 from flask import Flask
-from flask import render_template, send_from_directory, request
+from flask import render_template, request
 import numpy as np
 
 from .config import PATH_TO_STATIC
 from .config import PATH_TO_PROJECT
-# from .chronos import plots, stats
 
 
 # initialize app
 app = Flask(__name__)
 
-# views
+
+# view functions
 # =============================================================================
 
 
@@ -93,6 +90,7 @@ def index():
             'pages': [
                 {'id': 'tatooine', 'link': '/old/tatooine'},
                 {'id': 'lorentz', 'link': '/old/lorentz'},
+                {'id': 'correlation_finder', 'link': '/chronos/correlation_finder'},
                 # {'id': 'orbit'},
                 # {'id': 'solar'},
                 # {'id': 'factfulness'},
@@ -134,12 +132,12 @@ def comp_phys_n_body(subdir):
         # return props directory
         template = 'comp_phys/n_body/n_body.html'
         props = {'simulations': simulations}
-        return render_template(template, props=props)
 
     elif subdir in ['3body_moon', 'flowers']:
         template = f'comp_phys/n_body/{subdir}.html'
         props = {}
-        return render_template(template, props=props)
+
+    return render_template(template, props=props)
 
 
 @app.route('/comp_phys/harmonical_oscillators/<subdir>')
@@ -156,12 +154,12 @@ def comp_phys_pendulum(subdir):
             'description': 'theory, latex...',
             'ys': json.dumps(system_states),
         }
-        return render_template(template, props=props)
 
     elif subdir == 'lissajous':
         template = 'comp_phys/oscillators/lissajous.html'
         props = {}
-        return render_template(template, props=props)
+
+    return render_template(template, props=props)
 
 
 @app.route('/comp_phys/cellular_automata/<subdir>')
@@ -170,7 +168,8 @@ def comp_phys_cellular_automata(subdir):
     if subdir in ['game_of_life', 'forest_fire', 'rock_paper_scissors']:
         template = f'comp_phys/cellular_automata/{subdir}.html'
         props = {}
-        return render_template(template, props=props)
+
+    return render_template(template, props=props)
 
 
 @app.route('/comp_phys/stat_phys/<subdir>')
@@ -179,7 +178,6 @@ def comp_phys_stat_phys(subdir):
     if subdir in ['brownian_motion', 'ising']:
         template = f'comp_phys/stat_phys/{subdir}.html'
         props = {}
-        return render_template(template, props=props)
 
     elif subdir == 'thermal_motion':
         system_states = np.loadtxt(
@@ -190,7 +188,8 @@ def comp_phys_stat_phys(subdir):
         props = {
             'ys': json.dumps(system_states),
         }
-        return render_template(template, props=props)
+
+    return render_template(template, props=props)
 
 
 @app.route('/comp_phys/monte_carlo/<subdir>')
@@ -199,7 +198,18 @@ def comp_phys_monte_carlo(subdir):
     if subdir == 'pi_darts':
         template = 'comp_phys/monte_carlo/pi_darts.html'
         props = {}
-        return render_template(template, props=props)
+
+    return render_template(template, props=props)
+
+
+@app.route('/chronos/<subdir>')
+def chronos_correlation_finder(subdir):
+
+    if subdir == 'correlation_finder':
+        template = 'chronos/correlation_finder.html'
+        props = {}
+
+    return render_template(template, props=props)
 
 
 # @app.route('/chronos/testing/<subdir>')
