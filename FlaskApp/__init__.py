@@ -100,13 +100,13 @@ def index():
                 # {'id': 'spotify'},
                 # {'id': 'boltzmann', 'link': '/comp_phys/boltzmann'},
             ]
-        }, {
-            'title': 'unfinished',
-            'pages': [
-                {'id': 'testing_bokeh', 'link': '/chronos/testing/bokeh'},
-                {'id': 'testing_chartjs', 'link': '/chronos/testing/chartjs'},
-                {'id': 'testing_pyplot', 'link': '/chronos/testing/pyplot'},
-            ]
+        # }, {
+        #     'title': 'unfinished',
+        #     'pages': [
+        #         {'id': 'testing_bokeh', 'link': '/chronos/testing/bokeh'},
+        #         {'id': 'testing_chartjs', 'link': '/chronos/testing/chartjs'},
+        #         {'id': 'testing_pyplot', 'link': '/chronos/testing/pyplot'},
+        #     ]
         }
     ]
 
