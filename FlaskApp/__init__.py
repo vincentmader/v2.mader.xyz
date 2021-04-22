@@ -93,6 +93,7 @@ def index():
             'pages': [
                 {'id': 'tatooine', 'link': '/old/tatooine'},
                 {'id': 'lorentz', 'link': '/old/lorentz'},
+                {'id': 'ants', 'link': '/comp_phys/monte_carlo/ants'},
                 # {'id': 'orbit'},
                 # {'id': 'solar'},
                 # {'id': 'factfulness'},
@@ -198,6 +199,11 @@ def comp_phys_monte_carlo(subdir):
 
     if subdir == 'pi_darts':
         template = 'comp_phys/monte_carlo/pi_darts.html'
+        props = {}
+        return render_template(template, props=props)
+
+    if subdir == 'ants':
+        template = 'comp_phys/monte_carlo/ants.html'
         props = {}
         return render_template(template, props=props)
 
