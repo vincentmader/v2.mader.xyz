@@ -89,7 +89,8 @@ def index():
             'pages': [
                 {'id': 'tatooine', 'link': '/old/tatooine'},
                 {'id': 'lorentz', 'link': '/old/lorentz'},
-                {'id': 'correlation_finder', 'link': '/chronos/correlation_finder'},
+                {'id': 'correlation_finder',
+                    'link': '/chronos/stats/correlation_finder'},
                 # {'id': 'orbit'},
                 # {'id': 'solar'},
                 # {'id': 'factfulness'},
@@ -199,8 +200,8 @@ def comp_phys_monte_carlo(subdir):
         return render_template(template, props=props)
 
 
-@app.route('/chronos/<subdir>')
-def chronos(subdir):
+@app.route('/chronos/stats/<subdir>')
+def chronos_stats(subdir):
 
     if subdir == 'correlation_finder':
         template = 'chronos/correlation_finder.html'
