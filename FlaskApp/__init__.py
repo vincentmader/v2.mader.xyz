@@ -1,4 +1,3 @@
-
 import json
 import os
 import sys
@@ -6,9 +5,10 @@ import sys
 from flask import Flask, render_template, request
 import numpy as np
 
+from .chronos import plots, stats
 from .config import PATH_TO_PROJECT
 from .config import PATH_TO_STATIC
-# from .chronos import plots, stats
+from .db_config import MDB_HIERARCHY
 
 
 # initialize app
@@ -200,75 +200,101 @@ def comp_phys_monte_carlo(subdir):
         return render_template(template, props=props)
 
 
-@app.route('/chronos/stats/<subdir>')
-def chronos_stats(subdir):
+@app.route('/chronos/stats/correlation_finder')
+def chronos_stats_correlation_finder(subdir='activity/active_calories'):
 
-    if subdir == 'correlation_finder':
-        template = 'chronos/correlation_finder.html'
-        props = {}
-        return render_template(template, props=props)
+    template = 'chronos/correlation_finder.html'
+    props = {
+        'section_hierarchy': MDB_HIERARCHY['stats']['time series']['daily'],
+        'MDB': config.MDB['stats']['time series']['daily'],
+        'zip': zip,
+        'nr_of_datasets': db_config.NR_OF_DATASETS,
+    }
 
-
-# @app.route('/chronos/testing/<subdir>')
-# def chronos_testing(subdir, lolol=0):
-
-#     if subdir in ['chartjs']:
-#         return render_template(f'chronos/testing/{subdir}.html')
-
-#     if subdir == 'pyplot':
-#         images = []
-
-#         path_to_pyplots = os.path.join(PATH_TO_STATIC, 'media/pyplots')
-#         for filename in os.listdir(path_to_pyplots):
-#             image = {
-#                 'filepath': os.path.join('media/pyplots', filename)
-#             }
-#             images.append(image)
-#         print(images)
-
-#         return render_template(
-#             'chronos/testing/pyplot.html',
-#             images=images
-#         )
-
-#     if subdir == 'bokeh':
-#         plot_functions = [
-#             plots.bokeh.google_takeout.gmap,
-#         ]
-
-#         scripts, divs = [], []
-#         for f in plot_functions:
-#             script, div = f()
-#             scripts.append(script)
-#             divs.append(div)
-
-#         script, div = plots.bokeh.google_takeout.bar_plot_search_hits(
-#             'youtube')
-#         scripts.append(script)
-#         divs.append(div)
-
-#         x, y = stats.time_series.avg_grades()
-#         # x, y = np.array(list(foo.keys())), np.array(list(foo.values()))
-#         # x, y = stats.time_series.avg_grades()
-#         script, div = plots.bokeh.basic.time_series(x, y)
-#         scripts.append(script)
-#         divs.append(div)
-
-#         # x, y = stats.time_series.chars_written_in_daily_log()
-#         # x, y = np.array(list(foo.keys())), np.array(list(foo.values()))
-#         # x, y = stats.time_series.avg_grades()
-#         # script, div = plots.bokeh.basic.time_series(x, y)
-#         # scripts.append(script)
-#         # divs.append(div)
-
-#         template = 'chronos/testing/bokeh.html'
-#         return render_template(template, scripts=scripts, divs=divs)
+    return render_template(template, props=props)
 
 
-# @app.route('/chronos/testing/<subdir>', methods=['POST'])
-# def testing_bokeh_post(subdir):
+# @app.route('/chronos/stats/<subdir>', methods=['POST'])
+# def chronos_stats_post(subdir):
+#     if subdir == 'correlation_finder':
+#         return chronos_stats(subdir, )
 #     textfield_1 = request.form['textfield_1']
 #     return chronos_testing(subdir, textfield_1)
+
+
+# debugging
+# =============================================================================
+
+
+@app.route('/debugging/print_py_exec')
+def print_python_executable():
+    return sys.executable
+
+
+# old
+# =============================================================================
+
+
+@app.route('/chronos/testing/<subdir>')
+def chronos_testing(subdir, lolol=0):
+
+    if subdir in ['chartjs']:
+        return render_template(f'chronos/testing/{subdir}.html')
+
+    if subdir == 'pyplot':
+        images = []
+
+        path_to_pyplots = os.path.join(PATH_TO_STATIC, 'media/pyplots')
+        for filename in os.listdir(path_to_pyplots):
+            image = {
+                'filepath': os.path.join('media/pyplots', filename)
+            }
+            images.append(image)
+        print(images)
+
+        return render_template(
+            'chronos/testing/pyplot.html',
+            images=images
+        )
+
+    if subdir == 'bokeh':
+        plot_functions = [
+            plots.bokeh.google_takeout.gmap,
+        ]
+
+        scripts, divs = [], []
+        for f in plot_functions:
+            script, div = f()
+            scripts.append(script)
+            divs.append(div)
+
+        script, div = plots.bokeh.google_takeout.bar_plot_search_hits(
+            'youtube')
+        scripts.append(script)
+        divs.append(div)
+
+        x, y = stats.time_series.avg_grades()
+        # x, y = np.array(list(foo.keys())), np.array(list(foo.values()))
+        # x, y = stats.time_series.avg_grades()
+        script, div = plots.bokeh.basic.time_series(x, y)
+        scripts.append(script)
+        divs.append(div)
+
+        # x, y = stats.time_series.chars_written_in_daily_log()
+        # x, y = np.array(list(foo.keys())), np.array(list(foo.values()))
+        # x, y = stats.time_series.avg_grades()
+        # script, div = plots.bokeh.basic.time_series(x, y)
+        # scripts.append(script)
+        # divs.append(div)
+
+        template = 'chronos/testing/bokeh.html'
+        return render_template(template, scripts=scripts, divs=divs)
+
+
+@app.route('/chronos/testing/<subdir>', methods=['POST'])
+def testing_bokeh_post(subdir):
+    textfield_1 = request.form['textfield_1']
+    return chronos_testing(subdir, textfield_1)
 
 
 @app.route('/old/<subdir>')
@@ -313,15 +339,6 @@ def old(subdir):
 #         'simulations': simulations,
 #     }
 #     return render_template('comp_phys/n_body.html', props=props)
-
-
-# old
-# =============================================================================
-
-
-@app.route('/debugging/print_py_exec')
-def print_python_executable():
-    return sys.executable
 
 
 # @app.route('/bokeh/')
