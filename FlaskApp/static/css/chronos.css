@@ -1,0 +1,15 @@
+.correlation_matrix {
+  width: 100%;
+}
+
+.correlation_matrix_cell {
+  border: 1px solid black;
+  background-color: green;
+  width: 100%;
+}
+
+.correlation_matrix_cell:after {
+  content: "";
+  display: block;
+  padding-bottom: 100%;
+}
