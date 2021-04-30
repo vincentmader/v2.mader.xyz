@@ -1,0 +1,22 @@
+{
+  "name": "mader.xyz",
+  "version": "1.0.0",
+  "description": "website",
+  "main": "-",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vincentmader/mader.xyz.git"
+  },
+  "author": "Vincent C. Mader",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vincentmader/mader.xyz/issues"
+  },
+  "homepage": "https://github.com/vincentmader/mader.xyz#readme",
+  "dependencies": {
+    "mongodb": "latest"
+  }
+}
