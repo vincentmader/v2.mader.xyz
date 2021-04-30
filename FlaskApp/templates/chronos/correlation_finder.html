@@ -3,16 +3,153 @@
 {% block head %}
 
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/comp_phys.css') }}" type="text/css">
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/comp_phys.css') }}" type="text/css"> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chronos.css') }}" type="text/css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.2.0/dist/chart.min.js"></script>
 
 {% endblock %}
 {% block content %}
 
-    <h4 class="section_title">
-        Correlation Finder
-    </h4>
-    <div class="section">
+    <h4 class="section_title">Correlation Finder</h4>
 
+    <div class="section">
+        <div class="correlation_matrix" style="
+                display: grid;
+                grid-template-columns: repeat({{ props['nr_of_datasets'] }}, 1fr);
+            ">
+            {% for k, v in props['section_hierarchy'].items() %}
+                {% for k2, v2 in v.items() %}
+                    {% for k3 in v2['db_entry_keys'] %}
+                        {% for k4 in v2['db_entry_keys'] %}
+                            <div class="correlation_matrix_cell">                
+
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                {% endfor %}
+            {% endfor %}
+        </div>
+        <!-- <script> -->
+        <!--     // const x = [1,2,3]; -->
+        <!--     // const y = [1,2,3]; -->
+        <!--     // const fig = new Bokeh.Plotting.Figure() -->
+        <!--     // fig.line(x, y) -->
+        <!--     // console.log(fig) -->
+        <!--     // Bokeh.Plotting.show(fig) -->
+        <!-- </script> -->
+        corr matrix, on-hover info (x,y,corr,err)
+    </div>
+    <script type="module">
+        //import {MongoClient} from "{{url_for('static', filename='js/node_modules/mongodb/lib/mongo_client.js')}}";
+        // const MongoClient = require('mongodb').MongoClient;
+        // const assert = require('assert');
+        
+        // Connection URL
+        // const url = 'mongodb://localhost:27017';
+        
+        // Database Name
+        // const dbName = 'myproject';
+        // const client = new MongoClient(url);
+        // Use connect method to connect to the server
+        // client.connect(function(err) {
+        //   // assert.equal(null, err);
+        //   console.log('Connected successfully to server');
+        // 
+        //   const db = client.db(dbName);
+        // 
+        //   client.close();
+        // });
+    </script>
+
+    x-t / y-t plot <br>
+    x-y plot, corr
+    <div class="section">
+        <canvas class="canvas" id="canvas_time_series_plot"></canvas>
+        <script type=module>
+            import { init } from "{{ url_for('static', filename='js/chronos/time_series_plot.js') }}"
+            const canvas_id = "canvas_time_series_plot"
+            const canvas = document.getElementById(canvas_id);
+            const ctx = canvas.getContext("2d");
+            init(canvas, ctx)
+        </script>
     </div>
 
-{% endblock %}
+    <div class="section"><ul>
+        {% for k, v in props['section_hierarchy'].items() %}
+            <li style="color: green">{{ k }}<ul>
+            {% for k2, v2 in v.items() %}
+                <li style="color: green">{{ k2 }}<ul>
+                {% for k3 in v2['db_entry_keys'] %}
+                    <li>
+                    <button 
+                        class="stealthy_button" style="color: white"
+                        id="button_{{ k + '/' + k2 + '/' + k3 }}"
+                    > {{ k3 }}
+                    </button>
+                    <script type="module">
+                        import { update } from "{{ url_for('static', filename='js/chronos/time_series_plot.js') }}";
+
+                        var x = [];
+                        var y = [];
+                        var dataset_is_empty = true;
+                        {% for i in props['MDB'][k][k2][k3].find() %}
+                            {% for j, k in props['zip'](i['date'], i[k3]) %}
+                                {% if k %}
+                                    x.push({{ j.timestamp() }});
+                                    y.push({{ k }});
+                                    dataset_is_empty = false;
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+
+                        const button = document.getElementById("button_{{ k + '/' + k2 + '/' + k3 }}");
+                        if (!dataset_is_empty) button.style = "color: green"
+                        button.addEventListener(
+                            "click", 
+                            () => {
+                            update("{{k}}", "{{k2}}", "{{k3}}", x, y);
+                            },
+                            false
+                        )
+                    </script>
+                    </li>
+                {% endfor %}
+                </ul></li>
+            {% endfor %}
+            </ul></li>
+        {% endfor %}
+    </ul></div>
+
+
+
+<!--     {% for k, v in props['section_hierarchy'].items() %} -->
+<!--         <div class="section"> -->
+<!--         {% for k2, v2 in v.items() %} -->
+<!--             {% for k3 in v2['db_entry_keys'] %} -->
+<!--                 <canvas class="canvas" id="2{{ k + '/' + k2 + '/' + k3 }}"></canvas> -->
+<!--                 <script type=module> -->
+<!--                     import { main } from "{{ url_for('static', filename='js/chronos/time_series_plot.js') }}" -->
+<!--                     const canvas_id = "2{{ k + '/' + k2 + '/' + k3 }}" -->
+<!--                     const canvas = document.getElementById(canvas_id); -->
+<!--                     const ctx = canvas.getContext("2d"); -->
+<!--                     var x = [] -->
+<!--                     var y = [] -->
+<!--                     {% for i in props['MDB'][k][k2][k3].find() %} -->
+<!--                         {% for j, k in props['zip'](i['date'], i[k3]) %} -->
+<!--                             {% if k %} -->
+<!--                                 x.push({{ j.timestamp() }}) -->
+<!--                                 y.push({{ k }}) -->
+<!--                             {% endif %} -->
+<!--                         {% endfor %} -->
+<!--                     {% endfor %} -->
+<!--                     main(canvas, ctx, "{{k}}", "{{k2}}", "{{k3}}", x, y); -->
+<!--                 </script> -->
+<!--                 <br/> -->
+<!--                 <br/> -->
+<!--             {% endfor %} -->
+<!--             <br/> -->
+<!--         {% endfor %} -->
+<!--         </div> -->
+<!--     {% endfor %} -->
+
+<!-- {% endblock %} -->
