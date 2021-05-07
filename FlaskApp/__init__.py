@@ -8,7 +8,7 @@ import numpy as np
 from .chronos import plots, stats
 from .config import PATH_TO_PROJECT
 from .config import PATH_TO_STATIC
-from .db_config import MDB_HIERARCHY
+from .db_config import MDB_HIERARCHY, MDB_TS_CATEGORIES
 
 
 # initialize app
@@ -206,9 +206,11 @@ def chronos_stats_correlation_finder(subdir='activity/active_calories'):
     template = 'chronos/correlation_finder.html'
     props = {
         'section_hierarchy': MDB_HIERARCHY['stats']['time series']['daily'],
+        'categories': MDB_TS_CATEGORIES,
+        'nr of categories': len(MDB_TS_CATEGORIES),
         'MDB': config.MDB['stats']['time series']['daily'],
+        'correlations': config.MDB['stats']['correlations'],
         'zip': zip,
-        'nr_of_datasets': db_config.NR_OF_DATASETS,
     }
 
     return render_template(template, props=props)

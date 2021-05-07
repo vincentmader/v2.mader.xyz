@@ -13,21 +13,52 @@
     <h4 class="section_title">Correlation Finder</h4>
 
     <div class="section">
-        <div class="correlation_matrix" style="
+        <div class="correlation_matrix" id="correlation_matrix"
+            style="
                 display: grid;
-                grid-template-columns: repeat({{ props['nr_of_datasets'] }}, 1fr);
+                grid-template-columns: repeat({{ props['nr of categories'] }}, 1fr);
             ">
-            {% for k, v in props['section_hierarchy'].items() %}
-                {% for k2, v2 in v.items() %}
-                    {% for k3 in v2['db_entry_keys'] %}
-                        {% for k4 in v2['db_entry_keys'] %}
-                            <div class="correlation_matrix_cell">                
-
-                            </div>
-                        {% endfor %}
+        {% for i in range(props['nr of categories']) %}
+            {% for j in range(props['nr of categories']) %}
+                <div 
+                    class="correlation_matrix_cell" 
+                    id="correlation_matrix_cell_{{i}}_{{j}}"
+                    style="border: 1px solid black"
+                ></div>
+                <script>
+                    var cell = document.getElementById(
+                        "correlation_matrix_cell_{{i}}_{{j}}"
+                    )
+                    var corr;
+                    {% for k in props['correlations'].find() %}
+                        corr = {{k['correlation matrix']}};
                     {% endfor %}
-                {% endfor %}
+
+                    if ({{i}} > {{j}}) {
+                        cell.style.backgroundColor = '#222222'
+                        // cell.style.border = '0px'
+                        if (Math.abs(corr[{{j}}][{{i}}]) > 0) {
+                            cell.innerHTML = "<p>" + Math.round(100*corr[{{j}}][{{i}}])/100. + "</p>"
+                            if (corr[{{j}}][{{i}}] > 0) {
+                                cell.style.color = 'green'//"rgba(0, 255, 0, " + String(-corr[{{j}}][{{i}}]) + ")"
+                            } else if (corr[{{j}}][{{i}}] < 0) {
+                                cell.style.color = 'red'//"rgba(255, 0, 0, " + String(corr[{{j}}][{{i}}]) + ")"
+                            }
+                        }         
+                    } else if ({{i}} < {{j}}) {
+                        if (corr[{{i}}][{{j}}] < 0) {
+                            console.log(corr[{{i}}][{{j}}])   
+                            cell.style.backgroundColor = "rgba(255, 0, 0, " + String(-corr[{{i}}][{{j}}]) + ")"
+                        //} else if (corr[{{i}}][{{j}}] == 0) {
+                        } else if (corr[{{i}}][{{j}}] > 0) {
+                            cell.style.backgroundColor = "rgba(0, 255, 0, " + String(corr[{{i}}][{{j}}]) + ")"
+                        }
+                    } else {
+                        cell.style.backgroundColor = "blue"
+                    }
+                </script>
             {% endfor %}
+        {% endfor %}
         </div>
         <!-- <script> -->
         <!--     // const x = [1,2,3]; -->
@@ -37,7 +68,7 @@
         <!--     // console.log(fig) -->
         <!--     // Bokeh.Plotting.show(fig) -->
         <!-- </script> -->
-        corr matrix, on-hover info (x,y,corr,err)
+        <!-- corr matrix, on-hover info (x,y,corr,err) -->
     </div>
     <script type="module">
         //import {MongoClient} from "{{url_for('static', filename='js/node_modules/mongodb/lib/mongo_client.js')}}";
@@ -61,8 +92,8 @@
         // });
     </script>
 
-    x-t / y-t plot <br>
-    x-y plot, corr
+    <!-- x-t / y-t plot <br> -->
+    <!-- x-y plot, corr -->
     <div class="section">
         <canvas class="canvas" id="canvas_time_series_plot"></canvas>
         <script type=module>
@@ -94,7 +125,7 @@
                         var dataset_is_empty = true;
                         {% for i in props['MDB'][k][k2][k3].find() %}
                             {% for j, k in props['zip'](i['date'], i[k3]) %}
-                                {% if k %}
+                                {% if k != None %}
                                     x.push({{ j.timestamp() }});
                                     y.push({{ k }});
                                     dataset_is_empty = false;
