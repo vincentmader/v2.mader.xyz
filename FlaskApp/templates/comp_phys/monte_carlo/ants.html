@@ -28,6 +28,7 @@
             <button class="button" id="button_place_phA">Place pheromone A</button>
             <button class="button" id="button_place_phB">Place pheromone B</button>
             <button class="button" id="button_draw_pheromones">Draw/Hide pheromone</button>
+            <button class="button" id="button_periodic_bounds">Toggle periodic bounds</button>
         </div>
         <div class="button_menu">
             <input 
@@ -45,9 +46,8 @@
         </div>
         <div class="button_menu">
             <input 
-                type="range" 
                 class="slider" id="slider_colony_size"
-                min="0" max="1000" value="200" 
+                type="range" min="1" max="15000" value="5000" step=1
             >
         </div>
     </div>
@@ -59,3 +59,4 @@
     <script type="module" src="{{ url_for('static', filename='js/comp_phys/monte_carlo/ants/main.js') }}"></script>
 
 {% endblock %}
+
