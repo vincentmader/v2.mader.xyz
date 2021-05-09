@@ -3,7 +3,7 @@
 
 // numerical parameters
 const min_pheromone_drop_amount = 0.1;
-const ant_speed = 2;
+const ant_speed = 1;
 const sensor_radius = 5; // minimum 5 for ant to form streets
 var phA_evaporation_rate; // = 0.99; // 1 - 1 / world_size[0]**2;
 var phB_evaporation_rate; // = 0.99; // 1 - 1 / world_size[0]**2;
@@ -12,16 +12,16 @@ const probability_for_random_ant_turn = 0.7;
 const max_ant_random_turn_angle = Math.PI / 4;
 const ant_fov = (7 / 6) * Math.PI; // 2*Math.PI
 // world parameters
-const colony_radius = 20;
+const colony_radius = 3;
 const colony_pos = [1.1 * colony_radius, 1.1 * colony_radius]; // [world_size[0] / 6, world_size[1] / 6];
-const world_size = [150, 150];
+const world_size = [60, 60];
 // button presets
 var paused = false;
 var periodic_bounds = false;
 var placement_select = "food";
 // draw settings
-const ant_drawing_radius = 0.5;
-const food_drawing_radius = 4;
+const ant_drawing_radius = 0.08;
+const food_drawing_radius = 1;
 const pheromone_drawing_radius = 2;
 var bool_draw_pheromones = false;
 var bool_draw_registered_pheromones = false;
@@ -30,7 +30,7 @@ var canvas, ctx, W, H;
 // world & ants
 var world;
 var ants = [];
-const ant_eating_radius = 2;
+const ant_eating_radius = 3;
 const pheromone_drop_amount = 1; // amount of pheromone distributed by ant each turn
 var ants_1, ants_2, ants_3, ants_4;
 // stats
@@ -112,7 +112,7 @@ class Ant {
         if (pheromone_strength <= min_pheromone_drop_amount) continue;
         // skip cell if it is outside of sensor radius
         let r = Math.sqrt(delta_y ** 2 + delta_x ** 2);
-        if (r > sensor_radius) continue;
+        // if (r > sensor_radius) continue;
 
         let direction_idx = Math.floor(3 * (phi / ant_fov + 0.5));
         weights[direction_idx] += pheromone_strength;
@@ -283,9 +283,10 @@ class Ant {
     ctx.fillStyle = { true: "green", false: "white" }[this.is_carrying_food];
     ctx.strokeStyle = "white";
     const ctx_radius = get_ctx_radius(ant_drawing_radius);
-    ctx.beginPath();
-    ctx.arc(ctx_coords[0], ctx_coords[1], ctx_radius, 0, TAU);
-    ctx.stroke();
+    // ctx.beginPath();
+    // ctx.arc(ctx_coords[0], ctx_coords[1], ctx_radius, 0, TAU);
+    // ctx.stroke();
+    ctx.fillRect(ctx_coords[0], ctx_coords[1], ctx_radius, ctx_radius);
     ctx.fill();
   }
   draw_sensor_radius() {
@@ -500,6 +501,23 @@ class World {
     // else: return false
     return false;
   }
+  update_ants() {
+    // TODO: move function elsewhere?
+    // ants.forEach((ant) => {
+    //   let x = ant.x;
+    //   let y = ant.y;
+    // });
+    ants.forEach((ant) => {
+      ant.update();
+      if (!bool_draw_pheromones) {
+        // if (colony_size < 100) {
+        //   ant.draw_sensor_radius();
+        //   ant.draw_velocity_vector();
+        // }
+        ant.draw();
+      }
+    });
+  }
   update() {
     this.evaporate_pheromones();
   }
@@ -649,6 +667,14 @@ const add_event_listeners = () => {
       console.log("ayyy");
     });
   document
+    .getElementById("slider_colony_size")
+    .addEventListener("click", function () {
+      colony_size = document.getElementById("slider_colony_size").value;
+      // console.log("aaaaaaaa");
+      console.log(colony_size);
+      init();
+    });
+  document
     .getElementById("button_reset")
     .addEventListener("click", function () {
       // animate()
@@ -681,13 +707,8 @@ const add_event_listeners = () => {
     });
   document
     .getElementById("button_periodic_bounds")
-    .addEventListener("onchange", function () {
+    .addEventListener("click", function () {
       periodic_bounds = !periodic_bounds;
-    });
-  document
-    .getElementById("slider_colony_size")
-    .addEventListener("onchange", function () {
-      init();
     });
 };
 const draw_registered_pheromones = (x, y) => {
@@ -769,11 +790,14 @@ async function animate() {
   // let ants_2 = ants.slice(ants.length / 4, ants.length / 2);
   // let ants_3 = ants.slice(ants.length / 2, (3 * ants.length) / 4);
   // let ants_4 = ants.slice((3 * ants.length) / 4, ants.length);
-  let promise_1 = new Promise((res) => updateAnts(ants_1));
-  let promise_2 = new Promise((res) => updateAnts(ants_2));
-  let promise_3 = new Promise((res) => updateAnts(ants_3));
-  let promise_4 = new Promise((res) => updateAnts(ants_4));
-  Promise.all([promise_1, promise_2, promise_3, promise_4]);
+
+  // let promise_1 = new Promise((res) => updateAnts(ants_1));
+  // let promise_2 = new Promise((res) => updateAnts(ants_2));
+  // let promise_3 = new Promise((res) => updateAnts(ants_3));
+  // let promise_4 = new Promise((res) => updateAnts(ants_4));
+  // Promise.all([promise_1, promise_2, promise_3, promise_4]);
+  world.update_ants();
+  // updateAnts(ants);
 
   var foo3 = new Date();
   time_03.push(foo3 - foo2);
@@ -854,10 +878,10 @@ const init = () => {
     ];
     ants.push(new Ant(ant_spawn_pos));
   }
-  ants_1 = ants.slice(0, ants.length / 4);
-  ants_2 = ants.slice(ants.length / 4, ants.length / 2);
-  ants_3 = ants.slice(ants.length / 2, (3 * ants.length) / 4);
-  ants_4 = ants.slice((3 * ants.length) / 4, ants.length);
+  // ants_1 = ants.slice(0, ants.length / 4);
+  // ants_2 = ants.slice(ants.length / 4, ants.length / 2);
+  // ants_3 = ants.slice(ants.length / 2, (3 * ants.length) / 4);
+  // ants_4 = ants.slice((3 * ants.length) / 4, ants.length);
 
   // reset time
   reset_time();
