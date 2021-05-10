@@ -87,13 +87,14 @@ def index():
                     'id': 'mc_pi_darts',
                     'link': '/comp_phys/monte_carlo/pi_darts'
                 },
+                {'id': 'ants', 'link': '/comp_phys/monte_carlo/ants'},
+                {'id': 'ants', 'link': '/comp_phys/monte_carlo/boids'},
             ]
         }, {
             'title': 'stuff',
             'pages': [
                 {'id': 'tatooine', 'link': '/old/tatooine'},
                 {'id': 'lorentz', 'link': '/old/lorentz'},
-                {'id': 'ants', 'link': '/comp_phys/monte_carlo/ants'},
                 # {'id': 'orbit'},
                 # {'id': 'solar'},
                 # {'id': 'factfulness'},
@@ -101,13 +102,13 @@ def index():
                 # {'id': 'spotify'},
                 # {'id': 'boltzmann', 'link': '/comp_phys/boltzmann'},
             ]
-        # }, {
-        #     'title': 'unfinished',
-        #     'pages': [
-        #         {'id': 'testing_bokeh', 'link': '/chronos/testing/bokeh'},
-        #         {'id': 'testing_chartjs', 'link': '/chronos/testing/chartjs'},
-        #         {'id': 'testing_pyplot', 'link': '/chronos/testing/pyplot'},
-        #     ]
+            # }, {
+            #     'title': 'unfinished',
+            #     'pages': [
+            #         {'id': 'testing_bokeh', 'link': '/chronos/testing/bokeh'},
+            #         {'id': 'testing_chartjs', 'link': '/chronos/testing/chartjs'},
+            #         {'id': 'testing_pyplot', 'link': '/chronos/testing/pyplot'},
+            #     ]
         }
     ]
 
@@ -204,6 +205,11 @@ def comp_phys_monte_carlo(subdir):
 
     if subdir == 'ants':
         template = 'comp_phys/monte_carlo/ants.html'
+        props = {}
+        return render_template(template, props=props)
+
+    if subdir == 'boids':
+        template = 'comp_phys/monte_carlo/boids.html'
         props = {}
         return render_template(template, props=props)
 
