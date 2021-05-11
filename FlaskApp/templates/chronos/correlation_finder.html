@@ -21,9 +21,7 @@
         {% for i in range(props['nr of categories']) %}
             {% for j in range(props['nr of categories']) %}
                 <div 
-                    class="correlation_matrix_cell" 
                     id="correlation_matrix_cell_{{i}}_{{j}}"
-                    style="border: 1px solid black"
                 ></div>
                 <script>
                     var cell = document.getElementById(
@@ -36,25 +34,27 @@
 
                     if ({{i}} > {{j}}) {
                         cell.style.backgroundColor = '#222222'
-                        // cell.style.border = '0px'
-                        if (Math.abs(corr[{{j}}][{{i}}]) > 0) {
-                            cell.innerHTML = "<p>" + Math.round(100*corr[{{j}}][{{i}}])/100. + "</p>"
+                        cell.classList.add("correlation_matrix_cell_lower_left")
+                        if (corr.length < 10) {
                             if (corr[{{j}}][{{i}}] > 0) {
-                                cell.style.color = 'green'//"rgba(0, 255, 0, " + String(-corr[{{j}}][{{i}}]) + ")"
+                                cell.style.color = "green" // "rgba(255, 0, 0, " + String(-corr[{{i}}][{{j}}]) + ")"
+                                cell.innerHTML = "<p>" + Math.round(100*corr[{{j}}][{{i}}])/100. + "</p>"
                             } else if (corr[{{j}}][{{i}}] < 0) {
-                                cell.style.color = 'red'//"rgba(255, 0, 0, " + String(corr[{{j}}][{{i}}]) + ")"
+                                cell.style.color = "red" // "rgba(255, 0, 0, " + String(corr[{{i}}][{{j}}]) + ")"
+                                cell.innerHTML = "<p>" + Math.round(-100*corr[{{j}}][{{i}}])/100. + "</p>"
                             }
                         }         
                     } else if ({{i}} < {{j}}) {
+                        cell.classList.add("correlation_matrix_cell_upper_right")
                         if (corr[{{i}}][{{j}}] < 0) {
-                            console.log(corr[{{i}}][{{j}}])   
                             cell.style.backgroundColor = "rgba(255, 0, 0, " + String(-corr[{{i}}][{{j}}]) + ")"
-                        //} else if (corr[{{i}}][{{j}}] == 0) {
+                        } else if (corr[{{i}}][{{j}}] == 0) {
+                            // TODO: what to do here?
                         } else if (corr[{{i}}][{{j}}] > 0) {
                             cell.style.backgroundColor = "rgba(0, 255, 0, " + String(corr[{{i}}][{{j}}]) + ")"
                         }
                     } else {
-                        cell.style.backgroundColor = "blue"
+                        cell.classList.add("correlation_matrix_cell_diagonal")
                     }
                 </script>
             {% endfor %}
