@@ -42,24 +42,21 @@ export function init(canvas, ctx) {
     },
     options: {
       scales: {
-        x: {
-          ticks: {
-            // autoSkip: false,
-            callback: function (value, index, values) {
-              console.log("aaa");
-              return value;
-              // const date = new Date(value);
-              // if (date.getMonth() == 0) {
-              // return date.getFullYear();
-              // } else {
-              //   return null;
-              // }
-            },
-          },
-        },
-        // y: {
-        //   beginAtZero: true,
-        // },
+        //x: {
+        //  ticks: {
+        //    // autoSkip: false,
+        //    callback: function (value, index, values) {
+        //      console.log("aaa");
+        //      return value;
+        //      // const date = new Date(value);
+        //      // if (date.getMonth() == 0) {
+        //      // return date.getFullYear();
+        //      // } else {
+        //      //   return null;
+        //      // }
+        //    },
+        //  },
+        //},
       },
 
       // scales: {
@@ -81,7 +78,7 @@ export function init(canvas, ctx) {
 }
 
 export function update(k, k2, k3, x, y) {
-  console.log(y);
+  console.log("displaying dataset: ", y);
   chart.data = {
     labels: x, //["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
     datasets: [
@@ -95,7 +92,20 @@ export function update(k, k2, k3, x, y) {
     ],
   };
   chart.options = {
-    options: {
+    scales: {
+      yAxes: [
+        {
+          display: true,
+          ticks: {
+            //min: 0,
+            //max: 100,
+            //beginAtZero: true,
+            suggestedMin: 0,
+          },
+
+          //maximum: 1,
+        },
+      ],
       // scales: {
       //   x: {
       //     ticks: {

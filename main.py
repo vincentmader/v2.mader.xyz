@@ -12,16 +12,16 @@ def load_all_raw():
     print('load_raw')
     for k, v in db_config.MDB_HIERARCHY['raw_data'].items():
         if 'f' in v.keys():
-            v['f']()
             print('  ' + k)  # TODO: print all skipped
+            v['f']()
         else:
-            # print('  ' + k)  # TODO: print all skipped
+            print('  ' + k)  # TODO: print all skipped
             for k2, v2 in db_config.MDB_HIERARCHY['raw_data'][k].items():
                 if type(v2) is not dict:
                     continue
                 if 'f' in v2.keys():
-                    v2['f']()
                     print('    ' + k2)
+                    v2['f']()
                 else:
                     print('    (skipped) ' + k2)
 
@@ -42,7 +42,7 @@ if __name__ == '__main__':
     # load_all_raw()
     # create_all_stats()
 
-    chronos.load_raw.sleep_cycle.sleep_history()
+    # chronos.load_raw.qs_export.stand_hours()
     # chronos.load_raw.qs_export.heart_rate()
 
     # chronos.load_raw.qs_export.distance()
@@ -50,11 +50,18 @@ if __name__ == '__main__':
     # chronos.load_raw.qs_export.energy_active()
     # chronos.load_raw.qs_export.flights_climbed()
 
+    #
+
+    # chronos.load_raw.sleep_cycle.sleep_history()
     mdb_hierarchy = db_config.MDB_HIERARCHY['stats']['time series']['daily']
     for cat in mdb_hierarchy.keys():
         for subcat in mdb_hierarchy[cat].keys():
             chronos.stats.time_series.health.diet(cat, subcat)
+    chronos.stats.time_series.health.sleep_analysis()
+    chronos.stats.time_series.various.main()
     chronos.stats.correlation_finder.main()
+
+    #
 
     # LOAD RAW DATA
 
