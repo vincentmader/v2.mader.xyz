@@ -50,6 +50,7 @@ def index():
                 }, {
                     'id': 'lissajous',
                     'link': '/comp_phys/harmonical_oscillators/lissajous'
+                    # TODO: solve analytically (-> performance)
                 },
             ]
         }, {
@@ -88,11 +89,12 @@ def index():
                     'link': '/comp_phys/monte_carlo/pi_darts'
                 },
                 {'id': 'ants', 'link': '/comp_phys/monte_carlo/ants'},
-                {'id': 'ants', 'link': '/comp_phys/monte_carlo/boids'},
             ]
         }, {
             'title': 'stuff',
             'pages': [
+                {'id': 'boids', 'link': '/comp_phys/monte_carlo/boids'},
+                {'id': 'quadtree', 'link': '/comp_phys/various/quadtree'},
                 {'id': 'tatooine', 'link': '/old/tatooine'},
                 {'id': 'lorentz', 'link': '/old/lorentz'},
                 # {'id': 'orbit'},
@@ -210,6 +212,15 @@ def comp_phys_monte_carlo(subdir):
 
     if subdir == 'boids':
         template = 'comp_phys/monte_carlo/boids.html'
+        props = {}
+        return render_template(template, props=props)
+
+
+@app.route('/comp_phys/various/<subdir>')
+def comp_phys_various(subdir):
+
+    if subdir == 'quadtree':
+        template = 'comp_phys/various/quadtree.html'
         props = {}
         return render_template(template, props=props)
 

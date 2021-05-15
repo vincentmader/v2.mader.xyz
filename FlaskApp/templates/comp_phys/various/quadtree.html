@@ -1,0 +1,23 @@
+{% extends "base/page_design_1.html" %}
+
+{% block head %}
+
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/comp_phys.css') }}" type="text/css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+
+{% endblock %}
+{% block content %}
+
+    <h4 class="section_title">
+        QuadTree
+    </h4>
+    <div class="section">
+        <div class="canvas_holder">
+            <canvas class="canvas" id="canvas"></canvas>
+        </div>
+
+    <script type="module" src="{{ url_for('static', filename='js/comp_phys/various/quadtree/main.js') }}"></script>
+
+{% endblock %}
+
