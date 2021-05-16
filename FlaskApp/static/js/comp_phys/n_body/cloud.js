@@ -1,4 +1,4 @@
-// Boids
+// Interstellar Gas Cloud
 // Vincent C. Mader
 
 // IMPORTS

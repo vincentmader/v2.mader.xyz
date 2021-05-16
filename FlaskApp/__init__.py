@@ -42,33 +42,11 @@ def index():
                 }, {
                     'id': 'n_body_cloud',
                     'link': '/comp_phys/n_body/cloud'
-                },
-            ]
-        }, {
-            'title': 'harmonical oscillators',
-            'pages': [
-                {
-                    'id': 'double_pendulum',
-                    'link': '/comp_phys/harmonical_oscillators/pendulum'
                 }, {
-                    'id': 'lissajous',
-                    'link': '/comp_phys/harmonical_oscillators/lissajous'
-                    # TODO: solve analytically (-> performance)
+                    'id': 'n_body_asteriods',
+                    'link': '/comp_phys/n_body/asteroids'
                 },
-            ]
-        }, {
-            'title': 'cellular automata',
-            'pages': [
-                {
-                    'id': 'game_of_life',
-                    'link': '/comp_phys/cellular_automata/game_of_life'
-                }, {
-                    'id': 'rock_paper_scissors',
-                    'link': '/comp_phys/cellular_automata/rock_paper_scissors'
-                }, {
-                    'id': 'forest_fire',
-                    'link': '/comp_phys/cellular_automata/forest_fire'
-                },
+                {'id': 'quadtree', 'link': '/comp_phys/various/quadtree'},
             ]
         }, {
             'title': 'statistical physics',
@@ -84,6 +62,19 @@ def index():
                     'link': '/comp_phys/stat_phys/brownian_motion'
                 },
             ]
+
+        }, {
+            'title': 'harmonical oscillators',
+            'pages': [
+                {
+                    'id': 'double_pendulum',
+                    'link': '/comp_phys/harmonical_oscillators/pendulum'
+                }, {
+                    'id': 'lissajous',
+                    'link': '/comp_phys/harmonical_oscillators/lissajous'
+                    # TODO: solve analytically (-> performance)
+                },
+            ]
         }, {
             'title': 'Monte Carlo',
             'pages': [
@@ -94,10 +85,23 @@ def index():
                 {'id': 'ants', 'link': '/comp_phys/monte_carlo/ants'},
             ]
         }, {
+            'title': 'cellular automata',
+            'pages': [
+                {
+                    'id': 'game_of_life',
+                    'link': '/comp_phys/cellular_automata/game_of_life'
+                }, {
+                    'id': 'rock_paper_scissors',
+                    'link': '/comp_phys/cellular_automata/rock_paper_scissors'
+                }, {
+                    'id': 'forest_fire',
+                    'link': '/comp_phys/cellular_automata/forest_fire'
+                },
+                {'id': 'boids', 'link': '/comp_phys/monte_carlo/boids'},
+            ]
+        }, {
             'title': 'stuff',
             'pages': [
-                {'id': 'boids', 'link': '/comp_phys/monte_carlo/boids'},
-                {'id': 'quadtree', 'link': '/comp_phys/various/quadtree'},
                 {'id': 'tatooine', 'link': '/old/tatooine'},
                 {'id': 'lorentz', 'link': '/old/lorentz'},
                 # {'id': 'orbit'},
@@ -143,7 +147,7 @@ def comp_phys_n_body(subdir):
         props = {'simulations': simulations}
         return render_template(template, props=props)
 
-    elif subdir in ['3body_moon', 'flowers', 'cloud']:
+    elif subdir in ['3body_moon', 'flowers', 'cloud', 'asteroids']:
         template = f'comp_phys/n_body/{subdir}.html'
         props = {}
         return render_template(template, props=props)

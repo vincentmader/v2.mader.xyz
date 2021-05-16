@@ -24,6 +24,5 @@ search_history.db
 *.png
 *.pdf
 
-correlation_finder2.html
 main_precompute_directions.js
 db_config.py

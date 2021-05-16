@@ -7,7 +7,7 @@ const ant_speed = 1;
 const sensor_radius = 4.5; // minimum 4.5 for ant to form streets
 var phA_evaporation_rate; // = 0.99; // 1 - 1 / world.width**2;
 var phB_evaporation_rate; // = 0.99; // 1 - 1 / world.width**2;
-var colony_size; 
+var colony_size;
 const probability_for_random_ant_turn = 0.33;
 const max_ant_random_turn_angle = Math.PI / 6;
 const ant_fov = (7 / 6) * Math.PI; // 2*Math.PI
@@ -21,7 +21,7 @@ var paused = false;
 var periodic_bounds = false;
 var placement_select = "food";
 // draw settings
-const ant_drawing_radius = 0.2;
+const ant_drawing_radius = 0.4;
 const food_drawing_radius = 1;
 const pheromone_drawing_radius = 2;
 var bool_draw_pheromones = false;
@@ -290,7 +290,9 @@ class Ant {
     // if (bool_draw_ant_state_colors) {
     // color = { true: "green", false: "white" }[this.is_carrying_food];
     // } else color = "white";
-    ctx.fillStyle = { true: "green", false: "white" }[this.is_carrying_food];
+    ctx.fillStyle = { true: "rgba(0,64,0,0.3)", false: "rgba(64,32,32,0.8)" }[
+      this.is_carrying_food
+    ];
     ctx.strokeStyle = "white";
     const ctx_radius = get_ctx_radius(ant_drawing_radius);
     // ctx.beginPath();
@@ -351,11 +353,11 @@ class AntHill {
     this.x = spawn_position[0];
     this.y = spawn_position[1];
     this.colony_size = colony_size;
-    this.colony_radius = colony_radius
-    this.ants = this.create_ants()
+    this.colony_radius = colony_radius;
+    this.ants = this.create_ants();
   }
   create_ants() {
-    var ants = []
+    var ants = [];
     var phi, ant_spawn_pos;
     for (let idx = 0; idx < this.colony_size; idx++) {
       phi = TAU * Math.random();
@@ -369,7 +371,7 @@ class AntHill {
     // ants_2 = ants.slice(ants.length / 4, ants.length / 2);
     // ants_3 = ants.slice(ants.length / 2, (3 * ants.length) / 4);
     // ants_4 = ants.slice((3 * ants.length) / 4, ants.length);
-    return ants
+    return ants;
   }
   update_ants() {
     // precompute new directions for each currenlty inhabited world grid cell
@@ -382,13 +384,13 @@ class AntHill {
     //   }
     // }
     // this.ants.forEach((ant) => {
-      // get idx & jdx of ant's current cell in pheromone grid
-      // calculate adjusted direction
-      // save to dictionary
+    // get idx & jdx of ant's current cell in pheromone grid
+    // calculate adjusted direction
+    // save to dictionary
     // })
     // update ants
     // this.ants.forEach((ant) => {
-      // update velocities
+    // update velocities
     // })
     // TODO: move function elsewhere?
     // ants.forEach((ant) => {
@@ -825,7 +827,6 @@ const draw_registered_pheromones = (x, y) => {
   }
 };
 
-
 // INITIALIZATION
 // ============================================================================
 
@@ -851,7 +852,6 @@ const init = () => {
   // add_event_listeners
   add_event_listeners();
 };
-
 
 // ANIMATION LOOP
 // ============================================================================
@@ -979,7 +979,6 @@ async function animate() {
 
   // console.log(min_from_1D_array(foo0), max_from_1D_array(foo0))
 }
-
 
 // MAIN PROGRAM
 // ============================================================================
