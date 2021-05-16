@@ -1,32 +1,40 @@
 // Boids
 // Vincent C. Mader
 
+// IMPORTS
+// ============================================================================
+
+import { Vector2D } from "../../../utils/math_utils.js";
+import { Point } from "../../../utils/math_utils.js";
+import { Rectangle } from "../../../utils/math_utils.js";
+
 // VARIABLE DEFINITIONS
 // ============================================================================
 
 // numerical parameters
 var flock_size = 700; // nr of boids in system
 var boid_collision_radius = 4; // TODO: make changeable
-var use_quad_tree = false;
-var quad_tree_capacity = 8
+var use_quad_tree = true;
+var quad_tree_capacity = 10;
 // sensor radii
 var avoidance_radius = 20;
-var attraction_radius = 100;
-var cohesion_radius = 80;
-var evasion_radius = 150;
+var attraction_radius = 300;
+var cohesion_radius = 200;
+var evasion_radius = 500;
 // forces
 var avoidance_force = 0.5;
 var attraction_force = 0.05;
-var cohesion_force = 0.4;
+var cohesion_force = 1;
 //
 var DT = 1; // TODO: make changeable
-var initial_boid_speed = 4.5; // TODO: make changeable
-var initial_predator_speed = 4; // TODO: make changeable
+var initial_boid_speed = 5; // TODO: make changeable
+var initial_predator_speed = 5; // TODO: make changeable
 var probability_for_random_boid_turn = 1; // TODO: make changeable
-var max_random_turn_angle = Math.PI / 20; // TODO: make changeable
+var max_random_turn_angle = Math.PI / 10; // TODO: make changeable
 
 // world parameters
-const world_size = [1000, 1000];
+const world_size = [1200, 1200];
+
 const nr_of_predators = 1;
 var quadtree;
 
@@ -35,7 +43,7 @@ var bool_draw_avoidance_radius = false;
 var bool_draw_attraction_radius = false;
 var bool_draw_cohesion_radius = false;
 var bool_show_trajectories = false;
-var bool_show_quad_tree_grid = false
+var bool_show_quad_tree_grid = false;
 // var bool_draw_boid_sensor_radius = false;
 // var bool_draw_boid_collision_radius = false;
 var bool_draw_boid_velocity_vectors = false;
@@ -57,72 +65,6 @@ var time_step, delivered_food, fps;
 const TAU = 2 * Math.PI;
 
 // CLASS DEFINITIONS
-
-class Vector2D {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-  }
-  norm_l2() {
-    return Math.sqrt(this.x ** 2 + this.y ** 2);
-  }
-  add(vec) {
-    return new Vector2D(this.x + vec.x, this.y + vec.y);
-  }
-  sub(vec) {
-    return new Vector2D(this.x - vec.x, this.y - vec.y);
-  }
-  mult(lambda) {
-    return new Vector2D(lambda * this.x, lambda * this.y);
-  }
-  dot(vec) {
-    return this.x * vec.x + this.y * vec.y;
-  }
-  angle() {
-    return Math.atan2(this.y, this.x);
-  }
-  angle_diff(vec) {
-    return Math.acos(this.dot(vec) / this.norm_l2(this), this.norm_l2(vec));
-  }
-  rotate(angle) {
-    // rotate anti-clockwise
-    let x = this.x * Math.cos(angle) - this.y * Math.sin(angle);
-    let y = this.x * Math.sin(angle) + this.y * Math.cos(angle);
-    return new Vector2D(x, y);
-  }
-}
-
-class Point {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-  }
-}
-
-class Rectangle {
-  constructor(x, y, w, h) {
-    this.x = x;
-    this.y = y;
-    this.w = w;
-    this.h = h;
-  }
-  contains(point) {
-    return (
-      point.x >= this.x - this.w &&
-      point.x < this.x + this.w &&
-      point.y >= this.y - this.h &&
-      point.y < this.y + this.h
-    );
-  }
-  intersects(range) {
-    return !(
-      range.x - range.w > this.x + this.w ||
-      range.x + range.w < this.x - this.w ||
-      range.y - range.h > this.y + this.h ||
-      range.y + range.h < this.y - this.h
-    );
-  }
-}
 
 class QuadTree {
   constructor(boundary, n) {
@@ -176,9 +118,9 @@ class QuadTree {
     let ctx_coords = get_ctx_coords([
       this.boundary.x - this.boundary.w,
       this.boundary.y - this.boundary.h,
-    ])
-    let ctx_w = get_ctx_radius(2 * this.boundary.w,)
-    let ctx_h = get_ctx_radius(2 * this.boundary.h,)
+    ]);
+    let ctx_w = get_ctx_radius(2 * this.boundary.w);
+    let ctx_h = get_ctx_radius(2 * this.boundary.h);
     ctx.rect(ctx_coords[0], ctx_coords[1], ctx_w, ctx_h);
     ctx.stroke();
 
@@ -252,7 +194,7 @@ class Boid {
     let collision_detected = false;
     var ahead;
     // TODO: implement faster way of checking for line-circle intersection
-    let speed = avoidance_radius / this.velocity.norm_l2();
+    let speed = this.velocity.norm_l2();
     for (let lambda of [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]) {
       ahead = this.position.add(this.velocity.mult(speed * lambda));
       let distance_from_ahead = ahead.sub(closest_boid.position).norm_l2();
@@ -304,6 +246,7 @@ class Boid {
     this.velocity = this.velocity.add(
       force.mult((1 / force_norm) * attraction_force)
     );
+    // renormalize
     this.velocity = this.velocity.mult(this.speed / this.velocity.norm_l2());
   }
   apply_cohesion(possible_neighbors) {
@@ -330,11 +273,12 @@ class Boid {
     average_velocity = average_velocity.mult(1 / boids_in_local_flock);
 
     let force = average_velocity;
-    if (!force) console.log(force)
+    if (!force) console.log(force);
     let force_norm = force.norm_l2();
     this.velocity = this.velocity.add(
       force.mult((1 / force_norm) * cohesion_force)
     );
+    // renormalize
     this.velocity = this.velocity.mult(this.speed / this.velocity.norm_l2());
   }
   apply_evasion() {
@@ -441,13 +385,13 @@ class Boid {
     }
   }
   update() {
-    var possible_neighbors = []
+    var possible_neighbors = [];
     if (use_quad_tree) {
       let x = this.position.x;
       let y = this.position.y;
-      let w = Math.max(attraction_radius, cohesion_radius)
-      let h = w
-      let range = new Rectangle(x, y, w, h)
+      let w = Math.max(attraction_radius, cohesion_radius);
+      let h = w;
+      let range = new Rectangle(x, y, w, h);
 
       // ctx.strokeStyle = 'white'
       // ctx.beginPath();
@@ -457,14 +401,14 @@ class Boid {
       // ctx.rect(ctx_coords[0]-ctx_w/2, ctx_coords[1]-ctx_h/2, 2*ctx_w, 2*ctx_h)
       // ctx.stroke()
 
-      let points = []
-      quadtree.query(range, points)
+      let points = [];
+      quadtree.query(range, points);
       for (let p of points) {
-        possible_neighbors.push(flock.boids_from_loc[[p.x, p.y]])
+        possible_neighbors.push(flock.boids_from_loc[[p.x, p.y]]);
         // console.log(possible_neighbors.length)
       }
     } else {
-      possible_neighbors = flock.boids
+      possible_neighbors = flock.boids;
     }
 
     this.apply_attraction(possible_neighbors);
@@ -504,9 +448,11 @@ class Predator {
     }
   }
   follow_mouse(mouse_pos) {
-    let force = mouse_pos.sub(this.position)
-    this.velocity = this.velocity.add(force)
-    this.velocity = this.velocity.mult(initial_predator_speed/this.velocity.norm_l2())
+    let force = mouse_pos.sub(this.position);
+    this.velocity = this.velocity.add(force);
+    this.velocity = this.velocity.mult(
+      initial_predator_speed / this.velocity.norm_l2()
+    );
   }
   draw() {
     // get canvas coords of boid
@@ -566,13 +512,18 @@ class Flock {
     }
   }
   update() {
-    this.boids_from_loc = {}
+    this.boids_from_loc = {};
     // define quadtree if necessary
     let n = quad_tree_capacity;
-    let boundary = new Rectangle(world.width/2, world.height/2, world.width/2, world.height/2);
+    let boundary = new Rectangle(
+      world.width / 2,
+      world.height / 2,
+      world.width / 2,
+      world.height / 2
+    );
     quadtree = new QuadTree(boundary, n);
     for (let boid of this.boids) {
-      let pos = boid.position
+      let pos = boid.position;
       this.boids_from_loc[[pos.x, pos.y]] = boid; // TODO: better idea?
       quadtree.insert(pos);
     }
@@ -722,17 +673,17 @@ const add_event_listeners = () => {
   //   }
   //   alert(String.fromCharCode(keynum))
   // })
-   canvas.addEventListener("mousemove", function (e) {
-     const ctx_coords = getCursorPosition(canvas, e);
-     const map_coords = get_map_coords(ctx_coords);
-     const x = map_coords[0]
-     const y = map_coords[1]
-     if (x > 0 && x < world.width && y > 0 && y < world.height) {
-       let mouse_pos = new Vector2D(x, y)
-       predators[0].follow_mouse(mouse_pos)
-     }
-   })
-   // canvas.addEventListener("mousedown", function (e) {
+  canvas.addEventListener("mousemove", function (e) {
+    const ctx_coords = getCursorPosition(canvas, e);
+    const map_coords = get_map_coords(ctx_coords);
+    const x = map_coords[0];
+    const y = map_coords[1];
+    if (x > 0 && x < world.width && y > 0 && y < world.height) {
+      let mouse_pos = new Vector2D(x, y);
+      predators[0].follow_mouse(mouse_pos);
+    }
+  });
+  // canvas.addEventListener("mousedown", function (e) {
   //    const ctx_coords = getCursorPosition(canvas, e);
   //    const map_coords = get_map_coords(ctx_coords);
   //    const col_idx = Math.floor(map_coords[0]);
@@ -939,7 +890,6 @@ const add_event_listeners = () => {
   //    });
 };
 
-
 // INITIALIZATION
 // ============================================================================
 
@@ -958,7 +908,8 @@ const init = () => {
   predators = [];
   for (let idx = 0; idx < nr_of_predators; idx++) {
     let spawn_pos = new Vector2D(
-      Math.random() * world.width, Math.random() * world.height
+      Math.random() * world.width,
+      Math.random() * world.height
     );
     let v0 = initial_predator_speed; // TODO: larger v? variable?
     let phi0 = Math.random() * TAU;
@@ -1002,11 +953,10 @@ async function animate() {
   // update flock
   flock.update();
   // show quad tree grid
-  if (bool_show_quad_tree_grid) quadtree.show()
+  if (bool_show_quad_tree_grid) quadtree.show();
   // increment time
   time_step += 1;
 }
-
 
 init();
 animate();

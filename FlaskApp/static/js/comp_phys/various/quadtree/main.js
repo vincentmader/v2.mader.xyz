@@ -87,9 +87,11 @@ class QuadTree {
     }
   }
   show() {
-    ctx.strokeStyle = "white";
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = "gray";
     ctx.beginPath();
     ctx.rect(
+      // TODO: why no left/bottom border?
       this.boundary.x - this.boundary.w,
       this.boundary.y - this.boundary.h,
       2 * this.boundary.w,
@@ -104,10 +106,12 @@ class QuadTree {
       this.southwest.show();
     }
     for (let p of this.points) {
-      ctx.strokeStyle = "white";
+      ctx.strokeStyle = "red";
+      ctx.fillStyle = "red";
       ctx.beginPath();
-      ctx.arc(p.x, p.y, 1, 0, TAU);
+      ctx.arc(p.x, p.y, 2, 0, TAU);
       ctx.stroke();
+      ctx.fill();
     }
   }
   query(range, found) {
@@ -125,7 +129,6 @@ class QuadTree {
         this.southwest.query(range, found);
         this.southeast.query(range, found);
       }
-      // return found;
     }
   }
 }
@@ -158,19 +161,19 @@ const init = () => {
 
   // add points to tree on click
   document.getElementById("canvas").addEventListener("click", (e) => {
-    for (let _ = 0; _ < 50; _++) {
+    for (let _ = 0; _ < 1; _++) {
       const pos = getCursorPosition(canvas, e);
       let p = new Point(
-        pos[0] + ((2 * Math.random() - 1) * W) / 8,
-        pos[1] + ((2 * Math.random() - 1) * H) / 8
+        pos[0], //+ ((2 * Math.random() - 1) * W) / 8,
+        pos[1] //+ ((2 * Math.random() - 1) * H) / 8
       );
       quadtree.insert(p);
     }
     draw();
   });
 
-  // add points
-  for (let _ = 0; _ < 50; _++) {
+  // add points on init
+  for (let _ = 0; _ < 0; _++) {
     let p = new Point(Math.random() * W, Math.random() * H);
     quadtree.insert(p);
   }
@@ -188,17 +191,19 @@ function draw() {
 
   // test
   ctx.strokeStyle = "green";
+  ctx.lineWidth = 2;
   ctx.beginPath();
   ctx.rect(range.x - range.w, range.y - range.h, 2 * range.w, 2 * range.h);
   ctx.stroke();
   var points = [];
   quadtree.query(range, points);
-  console.log(points);
   for (let p of points) {
     ctx.strokeStyle = "green";
+    ctx.fillStyle = "green";
     ctx.beginPath();
-    ctx.arc(p.x, p.y, 9, 0, TAU);
+    ctx.arc(p.x, p.y, 2, 0, TAU);
     ctx.stroke();
+    ctx.fill();
   }
 }
 

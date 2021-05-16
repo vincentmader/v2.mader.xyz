@@ -39,6 +39,9 @@ def index():
                 }, {
                     'id': 'n_body_flowers',
                     'link': '/comp_phys/n_body/flowers'
+                }, {
+                    'id': 'n_body_cloud',
+                    'link': '/comp_phys/n_body/cloud'
                 },
             ]
         }, {
@@ -140,7 +143,7 @@ def comp_phys_n_body(subdir):
         props = {'simulations': simulations}
         return render_template(template, props=props)
 
-    elif subdir in ['3body_moon', 'flowers']:
+    elif subdir in ['3body_moon', 'flowers', 'cloud']:
         template = f'comp_phys/n_body/{subdir}.html'
         props = {}
         return render_template(template, props=props)

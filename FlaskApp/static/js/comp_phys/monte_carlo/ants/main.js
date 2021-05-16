@@ -4,24 +4,24 @@
 // numerical parameters
 const min_pheromone_drop_amount = 0.1;
 const ant_speed = 1;
-const sensor_radius = 4.5; // minimum 5 for ant to form streets
+const sensor_radius = 4.5; // minimum 4.5 for ant to form streets
 var phA_evaporation_rate; // = 0.99; // 1 - 1 / world.width**2;
 var phB_evaporation_rate; // = 0.99; // 1 - 1 / world.width**2;
-var colony_size; // = 750;
-const probability_for_random_ant_turn = 0.7;
-const max_ant_random_turn_angle = Math.PI / 4;
+var colony_size; 
+const probability_for_random_ant_turn = 0.33;
+const max_ant_random_turn_angle = Math.PI / 6;
 const ant_fov = (7 / 6) * Math.PI; // 2*Math.PI
 // world parameters
 const colony_radius = 3;
 const colony_pos = [1.1 * colony_radius, 1.1 * colony_radius];
-const world_size = [40, 40];
-const food_placement_amount = 8000
+const world_size = [60, 60];
+const food_placement_amount = 8000;
 // button presets
 var paused = false;
 var periodic_bounds = false;
 var placement_select = "food";
 // draw settings
-const ant_drawing_radius = 0.1;
+const ant_drawing_radius = 0.2;
 const food_drawing_radius = 1;
 const pheromone_drawing_radius = 2;
 var bool_draw_pheromones = false;
@@ -30,7 +30,6 @@ var bool_draw_ant_state_colors = true;
 var canvas, ctx, W, H;
 // world & ants
 var world, ant_hill;
-var ants = [];
 const ant_eating_radius = 1;
 const pheromone_drop_amount = 1; // amount of pheromone distributed by ant each turn
 // var ants_1, ants_2, ants_3, ants_4;
@@ -56,7 +55,7 @@ class Ant {
     this.y = spawn_position[1];
     // set orientation & velocity vector
     this.theta = TAU * Math.random(); // TODO: keep as class attribute?
-    this.update_velocity_values()
+    this.update_velocity_values();
   }
   assert_position_in_world() {
     if (this.x < 0) this.x = 0;
@@ -73,8 +72,10 @@ class Ant {
     this.v = ant_speed * Math.sin(this.theta);
   }
   turn_randomly() {
-    const rand = 2 * (Math.random() - 0.5);
+    const rand = [-1, 0, 1][Math.floor(3 * Math.random())];
     this.theta += max_ant_random_turn_angle * rand;
+    // const rand = 2 * (Math.random() - 0.5);
+    // this.theta += max_ant_random_turn_angle * rand;
   }
   distribute_pheromone() {
     const ph_idx = { true: 1, false: 0 }[this.is_carrying_food];
@@ -270,7 +271,7 @@ class Ant {
       this.theta = Math.PI / 2;
     } else {
       if (world.walls[Math.floor(new_y)][Math.floor(new_x)] == 1) {
-        this.theta = this.theta + TAU/2
+        this.theta = this.theta + TAU / 2;
       }
     }
 
@@ -324,7 +325,7 @@ class Ant {
     if (this.is_carrying_food) {
       this.detect_colony();
       this.deliver_food();
-      this.detect_pheromones();
+      if (time_step % 2 == 0) this.detect_pheromones();
     } else {
       this.detect_food();
       if (this.has_detected_food) {
@@ -346,18 +347,55 @@ class Ant {
 }
 
 class AntHill {
-  constructor(spawn_position, colony_size) {
+  constructor(spawn_position, colony_size, colony_radius) {
     this.x = spawn_position[0];
     this.y = spawn_position[1];
-    this.colony_size = colony_size
+    this.colony_size = colony_size;
+    this.colony_radius = colony_radius
+    this.ants = this.create_ants()
+  }
+  create_ants() {
+    var ants = []
+    var phi, ant_spawn_pos;
+    for (let idx = 0; idx < this.colony_size; idx++) {
+      phi = TAU * Math.random();
+      ant_spawn_pos = [
+        this.x + this.colony_radius * Math.cos(phi),
+        this.y + this.colony_radius * Math.sin(phi),
+      ];
+      ants.push(new Ant(ant_spawn_pos));
+    }
+    // ants_1 = ants.slice(0, ants.length / 4);
+    // ants_2 = ants.slice(ants.length / 4, ants.length / 2);
+    // ants_3 = ants.slice(ants.length / 2, (3 * ants.length) / 4);
+    // ants_4 = ants.slice((3 * ants.length) / 4, ants.length);
+    return ants
   }
   update_ants() {
+    // precompute new directions for each currenlty inhabited world grid cell
+    // for (let idx = 0; idx < world.width; idx++) {
+    //   for (let jdx = 0; jdx < world.height; jdx++) {
+    //     for (let ph_idx of [0, 1]) {
+    //       let ph = world.pheromone_strengths[ph_idx][idx][jdx]
+    //       // console.log(ph)
+    //     }
+    //   }
+    // }
+    // this.ants.forEach((ant) => {
+      // get idx & jdx of ant's current cell in pheromone grid
+      // calculate adjusted direction
+      // save to dictionary
+    // })
+    // update ants
+    // this.ants.forEach((ant) => {
+      // update velocities
+    // })
     // TODO: move function elsewhere?
     // ants.forEach((ant) => {
     //   let x = ant.x;
     //   let y = ant.y;
     // });
-    ants.forEach((ant) => {
+    this.ants.forEach((ant) => {
       ant.update();
       if (!bool_draw_pheromones) {
         // if (colony_size < 100) {
@@ -392,11 +430,11 @@ class World {
       }
     }
     this.active_grid_cells = [];
-    this.walls = []
+    this.walls = [];
     for (let idx = 0; idx < this.height; idx++) {
-      this.walls[idx] = {}
+      this.walls[idx] = {};
       for (let jdx = 0; jdx < this.width; jdx++) {
-        this.walls[idx][jdx] = 0
+        this.walls[idx][jdx] = 0;
       }
     }
   }
@@ -409,7 +447,10 @@ class World {
         if (food_source_value === 0) {
           continue;
         }
-        ctx_radius = get_ctx_radius(food_drawing_radius * Math.sqrt(food_source_value / food_placement_amount));
+        ctx_radius = get_ctx_radius(
+          food_drawing_radius *
+            Math.sqrt(food_source_value / food_placement_amount)
+        );
         ctx_coords = get_ctx_coords([col_idx, row_idx]);
         ctx.fillStyle = "green";
         ctx.strokeStyle = "green";
@@ -495,14 +536,13 @@ class World {
     for (let idx = 0; idx < this.height; idx++) {
       for (let jdx = 0; jdx < this.width; jdx++) {
         if (this.walls[idx][jdx] == 1) {
-          let ctx_coords = get_ctx_coords([jdx, idx])
-          let ctx_radius = get_ctx_radius(1)
-          ctx.strokeStyle = "white"
-          ctx.strokeRect(ctx_coords[0], ctx_coords[1], ctx_radius, ctx_radius)
+          let ctx_coords = get_ctx_coords([jdx, idx]);
+          let ctx_radius = get_ctx_radius(1);
+          ctx.strokeStyle = "white";
+          ctx.strokeRect(ctx_coords[0], ctx_coords[1], ctx_radius, ctx_radius);
         }
       }
     }
-
   }
   evaporate_pheromones() {
     const nr_of_active_cells = this.active_grid_cells.length;
@@ -689,16 +729,18 @@ const add_event_listeners = () => {
       for (let i = row_idx - 1; i <= row_idx + 1; i++) {
         for (let j = col_idx - 1; j <= col_idx + 1; j++) {
           try {
-            world.walls[i][j] = 1
-          } finally {}
+            world.walls[i][j] = 1;
+          } finally {
+          }
         }
       }
     } else if (placement_select === "remove_walls") {
       for (let i = row_idx - 1; i <= row_idx + 1; i++) {
         for (let j = col_idx - 1; j <= col_idx + 1; j++) {
           try {
-            world.walls[i][j] = 0
-          } finally {}
+            world.walls[i][j] = 0;
+          } finally {
+          }
         }
       }
     }
@@ -782,6 +824,34 @@ const draw_registered_pheromones = (x, y) => {
     ctx.fill();
   }
 };
+
+
+// INITIALIZATION
+// ============================================================================
+
+const init = () => {
+  // setup canvas
+  canvas = document.getElementById("canvas");
+  W = canvas.getBoundingClientRect().width;
+  H = W;
+  canvas.width = W;
+  canvas.height = W;
+  ctx = canvas.getContext("2d");
+
+  // setup world
+  world = new World(world_size);
+
+  // setup ants
+  colony_size = Number(document.getElementById("slider_colony_size").value);
+  ant_hill = new AntHill(colony_pos, colony_size, colony_radius);
+
+  // reset time
+  reset_time();
+
+  // add_event_listeners
+  add_event_listeners();
+};
+
 
 // ANIMATION LOOP
 // ============================================================================
@@ -910,45 +980,9 @@ async function animate() {
   // console.log(min_from_1D_array(foo0), max_from_1D_array(foo0))
 }
 
-// INITIALIZATION
+
+// MAIN PROGRAM
 // ============================================================================
 
-const init = () => {
-  // setup canvas
-  canvas = document.getElementById("canvas");
-  W = canvas.getBoundingClientRect().width;
-  H = W;
-  canvas.width = W;
-  canvas.height = W;
-  ctx = canvas.getContext("2d");
-
-  // setup world
-  world = new World(world_size);
-  ant_hill = new AntHill(colony_pos, colony_size)
-
-  // setup ants
-  colony_size = Number(document.getElementById("slider_colony_size").value);
-  ants = [];
-  var phi, ant_spawn_pos;
-  for (let idx = 0; idx < colony_size; idx++) {
-    phi = TAU * Math.random();
-    ant_spawn_pos = [
-      colony_pos[0] + colony_radius * Math.cos(phi),
-      colony_pos[1] + colony_radius * Math.sin(phi),
-    ];
-    ants.push(new Ant(ant_spawn_pos));
-  }
-  // ants_1 = ants.slice(0, ants.length / 4);
-  // ants_2 = ants.slice(ants.length / 4, ants.length / 2);
-  // ants_3 = ants.slice(ants.length / 2, (3 * ants.length) / 4);
-  // ants_4 = ants.slice((3 * ants.length) / 4, ants.length);
-
-  // reset time
-  reset_time();
-
-  // add_event_listeners
-  add_event_listeners();
-};
-
 init();
-animate(new Date().getTime());
+animate();
