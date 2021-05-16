@@ -14,16 +14,16 @@ import { Rectangle } from "../../../utils/math_utils.js";
 // numerical parameters
 var flock_size = 700; // nr of boids in system
 var boid_collision_radius = 4; // TODO: make changeable
-var use_quad_tree = true;
+var use_quad_tree = false;
 var quad_tree_capacity = 10;
 // sensor radii
 var avoidance_radius = 20;
-var attraction_radius = 300;
-var cohesion_radius = 200;
-var evasion_radius = 500;
+var attraction_radius = 100;
+var cohesion_radius = 50;
+var evasion_radius = 200;
 // forces
 var avoidance_force = 0.5;
-var attraction_force = 0.05;
+var attraction_force = 0.2;
 var cohesion_force = 1;
 //
 var DT = 1; // TODO: make changeable
@@ -33,7 +33,7 @@ var probability_for_random_boid_turn = 1; // TODO: make changeable
 var max_random_turn_angle = Math.PI / 10; // TODO: make changeable
 
 // world parameters
-const world_size = [1200, 1200];
+const world_size = [800, 800];
 
 const nr_of_predators = 1;
 var quadtree;
