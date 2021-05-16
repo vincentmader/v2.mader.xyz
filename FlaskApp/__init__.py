@@ -100,10 +100,14 @@ def index():
                 {'id': 'boids', 'link': '/comp_phys/monte_carlo/boids'},
             ]
         }, {
+            'title': 'electro-magnetism',
+            'pages': [
+                {'id': 'lorentz', 'link': '/old/lorentz'},
+            ]
+        }, {
             'title': 'stuff',
             'pages': [
                 {'id': 'tatooine', 'link': '/old/tatooine'},
-                {'id': 'lorentz', 'link': '/old/lorentz'},
                 # {'id': 'orbit'},
                 # {'id': 'solar'},
                 # {'id': 'factfulness'},
