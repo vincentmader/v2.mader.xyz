@@ -37,13 +37,13 @@ def index():
                     #     'id': 'n_body',
                     #     'link': '/comp_phys/n_body/3body_moon'
                 }, {
-                    'id': 'n_body_flowers',
+                    'id': 'nbody_flowers',
                     'link': '/comp_phys/n_body/flowers'
                 }, {
-                    'id': 'n_body_cloud',
+                    'id': 'nbody_cloud',
                     'link': '/comp_phys/n_body/cloud'
                 }, {
-                    'id': 'n_body_asteriods',
+                    'id': 'nbody_asteroids',
                     'link': '/comp_phys/n_body/asteroids'
                 },
                 {'id': 'quadtree', 'link': '/comp_phys/various/quadtree'},
@@ -91,13 +91,14 @@ def index():
                     'id': 'game_of_life',
                     'link': '/comp_phys/cellular_automata/game_of_life'
                 }, {
+                    'id': 'boids', 'link': '/comp_phys/monte_carlo/boids'
+                }, {
                     'id': 'rock_paper_scissors',
                     'link': '/comp_phys/cellular_automata/rock_paper_scissors'
                 }, {
                     'id': 'forest_fire',
                     'link': '/comp_phys/cellular_automata/forest_fire'
                 },
-                {'id': 'boids', 'link': '/comp_phys/monte_carlo/boids'},
             ]
         }, {
             'title': 'electro-magnetism',
