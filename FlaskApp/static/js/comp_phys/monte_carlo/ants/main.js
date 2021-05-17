@@ -2,28 +2,33 @@
 // ============================================================================
 
 // numerical parameters
-const min_pheromone_drop_amount = 0.1;
-const ant_speed = 1;
-const sensor_radius = 4.5; // minimum 4.5 for ant to form streets
-var phA_evaporation_rate; // = 0.99; // 1 - 1 / world.width**2;
-var phB_evaporation_rate; // = 0.99; // 1 - 1 / world.width**2;
-var colony_size;
-const probability_for_random_ant_turn = 0.33;
-const max_ant_random_turn_angle = Math.PI / 6;
-const ant_fov = (7 / 6) * Math.PI; // 2*Math.PI
+var colony_size = 1000; // nr of ants
+var sensor_radius = 5; // minimum 4.5 for ant to form streets
+var ant_speed = 1;
+var min_pheromone_drop_amount = 1; // min. registered ph. amount
+var pheromone_drop_amount = 40; // amount of pheromone distributed by ant each turn
+var phA_evaporation_rate = 0.999; // = 0.99; // 1 - 1 / world.width**2;
+var phB_evaporation_rate = 0.999; // = 0.99; // 1 - 1 / world.width**2;
+var probability_for_random_ant_turn = 1;
+var max_ant_random_turn_angle = Math.PI / 6;
+var ant_fov = (7 / 6) * Math.PI; // 2*Math.PI
+var max_pheromone_strengths = [pheromone_drop_amount, pheromone_drop_amount];
 // world parameters
-const colony_radius = 3;
-const colony_pos = [1.1 * colony_radius, 1.1 * colony_radius];
-const world_size = [60, 60];
+const world_size = [200, 200];
+const colony_radius = 8;
+const colony_pos = [
+  world_size[0] / 2 - colony_radius / 2,
+  world_size[1] / 2 - colony_radius / 2,
+];
 const food_placement_amount = 8000;
 // button presets
 var paused = false;
-var periodic_bounds = false;
+var periodic_bounds = true;
 var placement_select = "food";
 // draw settings
-const ant_drawing_radius = 0.4;
+const ant_drawing_radius = 2.8;
 const food_drawing_radius = 1;
-const pheromone_drawing_radius = 2;
+const pheromone_drawing_radius = 1;
 var bool_draw_pheromones = false;
 var bool_draw_registered_pheromones = false;
 var bool_draw_ant_state_colors = true;
@@ -31,7 +36,6 @@ var canvas, ctx, W, H;
 // world & ants
 var world, ant_hill;
 const ant_eating_radius = 1;
-const pheromone_drop_amount = 1; // amount of pheromone distributed by ant each turn
 // var ants_1, ants_2, ants_3, ants_4;
 // stats
 var time_step, delivered_food, fps;
@@ -107,14 +111,15 @@ class Ant {
         while (Math.abs(phi) > Math.PI) phi -= Math.sign(phi) * TAU;
 
         // skip cell if it is outside of ant's FOV
-        if (Math.abs(phi >= ant_fov / 2)) continue;
+        if (Math.abs(phi) >= ant_fov / 2) continue;
         // skip cell if it is (almost empty), get pheromone strength
         pheromone_strength = world.pheromone_strengths[ph_idx][y][x];
         if (pheromone_strength <= min_pheromone_drop_amount) continue;
         // skip cell if it is outside of sensor radius
         let r = Math.sqrt(delta_y ** 2 + delta_x ** 2);
-        // if (r > sensor_radius) continue;
+        if (r > sensor_radius) continue;
 
+        // TODO: is this correct? somewhere in this func is an error...
         let direction_idx = Math.floor(3 * (phi / ant_fov + 0.5));
         weights[direction_idx] += pheromone_strength;
         this.has_detected_pheromones = true;
@@ -127,6 +132,7 @@ class Ant {
     if (this.has_detected_pheromones) {
       const direction_idx = argmax([weights[0], weights[1], weights[2]]) - 1;
       this.theta += (ant_fov / 3) * direction_idx;
+      // TODO: use forces instead?
     }
   }
   detect_colony() {
@@ -228,60 +234,53 @@ class Ant {
   detect_walls() {
     let new_x = this.x + 2 * this.u;
     let new_y = this.y + 2 * this.v;
-    // METHOD 1: remove ants from ants list when leaving world
-    // if (
-    //   new_x > world_size[0] - 1 ||
-    //   new_x < 0 ||
-    //   new_y > world_size[1] - 1 ||
-    //   new_y < 0
-    // ) {
-    //   ants = ants.filter((val, idx, arr) => val !== this);
-    // }
-    // METHOD 2: apply periodic bounds
-    // if (periodic_bounds === true) {
-    //   if (new_x > world_size[0] - 1) {
-    //     this.x = 0;
-    //   } else if (new_x < 0) {
-    //     this.x = world_size[0] - 1;
-    //   }
-    //   if (new_y > world_size[1] - 1) {
-    //     this.y = 0;
-    //   } else if (new_y < 0) {
-    //     this.y = world_size[1] - 1;
-    //   }
-    // } else {
-    // METHOD 3: update velocities on 'wall' hit
-    // if (world.has_wall_at_position([new_x, new_y])) {
-    //   // this.theta += Math.PI * (Math.random() - 0.5) // TODO: improve?
-    //   this.theta = TAU * Math.random();
-    //   // this.theta -= Math.PI + (Math.random() - 0.5) * Math.PI/4;
-    //   this.update_velocity_values();
-    //   if (!this.detect_walls()) {
-    //     return false;
-    //   } else return true;
-    // }
-    // METHOD 3.1: different velocity update (move away from wall)
-    if (new_x > world_size[0] - 1) {
-      this.theta = Math.PI;
-    } else if (new_x < 0) {
-      this.theta = 0;
-    } else if (new_y > world_size[1] - 1) {
-      this.theta = -Math.PI / 2;
-    } else if (new_y < 0) {
-      this.theta = Math.PI / 2;
+    // METHOD 1: apply periodic bounds
+    if (periodic_bounds === true) {
+      if (new_x > world_size[0] - 1) {
+        this.x = 0;
+      } else if (new_x < 0) {
+        this.x = world_size[0] - 1;
+      }
+      if (new_y > world_size[1] - 1) {
+        this.y = 0;
+      } else if (new_y < 0) {
+        this.y = world_size[1] - 1;
+      }
     } else {
-      if (world.walls[Math.floor(new_y)][Math.floor(new_x)] == 1) {
-        this.theta = this.theta + TAU / 2;
+      // METHOD 2: remove ants from ants list when leaving world
+      // if (
+      //   new_x > world_size[0] - 1 ||
+      //   new_x < 0 ||
+      //   new_y > world_size[1] - 1 ||
+      //   new_y < 0
+      // ) {
+      //   ants = ants.filter((val, idx, arr) => val !== this);
+      // }
+      // METHOD 3: update velocities on 'wall' hit
+      // if (world.has_wall_at_position([new_x, new_y])) {
+      //   // this.theta += Math.PI * (Math.random() - 0.5) // TODO: improve?
+      //   this.theta = TAU * Math.random();
+      //   // this.theta -= Math.PI + (Math.random() - 0.5) * Math.PI/4;
+      //   this.update_velocity_values();
+      //   if (!this.detect_walls()) {
+      //     return false;
+      //   } else return true;
+      // }
+      // METHOD 3.1: different velocity update (move away from wall)
+      if (new_x > world_size[0] - 1) {
+        this.theta = Math.PI;
+      } else if (new_x < 0) {
+        this.theta = 0;
+      } else if (new_y > world_size[1] - 1) {
+        this.theta = -Math.PI / 2;
+      } else if (new_y < 0) {
+        this.theta = Math.PI / 2;
+      } else {
+        if (world.walls[Math.floor(new_y)][Math.floor(new_x)] == 1) {
+          this.theta = this.theta + TAU / 2;
+        }
       }
     }
-
-    // console.log(this.u, this.v)
-    // console.log(new_y, new_x)
-    // console.log(Math.floor(new_y), Math.floor(new_x))
-    // console.log(world.walls)
-
-    // }
-
     this.update_velocity_values();
   }
   draw() {
@@ -290,7 +289,7 @@ class Ant {
     // if (bool_draw_ant_state_colors) {
     // color = { true: "green", false: "white" }[this.is_carrying_food];
     // } else color = "white";
-    ctx.fillStyle = { true: "rgba(0,64,0,0.3)", false: "rgba(64,32,32,0.8)" }[
+    ctx.fillStyle = { true: "rgba(0,64,0,1)", false: "rgba(64,32,32,0.8)" }[
       this.is_carrying_food
     ];
     ctx.strokeStyle = "white";
@@ -327,13 +326,16 @@ class Ant {
     if (this.is_carrying_food) {
       this.detect_colony();
       this.deliver_food();
-      if (time_step % 2 == 0) this.detect_pheromones();
+      if (time_step % 1 == 0) this.detect_pheromones(); // TODO: how often?
     } else {
       this.detect_food();
       if (this.has_detected_food) {
         //
       } else {
-        this.detect_pheromones();
+        let d = Math.sqrt(
+          (this.x - colony_pos[0]) ** 2 + (this.y - colony_pos[1]) ** 2
+        );
+        if (d > 1.5 * colony_radius) this.detect_pheromones();
       }
     }
     // if (!this.has_detected_pheromones) {
@@ -343,7 +345,7 @@ class Ant {
     // }
     this.detect_walls(); // needs to be called last (update_vel_val())
 
-    if (time_step % 2 == 0) this.distribute_pheromone(); // TODO: after move?
+    if (time_step % 4 == 0) this.distribute_pheromone(); // TODO: after move?
     this.update_position_values();
   }
 }
@@ -484,52 +486,42 @@ class World {
     ctx.fill();
   }
   draw_pheromones() {
-    const ctx_radius = get_ctx_coords([
-      pheromone_drawing_radius,
-      pheromone_drawing_radius,
-    ])[0];
-    // determine max & min pheromone strength values, TODO: remove?
-    // for (let i of [0, 1]) {
-    //   max_pheromone_strengths[i] = max_from_2D_array(
-    //     world.pheromone_strengths[i]
-    //   );
-    // }
-    const max_pheromone_strengths = [1, 1];
+    const ctx_radius = get_ctx_radius(pheromone_drawing_radius);
+    // TODO: determine max & min pheromone strength values?
+    //
     // loop over grid and draw
-    var ctx_coords, strength_A, strength_B, x, y;
-    // for (let y = 0; y < world_size[0]; y++) {
-    // for (let x = 0; x < world_size[1]; x++) {
-    for (let idx = 0; idx < this.active_grid_cells.length; idx++) {
-      // if (idx % 2 == 0 || idx % 3 == 0) {continue}
-      let cell = this.active_grid_cells[idx];
-      // if (Math.random() > 0.8) {continue}
-
-      x = cell[1];
-      y = cell[0];
-      // get marker strengths from cell, skip (quasi-)empty ones
-      strength_A = this.pheromone_strengths[0][y][x];
-      strength_B = this.pheromone_strengths[1][y][x];
+    let cells = this.active_grid_cells;
+    for (let idx = 0; idx < cells.length; idx++) {
+      // get position for each cell in active grid cell list
+      let x = cells[idx][1];
+      let y = cells[idx][0];
+      // get marker strengths from cell
+      let strength_A = this.pheromone_strengths[0][y][x];
+      let strength_B = this.pheromone_strengths[1][y][x];
+      // skip empty (or almost-empty?) cells
       if (Math.max(strength_A, strength_B) < min_pheromone_drop_amount) {
         continue;
       }
       // draw either phA or phB (stronger one) with strength-dependent alpha
-      if (strength_A <= strength_B && strength_B) {
+      if (strength_A <= strength_B) {
         // Pheromone B
         var alpha = sigmoid(
           strength_B / Math.max(1, max_pheromone_strengths[1])
         );
+        alpha = 1; // TODO: remove
         ctx.fillStyle = "rgba(255, 64, 0, " + alpha + ")";
-      } else if (strength_A >= strength_B) {
+      } else if (strength_A > strength_B) {
         // Pheromone A
         var alpha = sigmoid(
           strength_A / Math.max(1, max_pheromone_strengths[0])
         );
+        alpha = 1; // TODO: remove
         ctx.fillStyle = "rgba(128, 255, 255, " + alpha + ")";
       } else {
         continue;
       }
       // place marker
-      ctx_coords = get_ctx_coords([x, y]);
+      let ctx_coords = get_ctx_coords([x, y]);
       ctx.fillRect(ctx_coords[0], ctx_coords[1], ctx_radius, ctx_radius);
       // }
     }
@@ -547,42 +539,34 @@ class World {
     }
   }
   evaporate_pheromones() {
-    const nr_of_active_cells = this.active_grid_cells.length;
-    // either loop over all N**2 cells...
-    // for (let row_idx = 0; row_idx < world_size[0]; row_idx++) {
-    //   for (let col_idx = 0; col_idx < world_size[1]; col_idx++) {
-    // ... or use Monte Carlo techniques
-    // const foo = Math.min(4*colony_size, nr_of_active_cells)
-    // for (let _ = 0; _ < foo; _++) {
-    //   var idx = Math.floor(Math.random() * nr_of_active_cells)
-    // ... or loop over list of active cells
-    for (let idx = 0; idx < nr_of_active_cells; idx++) {
-      // if (idx % 2 == 0 || idx % 3 == 0) {continue}
-      let cell = this.active_grid_cells[idx];
-      let row_idx = cell[0];
-      let col_idx = cell[1];
+    // loop over all active cells
+    const cells = this.active_grid_cells;
+    for (let idx = cells.length - 1; idx >= 0; idx--) {
+      let row_idx = cells[idx][0];
+      let col_idx = cells[idx][1];
+      world.pheromone_strengths[0][row_idx][col_idx] -= 1;
+      world.pheromone_strengths[1][row_idx][col_idx] -= 1;
       if (
-        world.pheromone_strengths[0][row_idx][col_idx] * phA_evaporation_rate <
+        world.pheromone_strengths[0][row_idx][col_idx] <
         min_pheromone_drop_amount
       ) {
         world.pheromone_strengths[0][row_idx][col_idx] = 0;
-        // remove_from_array(this.active_grid_cells, [row_idx, col_idx])
-        // world.active_grid_cells.splice(idx_in_list, 1);
-      } else {
-        world.pheromone_strengths[0][row_idx][col_idx] *= phA_evaporation_rate;
       }
       if (
-        world.pheromone_strengths[1][row_idx][col_idx] * phB_evaporation_rate <
+        world.pheromone_strengths[1][row_idx][col_idx] <
         min_pheromone_drop_amount
       ) {
         world.pheromone_strengths[1][row_idx][col_idx] = 0;
-        // remove_from_array(this.active_grid_cells, [row_idx, col_idx])
-        // world.active_grid_cells.splice(idx_in_list, 1);
-      } else {
-        world.pheromone_strengths[1][row_idx][col_idx] *= phB_evaporation_rate;
+      }
+      if (
+        world.pheromone_strengths[0][row_idx][col_idx] <
+          min_pheromone_drop_amount &&
+        world.pheromone_strengths[1][row_idx][col_idx] <
+          min_pheromone_drop_amount
+      ) {
+        world.active_grid_cells.splice(idx, 1);
       }
     }
-    // world.active_grid_cells = world.active_grid_cells.slice(20, nr_of_active_cells)
   }
   has_wall_at_position(position) {
     // check for world edges in horizontal direction
@@ -728,8 +712,8 @@ const add_event_listeners = () => {
       world.pheromone_strengths[1][row_idx][col_idx] += 100;
       world.active_grid_cells.push([row_idx, col_idx]);
     } else if (placement_select === "walls") {
-      for (let i = row_idx - 1; i <= row_idx + 1; i++) {
-        for (let j = col_idx - 1; j <= col_idx + 1; j++) {
+      for (let i = row_idx - 7; i <= row_idx + 7; i++) {
+        for (let j = col_idx - 7; j <= col_idx + 7; j++) {
           try {
             world.walls[i][j] = 1;
           } finally {
@@ -737,8 +721,8 @@ const add_event_listeners = () => {
         }
       }
     } else if (placement_select === "remove_walls") {
-      for (let i = row_idx - 1; i <= row_idx + 1; i++) {
-        for (let j = col_idx - 1; j <= col_idx + 1; j++) {
+      for (let i = row_idx - 7; i <= row_idx + 7; i++) {
+        for (let j = col_idx - 7; j <= col_idx + 7; j++) {
           try {
             world.walls[i][j] = 0;
           } finally {
@@ -842,6 +826,14 @@ const init = () => {
   // setup world
   world = new World(world_size);
 
+  document.getElementById("slider_colony_size").value = colony_size;
+  document.getElementById(
+    "slider_evaporation_factor_A"
+  ).value = phA_evaporation_rate;
+  document.getElementById(
+    "slider_evaporation_factor_B"
+  ).value = phB_evaporation_rate;
+
   // setup ants
   colony_size = Number(document.getElementById("slider_colony_size").value);
   ant_hill = new AntHill(colony_pos, colony_size, colony_radius);
@@ -877,7 +869,7 @@ async function animate() {
   phB_evaporation_rate = Number(slider_B) / 1000;
 
   // update world every 10 time steps
-  if (time_step % 10 == 0) {
+  if (time_step % 2 == 0) {
     world.update();
   }
 
@@ -937,6 +929,7 @@ async function animate() {
   // console.log("ants: " + (new_date - old_date))
   // var old_date = new_date
 
+  // if (time_step % 2 == 0) {
   world.draw_ant_colonies();
   world.draw_food_sources();
   world.draw_walls();

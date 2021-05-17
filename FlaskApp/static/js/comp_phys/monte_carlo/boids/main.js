@@ -13,27 +13,27 @@ import { Rectangle } from "../../../utils/math_utils.js";
 
 // numerical parameters
 var flock_size = 700; // nr of boids in system
-var boid_collision_radius = 4; // TODO: make changeable
 var use_quad_tree = false;
 var quad_tree_capacity = 10;
 // sensor radii
+var boid_collision_radius = 7; // TODO: make changeable
 var avoidance_radius = 20;
-var attraction_radius = 100;
-var cohesion_radius = 50;
-var evasion_radius = 200;
+var attraction_radius = 60;
+var cohesion_radius = 20;
+var evasion_radius = 50;
 // forces
-var avoidance_force = 0.5;
+var avoidance_force = 0.3;
 var attraction_force = 0.2;
-var cohesion_force = 1;
+var cohesion_force = 0.3;
 //
 var DT = 1; // TODO: make changeable
-var initial_boid_speed = 5; // TODO: make changeable
-var initial_predator_speed = 5; // TODO: make changeable
+var initial_boid_speed = 1.5; // TODO: make changeable
+var initial_predator_speed = 1.5; // TODO: make changeable
 var probability_for_random_boid_turn = 1; // TODO: make changeable
 var max_random_turn_angle = Math.PI / 10; // TODO: make changeable
 
 // world parameters
-const world_size = [800, 800];
+const world_size = [400, 400];
 
 const nr_of_predators = 1;
 var quadtree;
@@ -46,12 +46,13 @@ var bool_show_trajectories = false;
 var bool_show_quad_tree_grid = false;
 // var bool_draw_boid_sensor_radius = false;
 // var bool_draw_boid_collision_radius = false;
-var bool_draw_boid_velocity_vectors = false;
+var bool_draw_boid_velocity_vectors = true;
 var paused = false;
 var periodic_bounds = true;
 
 // draw settings
-var boid_drawing_radius = 2;
+var boid_drawing_radius = 1.1;
+var predator_drawing_radius = 5 * boid_drawing_radius;
 var canvas, ctx, W, H;
 
 // world & boids
@@ -319,6 +320,8 @@ class Boid {
     // get boid color
     let angle = this.velocity.angle() + Math.PI;
     let color = "hsl(" + ((angle - Math.PI / 2) / TAU) * 360 + ", 100%, 50%)";
+
+    ctx.lineWidth = 1;
     // draw boid
     let ctx_radius = get_ctx_radius(boid_drawing_radius);
     ctx.beginPath();
@@ -353,7 +356,6 @@ class Boid {
       ctx.lineWidth = 3;
       ctx.stroke();
     }
-    ctx.lineWidth = 1;
 
     // // draw collision radius
     // if (bool_draw_boid_collision_radius) {
@@ -364,8 +366,8 @@ class Boid {
     //   ctx.stroke();
     // }
     // draw velocity vector
-    // if (bool_draw_boid_velocity_vectors) {
-    if (true) {
+    if (bool_draw_boid_velocity_vectors) {
+      ctx.lineWidth = 1;
       ctx.strokeStyle = color;
       ctx.beginPath();
       let ctx_coords = get_ctx_coords([this.position.x, this.position.y]);
@@ -377,8 +379,10 @@ class Boid {
       //     (this.velocity.y / this.velocity.norm_l2()) * this.sensor_radius,
       // ]);
       ctx_coords = get_ctx_coords([
-        this.position.x + (this.velocity.x / this.velocity.norm_l2()) * 5,
-        this.position.y + (this.velocity.y / this.velocity.norm_l2()) * 5,
+        this.position.x + // TODO: factor 0.5
+          ((0.5 * this.velocity.x) / this.velocity.norm_l2()) * 5,
+        this.position.y +
+          ((0.5 * this.velocity.y) / this.velocity.norm_l2()) * 5,
       ]);
       ctx.lineTo(ctx_coords[0], ctx_coords[1]);
       ctx.stroke();
@@ -462,7 +466,7 @@ class Predator {
     let color = "gray";
     // let color = "hsl(" + ((angle - Math.PI / 2) / TAU) * 360 + ", 100%, 50%)";
     // draw boid
-    let ctx_radius = get_ctx_radius(10 * boid_drawing_radius);
+    let ctx_radius = get_ctx_radius(predator_drawing_radius);
     ctx.beginPath();
     ctx.arc(ctx_coords[0], ctx_coords[1], ctx_radius, 0, TAU);
     ctx.fillStyle = color;
