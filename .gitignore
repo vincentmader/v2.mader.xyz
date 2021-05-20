@@ -16,7 +16,6 @@ venv
 env
 .venv
 **pyplots**
-config.py
 media/wallpapers
 *_backup.*
 *_old.*
@@ -24,11 +23,9 @@ media/wallpapers
 
 stocks.pdf
 net_worth.pdf
-wallpapers
 database
 search_history.db
 *.png
 *.pdf
 
 main_precompute_directions.js
-db_config.py
