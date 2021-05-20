@@ -33,34 +33,16 @@ def index():
                     'id': '3body_fig8',
                     'link': '/comp_phys/n_body/3body_fig8'
                 }, {
-                    'id': 'n_body_flowers',
+                    'id': 'nbody_flowers',
                     'link': '/comp_phys/n_body/flowers'
-                },
-            ]
-        }, {
-            'title': 'harmonical oscillators',
-            'pages': [
-                {
-                    'id': 'double_pendulum',
-                    'link': '/comp_phys/harmonical_oscillators/pendulum'
                 }, {
-                    'id': 'lissajous',
-                    'link': '/comp_phys/harmonical_oscillators/lissajous'
-                },
-            ]
-        }, {
-            'title': 'cellular automata',
-            'pages': [
-                {
-                    'id': 'game_of_life',
-                    'link': '/comp_phys/cellular_automata/game_of_life'
+                    'id': 'nbody_cloud',
+                    'link': '/comp_phys/n_body/cloud'
                 }, {
-                    'id': 'rock_paper_scissors',
-                    'link': '/comp_phys/cellular_automata/rock_paper_scissors'
-                }, {
-                    'id': 'forest_fire',
-                    'link': '/comp_phys/cellular_automata/forest_fire'
+                    'id': 'nbody_asteroids',
+                    'link': '/comp_phys/n_body/asteroids'
                 },
+                {'id': 'quadtree', 'link': '/comp_phys/various/quadtree'},
             ]
         }, {
             'title': 'statistical physics',
@@ -76,6 +58,19 @@ def index():
                     'link': '/comp_phys/stat_phys/brownian_motion'
                 },
             ]
+
+        }, {
+            'title': 'harmonical oscillators',
+            'pages': [
+                {
+                    'id': 'double_pendulum',
+                    'link': '/comp_phys/harmonical_oscillators/pendulum'
+                }, {
+                    'id': 'lissajous',
+                    'link': '/comp_phys/harmonical_oscillators/lissajous'
+                    # TODO: solve analytically (-> performance)
+                },
+            ]
         }, {
             'title': 'Monte Carlo',
             'pages': [
@@ -83,12 +78,33 @@ def index():
                     'id': 'mc_pi_darts',
                     'link': '/comp_phys/monte_carlo/pi_darts'
                 },
+                {'id': 'ants', 'link': '/comp_phys/monte_carlo/ants'},
+            ]
+        }, {
+            'title': 'cellular automata',
+            'pages': [
+                {
+                    'id': 'game_of_life',
+                    'link': '/comp_phys/cellular_automata/game_of_life'
+                }, {
+                    'id': 'boids', 'link': '/comp_phys/monte_carlo/boids'
+                }, {
+                    'id': 'rock_paper_scissors',
+                    'link': '/comp_phys/cellular_automata/rock_paper_scissors'
+                }, {
+                    'id': 'forest_fire',
+                    'link': '/comp_phys/cellular_automata/forest_fire'
+                },
+            ]
+        }, {
+            'title': 'electro-magnetism',
+            'pages': [
+                {'id': 'lorentz', 'link': '/old/lorentz'},
             ]
         }, {
             'title': 'stuff',
             'pages': [
                 {'id': 'tatooine', 'link': '/old/tatooine'},
-                {'id': 'lorentz', 'link': '/old/lorentz'},
                 {'id': 'correlation_finder',
                     'link': '/chronos/stats/correlation_finder'},
                 # {'id': 'orbit'},
@@ -98,13 +114,13 @@ def index():
                 # {'id': 'spotify'},
                 # {'id': 'boltzmann', 'link': '/comp_phys/boltzmann'},
             ]
-        }, {
-            'title': 'unfinished',
-            'pages': [
-                {'id': 'testing_bokeh', 'link': '/chronos/testing/bokeh'},
-                {'id': 'testing_chartjs', 'link': '/chronos/testing/chartjs'},
-                {'id': 'testing_pyplot', 'link': '/chronos/testing/pyplot'},
-            ]
+            # }, {
+            #     'title': 'unfinished',
+            #     'pages': [
+            #         {'id': 'testing_bokeh', 'link': '/chronos/testing/bokeh'},
+            #         {'id': 'testing_chartjs', 'link': '/chronos/testing/chartjs'},
+            #         {'id': 'testing_pyplot', 'link': '/chronos/testing/pyplot'},
+            #     ]
         }
     ]
 
@@ -134,7 +150,7 @@ def comp_phys_n_body(subdir):
         props = {'simulations': simulations}
         return render_template(template, props=props)
 
-    elif subdir in ['3body_moon', 'flowers']:
+    elif subdir in ['3body_moon', 'flowers', 'cloud', 'asteroids']:
         template = f'comp_phys/n_body/{subdir}.html'
         props = {}
         return render_template(template, props=props)
@@ -196,6 +212,25 @@ def comp_phys_monte_carlo(subdir):
 
     if subdir == 'pi_darts':
         template = 'comp_phys/monte_carlo/pi_darts.html'
+        props = {}
+        return render_template(template, props=props)
+
+    if subdir == 'ants':
+        template = 'comp_phys/monte_carlo/ants.html'
+        props = {}
+        return render_template(template, props=props)
+
+    if subdir == 'boids':
+        template = 'comp_phys/monte_carlo/boids.html'
+        props = {}
+        return render_template(template, props=props)
+
+
+@app.route('/comp_phys/various/<subdir>')
+def comp_phys_various(subdir):
+
+    if subdir == 'quadtree':
+        template = 'comp_phys/various/quadtree.html'
         props = {}
         return render_template(template, props=props)
 

@@ -21,8 +21,14 @@ media/wallpapers
 *_backup.*
 *_old.*
 *_test.*
-db_config.py
 
 stocks.pdf
 net_worth.pdf
+wallpapers
+database
 search_history.db
+*.png
+*.pdf
+
+main_precompute_directions.js
+db_config.py
