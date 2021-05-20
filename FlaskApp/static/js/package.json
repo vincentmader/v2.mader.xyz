@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/vincentmader/mader.xyz#readme",
   "dependencies": {
+    "chartjs": "^0.3.24",
+    "moment": "^2.29.1",
+    "momentjs": "^2.0.0",
     "mongodb": "latest"
   }
 }
