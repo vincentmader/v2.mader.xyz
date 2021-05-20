@@ -16,7 +16,6 @@ venv
 env
 .venv
 **pyplots**
-config.py
 wallpapers
 database
 *_backup.*
@@ -25,4 +24,3 @@ search_history.db
 *.pdf
 
 main_precompute_directions.js
-db_config.py
