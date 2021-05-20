@@ -8,10 +8,10 @@ export function init(canvas, ctx) {
   canvas.height = W;
   var x = [];
   var y = [];
-  var k3 = "aaaa";
+  var k3 = "";
 
   chart = new Chart(ctx, {
-    type: "line",
+    type: "bar",
     data: {
       labels: x, //["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
       datasets: [
@@ -88,11 +88,26 @@ export function update(k, k2, k3, x, y) {
         backgroundColor: "green",
         borderColor: "green",
         borderWidth: 1,
+        line: {
+          backgroundColor: "blue",
+          tension: 0,
+        },
       },
     ],
   };
   chart.options = {
     scales: {
+      xAxes: [
+        {
+          type: "time",
+          time: {
+            unit: "month",
+            // displayFormats: {
+            //   year: "YYYY",
+            // },
+          },
+        },
+      ],
       yAxes: [
         {
           display: true,

@@ -5,7 +5,16 @@
     {{ super() }}
     <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/comp_phys.css') }}" type="text/css"> -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/chronos.css') }}" type="text/css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.2.0/dist/chart.min.js"></script>
+    <!-- <script src="https://momentjs.com/downloads/moment.min.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.js"></script> -->
+    <!-- <script src="{{ url_for('static', filename='js/node_modules/moment/moment.js') }}"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@3.2.0/dist/chart.min.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script> -->
+    <!-- <script src="{{ url_for('static', filename='js/node_modules/chartjs/chart.js') }}"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@0.1.1"></script>
 
 {% endblock %}
 {% block content %}
@@ -138,19 +147,27 @@
                         var x = [];
                         var y = [];
                         var dataset_is_empty = true;
-                        {% for i in props['MDB'][k][k2][k3].find() %}
-                            {% for j, k in props['zip'](i['date'], i[k3]) %}
-                                {% if k != None %}
-                                    x.push({{ j.timestamp() }});
-                                    y.push({{ k }});
+                        let date, value
+                        {% for ts in props['MDB'].find({
+                            "category": k,
+                            "subcategory": k2,
+                            "title": k3,
+                        }) %} // TODO: rules?
+                            {% for idx in range(props['funcs']['len'](ts['dates'])) %}
+                                date = new Date({{ts['timestamps'][idx]*1000}});
+                                {% if ts['values'][idx] != None %}
+                                    value = {{ts['values'][idx]}}
                                     dataset_is_empty = false;
+                                    x.push(date)
+                                    y.push(value)
                                 {% endif %}
+
                             {% endfor %}
                         {% endfor %}
-                        // if (true) { // TODO
+                          var y_mavg = []
+                        if (true) { // TODO
                           // assert (x.length === y.length)
                           var N = 30
-                          var y_mavg = []
                           for (let idx=0; idx<x.length; idx++) {
                             y_mavg.push(0)
                             var count = 0
@@ -163,7 +180,7 @@
                           x = x.slice(N, x.length)
                           y_mavg = y_mavg.slice(N, y.length)
                           // y.slice ?
-                        // }
+                        }
 
                         const button = document.getElementById("button_{{ k + '/' + k2 + '/' + k3 }}");
                         if (!dataset_is_empty) button.style = "color: green"

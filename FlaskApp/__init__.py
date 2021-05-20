@@ -211,6 +211,7 @@ def chronos_stats_correlation_finder(subdir='activity/active_calories'):
         'MDB': config.MDB['stats']['time series']['daily'],
         'correlations': config.MDB['stats']['correlations'],
         'zip': zip,
+        'funcs': {'len': len}
     }
 
     return render_template(template, props=props)

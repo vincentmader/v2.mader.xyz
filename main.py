@@ -52,7 +52,7 @@ if __name__ == '__main__':
 
     #
 
-    # chronos.load_raw.sleep_cycle.sleep_history()
+    chronos.load_raw.sleep_cycle.sleep_history()
     mdb_hierarchy = db_config.MDB_HIERARCHY['stats']['time series']['daily']
     for cat in mdb_hierarchy.keys():
         for subcat in mdb_hierarchy[cat].keys():
