@@ -5,34 +5,35 @@
 // ============================================================================
 
 import { Vector2D } from "../../utils/math_utils.js";
-import { Point } from "../../utils/math_utils.js";
 import { Rectangle } from "../../utils/math_utils.js";
-import { get_random_color } from "../../utils/color_utils.js";
 
 // VARIABLE DEFINITIONS
 // ============================================================================
 
 // numerical parameters
-
-var cloud_size = 100;
-// var boid_collision_radius = 4; // TODO: make changeable
+var cloud_size = 100; // nr of particles
 var use_quad_tree = true; // else: direct summation, O(N^2)
 var quad_tree_capacity = 1;
 var max_opening_angle = Math.PI / 20;
 var DT = 1; // TODO: make changeable
 var EPSILON = 10;
 var max_mass = 1;
-var use_leapfrog = false; // else: Euler
+var use_leapfrog = true; // else: Euler
 
 // // world parameters
 const world_size = [600, 600];
 var quad_tree;
 
 // // button presets
-// var bool_show_trajectories = false;
-var bool_show_quad_tree_grid = !use_quad_tree;
 var paused = false;
-// var periodic_bounds = false;
+
+var bool_draw_trajectories = false;
+var bool_draw_vel_vecs = false
+var bool_draw_acc_vecs = false
+
+var bool_draw_all_qt_nodes = false;
+var bool_draw_active_qt_nodes = false;
+var bool_draw_qt_branches = false;
 
 // draw settings
 var canvas, ctx, W, H;
@@ -58,7 +59,7 @@ class Particle {
     this.velocity = vel_0;
   }
   draw() {
-    if (this == cloud.particles[0]) {
+    if (this == cloud.particles[50]) {
       ctx.strokeStyle = "red";
       ctx.fillStyle = "red";
     } else {
@@ -71,6 +72,18 @@ class Particle {
     ctx.arc(ctx_coords[0], ctx_coords[1], 3 * r, 0, TAU);
     ctx.stroke();
     ctx.fill();
+
+    if (bool_draw_vel_vecs) {
+      let pos = this.position
+      let ctx_coords = get_ctx_coords([pos.x, pos.y]);
+      let new_pos = pos.add(this.velocity.mult(DT * 100))
+      let new_ctx_coords = get_ctx_coords([new_pos.x, new_pos.y]);
+      ctx.strokeStyle = 'red'
+      ctx.beginPath()
+      ctx.moveTo(ctx_coords[0], ctx_coords[1])
+      ctx.lineTo(new_ctx_coords[0], new_ctx_coords[1])
+      ctx.stroke()
+    }
   }
   update() {
     // 1. Create list of neighboring particles/clouds
@@ -96,13 +109,25 @@ class Particle {
         let unit_vec = delta_pos.mult(1 / distance);
         let acc = unit_vec.mult((G * p.mass) / (distance ** 2 + EPSILON ** 2));
         a_i = a_i.add(acc);
+
+        if (this === cloud.particles[50]) {
+          let pos = this.position
+          let ctx_coords = get_ctx_coords([pos.x, pos.y]);
+          let new_pos = p.position
+          let new_ctx_coords = get_ctx_coords([new_pos.x, new_pos.y]);
+          ctx.strokeStyle = 'red'
+          ctx.beginPath()
+          ctx.moveTo(ctx_coords[0], ctx_coords[1])
+          ctx.lineTo(new_ctx_coords[0], new_ctx_coords[1])
+          ctx.stroke()
+        }
       }
       // get next position
       let v_j = v_i.add(a_i.mult(DT / 2));
       let x_k = x_i.add(v_j.mult(DT));
       this.position = x_k;
       // get next velocity
-      // let a_k = new Vector2D(0, 0); // TODO: try also with a_i (worse?)
+      let a_k = new Vector2D(0, 0); // TODO: try also with a_i (worse?)
       // for (let p of neighbors) {
       //   if (this === p) continue;
       //   let delta_pos = p.position.sub(this.position);
@@ -111,8 +136,21 @@ class Particle {
       //   let acc = unit_vec.mult((G * p.mass) / (distance ** 2 + EPSILON ** 2));
       //   a_k = a_k.add(acc);
       // }
-      let v_k = v_j.add(a_i.mult(DT / 2));
+      let v_k = v_j.add(a_i.mult(DT / 2)); // should be done with a_k
       this.velocity = v_k;
+      // console.log(a_i.dot(x_i))
+
+      if (bool_draw_acc_vecs) {
+        let pos = this.position
+        let ctx_coords = get_ctx_coords([pos.x, pos.y]);
+        let new_pos = pos.add(a_i.mult(DT * 10000))
+        let new_ctx_coords = get_ctx_coords([new_pos.x, new_pos.y]);
+        ctx.strokeStyle = 'yellow'
+        ctx.beginPath()
+        ctx.moveTo(ctx_coords[0], ctx_coords[1])
+        ctx.lineTo(new_ctx_coords[0], new_ctx_coords[1])
+        ctx.stroke()
+      }
     } else {
       let x_i = this.position;
       let v_i = this.velocity;
@@ -158,6 +196,19 @@ class Particle {
           let macro_particle = cloud.get_macro_particle(node, theta, this);
           if (macro_particle) macro_particles.push(macro_particle);
         }
+      }
+    }
+    // draw macro-particles
+    // console.log(macro_particles.length)
+    if (this === cloud.particles[50]) {
+      for (let p of macro_particles) {
+        let ctx_coords = get_ctx_coords([p.position.x, p.position.y])
+        ctx.strokeStyle = 'red'
+        ctx.fillStyle = 'red'
+        ctx.beginPath()
+        ctx.arc(ctx_coords[0], ctx_coords[1], 1, 0, TAU)
+        ctx.stroke()
+        ctx.fill()
       }
     }
     return macro_particles;
@@ -221,13 +272,17 @@ class Cloud {
     node.query(node.boundary, found); // TODO: node.boundary
     // calculate center of mass
     // let com = new Vector2D(node.boundary.x, node.boundary.y);
-    let com = new Vector2D(0.001, 0.001); // center of mass // TODO: wtf?
+    let com = 0 //new Vector2D(-0.0000001, -0.0000001); // center of mass // TODO: wtf?
     let M = 0; // total mass of node
     for (let v of found) {
       let p = cloud.particles_from_loc[[v.x, v.y]];
       let m = p.mass;
-      com = com.add(p.position.mult(m));
-      M += m;
+      if (com === 0) {
+        com = p.position.mult(m)
+      } else {
+        com = com.add(p.position.mult(m));
+        M += m;
+      }
     }
     // only return macro particle for non-empty nodes
     if (M === 0) {
@@ -237,7 +292,7 @@ class Cloud {
       // define macro particle describing cloud/cell
       let macro_particle = new Particle(M, com, new Vector2D(0, 0));
       // draw & return
-      if (theta < max_opening_angle && p == this.particles[0]) {
+      if (theta < max_opening_angle && p == this.particles[50]) {
         cloud.draw_macro_particle(node, macro_particle, p);
         for (let v of found) {
           let p = cloud.particles_from_loc[[v.x, v.y]];
@@ -253,26 +308,28 @@ class Cloud {
           ctx.stroke();
 
           // draw active nodes
-          let x = node.boundary.x;
-          let y = node.boundary.y;
-          let w = node.boundary.w;
-          let h = node.boundary.h;
-          ctx.beginPath();
-          ctx_coords = get_ctx_coords([x + w, y + h]);
-          ctx.moveTo(ctx_coords[0], ctx_coords[1]);
-          ctx_coords = get_ctx_coords([x - w, y + h]);
-          ctx.lineTo(ctx_coords[0], ctx_coords[1]);
-          ctx.moveTo(ctx_coords[0], ctx_coords[1]);
-          ctx_coords = get_ctx_coords([x - w, y - h]);
-          ctx.lineTo(ctx_coords[0], ctx_coords[1]);
-          ctx.moveTo(ctx_coords[0], ctx_coords[1]);
-          ctx_coords = get_ctx_coords([x + w, y - h]);
-          ctx.lineTo(ctx_coords[0], ctx_coords[1]);
-          ctx.moveTo(ctx_coords[0], ctx_coords[1]);
-          ctx_coords = get_ctx_coords([x + w, y + h]);
-          ctx.lineTo(ctx_coords[0], ctx_coords[1]);
-          ctx.moveTo(ctx_coords[0], ctx_coords[1]);
-          ctx.stroke();
+          if (bool_draw_active_qt_nodes) {
+            let x = node.boundary.x;
+            let y = node.boundary.y;
+            let w = node.boundary.w;
+            let h = node.boundary.h;
+            ctx.beginPath();
+            ctx_coords = get_ctx_coords([x + w, y + h]);
+            ctx.moveTo(ctx_coords[0], ctx_coords[1]);
+            ctx_coords = get_ctx_coords([x - w, y + h]);
+            ctx.lineTo(ctx_coords[0], ctx_coords[1]);
+            ctx.moveTo(ctx_coords[0], ctx_coords[1]);
+            ctx_coords = get_ctx_coords([x - w, y - h]);
+            ctx.lineTo(ctx_coords[0], ctx_coords[1]);
+            ctx.moveTo(ctx_coords[0], ctx_coords[1]);
+            ctx_coords = get_ctx_coords([x + w, y - h]);
+            ctx.lineTo(ctx_coords[0], ctx_coords[1]);
+            ctx.moveTo(ctx_coords[0], ctx_coords[1]);
+            ctx_coords = get_ctx_coords([x + w, y + h]);
+            ctx.lineTo(ctx_coords[0], ctx_coords[1]);
+            ctx.moveTo(ctx_coords[0], ctx_coords[1]);
+            ctx.stroke();
+          }
         }
       }
       return macro_particle;
@@ -402,357 +459,6 @@ class QuadTree {
   }
 }
 
-// class Boid {
-//   constructor(spawn_position, initial_speed, initial_rotation) {
-//     this.position = spawn_position;
-//     this.speed = initial_speed;
-
-//     let u = initial_speed * Math.cos(initial_rotation);
-//     let v = initial_speed * Math.sin(initial_rotation);
-//     this.velocity = new Vector2D(u, v);
-
-//     this.collision_radius = boid_collision_radius;
-//     this.avoidance_force = avoidance_force;
-//   }
-//   apply_avoidance(possible_neighbors) {
-//     // find list idx of closest boid
-//     let distance_to_closest_boid = 10000; // TODO
-//     let idx_of_closest_boid = -1;
-//     for (let idx = 0; idx < possible_neighbors.length; idx++) {
-//       let boid = flock.boids[idx];
-//       if (boid === this) continue;
-//       let distance = boid.position.sub(this.position).norm_l2();
-//       if (distance > avoidance_radius) continue;
-//       let angle =
-//         boid.position.sub(this.position).angle() - this.velocity.angle();
-//       if (angle < -Math.PI / 2 || angle > Math.PI / 2) continue;
-//       if (distance < distance_to_closest_boid) {
-//         distance_to_closest_boid = distance;
-//         idx_of_closest_boid = idx;
-//       }
-//     }
-//     // do nothing if no other boids are present within sensor radius
-//     if (idx_of_closest_boid == -1) return;
-//     // check for collision with closest boid
-//     let closest_boid = flock.boids[idx_of_closest_boid];
-//     let collision_detected = false;
-//     var ahead;
-//     // TODO: implement faster way of checking for line-circle intersection
-//     let speed = avoidance_radius / this.velocity.norm_l2();
-//     for (let lambda of [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]) {
-//       ahead = this.position.add(this.velocity.mult(speed * lambda));
-//       let distance_from_ahead = ahead.sub(closest_boid.position).norm_l2();
-//       // console.log(distance_from_ahead);
-//       if (
-//         distance_from_ahead <
-//         closest_boid.collision_radius + this.collision_radius
-//       ) {
-//         collision_detected = true;
-//         break;
-//       }
-//     }
-//     // continue if there are no collisions on present trajectory
-//     if (!collision_detected) return;
-//     // TODO: choose random point, check for collision, repeat until empty spot found
-//     // apply repulsion force to velocity
-//     let force = ahead.sub(closest_boid.position);
-//     let force_norm = force.norm_l2();
-//     force = force.mult(this.avoidance_force / force_norm);
-//     this.velocity = this.velocity.add(force);
-//     // renormalize
-//     this.velocity = this.velocity.mult(this.speed / this.velocity.norm_l2());
-//   }
-//   apply_attraction(possible_neighbors) {
-//     var center_of_mass = 0;
-//     var boids_in_local_flock = 0;
-//     for (let idx = 0; idx < possible_neighbors.length; idx++) {
-//       let boid = flock.boids[idx];
-//       if (boid === this) continue;
-//       let distance = boid.position.sub(this.position).norm_l2();
-//       if (distance > attraction_radius) continue;
-//       let angle =
-//         boid.position.sub(this.position).angle() - this.velocity.angle();
-//       if (angle < -Math.PI / 2 || angle > Math.PI / 2) continue;
-//       // determine center of mass of local boid flock (inside sensor radius)
-//       if (center_of_mass === 0) {
-//         center_of_mass = boid.position;
-//         boids_in_local_flock = 1;
-//       } else {
-//         center_of_mass = center_of_mass.add(boid.position);
-//         boids_in_local_flock += 1;
-//       }
-//     }
-//     if (boids_in_local_flock === 0) return;
-//     center_of_mass = center_of_mass.mult(1 / boids_in_local_flock);
-
-//     let force = center_of_mass.sub(this.position);
-//     let force_norm = force.norm_l2();
-//     this.velocity = this.velocity.add(
-//       force.mult((1 / force_norm) * attraction_force)
-//     );
-//     this.velocity = this.velocity.mult(this.speed / this.velocity.norm_l2());
-//   }
-//   apply_cohesion(possible_neighbors) {
-//     var average_velocity = 0;
-//     var boids_in_local_flock = 0;
-//     for (let idx = 0; idx < possible_neighbors.length; idx++) {
-//       let boid = flock.boids[idx];
-//       if (boid === this) continue;
-//       let distance = boid.position.sub(this.position).norm_l2();
-//       if (distance > cohesion_radius) continue;
-//       let angle =
-//         boid.position.sub(this.position).angle() - this.velocity.angle();
-//       if (angle < -Math.PI / 2 || angle > Math.PI / 2) continue;
-//       // determine center of mass of local boid flock (inside sensor radius)
-//       if (average_velocity === 0) {
-//         average_velocity = boid.velocity;
-//         boids_in_local_flock = 1;
-//       } else {
-//         average_velocity = average_velocity.add(boid.velocity);
-//         boids_in_local_flock += 1;
-//       }
-//     }
-//     if (boids_in_local_flock === 0) return;
-//     average_velocity = average_velocity.mult(1 / boids_in_local_flock);
-
-//     let force = average_velocity;
-//     if (!force) console.log(force)
-//     let force_norm = force.norm_l2();
-//     this.velocity = this.velocity.add(
-//       force.mult((1 / force_norm) * cohesion_force)
-//     );
-//     this.velocity = this.velocity.mult(this.speed / this.velocity.norm_l2());
-//   }
-//   apply_evasion() {
-//     for (let p of predators) {
-//       // TODO: what radius?
-//       if (p.position.sub(this.position).norm_l2() < evasion_radius) {
-//         let force = p.position.sub(this.position);
-//         let force_norm = force.norm_l2();
-//         this.velocity = this.velocity.sub(
-//           force.mult((1 / force_norm) * avoidance_force)
-//         );
-//         this.velocity = this.velocity.mult(
-//           this.speed / this.velocity.norm_l2()
-//         );
-//       }
-//     }
-//   }
-//   apply_random_turns() {
-//     // TODO: do this every %N ? bottlenecks?
-//     if (Math.random() < probability_for_random_boid_turn) {
-//       let turning_angle = (2 * Math.random() - 1) * max_random_turn_angle;
-//       this.velocity = this.velocity.rotate(turning_angle);
-//     }
-//   }
-//   update_position_values() {
-//     this.position = this.position.add(this.velocity.mult(DT));
-//     // apply periodic bounds
-//     if (periodic_bounds) {
-//       if (this.position.x > world.width) this.position.x = 0;
-//       if (this.position.y > world.height) this.position.y = 0;
-//       if (this.position.x < 0) this.position.x = world.width;
-//       if (this.position.y < 0) this.position.y = world.height;
-//     }
-//   }
-//   draw() {
-//     // get canvas coords of boid
-//     let ctx_coords = get_ctx_coords([this.position.x, this.position.y]);
-//     // get boid color
-//     let angle = this.velocity.angle() + Math.PI;
-//     let color = "hsl(" + ((angle - Math.PI / 2) / TAU) * 360 + ", 100%, 50%)";
-//     // draw boid
-//     let ctx_radius = get_ctx_radius(boid_drawing_radius);
-//     ctx.beginPath();
-//     ctx.arc(ctx_coords[0], ctx_coords[1], ctx_radius, 0, TAU);
-//     ctx.fillStyle = color;
-//     ctx.fill();
-//     ctx.strokeStyle = color;
-//     ctx.stroke();
-
-//     // draw sensor radii
-//     if (bool_draw_avoidance_radius && this === flock.boids[0]) {
-//       let ctx_radius = get_ctx_radius(avoidance_radius);
-//       ctx.beginPath();
-//       ctx.arc(ctx_coords[0], ctx_coords[1], ctx_radius, 0, TAU);
-//       ctx.strokeStyle = "red";
-//       ctx.lineWidth = 3;
-//       ctx.stroke();
-//     }
-//     if (bool_draw_attraction_radius && this === flock.boids[0]) {
-//       let ctx_radius = get_ctx_radius(attraction_radius);
-//       ctx.beginPath();
-//       ctx.arc(ctx_coords[0], ctx_coords[1], ctx_radius, 0, TAU);
-//       ctx.strokeStyle = "green";
-//       ctx.lineWidth = 3;
-//       ctx.stroke();
-//     }
-//     if (bool_draw_cohesion_radius && this === flock.boids[0]) {
-//       let ctx_radius = get_ctx_radius(cohesion_radius);
-//       ctx.beginPath();
-//       ctx.arc(ctx_coords[0], ctx_coords[1], ctx_radius, 0, TAU);
-//       ctx.strokeStyle = "blue";
-//       ctx.lineWidth = 3;
-//       ctx.stroke();
-//     }
-//     ctx.lineWidth = 1;
-
-//     // // draw collision radius
-//     // if (bool_draw_boid_collision_radius) {
-//     //   ctx.strokeStyle = "white";
-//     //   let ctx_radius = get_ctx_radius(boid_collision_radius);
-//     //   ctx.beginPath();
-//     //   ctx.arc(ctx_coords[0], ctx_coords[1], ctx_radius, 0, TAU);
-//     //   ctx.stroke();
-//     // }
-//     // draw velocity vector
-//     // if (bool_draw_boid_velocity_vectors) {
-//     if (true) {
-//       ctx.strokeStyle = color;
-//       ctx.beginPath();
-//       let ctx_coords = get_ctx_coords([this.position.x, this.position.y]);
-//       ctx.moveTo(ctx_coords[0], ctx_coords[1]);
-//       // ctx_coords = get_ctx_coords([
-//       //   this.position.x +
-//       //     (this.velocity.x / this.velocity.norm_l2()) * this.sensor_radius,
-//       //   this.position.y +
-//       //     (this.velocity.y / this.velocity.norm_l2()) * this.sensor_radius,
-//       // ]);
-//       ctx_coords = get_ctx_coords([
-//         this.position.x + (this.velocity.x / this.velocity.norm_l2()) * 5,
-//         this.position.y + (this.velocity.y / this.velocity.norm_l2()) * 5,
-//       ]);
-//       ctx.lineTo(ctx_coords[0], ctx_coords[1]);
-//       ctx.stroke();
-//     }
-//   }
-//   update() {
-//     var possible_neighbors = []
-//     if (use_quad_tree) {
-//       let x = this.position.x;
-//       let y = this.position.y;
-//       let w = Math.max(attraction_radius, cohesion_radius)
-//       let h = w
-//       let range = new Rectangle(x, y, w, h)
-
-//       // ctx.strokeStyle = 'white'
-//       // ctx.beginPath();
-//       // let ctx_coords = get_ctx_coords([range.x, range.y])
-//       // let ctx_w = get_ctx_radius(range.w)
-//       // let ctx_h = get_ctx_radius(range.h)
-//       // ctx.rect(ctx_coords[0]-ctx_w/2, ctx_coords[1]-ctx_h/2, 2*ctx_w, 2*ctx_h)
-//       // ctx.stroke()
-
-//       let points = []
-//       quadtree.query(range, points)
-//       for (let p of points) {
-//         possible_neighbors.push(flock.boids_from_loc[[p.x, p.y]])
-//         // console.log(possible_neighbors.length)
-//       }
-//     } else {
-//       possible_neighbors = flock.boids
-//     }
-
-//     this.apply_attraction(possible_neighbors);
-//     this.apply_cohesion(possible_neighbors);
-//     this.apply_random_turns();
-//     this.apply_avoidance(possible_neighbors);
-//     this.apply_evasion();
-//     this.update_position_values();
-//     this.draw();
-//   }
-// }
-
-// class Predator {
-//   constructor(spawn_position, initial_speed, initial_rotation) {
-//     this.position = spawn_position;
-//     this.speed = initial_speed;
-
-//     let u = initial_speed * Math.cos(initial_rotation);
-//     let v = initial_speed * Math.sin(initial_rotation);
-//     this.velocity = new Vector2D(u, v);
-//   }
-//   apply_random_turns() {
-//     // TODO: do this every %N ? bottlenecks?
-//     if (Math.random() < probability_for_random_boid_turn) {
-//       let turning_angle = (2 * Math.random() - 1) * max_random_turn_angle;
-//       this.velocity = this.velocity.rotate(turning_angle);
-//     }
-//   }
-//   update_position_values() {
-//     this.position = this.position.add(this.velocity.mult(DT));
-//     // apply periodic bounds
-//     if (periodic_bounds) {
-//       if (this.position.x > world.width) this.position.x = 0;
-//       if (this.position.y > world.height) this.position.y = 0;
-//       if (this.position.x < 0) this.position.x = world.width;
-//       if (this.position.y < 0) this.position.y = world.height;
-//     }
-//   }
-//   follow_mouse(mouse_pos) {
-//     let force = mouse_pos.sub(this.position)
-//     this.velocity = this.velocity.add(force)
-//     this.velocity = this.velocity.mult(initial_predator_speed/this.velocity.norm_l2())
-//   }
-//   draw() {
-//     // get canvas coords of boid
-//     let ctx_coords = get_ctx_coords([this.position.x, this.position.y]);
-//     // get boid color
-//     // let angle = this.velocity.angle() + Math.PI;
-//     let color = "gray";
-//     // let color = "hsl(" + ((angle - Math.PI / 2) / TAU) * 360 + ", 100%, 50%)";
-//     // draw boid
-//     let ctx_radius = get_ctx_radius(10 * boid_drawing_radius);
-//     ctx.beginPath();
-//     ctx.arc(ctx_coords[0], ctx_coords[1], ctx_radius, 0, TAU);
-//     ctx.fillStyle = color;
-//     ctx.fill();
-//     ctx.strokeStyle = color;
-//     ctx.stroke();
-//     // ctx.lineWidth = 1;
-//     // draw velocity vector
-//     // if (bool_draw_boid_velocity_vectors) {
-//     // if (true) {
-//     //   ctx.strokeStyle = color;
-//     //   ctx.beginPath();
-//     //   let ctx_coords = get_ctx_coords([this.position.x, this.position.y]);
-//     //   ctx.moveTo(ctx_coords[0], ctx_coords[1]);
-//     //   // ctx_coords = get_ctx_coords([
-//     //   //   this.position.x +
-//     //   //     (this.velocity.x / this.velocity.norm_l2()) * this.sensor_radius,
-//     //   //   this.position.y +
-//     //   //     (this.velocity.y / this.velocity.norm_l2()) * this.sensor_radius,
-//     //   // ]);
-//     //   ctx_coords = get_ctx_coords([
-//     //     this.position.x + (this.velocity.x / this.velocity.norm_l2()) * 5,
-//     //     this.position.y + (this.velocity.y / this.velocity.norm_l2()) * 5,
-//     //   ]);
-//     //   ctx.lineTo(ctx_coords[0], ctx_coords[1]);
-//     //   ctx.stroke();
-//   }
-//   update() {
-//     this.update_position_values();
-//     this.apply_random_turns();
-//     this.draw();
-//   }
-// }
-
-// class Flock {
-//   constructor(flock_size) {
-//     this.boids = [];
-//     for (let idx = 0; idx < flock_size; idx++) {
-//       let spawn_position = new Vector2D(
-//         world.width * Math.random(),
-//         world.height * Math.random()
-//       );
-//       let initial_speed = initial_boid_speed; // Math.random()
-//       let initial_rotation = TAU * Math.random();
-//       let boid = new Boid(spawn_position, initial_speed, initial_rotation);
-//       this.boids.push(boid);
-//     }
-//   }
-// }
-
 class World {
   constructor(world_size) {
     this.width = world_size[0];
@@ -780,83 +486,6 @@ const get_ctx_coords = (map_coords) => {
 const get_ctx_radius = (radius) => {
   return (radius / world.width) * W; // TODO: only for H=W
 };
-// const getCursorPosition = (canvas, event) => {
-//   const rect = canvas.getBoundingClientRect();
-//   const x = event.clientX - rect.left;
-//   const y = event.clientY - rect.top;
-//   return [x, y];
-// };
-// //const argmax = (arr) => {
-// //  if (arr.length === 0) {
-// //    return -1;
-// //  }
-
-// //  var max = arr[0];
-// //  var maxIndex = 0;
-
-// //  for (var i = 1; i < arr.length; i++) {
-// //    if (arr[i] > max) {
-// //      maxIndex = i;
-// //      max = arr[i];
-// //    }
-// //  }
-
-// //  return maxIndex;
-// //};
-// //const min_from_1D_array = (arr) => {
-// //  return arr.reduce(function (a, b) {
-// //    return Math.min(a, b);
-// //  });
-// //};
-// //const max_from_1D_array = (arr) => {
-// //  return arr.reduce(function (a, b) {
-// //    return Math.max(a, b);
-// //  });
-// //};
-// //const min_from_2D_array = (arr) => {
-// //  var values = arr.map(function (elt) {
-// //    return elt[1];
-// //  });
-// //  return Math.min.apply(null, values);
-// //};
-// //const max_from_2D_array = (arr) => {
-// //  var values = arr.map(function (elt) {
-// //    return elt[1];
-// //  });
-// //  return Math.max.apply(null, values);
-// //};
-// //const sigmoid = (x) => {
-// //  return Math.exp(x) / (Math.exp(x) + 1);
-// //};
-// //const round = (num, acc) => {
-// //  return Math.round((num + Number.EPSILON) * 10 ** acc) / 10 ** acc;
-// //};
-// //const add_info_text = () => {
-// //  ctx.font = "30px Arial";
-// //  ctx.fillText("t = " + time_step, 10, 50);
-// //};
-// //const sleep = (ms) => {
-// //  return new Promise((resolve) => setTimeout(resolve, ms));
-// //};
-// //const sleepFor = (ms) => {
-// //  var now = new Date().getTime();
-// //  while (new Date().getTime() < now + ms) {
-// //    /* do nothing */
-// //  }
-// //};
-// //const remove_from_array = (arr, item) => {
-// //  const index = arr.indexOf(item);
-// //  if (index > -1) {
-// //    arr.splice(index, 1);
-// //  }
-// //};
-// //const mean = (arr) => {
-// //  var sum = 0;
-// //  for (let i of arr) {
-// //    sum += i;
-// //  }
-// //  return sum / arr.length;
-// //};
 const add_event_listeners = () => {
   //   // canvas.addEventListener("keypress", function(e) {
   //   //   var keynum;
@@ -909,7 +538,57 @@ const add_event_listeners = () => {
   //   //    }
   //   //    // console.log(ctx_coords, [col_idx, row_idx]);
   //   //  });
-  //   // BUTTONS
+    // BUTTONS
+    document
+      .getElementById("button_toggle_pause")
+      .addEventListener("click", function () {
+        paused = !paused;
+        console.log("toggled pause");
+      });
+    document
+      .getElementById("button_reset")
+      .addEventListener("click", function () {
+        init()
+        console.log("reset");
+      });
+
+    document
+      .getElementById("button_toggle_draw_qt_branches")
+      .addEventListener("click", function () {
+        bool_draw_qt_branches = !bool_draw_qt_branches;
+        console.log("toggled showing of quad tree branches");
+      });
+    document
+      .getElementById("button_toggle_draw_all_qt_nodes")
+      .addEventListener("click", function () {
+        bool_draw_all_qt_nodes = !bool_draw_all_qt_nodes;
+        console.log("toggled showing of all quad tree nodes");
+      });
+    document
+      .getElementById("button_toggle_draw_active_qt_nodes")
+      .addEventListener("click", function () {
+        bool_draw_active_qt_nodes = !bool_draw_active_qt_nodes;
+        console.log("toggled showing of active quad tree nodes");
+      });
+
+    document
+      .getElementById("button_toggle_draw_trajectories")
+      .addEventListener("click", function () {
+        bool_draw_trajectories = !bool_draw_trajectories;
+        console.log("toggled showing of trajectories");
+      });
+    document
+      .getElementById("button_toggle_draw_vel_vecs")
+      .addEventListener("click", function () {
+        bool_draw_vel_vecs = !bool_draw_vel_vecs;
+        console.log("toggled showing of velocity vectors");
+      });
+    document
+      .getElementById("button_toggle_draw_acc_vecs")
+      .addEventListener("click", function () {
+        bool_draw_acc_vecs = !bool_draw_acc_vecs;
+        console.log("toggled showing of acceleration vectors");
+      });
   //   // buttons for displaying force radii
   //   document
   //     .getElementById("button_display_avoidance_radius")
@@ -936,22 +615,10 @@ const add_event_listeners = () => {
   //       console.log("toggled pause");
   //     });
   //   document
-  //     .getElementById("button_toggle_show_trajectories")
-  //     .addEventListener("click", function () {
-  //       bool_show_trajectories = !bool_show_trajectories;
-  //       console.log("toggled showing of trajectories");
-  //     });
-  //   document
   //     .getElementById("button_toggle_use_quad_tree")
   //     .addEventListener("click", function () {
   //       use_quad_tree = !use_quad_tree;
   //       console.log("toggled usage of quad tree");
-  //     });
-  //   document
-  //     .getElementById("button_toggle_show_quad_tree_grid")
-  //     .addEventListener("click", function () {
-  //       bool_show_quad_tree_grid = !bool_show_quad_tree_grid;
-  //       console.log("toggled showing of quad tree grid");
   //     });
   //   // document
   //   //   .getElementById("button_toggle_periodic_bounds")
@@ -1022,64 +689,7 @@ const add_event_listeners = () => {
   //       cohesion_force = value / 100;
   //       console.log("new boid cohesion strength: ", cohesion_force);
   //     });
-  //   // other sliders
-  //   // document
-  //   //   .getElementById("slider_flock_size")
-  //   //   .addEventListener("click", function () {
-  //   //     flock_size = document.getElementById("slider_flock_size").value;
-  //   //     console.log("new flock size: ", flock_size);
-  //   //     init();
-  //   //  });
-  //   // document
-  //   //   .getElementById("slider_collision_radius")
-  //   //   .addEventListener("click", function () {
-  //   //     let value = document.getElementById("slider_collision_radius").value;
-  //   //     boid_collision_radius = (value / 5000) * world.width; // TODO: only for W=H
-  //   //     console.log("new boid collision radius: ", boid_collision_radius);
-  //   //     init();
-  //   //   });
-  //   //  document
-  //   //    .getElementById("button_reset")
-  //   //    .addEventListener("click", function () {
-  //   //      // animate()
-  //   //      init();
-  //   //    });
-  //   //  document
-  //   //    .getElementById("button_place_food")
-  //   //    .addEventListener("click", function () {
-  //   //      placement_select = "food";
-  //   //    });
-  //   //  document
-  //   //    .getElementById("button_place_walls")
-  //   //    .addEventListener("click", function () {
-  //   //      placement_select = "walls";
-  //   //    });
-  //   //  document
-  //   //    .getElementById("button_remove_walls")
-  //   //    .addEventListener("click", function () {
-  //   //      placement_select = "remove_walls";
-  //   //    });
-  //   //  document
-  //   //    .getElementById("button_place_phA")
-  //   //    .addEventListener("click", function () {
-  //   //      placement_select = "phA";
-  //   //    });
-  //   //  document
-  //   //    .getElementById("button_place_phB")
-  //   //    .addEventListener("click", function () {
-  //   //      placement_select = "phB";
-  //   //    });
-  //   //  document
-  //   //    .getElementById("button_draw_pheromones")
-  //   //    .addEventListener("click", function () {
-  //   //      bool_draw_pheromones = !bool_draw_pheromones;
-  //   //    });
-  //   //  document
-  //   //    .getElementById("button_periodic_bounds")
-  //   //    .addEventListener("click", function () {
-  //   //      periodic_bounds = !periodic_bounds;
-  //   //    });
-};
+  };
 
 // INITIALIZATION
 // ============================================================================
@@ -1096,15 +706,6 @@ const init = () => {
   // setup world
   world = new World(world_size);
   cloud = new Cloud(cloud_size);
-  // predators = [];
-  // for (let idx = 0; idx < nr_of_predators; idx++) {
-  //   let spawn_pos = new Vector2D(
-  //     Math.random() * world.width, Math.random() * world.height
-  //   );
-  //   let v0 = initial_predator_speed; // TODO: larger v? variable?
-  //   let phi0 = Math.random() * TAU;
-  //   predators.push(new Predator(spawn_pos, v0, phi0));
-  // }
 
   // set values of sliders for sensor radii
   // document.getElementById("slider_avoidance_radius").value = avoidance_radius;
@@ -1135,12 +736,11 @@ async function animate() {
     return;
   }
   // Erase whole canvas
-  // if (!bool_show_trajectories)
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  if (!bool_draw_trajectories) ctx.clearRect(0, 0, canvas.width, canvas.height);
   // update cloud of particles
   cloud.update();
   // show quad tree grid
-  if (bool_show_quad_tree_grid) quad_tree.show();
+  if (bool_draw_all_qt_nodes) quad_tree.show();
   // draw particles
   cloud.draw();
   // increment time
