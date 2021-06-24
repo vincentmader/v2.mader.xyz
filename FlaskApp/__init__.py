@@ -8,7 +8,7 @@ import numpy as np
 # from .chronos import plots, stats
 from .config import PATH_TO_PROJECT, PATH_TO_STATIC
 from .config import INDEX_NAVGRID_SECTIONS
-from .db_config import MDB_HIERARCHY, MDB_TS_CATEGORIES
+# from .db_config import MDB_HIERARCHY, MDB_TS_CATEGORIES
 
 
 # initialize app
@@ -134,26 +134,26 @@ def comp_phys_various(subdir):
 
 
 # chronos
-@app.route('/chronos/stats/<subdir>')
-def chronos_stats_correlation_finder(subdir):
+# @app.route('/chronos/stats/<subdir>')
+# def chronos_stats_correlation_finder(subdir):
 
-    if subdir == 'correlation_finder':
-        template = 'chronos/correlation_finder.html'
-        props = {
-            'section_hierarchy': MDB_HIERARCHY['stats']['time series']['daily'],
-            'categories': MDB_TS_CATEGORIES,
-            'nr of categories': len(MDB_TS_CATEGORIES),
-            'MDB': config.MDB['stats']['time series']['daily'],
-            'correlations': config.MDB['stats']['correlations'],
-            'zip': zip,
-            'funcs': {'len': len}
-        }
+#     if subdir == 'correlation_finder':
+#         template = 'chronos/correlation_finder.html'
+#         props = {
+#             'section_hierarchy': MDB_HIERARCHY['stats']['time series']['daily'],
+#             'categories': MDB_TS_CATEGORIES,
+#             'nr of categories': len(MDB_TS_CATEGORIES),
+#             'MDB': config.MDB['stats']['time series']['daily'],
+#             'correlations': config.MDB['stats']['correlations'],
+#             'zip': zip,
+#             'funcs': {'len': len}
+#         }
 
-    elif subdir == 'test':
-        template = 'chronos/test.html'
-        props = {}
+#     elif subdir == 'test':
+#         template = 'chronos/test.html'
+#         props = {}
 
-    return render_template(template, props=props)
+#     return render_template(template, props=props)
 
 
 # @app.route('/chronos/stats/<subdir>', methods=['POST'])
