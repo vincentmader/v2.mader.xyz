@@ -16,159 +16,39 @@
         <div class="canvas_holder">
             <canvas class="canvas" id="canvas"></canvas>
         </div>
-        <!-- <div class="button_menu"> -->
-        <!--     <button class="button" id="button_play/pause">Pause</button> -->
-        <!--     <button class="button" id="button_reset">Reset</button> -->
-        <!-- <!-1- </div> -1-> -->
-        <!-- <!-1- <div class="button_menu"> -1-> -->
-        <!--     <button class="button" id="button_place_food">Place food</button> -->
-        <!--     <button class="button" id="button_place_walls">Place Walls</button> -->
-        <!--     <button class="button" id="button_remove_walls">Remove Walls</button> -->
-        <!-- <!-1- </div> -1-> -->
-        <!-- <!-1- <div class="button_menu"> -1-> -->
-        <!--     <button class="button" id="button_place_phA">Place pheromone A</button> -->
-        <!--     <button class="button" id="button_place_phB">Place pheromone B</button> -->
-        <!--     <button class="button" id="button_draw_pheromones">Draw/Hide pheromone</button> -->
-        <!--     <button class="button" id="button_periodic_bounds">Toggle periodic bounds</button> -->
-        <!-- </div> -->
-        <!-- <div class="button_menu"> -->
-        <!--     <input --> 
-        <!--         type="range" --> 
-        <!--         class="slider" id="slider_evaporation_factor_A" -->
-        <!--         min="0" max="1000" value="980" --> 
-        <!--     > -->
-        <!-- </div> -->
-        <!-- <div class="button_menu"> -->
-        <!--     <input --> 
-        <!--         type="range" --> 
-        <!--         class="slider" id="slider_evaporation_factor_B" -->
-        <!--         min="0" max="1000" value="980" --> 
-        <!--     > -->
-        <!-- </div> -->
-        <!-- <div class="button_menu" style="grid-template-columns: repeat(2, 1fr);"> -->
-        <!-- </div> -->
-        <!-- <div class="button_menu" style="grid-template-columns: repeat(2, 1fr);"> -->
-        <!-- <div class="button_menu" style="grid-template-columns: repeat(2, 1fr);"> -->
-    <!-- </div> -->
-    <!-- <table class="button_menu_table"> -->
-    <!--     <tr> -->
-    <!--         <td>interaction</td> -->
-    <!--         <td>strength</td> -->
-    <!--         <td>distance</td> -->
-    <!--         <td>display</td> -->
-    <!--     </tr> -->
-    <!--     <!-1- avoidance -1-> -->
-    <!--     <tr> -->
-    <!--         <td>avoidance</td> -->
-    <!--         <td> -->
-    <!--             <input --> 
-    <!--                 class="slider" id="slider_avoidance_strength" -->
-    <!--                 type="range" min="0" max="50" step=1 -->
-    <!--             > -->
-    <!--         </td> -->
-    <!--         <td> -->
-    <!--             <input --> 
-    <!--                 class="slider" id="slider_avoidance_radius" -->
-    <!--                 type="range" min="1" max="500" step=1 -->
-    <!--             > -->
-    <!--         </td> -->
-    <!--         <td> -->
-    <!--             <button class="button" id="button_display_avoidance_radius"> -->
-    <!--                 x -->
-    <!--             </button> -->
-    <!--         </td> -->
-    <!--     </tr> -->
-    <!--     <!-1- attraction -1-> -->
-    <!--     <tr> -->
-    <!--         <td>attraction</td> -->
-    <!--         <td> -->
-    <!--             <input --> 
-    <!--                 class="slider" id="slider_attraction_strength" -->
-    <!--                 type="range" min="0" max="50" step=1 -->
-    <!--             > -->
-    <!--         </td> -->
-    <!--         <td> -->
-    <!--             <input --> 
-    <!--                 class="slider" id="slider_attraction_radius" -->
-    <!--                 type="range" min="1" max="500" step=1 -->
-    <!--             > -->
-    <!--         </td> -->
-    <!--         <td> -->
-    <!--             <button class="button" id="button_display_attraction_radius"> -->
-    <!--                 x -->
-    <!--             </button> -->
-    <!--         </td> -->
-    <!--     </tr> -->
-    <!--     <!-1- cohesion -1-> -->
-    <!--     <tr> -->
-    <!--         <td>cohesion</td> -->
-    <!--         <td> -->
-    <!--             <input --> 
-    <!--                 class="slider" id="slider_cohesion_strength" -->
-    <!--                 type="range" min="0" max="50" step=1 -->
-    <!--             > -->
-    <!--         </td> -->
-    <!--         <td> -->
-    <!--             <input --> 
-    <!--                 class="slider" id="slider_cohesion_radius" -->
-    <!--                 type="range" min="1" max="500" step=1 -->
-    <!--             > -->
-    <!--         </td> -->
-    <!--         <td> -->
-    <!--             <button class="button" id="button_display_cohesion_radius"> -->
-    <!--                 x -->
-    <!--             </button> -->
-    <!--         </td> -->
-    <!--     </tr> -->
-    <!-- </table> -->
-    <!-- <div class="button_menu"> -->
-    <!--     <button class="button" id="button_toggle_pause">pause</button> -->
-    <!-- <!-1-     <button class="button" id="button_toggle_periodic_bounds">toggle periodic bounds</button> -1-> -->
-    <!--     <button class="button" id="button_toggle_use_quad_tree"> -->
-    <!--         toggle quad tree use -->
-    <!--     </button> -->
-    <!-- </div> -->
-    <!-- <div class="button_menu"> -->
-    <!--     <button class="button" id="button_toggle_show_trajectories"> -->
-    <!--         toggle trajectories -->
-    <!--     </button> -->
-    <!--     <button class="button" id="button_toggle_show_quad_tree_grid"> -->
-    <!--         toggle grid -->
-    <!--     </button> -->
-    <!-- </div> -->
-    <!-- <table class="button_menu_table"> -->
-    <!--     <tr> -->
-    <!--         <td> -->
-    <!--             <button class="button" id="button_toggle_display_collision_radius"> -->
-    <!--                 show boid collision radius -->
-    <!--             </button> -->
-    <!--         </td> -->
-    <!--         <td> -->
-    <!--             <button class="button" id="button_toggle_display_velocity_vector"> -->
-    <!--                 show boid velocity vector -->
-    <!--             </button> -->
-    <!--         </td> -->
-    <!--     </tr> -->
-    <!-- </table> -->
-    <!-- <table> -->
-    <!--     <tr> -->
-    <!--         <td> -->
-    <!--             <input --> 
-    <!--                 class="slider" id="slider_collision_radius" -->
-    <!--                 type="range" min="1" max="500" value="100" step=1 -->
-    <!--             > -->
-    <!--         </td> -->
-    <!--         <td> -->
-    <!--             <input --> 
-    <!--                 class="slider" id="slider_flock_size" -->
-    <!--                 type="range" min="1" max="10000" value="100" step=1 -->
-    <!--             > -->
-    <!--         </td> -->
-    <!--     <tr> -->
-    <!-- </table> -->
-    
+    <table class="button_menu_table">
+        <tr>
+            <td>
+                <button class="button" id="button_toggle_pause">Pause</button>
+            </td>
+            <td>
+                <button class="button" id="button_reset">Reset</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button class="button" id="button_toggle_draw_trajectories">Draw trajectories</button>
+            </td>
+            <td>
+                <button class="button" id="button_toggle_draw_vel_vecs">Draw velocities</button>
+            </td>
+            <td>
+                <button class="button" id="button_toggle_draw_acc_vecs">Draw accelerations</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button class="button" id="button_toggle_draw_active_qt_nodes">Draw active QT nodes</button>
+            </td>
+            <td>
+                <button class="button" id="button_toggle_draw_all_qt_nodes">Draw all QT nodes</button>
+            </td>
+            <td>
+                <button class="button" id="button_toggle_draw_qt_branches">Draw QT branches</button>
+            </td>
+        </tr>
+    </table>
 
-    
     <!-- <div class="section"> -->
     <!--     <div class="canvas_holder"> -->
             <!-- <canvas class="canvas" id="canvas"></canvas> -->

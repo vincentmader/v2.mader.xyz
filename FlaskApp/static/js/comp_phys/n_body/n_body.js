@@ -11,7 +11,7 @@ var o_x, o_y;
 // Drawing
 var W, H;
 var zoom_level;
-var drawing_radius = 16;
+var drawing_radius = 14;
 // Statistics
 var frame_idx = 0;
 // Settings
@@ -50,7 +50,7 @@ function setup_event_listeners(canvas_id) {
     .getElementById("restart_" + String(canvas_id))
     .addEventListener("click", function () {
       frame_idx = 0;
-      zoom_level = W / 2; // TODO: implement zoom
+      // zoom_level = 2.5 / W; // TODO: implement zoom
     });
   document
     .getElementById("play/pause_" + String(canvas_id))
@@ -78,7 +78,7 @@ export function main(canvas, ctx, canvas_id, system_states) {
   // define coordinate origin on screen
   o_x = W / 2;
   o_y = H / 2;
-  zoom_level = 2 / W;
+  zoom_level = 2.5 / W; // TODO: move up (default value?)
   // setup event listeners
   setup_event_listeners(canvas_id);
 

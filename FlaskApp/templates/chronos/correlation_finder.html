@@ -122,7 +122,7 @@
         <canvas class="canvas" id="canvas_time_series_plot"></canvas>
         <script type=module>
             import { init } from "{{ url_for('static', filename='js/chronos/time_series_plot.js') }}"
-            const canvas_id = "canvas_time_series_plot"
+            let canvas_id = "canvas_time_series_plot"
             const canvas = document.getElementById(canvas_id);
             const ctx = canvas.getContext("2d");
             init(canvas, ctx)

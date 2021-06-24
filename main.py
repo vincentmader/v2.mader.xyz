@@ -8,37 +8,49 @@ from FlaskApp import chronos
 from FlaskApp import config, db_config
 
 
-def load_all_raw():
-    print('load_raw')
-    for k, v in db_config.MDB_HIERARCHY['raw_data'].items():
-        if 'f' in v.keys():
-            print('  ' + k)  # TODO: print all skipped
-            v['f']()
-        else:
-            print('  ' + k)  # TODO: print all skipped
-            for k2, v2 in db_config.MDB_HIERARCHY['raw_data'][k].items():
-                if type(v2) is not dict:
-                    continue
-                if 'f' in v2.keys():
-                    print('    ' + k2)
-                    v2['f']()
-                else:
-                    print('    (skipped) ' + k2)
+# def load_all_raw():
+#     print('load_raw')
+#     for k, v in db_config.MDB_HIERARCHY['raw_data'].items():
+#         if 'f' in v.keys():
+#             print('  ' + k)  # TODO: print all skipped
+#             v['f']()
+#         else:
+#             print('  ' + k)  # TODO: print all skipped
+#             for k2, v2 in db_config.MDB_HIERARCHY['raw_data'][k].items():
+#                 if type(v2) is not dict:
+#                     continue
+#                 if 'f' in v2.keys():
+#                     print('    ' + k2)
+#                     v2['f']()
+#                 else:
+#                     print('    (skipped) ' + k2)
 
 
-def create_all_stats():
-    print('stats')
-    for k, v in db_config.MDB_HIERARCHY['stats']['time series']['daily'].items():
-        print('  ' + k)
-        for k2, v2 in v.items():
-            if 'f' in v2.keys():
-                print('    ' + k2)
-                v2['f']()
-            else:
-                print('    (skipped) ' + k2)
+# def create_all_stats():
+#     print('stats')
+#     for k, v in db_config.MDB_HIERARCHY['stats']['time series']['daily'].items():
+#         print('  ' + k)
+#         for k2, v2 in v.items():
+#             if 'f' in v2.keys():
+#                 print('    ' + k2)
+#                 v2['f']()
+#             else:
+#                 print('    (skipped) ' + k2)
 
 
 if __name__ == '__main__':
+
+    chronos.load_raw.sleep_cycle.sleep_history()
+
+    mdb_hierarchy = db_config.MDB_HIERARCHY['stats']['time series']['daily']
+    for cat in mdb_hierarchy.keys():
+        for subcat in mdb_hierarchy[cat].keys():
+            chronos.stats.time_series.health.diet(cat, subcat)
+
+    chronos.stats.time_series.health.sleep_analysis()
+    chronos.stats.time_series.various.main()
+    chronos.stats.correlation_finder.main()
+
     # load_all_raw()
     # create_all_stats()
 
@@ -51,15 +63,6 @@ if __name__ == '__main__':
     # chronos.load_raw.qs_export.flights_climbed()
 
     #
-
-    chronos.load_raw.sleep_cycle.sleep_history()
-    mdb_hierarchy = db_config.MDB_HIERARCHY['stats']['time series']['daily']
-    for cat in mdb_hierarchy.keys():
-        for subcat in mdb_hierarchy[cat].keys():
-            chronos.stats.time_series.health.diet(cat, subcat)
-    chronos.stats.time_series.health.sleep_analysis()
-    chronos.stats.time_series.various.main()
-    chronos.stats.correlation_finder.main()
 
     #
 

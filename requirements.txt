@@ -16,3 +16,6 @@ pylint
 jedi
 neovim
 jupyter
+
+pdfreader
+yfinance

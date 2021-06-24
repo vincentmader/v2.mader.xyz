@@ -5,7 +5,7 @@ export function init(canvas, ctx) {
   W = canvas.getBoundingClientRect().width;
   H = W;
   canvas.width = W;
-  canvas.height = W;
+  canvas.height = W / 2;
   var x = [];
   var y = [];
   var k3 = "";

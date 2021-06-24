@@ -2,7 +2,7 @@
 // ============================================================================
 
 // numerical parameters
-var colony_size = 1000; // nr of ants
+var colony_size = 1100; // nr of ants
 var sensor_radius = 5; // minimum 4.5 for ant to form streets
 var ant_speed = 1;
 var min_pheromone_drop_amount = 1; // min. registered ph. amount
@@ -26,7 +26,7 @@ var paused = false;
 var periodic_bounds = true;
 var placement_select = "food";
 // draw settings
-const ant_drawing_radius = 2.8;
+const ant_drawing_radius = 0.7;
 const food_drawing_radius = 1;
 const pheromone_drawing_radius = 1;
 var bool_draw_pheromones = false;
@@ -289,7 +289,7 @@ class Ant {
     // if (bool_draw_ant_state_colors) {
     // color = { true: "green", false: "white" }[this.is_carrying_food];
     // } else color = "white";
-    ctx.fillStyle = { true: "rgba(0,64,0,1)", false: "rgba(64,32,32,0.8)" }[
+    ctx.fillStyle = { true: "rgba(0,64,0,1)", false: "rgba(255,255,255,1)" }[
       this.is_carrying_food
     ];
     ctx.strokeStyle = "white";
@@ -827,12 +827,10 @@ const init = () => {
   world = new World(world_size);
 
   document.getElementById("slider_colony_size").value = colony_size;
-  document.getElementById(
-    "slider_evaporation_factor_A"
-  ).value = phA_evaporation_rate;
-  document.getElementById(
-    "slider_evaporation_factor_B"
-  ).value = phB_evaporation_rate;
+  document.getElementById("slider_evaporation_factor_A").value =
+    phA_evaporation_rate;
+  document.getElementById("slider_evaporation_factor_B").value =
+    phB_evaporation_rate;
 
   // setup ants
   colony_size = Number(document.getElementById("slider_colony_size").value);
