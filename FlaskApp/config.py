@@ -111,12 +111,15 @@ INDEX_NAVGRID_SECTIONS = [
     }, {
         'title': 'stuff/unfinished',
         'pages': [
-            {'id': 'tatooine', 'link': '/old/tatooine'},
-            {'id': 'correlation_finder',
-                'link': '/chronos/stats/correlation_finder'},
-            {'id': 'test',
-                'link': '/chronos/stats/test'
-             }, {
+            {
+                'id': 'tatooine', 'link': '/old/tatooine'
+            }, {
+                # 'id': 'correlation_finder',
+                # 'link': '/chronos/stats/correlation_finder'
+                # }, {
+                # 'id': 'test',
+                # 'link': '/chronos/stats/test'
+                # }, {
                 'id': 'gas_in_a_box',
                 'link': '/comp_phys/stat_phys/thermal_motion'
             }, {
