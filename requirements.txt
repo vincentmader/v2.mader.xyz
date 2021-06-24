@@ -9,6 +9,7 @@ scipy
 oauth2client
 tqdm
 pygame
+pymongo
 pyPDF2
 
 autopep8

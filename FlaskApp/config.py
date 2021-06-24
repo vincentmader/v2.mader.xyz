@@ -1,6 +1,6 @@
 from datetime import datetime as dt
 import os
-import pymongo
+# import pymongo
 
 
 PATH_TO_PROJECT = '/home/vinc/code/mader.xyz/FlaskApp/'
@@ -18,7 +18,7 @@ FACEBOOK_USER_NAME = 'Vincent Mader'
 
 PLOT_WIDTH, PLOT_HEIGHT = 400, 400
 
-MDB = pymongo.MongoClient('localhost', 27017)['maderxyz']
+# MDB = pymongo.MongoClient('localhost', 27017)['maderxyz']
 
 # PARAMETERS FOR IMPORTING RAW DATA
 
