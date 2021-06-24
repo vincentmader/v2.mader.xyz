@@ -6,8 +6,8 @@ from flask import Flask, render_template, request
 import numpy as np
 
 from .chronos import plots, stats
-from .config import PATH_TO_PROJECT
-from .config import PATH_TO_STATIC
+from .config import PATH_TO_PROJECT, PATH_TO_STATIC
+from .config import INDEX_NAVGRID_SECTIONS
 from .db_config import MDB_HIERARCHY, MDB_TS_CATEGORIES
 
 
@@ -21,113 +21,11 @@ app = Flask(__name__)
 # index
 @app.route('/')
 def index():
-
-    nav_grid_sections = [
-        {
-            'title': 'n-body dynamics',
-            'pages': [
-                {
-                    'id': 'nbody_moon',
-                    'link': '/comp_phys/n_body/3body_moon'
-                }, {
-                    'id': '3body_fig8',
-                    'link': '/comp_phys/n_body/3body_fig8'
-                }, {
-                    'id': 'nbody_flowers',
-                    'link': '/comp_phys/n_body/flowers'
-                }, {
-                    'id': 'nbody_cloud',
-                    'link': '/comp_phys/n_body/cloud'
-                }, {
-                    'id': 'nbody_asteroids',
-                    'link': '/comp_phys/n_body/asteroids'
-                },
-                {'id': 'quadtree', 'link': '/comp_phys/various/quadtree'},
-            ]
-        }, {
-            'title': 'statistical physics',
-            'pages': [
-                {
-                    'id': 'ising',
-                    'link': '/comp_phys/stat_phys/ising'
-                }, {
-                    'id': 'gas_in_a_box',
-                    'link': '/comp_phys/stat_phys/thermal_motion'
-                }, {
-                    'id': 'brownian_motion',
-                    'link': '/comp_phys/stat_phys/brownian_motion'
-                },
-            ]
-
-        }, {
-            'title': 'harmonical oscillators',
-            'pages': [
-                {
-                    'id': 'double_pendulum',
-                    'link': '/comp_phys/harmonical_oscillators/pendulum'
-                }, {
-                    'id': 'lissajous',
-                    'link': '/comp_phys/harmonical_oscillators/lissajous'
-                    # TODO: solve analytically (-> performance)
-                },
-            ]
-        }, {
-            'title': 'Monte Carlo',
-            'pages': [
-                {
-                    'id': 'mc_pi_darts',
-                    'link': '/comp_phys/monte_carlo/pi_darts'
-                },
-                {'id': 'ants', 'link': '/comp_phys/monte_carlo/ants'},
-            ]
-        }, {
-            'title': 'cellular automata',
-            'pages': [
-                {
-                    'id': 'game_of_life',
-                    'link': '/comp_phys/cellular_automata/game_of_life'
-                }, {
-                    'id': 'boids', 'link': '/comp_phys/monte_carlo/boids'
-                }, {
-                    'id': 'rock_paper_scissors',
-                    'link': '/comp_phys/cellular_automata/rock_paper_scissors'
-                }, {
-                    'id': 'forest_fire',
-                    'link': '/comp_phys/cellular_automata/forest_fire'
-                },
-            ]
-        }, {
-            'title': 'electro-magnetism',
-            'pages': [
-                {'id': 'lorentz', 'link': '/old/lorentz'},
-            ]
-        }, {
-            'title': 'stuff',
-            'pages': [
-                {'id': 'tatooine', 'link': '/old/tatooine'},
-                {'id': 'correlation_finder',
-                    'link': '/chronos/stats/correlation_finder'},
-                # {'id': 'orbit'},
-                # {'id': 'solar'},
-                # {'id': 'factfulness'},
-                # {'id': 'bachelor_thesis'},
-                # {'id': 'spotify'},
-                # {'id': 'boltzmann', 'link': '/comp_phys/boltzmann'},
-            ]
-            # }, {
-            #     'title': 'unfinished',
-            #     'pages': [
-            #         {'id': 'testing_bokeh', 'link': '/chronos/testing/bokeh'},
-            #         {'id': 'testing_chartjs', 'link': '/chronos/testing/chartjs'},
-            #         {'id': 'testing_pyplot', 'link': '/chronos/testing/pyplot'},
-            #     ]
-        }
-    ]
-
-    props = {'nav_grid_sections': nav_grid_sections}
+    props = {'nav_grid_sections': INDEX_NAVGRID_SECTIONS}
     return render_template('index.html', props=props)
 
 
+# comp phys
 @app.route('/comp_phys/n_body/<subdir>')
 def comp_phys_n_body(subdir):
 
@@ -235,19 +133,25 @@ def comp_phys_various(subdir):
         return render_template(template, props=props)
 
 
-@app.route('/chronos/stats/correlation_finder')
-def chronos_stats_correlation_finder(subdir='activity/active_calories'):
+# chronos
+@app.route('/chronos/stats/<subdir>')
+def chronos_stats_correlation_finder(subdir):
 
-    template = 'chronos/correlation_finder.html'
-    props = {
-        'section_hierarchy': MDB_HIERARCHY['stats']['time series']['daily'],
-        'categories': MDB_TS_CATEGORIES,
-        'nr of categories': len(MDB_TS_CATEGORIES),
-        'MDB': config.MDB['stats']['time series']['daily'],
-        'correlations': config.MDB['stats']['correlations'],
-        'zip': zip,
-        'funcs': {'len': len}
-    }
+    if subdir == 'correlation_finder':
+        template = 'chronos/correlation_finder.html'
+        props = {
+            'section_hierarchy': MDB_HIERARCHY['stats']['time series']['daily'],
+            'categories': MDB_TS_CATEGORIES,
+            'nr of categories': len(MDB_TS_CATEGORIES),
+            'MDB': config.MDB['stats']['time series']['daily'],
+            'correlations': config.MDB['stats']['correlations'],
+            'zip': zip,
+            'funcs': {'len': len}
+        }
+
+    elif subdir == 'test':
+        template = 'chronos/test.html'
+        props = {}
 
     return render_template(template, props=props)
 
