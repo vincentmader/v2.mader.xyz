@@ -5,7 +5,7 @@ import sys
 from flask import Flask, render_template, request
 import numpy as np
 
-from .chronos import plots, stats
+# from .chronos import plots, stats
 from .config import PATH_TO_PROJECT, PATH_TO_STATIC
 from .config import INDEX_NAVGRID_SECTIONS
 from .db_config import MDB_HIERARCHY, MDB_TS_CATEGORIES
@@ -199,38 +199,38 @@ def chronos_testing(subdir, lolol=0):
             images=images
         )
 
-    if subdir == 'bokeh':
-        plot_functions = [
-            plots.bokeh.google_takeout.gmap,
-        ]
+    # if subdir == 'bokeh':
+    #     plot_functions = [
+    #         plots.bokeh.google_takeout.gmap,
+    #     ]
 
-        scripts, divs = [], []
-        for f in plot_functions:
-            script, div = f()
-            scripts.append(script)
-            divs.append(div)
+    #     scripts, divs = [], []
+    #     for f in plot_functions:
+    #         script, div = f()
+    #         scripts.append(script)
+    #         divs.append(div)
 
-        script, div = plots.bokeh.google_takeout.bar_plot_search_hits(
-            'youtube')
-        scripts.append(script)
-        divs.append(div)
+    #     script, div = plots.bokeh.google_takeout.bar_plot_search_hits(
+    #         'youtube')
+    #     scripts.append(script)
+    #     divs.append(div)
 
-        x, y = stats.time_series.avg_grades()
-        # x, y = np.array(list(foo.keys())), np.array(list(foo.values()))
-        # x, y = stats.time_series.avg_grades()
-        script, div = plots.bokeh.basic.time_series(x, y)
-        scripts.append(script)
-        divs.append(div)
+    #     x, y = stats.time_series.avg_grades()
+    #     # x, y = np.array(list(foo.keys())), np.array(list(foo.values()))
+    #     # x, y = stats.time_series.avg_grades()
+    #     script, div = plots.bokeh.basic.time_series(x, y)
+    #     scripts.append(script)
+    #     divs.append(div)
 
-        # x, y = stats.time_series.chars_written_in_daily_log()
-        # x, y = np.array(list(foo.keys())), np.array(list(foo.values()))
-        # x, y = stats.time_series.avg_grades()
-        # script, div = plots.bokeh.basic.time_series(x, y)
-        # scripts.append(script)
-        # divs.append(div)
+    #     # x, y = stats.time_series.chars_written_in_daily_log()
+    #     # x, y = np.array(list(foo.keys())), np.array(list(foo.values()))
+    #     # x, y = stats.time_series.avg_grades()
+    #     # script, div = plots.bokeh.basic.time_series(x, y)
+    #     # scripts.append(script)
+    #     # divs.append(div)
 
-        template = 'chronos/testing/bokeh.html'
-        return render_template(template, scripts=scripts, divs=divs)
+    #     template = 'chronos/testing/bokeh.html'
+    #     return render_template(template, scripts=scripts, divs=divs)
 
 
 @app.route('/chronos/testing/<subdir>', methods=['POST'])
