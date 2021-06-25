@@ -4,6 +4,7 @@ import os
 # import pymongo
 
 
+# TODO: long term: make sure paths are set-up for server
 PATH_TO_PROJECT = '/home/vinc/code/mader.xyz/FlaskApp/'
 PATH_TO_CHRONOS = os.path.join(PATH_TO_PROJECT, 'chronos')
 PATH_TO_STATIC = os.path.join(PATH_TO_PROJECT, 'static/')
@@ -67,6 +68,9 @@ INDEX_NAVGRID_SECTIONS = [
             {
                 'id': 'ising',
                 'link': '/comp_phys/stat_phys/ising'
+            }, {
+                'id': 'brownian_motion',
+                'link': '/comp_phys/stat_phys/brownian_motion'
             },
         ]
 
@@ -131,9 +135,6 @@ INDEX_NAVGRID_SECTIONS = [
                 # }, {
                 'id': 'gas_in_a_box',
                 'link': '/comp_phys/stat_phys/thermal_motion'
-            }, {
-                'id': 'brownian_motion',
-                'link': '/comp_phys/stat_phys/brownian_motion'
             }, {
                 'id': 'forest_fire',
                 'link': '/comp_phys/cellular_automata/forest_fire'

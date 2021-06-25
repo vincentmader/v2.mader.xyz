@@ -1,15 +1,15 @@
 import { draw_point } from "../../utils/drawing_utils.js";
 
 const dt = 0.001;
-const r_big = 0.1;
-const r_atom = 1e-3;
+const r_big = 0.06;
+const r_atom = 2e-3;
 const nr_of_atoms = 2000;
 const m = 1e-2;
 const M = 1;
-const v_th = 20; // TODO: fix this, it's unphysical
+const v_th = 10; // TODO: fix this, it's unphysical
 var big_particle, atoms;
 var canvas, ctx;
-var W, H, o_x, o_y;
+var W, H;
 var frame_idx;
 var big_particle_positions = [];
 
@@ -33,8 +33,7 @@ class Particle {
       const y_bp_next = big_particle.y + big_particle.v * dt;
       var dx = x_bp_next - x_next;
       var dy = y_bp_next - y_next;
-      var r = (dx ** 2 + dy ** 2) ** 0.5;
-      // console.log(r);
+      var r = Math.sqrt(dx ** 2 + dy ** 2);
       var u1, u2, v1, v2;
       if (r <= this.r + big_particle.r) {
         // u1 = big_particle.u;
@@ -82,16 +81,16 @@ function initialize_bodies(nr_of_atoms) {
   for (var i = 0; i < nr_of_atoms; i++) {
     free_spot_found = false;
     while (!free_spot_found) {
-      x = Math.random() * 0.6 + 0.2;
-      y = Math.random() * 0.6 + 0.2;
+      x = Math.random() * 0.9 + 0.05;
+      y = Math.random() * 0.9 + 0.05;
       dx = x - big_particle.x;
       dy = y - big_particle.y;
       if (Math.sqrt(dx ** 2 + dy ** 2) ** 0.5) {
         free_spot_found = true;
       }
     }
-    u = v_th * (Math.random() - 0.5);
-    v = v_th * (Math.random() - 0.5);
+    u = v_th * (2 * Math.random() - 1);
+    v = v_th * (2 * Math.random() - 1);
     atom = new Particle(r_atom, x, y, u, v);
     atoms.push(atom);
   }
@@ -113,8 +112,6 @@ function init() {
   canvas.width = W;
   canvas.height = W;
   ctx = canvas.getContext("2d");
-  o_x = W / 2;
-  o_y = H / 2;
 
   // ctx.lineWidth = line_width;
   initialize_bodies(nr_of_atoms);
@@ -136,7 +133,7 @@ function init() {
     draw_big_particle_positions();
 
     frame_idx += 1;
-  }, 1);
+  }, 0.001); // TODO: make changeable
 }
 
 init();
