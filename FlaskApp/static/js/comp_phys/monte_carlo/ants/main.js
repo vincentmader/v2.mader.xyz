@@ -5,16 +5,16 @@
 var colony_size = 1000; // nr of ants
 var sensor_radius = 5; // minimum 4.5 for ant to form streets
 var ant_speed = 1;
-var min_pheromone_drop_amount = 1; // min. registered ph. amount
+var min_pheromone_drop_amount = 0.1; // min. registered ph. amount
 var pheromone_drop_amount = 40; // amount of pheromone distributed by ant each turn
-var phA_evaporation_rate = 0.999; // = 0.99; // 1 - 1 / world.width**2;
-var phB_evaporation_rate = 0.999; // = 0.99; // 1 - 1 / world.width**2;
+var phA_evaporation_rate = 0; // = 0.99; // 1 - 1 / world.width**2;
+var phB_evaporation_rate = 0; // = 0.99; // 1 - 1 / world.width**2;
 var probability_for_random_ant_turn = 1;
-var max_ant_random_turn_angle = Math.PI / 6;
+var max_ant_random_turn_angle = Math.PI / 16;
 var ant_fov = (7 / 6) * Math.PI; // 2*Math.PI
 var max_pheromone_strengths = [pheromone_drop_amount, pheromone_drop_amount];
 // world parameters
-const world_size = [200, 200];
+const world_size = [150, 150];
 const colony_radius = 8;
 const colony_pos = [
   world_size[0] / 2 - colony_radius / 2,
@@ -26,11 +26,11 @@ var paused = false;
 var periodic_bounds = true;
 var placement_select = "food";
 // draw settings
-const ant_drawing_radius = 2.8;
+const ant_drawing_radius = 2.2;
 const food_drawing_radius = 1;
 const pheromone_drawing_radius = 1;
 var bool_draw_pheromones = false;
-var bool_draw_registered_pheromones = false;
+var bool_draw_registered_pheromones = true;
 var bool_draw_ant_state_colors = true;
 var canvas, ctx, W, H;
 // world & ants
@@ -289,7 +289,8 @@ class Ant {
     // if (bool_draw_ant_state_colors) {
     // color = { true: "green", false: "white" }[this.is_carrying_food];
     // } else color = "white";
-    ctx.fillStyle = { true: "rgba(0,64,0,1)", false: "rgba(64,32,32,0.8)" }[
+    // ctx.fillStyle = { true: "rgba(0,64,0,1)", false: "rgba(64,32,32,0.8)" }[
+    ctx.fillStyle = { true: "rgba(0,128,0,1)", false: "rgba(128,64,64,1)" }[
       this.is_carrying_food
     ];
     ctx.strokeStyle = "white";
@@ -326,7 +327,8 @@ class Ant {
     if (this.is_carrying_food) {
       this.detect_colony();
       this.deliver_food();
-      if (time_step % 1 == 0) this.detect_pheromones(); // TODO: how often?
+      if (time_step % 4 == 0) this.detect_pheromones(); // TODO: how often?
+      // TODO: run for each ant position ?
     } else {
       this.detect_food();
       if (this.has_detected_food) {
@@ -345,7 +347,7 @@ class Ant {
     // }
     this.detect_walls(); // needs to be called last (update_vel_val())
 
-    if (time_step % 4 == 0) this.distribute_pheromone(); // TODO: after move?
+    if (time_step % 5 == 0) this.distribute_pheromone(); // TODO: after move?
     this.update_position_values();
   }
 }
@@ -505,17 +507,28 @@ class World {
       // draw either phA or phB (stronger one) with strength-dependent alpha
       if (strength_A <= strength_B) {
         // Pheromone B
-        var alpha = sigmoid(
-          strength_B / Math.max(1, max_pheromone_strengths[1])
-        );
-        alpha = 1; // TODO: remove
+        var alpha = strength_B / Math.max(1, max_pheromone_strengths[1]); //sigmoid(
+
+        if (strength_B > min_pheromone_drop_amount) {
+          alpha = 1;
+        } else {
+          alpha = 0;
+        }
+
+        //);
+        // alpha = 1; // TODO: remove
         ctx.fillStyle = "rgba(255, 64, 0, " + alpha + ")";
       } else if (strength_A > strength_B) {
         // Pheromone A
-        var alpha = sigmoid(
-          strength_A / Math.max(1, max_pheromone_strengths[0])
-        );
-        alpha = 1; // TODO: remove
+        var alpha = strength_A / Math.max(1, max_pheromone_strengths[0]); //sigmoid(
+
+        if (strength_A > min_pheromone_drop_amount) {
+          alpha = 1;
+        } else {
+          alpha = 0;
+        }
+        //);
+        // alpha = 1; // TODO: remove
         ctx.fillStyle = "rgba(128, 255, 255, " + alpha + ")";
       } else {
         continue;
@@ -544,28 +557,42 @@ class World {
     for (let idx = cells.length - 1; idx >= 0; idx--) {
       let row_idx = cells[idx][0];
       let col_idx = cells[idx][1];
-      world.pheromone_strengths[0][row_idx][col_idx] -= 1;
-      world.pheromone_strengths[1][row_idx][col_idx] -= 1;
+      this.pheromone_strengths[0][row_idx][col_idx] -= 1;
+      this.pheromone_strengths[1][row_idx][col_idx] -= 1;
       if (
-        world.pheromone_strengths[0][row_idx][col_idx] <
+        this.pheromone_strengths[0][row_idx][col_idx] <
         min_pheromone_drop_amount
       ) {
-        world.pheromone_strengths[0][row_idx][col_idx] = 0;
+        this.pheromone_strengths[0][row_idx][col_idx] = 0;
       }
       if (
-        world.pheromone_strengths[1][row_idx][col_idx] <
+        this.pheromone_strengths[1][row_idx][col_idx] <
         min_pheromone_drop_amount
       ) {
-        world.pheromone_strengths[1][row_idx][col_idx] = 0;
+        this.pheromone_strengths[1][row_idx][col_idx] = 0;
       }
       if (
-        world.pheromone_strengths[0][row_idx][col_idx] <
+        this.pheromone_strengths[0][row_idx][col_idx] <
           min_pheromone_drop_amount &&
-        world.pheromone_strengths[1][row_idx][col_idx] <
+        this.pheromone_strengths[1][row_idx][col_idx] <
           min_pheromone_drop_amount
       ) {
-        world.active_grid_cells.splice(idx, 1);
+        this.active_grid_cells.splice(idx, 1);
       }
+    }
+  }
+  update_max_pheromone_strengths() {
+    let max_strengths = { 0: [], 1: [] };
+    let ph_strengths = this.pheromone_strengths;
+    for (let ph_idx = 0; ph_idx <= 1; ph_idx++) {
+      for (let jdx = 0; jdx < ph_strengths.length; jdx++) {
+        for (let idx = 0; idx < ph_strengths[jdx].length; idx++) {
+          let strength = ph_strengths[ph_idx][jdx][idx];
+          max_strengths[ph_idx].push(strength);
+        }
+      }
+      let max_strength = max_from_1D_array(max_strengths[ph_idx]);
+      max_pheromone_strengths[ph_idx] = max_strength;
     }
   }
   has_wall_at_position(position) {
@@ -584,6 +611,7 @@ class World {
   }
   update() {
     this.evaporate_pheromones();
+    this.update_max_pheromone_strengths();
   }
 }
 
@@ -854,7 +882,7 @@ async function animate() {
   const new_start_time = new Date();
   const fps = 1000 / (new_start_time - iteration_start_time);
   iteration_start_time = new_start_time;
-  if (fps_values.length >= 100) fps_values.shift();
+  if (fps_values.length >= 10) fps_values.shift();
   fps_values.push(fps);
 
   // create animation loop
@@ -867,6 +895,9 @@ async function animate() {
   const slider_B = document.getElementById("slider_evaporation_factor_B").value;
   phA_evaporation_rate = Number(slider_A) / 1000;
   phB_evaporation_rate = Number(slider_B) / 1000;
+  document.getElementById(
+    "evaporation_factor_A"
+  ).innerHTML = phA_evaporation_rate;
 
   // update world every 10 time steps
   if (time_step % 2 == 0) {
