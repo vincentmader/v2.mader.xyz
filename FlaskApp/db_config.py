@@ -3,7 +3,7 @@ from FlaskApp.chronos import load_raw, stats
 
 
 MDB_HIERARCHY = {
-    'raw_data': {
+    'raw data': {
         'daily log': {  # one text document per day
             # 'db_entry_keys': ['date', 'content', 'nr of characters', 'nr of words'],
             # 'f': load_raw.daily_log.daily_log_history

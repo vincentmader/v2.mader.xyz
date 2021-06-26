@@ -10,13 +10,13 @@ from FlaskApp import config, db_config
 
 # def load_all_raw():
 #     print('load_raw')
-#     for k, v in db_config.MDB_HIERARCHY['raw_data'].items():
+#     for k, v in db_config.MDB_HIERARCHY['raw data'].items():
 #         if 'f' in v.keys():
 #             print('  ' + k)  # TODO: print all skipped
 #             v['f']()
 #         else:
 #             print('  ' + k)  # TODO: print all skipped
-#             for k2, v2 in db_config.MDB_HIERARCHY['raw_data'][k].items():
+#             for k2, v2 in db_config.MDB_HIERARCHY['raw data'][k].items():
 #                 if type(v2) is not dict:
 #                     continue
 #                 if 'f' in v2.keys():

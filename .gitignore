@@ -24,6 +24,7 @@ media/wallpapers
 stocks.pdf
 net_worth.pdf
 database
+database_*
 search_history.db
 *.png
 *.pdf
