@@ -1,11 +1,13 @@
 from datetime import datetime as dt
+import json
 import os
 import pymongo
 
 
+# TODO: long term: make sure paths are set-up for server
 PATH_TO_PROJECT = '/home/vinc/code/mader.xyz/FlaskApp/'
-PATH_TO_CHRONOS = '/home/vinc/code/mader.xyz/FlaskApp/chronos'
-PATH_TO_STATIC = '/home/vinc/code/mader.xyz/FlaskApp/static/'
+PATH_TO_CHRONOS = os.path.join(PATH_TO_PROJECT, 'chronos')
+PATH_TO_STATIC = os.path.join(PATH_TO_PROJECT, 'static/')
 PATH_TO_RAW_DATA = '/home/vinc/docs/chronos_data/'
 PATH_TO_DAILY_LOGS = '/home/vinc/org/journal'
 
@@ -66,6 +68,9 @@ INDEX_NAVGRID_SECTIONS = [
             {
                 'id': 'ising',
                 'link': '/comp_phys/stat_phys/ising'
+            }, {
+                'id': 'brownian_motion',
+                'link': '/comp_phys/stat_phys/brownian_motion'
             },
         ]
 
@@ -82,13 +87,23 @@ INDEX_NAVGRID_SECTIONS = [
             },
         ]
     }, {
+        'title': 'emergent behavior',
+        'pages': [
+            {
+                'id': 'ants',
+                'link': '/comp_phys/monte_carlo/ants'
+            }, {
+                'id': 'boids',
+                'link': '/comp_phys/monte_carlo/boids'
+            },
+        ]
+    }, {
         'title': 'monte carlo',
         'pages': [
             {
                 'id': 'mc_pi_darts',
                 'link': '/comp_phys/monte_carlo/pi_darts'
             },
-            {'id': 'ants', 'link': '/comp_phys/monte_carlo/ants'},
         ]
     }, {
         'title': 'cellular automata',
@@ -96,8 +111,6 @@ INDEX_NAVGRID_SECTIONS = [
             {
                 'id': 'game_of_life',
                 'link': '/comp_phys/cellular_automata/game_of_life'
-            }, {
-                'id': 'boids', 'link': '/comp_phys/monte_carlo/boids'
             }, {
                 'id': 'rock_paper_scissors',
                 'link': '/comp_phys/cellular_automata/rock_paper_scissors'
@@ -111,17 +124,17 @@ INDEX_NAVGRID_SECTIONS = [
     }, {
         'title': 'stuff/unfinished',
         'pages': [
-            {'id': 'tatooine', 'link': '/old/tatooine'},
-            {'id': 'correlation_finder',
-                'link': '/chronos/stats/correlation_finder'},
-            {'id': 'test',
-                'link': '/chronos/stats/test'
-             }, {
+            {
+                'id': 'tatooine', 'link': '/old/tatooine'
+            }, {
+                # 'id': 'correlation_finder',
+                # 'link': '/chronos/stats/correlation_finder'
+                # }, {
+                # 'id': 'test',
+                # 'link': '/chronos/stats/test'
+                # }, {
                 'id': 'gas_in_a_box',
                 'link': '/comp_phys/stat_phys/thermal_motion'
-            }, {
-                'id': 'brownian_motion',
-                'link': '/comp_phys/stat_phys/brownian_motion'
             }, {
                 'id': 'forest_fire',
                 'link': '/comp_phys/cellular_automata/forest_fire'

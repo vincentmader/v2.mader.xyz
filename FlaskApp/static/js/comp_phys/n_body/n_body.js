@@ -11,7 +11,7 @@ var o_x, o_y;
 // Drawing
 var W, H;
 var zoom_level;
-var drawing_radius = 14;
+var drawing_radius = 8;
 // Statistics
 var frame_idx = 0;
 // Settings

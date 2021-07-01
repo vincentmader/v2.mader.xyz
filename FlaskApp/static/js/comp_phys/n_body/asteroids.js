@@ -37,6 +37,7 @@ var paused = false;
 
 // draw settings
 var canvas, ctx, W, H;
+var asteroid_drawing_radius = 0.4; // TODO: make changeable?
 
 // world
 var bodies, asteroids;
@@ -63,7 +64,7 @@ class Particle {
     ctx.strokeStyle = "gray";
     ctx.fillStyle = "gray";
     let ctx_coords = get_ctx_coords([this.position.x, this.position.y]);
-    let r = get_ctx_radius(0.2);
+    let r = get_ctx_radius(asteroid_drawing_radius);
     ctx.beginPath();
     ctx.arc(ctx_coords[0], ctx_coords[1], 3 * r, 0, TAU);
     ctx.stroke();
