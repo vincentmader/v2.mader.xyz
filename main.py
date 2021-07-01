@@ -40,27 +40,53 @@ from FlaskApp import config, db_config
 
 if __name__ == '__main__':
 
-    chronos.load_raw.sleep_cycle.sleep_history()
+    # LOAD RAW DATA INTO DB
+    # =====================
 
-    mdb_hierarchy = db_config.MDB_HIERARCHY['stats']['time series']['daily']
-    for cat in mdb_hierarchy.keys():
-        for subcat in mdb_hierarchy[cat].keys():
-            chronos.stats.time_series.health.diet(cat, subcat)
+    chronos.load_raw.load_all()
 
-    chronos.stats.time_series.health.sleep_analysis()
-    chronos.stats.time_series.various.main()
-    chronos.stats.correlation_finder.main()
+    # chronos.load_raw.qs_export.active_calories()
+    # chronos.load_raw.qs_export.cycling_distance()
+    # chronos.load_raw.qs_export.distance()
+    # chronos.load_raw.qs_export.flights_climbed()
+    # chronos.load_raw.qs_export.heart_rate()
+    # chronos.load_raw.qs_export.stand_hours()
+    # chronos.load_raw.qs_export.steps()
+
+    # ---
+
+    # chronos.load_raw.daily_log.daily_log_history()
+    # chronos.load_raw.facebook.chat_history()
+    # ! chronos.load_raw.facebook.comment_history()
+    # ! chronos.load_raw.facebook.friends_history()
+    # ! chronos.load_raw.facebook.like_history()
+    # ! chronos.load_raw.facebook.login_history()
+    # ! chronos.load_raw.facebook.poke_history()
+    # ! chronos.load_raw.facebook.profile_update_history()
+    # ! chronos.load_raw.facebook.search_history()
+
+    # chronos.load_raw.sleep_cycle.sleep_history()
+
+    # CREATE STATISTICS
+    # =================
+
+    # - time series
+    # mdb_hierarchy = db_config.MDB_HIERARCHY['stats']['time series']['daily']
+    # for cat in mdb_hierarchy.keys():
+    #     for subcat in mdb_hierarchy[cat].keys():
+    #         chronos.stats.time_series.sleep_analysis.daily_sleep_notes(
+    #             cat, subcat
+    #         )
+    # chronos.stats.time_series.health.sleep_analysis()
+    # chronos.stats.time_series.various.main()
+
+    # - correlations
+    # chronos.stats.correlation_finder.main()
+
+    # ======
 
     # load_all_raw()
     # create_all_stats()
-
-    # chronos.load_raw.qs_export.stand_hours()
-    # chronos.load_raw.qs_export.heart_rate()
-
-    # chronos.load_raw.qs_export.distance()
-    # chronos.load_raw.qs_export.cycling_distance()
-    # chronos.load_raw.qs_export.energy_active()
-    # chronos.load_raw.qs_export.flights_climbed()
 
     #
 

@@ -2,45 +2,57 @@ import os
 from FlaskApp.chronos import load_raw, stats
 
 
+# TODO: remove functions?
+
 MDB_HIERARCHY = {
     'raw data': {
         'daily log': {  # one text document per day
-            # 'db_entry_keys': ['date', 'content', 'nr of characters', 'nr of words'],
+            'db_entry_keys': [
+                'date', 'content', 'nr of characters', 'nr of words'
+            ],
             # 'f': load_raw.daily_log.daily_log_history
+        }, 'facebook}': {
+            # chat_history
         }, 'qs_export': {  # precision of seconds/minutes
-            'steps': {
-                'db_entry_keys': ['date', 'start', 'end', 'steps'],
-                # 'f': load_raw.qs_export.steps
-            }, 'active calories': {
-                'db_entry_keys': ['date', 'start', 'end', 'active calories'],
-                # 'f': load_raw.qs_export.energy_active
+            'active calories': {
+                'db_entry_keys': [
+                    'date', 'start', 'end', 'active calories'
+                ],  # 'f': load_raw.qs_export.energy_active
             }, 'cycling distance': {
-                'db_entry_keys': ['date', 'start', 'end', 'cycling distance'],
-                'f': load_raw.qs_export.cycling_distance
+                'db_entry_keys': [
+                    'date', 'start', 'end', 'cycling distance'
+                ], 'f': load_raw.qs_export.cycling_distance
             }, 'distance': {
-                'db_entry_keys': ['date', 'start', 'end', 'distance'],
-                'f': load_raw.qs_export.distance
+                'db_entry_keys': [
+                    'date', 'start', 'end', 'distance'
+                ], 'f': load_raw.qs_export.distance
             }, 'heart rate': {
-                'db_entry_keys': ['date', 'start', 'end', 'heart rate'],
-                'f': load_raw.qs_export.heart_rate
-            }, 'heart rate at rest': {
-                'db_entry_keys': ['date', 'start', 'end', 'heart rate at rest'],
-                # 'f': load_raw.qs_export.heart_rate_at_rest
-            }, 'heart rate variability': {
-                'db_entry_keys': ['date', 'start', 'end', 'heart rate variability'],
-                # 'f': load_raw.qs_export.heart_rate_variability
-            }, 'mindful minutes': {
-                'db_entry_keys': ['date', 'start', 'end', 'mindful minutes'],
-                # 'f': load_raw.qs_export.mindful_minutes
+                'db_entry_keys': [
+                    'date', 'start', 'end', 'heart rate'
+                ], 'f': load_raw.qs_export.heart_rate
+                # }, 'heart rate at rest': {
+                #     'db_entry_keys': ['date', 'start', 'end', 'heart rate at rest'],
+                #     # 'f': load_raw.qs_export.heart_rate_at_rest
+                # }, 'heart rate variability': {
+                #     'db_entry_keys': ['date', 'start', 'end', 'heart rate variability'],
+                #     # 'f': load_raw.qs_export.heart_rate_variability
             }, 'sleep analysis': {
-                'db_entry_keys': ['date', 'start', 'end', 'sleep analysis'],
-                # 'f': load_raw.qs_export.sleep_analysis
-            }, 'exercise minutes': {
-                'db_entry_keys': ['date', 'start', 'end', 'exercise minutes'],
-                # 'f': load_raw.qs_export.exercise_minutes
-            }, 'stand hours': {
-                'db_entry_keys': ['date', 'start', 'end', 'stand hours'],
-                # 'f': load_raw.qs_export.stand_hours
+                'db_entry_keys': [
+                    'date', 'start', 'end', 'sleep analysis'
+                ],  # 'f': load_raw.qs_export.sleep_analysis
+            }, 'steps': {
+                'db_entry_keys': [
+                    'date', 'start', 'end', 'steps'
+                ],  # 'f': load_raw.qs_export.steps
+                # }, 'exercise minutes': {
+                #     'db_entry_keys': ['date', 'start', 'end', 'exercise minutes'],
+                #     # 'f': load_raw.qs_export.exercise_minutes
+                # }, 'stand hours': {
+                #     'db_entry_keys': ['date', 'start', 'end', 'stand hours'],
+                #     # 'f': load_raw.qs_export.stand_hours
+                # }, 'mindful minutes': {
+                #     'db_entry_keys': ['date', 'start', 'end', 'mindful minutes'],
+                #     # 'f': load_raw.qs_export.mindful_minutes
             },
         }, 'sleep_cycle': {  # daily
             'db_entry_keys': [
@@ -53,7 +65,6 @@ MDB_HIERARCHY = {
             'daily': {
                 'health': {
                     'activity': {
-                        'f': stats.time_series.activity,
                         'db_entry_keys': {
                             # 'active calories': ['date', 'active calories'],
                             # 'cycling distance': ['date', 'cycling distance'],
@@ -66,9 +77,8 @@ MDB_HIERARCHY = {
                             # 'small bike tour': ['date', 'small bike tour'],
                             # 'large bike tour': ['date', 'large bike tour'],
                             # ...
-                        }
+                        }, 'f': stats.time_series.activity
                     }, 'diet': {
-                        'f': stats.time_series.diet,  # all sleep cycle notes
                         'db_entry_keys': {
                             # 'whether I ate meat': ['date', 'whether I ate meat'],
                             # 'whether I ate fish': ['date', 'whether I ate fish'],
@@ -80,8 +90,7 @@ MDB_HIERARCHY = {
                             'whether I ate nothing all day': ['date', 'whether I ate nothing all day'],
                             'whether I drank tea': ['date', 'whether I drank tea'],
                             'whether dinner was great': ['date', 'whether dinner was great'],
-                        }
-                        # ...
+                        }, 'f': stats.time_series.diet  # TODO: rename
                     }, 'drug consumption': {
                         'db_entry_keys': {
                             'whether I consumed alcohol': ['date', 'whether I consumed alcohol'],
