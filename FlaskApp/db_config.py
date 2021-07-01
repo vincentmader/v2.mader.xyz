@@ -46,7 +46,7 @@ MDB_HIERARCHY = {
             'db_entry_keys': [
                 'date', 'start', 'end', 'sleep quality',
                 'hours in bed', 'wake-up mood'
-            ], 'f': load_raw.sleep_cycle.sleep_history
+            ], 'f': load_raw.sleep_cycle.sleep_history,
         }
     }, 'stats': {
         'time series': {

@@ -2,134 +2,30 @@ import json
 import os
 import sys
 
-import flask
-from flask import Flask
-from flask import render_template, send_from_directory, request
+from flask import Flask, render_template, request
 import numpy as np
 
-from .config import PATH_TO_STATIC
-from .config import PATH_TO_PROJECT
 # from .chronos import plots, stats
+from .config import PATH_TO_PROJECT, PATH_TO_STATIC
+from .config import INDEX_NAVGRID_SECTIONS
+# from .db_config import MDB_HIERARCHY, MDB_TS_CATEGORIES
 
 
 # initialize app
 app = Flask(__name__)
 
-# views
-# =============================================================================
 
+# view functions
+# =============================================================================
 
 # index
 @app.route('/')
 def index():
-
-    nav_grid_sections = [
-        {
-            'title': 'n-body dynamics',
-            'pages': [
-                {
-                    'id': 'nbody_moon',
-                    'link': '/comp_phys/n_body/3body_moon'
-                }, {
-                    'id': '3body_fig8',
-                    'link': '/comp_phys/n_body/3body_fig8'
-                    # }, {
-                    #     'id': 'n_body',
-                    #     'link': '/comp_phys/n_body/3body_moon'
-                }, {
-                    'id': 'nbody_flowers',
-                    'link': '/comp_phys/n_body/flowers'
-                }, {
-                    'id': 'nbody_cloud',
-                    'link': '/comp_phys/n_body/cloud'
-                }, {
-                    'id': 'nbody_asteroids',
-                    'link': '/comp_phys/n_body/asteroids'
-                },
-                {'id': 'quadtree', 'link': '/comp_phys/various/quadtree'},
-            ]
-        }, {
-            'title': 'statistical physics',
-            'pages': [
-                {
-                    'id': 'ising',
-                    'link': '/comp_phys/stat_phys/ising'
-                }, {
-                    'id': 'gas_in_a_box',
-                    'link': '/comp_phys/stat_phys/thermal_motion'
-                }, {
-                    'id': 'brownian_motion',
-                    'link': '/comp_phys/stat_phys/brownian_motion'
-                },
-            ]
-
-        }, {
-            'title': 'harmonical oscillators',
-            'pages': [
-                {
-                    'id': 'double_pendulum',
-                    'link': '/comp_phys/harmonical_oscillators/pendulum'
-                }, {
-                    'id': 'lissajous',
-                    'link': '/comp_phys/harmonical_oscillators/lissajous'
-                    # TODO: solve analytically (-> performance)
-                },
-            ]
-        }, {
-            'title': 'Monte Carlo',
-            'pages': [
-                {
-                    'id': 'mc_pi_darts',
-                    'link': '/comp_phys/monte_carlo/pi_darts'
-                },
-                {'id': 'ants', 'link': '/comp_phys/monte_carlo/ants'},
-            ]
-        }, {
-            'title': 'cellular automata',
-            'pages': [
-                {
-                    'id': 'game_of_life',
-                    'link': '/comp_phys/cellular_automata/game_of_life'
-                }, {
-                    'id': 'boids', 'link': '/comp_phys/monte_carlo/boids'
-                }, {
-                    'id': 'rock_paper_scissors',
-                    'link': '/comp_phys/cellular_automata/rock_paper_scissors'
-                }, {
-                    'id': 'forest_fire',
-                    'link': '/comp_phys/cellular_automata/forest_fire'
-                },
-            ]
-        }, {
-            'title': 'electro-magnetism',
-            'pages': [
-                {'id': 'lorentz', 'link': '/old/lorentz'},
-            ]
-        }, {
-            'title': 'stuff',
-            'pages': [
-                {'id': 'tatooine', 'link': '/old/tatooine'},
-                # {'id': 'orbit'},
-                # {'id': 'solar'},
-                # {'id': 'factfulness'},
-                # {'id': 'bachelor_thesis'},
-                # {'id': 'spotify'},
-                # {'id': 'boltzmann', 'link': '/comp_phys/boltzmann'},
-            ]
-            # }, {
-            #     'title': 'unfinished',
-            #     'pages': [
-            #         {'id': 'testing_bokeh', 'link': '/chronos/testing/bokeh'},
-            #         {'id': 'testing_chartjs', 'link': '/chronos/testing/chartjs'},
-            #         {'id': 'testing_pyplot', 'link': '/chronos/testing/pyplot'},
-            #     ]
-        }
-    ]
-
-    props = {'nav_grid_sections': nav_grid_sections}
+    props = {'nav_grid_sections': INDEX_NAVGRID_SECTIONS}
     return render_template('index.html', props=props)
 
 
+# comp phys
 @app.route('/comp_phys/n_body/<subdir>')
 def comp_phys_n_body(subdir):
 
@@ -237,66 +133,110 @@ def comp_phys_various(subdir):
         return render_template(template, props=props)
 
 
-# @app.route('/chronos/testing/<subdir>')
-# def chronos_testing(subdir, lolol=0):
+# chronos
+# @app.route('/chronos/stats/<subdir>')
+# def chronos_stats_correlation_finder(subdir):
 
-#     if subdir in ['chartjs']:
-#         return render_template(f'chronos/testing/{subdir}.html')
+#     if subdir == 'correlation_finder':
+#         template = 'chronos/correlation_finder.html'
+#         props = {
+#             'section_hierarchy': MDB_HIERARCHY['stats']['time series']['daily'],
+#             'categories': MDB_TS_CATEGORIES,
+#             'nr of categories': len(MDB_TS_CATEGORIES),
+#             'MDB': config.MDB['stats']['time series']['daily'],
+#             'correlations': config.MDB['stats']['correlations'],
+#             'zip': zip,
+#             'funcs': {'len': len}
+#         }
 
-#     if subdir == 'pyplot':
-#         images = []
+#     elif subdir == 'test':
+#         template = 'chronos/test.html'
+#         props = {}
 
-#         path_to_pyplots = os.path.join(PATH_TO_STATIC, 'media/pyplots')
-#         for filename in os.listdir(path_to_pyplots):
-#             image = {
-#                 'filepath': os.path.join('media/pyplots', filename)
-#             }
-#             images.append(image)
-#         print(images)
-
-#         return render_template(
-#             'chronos/testing/pyplot.html',
-#             images=images
-#         )
-
-#     if subdir == 'bokeh':
-#         plot_functions = [
-#             plots.bokeh.google_takeout.gmap,
-#         ]
-
-#         scripts, divs = [], []
-#         for f in plot_functions:
-#             script, div = f()
-#             scripts.append(script)
-#             divs.append(div)
-
-#         script, div = plots.bokeh.google_takeout.bar_plot_search_hits(
-#             'youtube')
-#         scripts.append(script)
-#         divs.append(div)
-
-#         x, y = stats.time_series.avg_grades()
-#         # x, y = np.array(list(foo.keys())), np.array(list(foo.values()))
-#         # x, y = stats.time_series.avg_grades()
-#         script, div = plots.bokeh.basic.time_series(x, y)
-#         scripts.append(script)
-#         divs.append(div)
-
-#         # x, y = stats.time_series.chars_written_in_daily_log()
-#         # x, y = np.array(list(foo.keys())), np.array(list(foo.values()))
-#         # x, y = stats.time_series.avg_grades()
-#         # script, div = plots.bokeh.basic.time_series(x, y)
-#         # scripts.append(script)
-#         # divs.append(div)
-
-#         template = 'chronos/testing/bokeh.html'
-#         return render_template(template, scripts=scripts, divs=divs)
+#     return render_template(template, props=props)
 
 
-# @app.route('/chronos/testing/<subdir>', methods=['POST'])
-# def testing_bokeh_post(subdir):
+# @app.route('/chronos/stats/<subdir>', methods=['POST'])
+# def chronos_stats_post(subdir):
+#     if subdir == 'correlation_finder':
+#         return chronos_stats(subdir, )
 #     textfield_1 = request.form['textfield_1']
 #     return chronos_testing(subdir, textfield_1)
+
+
+# debugging
+# =============================================================================
+
+
+@app.route('/debugging/print_py_exec')
+def print_python_executable():
+    return sys.executable
+
+
+# old
+# =============================================================================
+
+
+@app.route('/chronos/testing/<subdir>')
+def chronos_testing(subdir, lolol=0):
+
+    if subdir in ['chartjs']:
+        return render_template(f'chronos/testing/{subdir}.html')
+
+    if subdir == 'pyplot':
+        images = []
+
+        path_to_pyplots = os.path.join(PATH_TO_STATIC, 'media/pyplots')
+        for filename in os.listdir(path_to_pyplots):
+            image = {
+                'filepath': os.path.join('media/pyplots', filename)
+            }
+            images.append(image)
+        print(images)
+
+        return render_template(
+            'chronos/testing/pyplot.html',
+            images=images
+        )
+
+    # if subdir == 'bokeh':
+    #     plot_functions = [
+    #         plots.bokeh.google_takeout.gmap,
+    #     ]
+
+    #     scripts, divs = [], []
+    #     for f in plot_functions:
+    #         script, div = f()
+    #         scripts.append(script)
+    #         divs.append(div)
+
+    #     script, div = plots.bokeh.google_takeout.bar_plot_search_hits(
+    #         'youtube')
+    #     scripts.append(script)
+    #     divs.append(div)
+
+    #     x, y = stats.time_series.avg_grades()
+    #     # x, y = np.array(list(foo.keys())), np.array(list(foo.values()))
+    #     # x, y = stats.time_series.avg_grades()
+    #     script, div = plots.bokeh.basic.time_series(x, y)
+    #     scripts.append(script)
+    #     divs.append(div)
+
+    #     # x, y = stats.time_series.chars_written_in_daily_log()
+    #     # x, y = np.array(list(foo.keys())), np.array(list(foo.values()))
+    #     # x, y = stats.time_series.avg_grades()
+    #     # script, div = plots.bokeh.basic.time_series(x, y)
+    #     # scripts.append(script)
+    #     # divs.append(div)
+
+    #     template = 'chronos/testing/bokeh.html'
+    #     return render_template(template, scripts=scripts, divs=divs)
+
+
+@app.route('/chronos/testing/<subdir>', methods=['POST'])
+def testing_bokeh_post(subdir):
+    textfield_1 = request.form['textfield_1']
+    return chronos_testing(subdir, textfield_1)
 
 
 @app.route('/old/<subdir>')
@@ -341,15 +281,6 @@ def old(subdir):
 #         'simulations': simulations,
 #     }
 #     return render_template('comp_phys/n_body.html', props=props)
-
-
-# old
-# =============================================================================
-
-
-# @app.route('/exec/')
-# def python_executable():
-#     return sys.executable
 
 
 # @app.route('/bokeh/')

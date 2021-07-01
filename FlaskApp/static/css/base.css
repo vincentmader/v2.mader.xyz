@@ -64,6 +64,17 @@ a.stealthy_link {
   /* font-family: "Arial"; */
 }
 
+button.stealthy_button {
+  /* color: white; */
+  text-decoration: none;
+  /* width: 80%; */
+  /* height: 80%; */
+  /* font-family: "Arial"; */
+  border: 0px;
+  padding: 0px;
+  margin: 0px;
+}
+
 #home_div {
   width: 100%;
   /* height: 500px; */
@@ -101,4 +112,8 @@ a.stealthy_link {
   padding: 20px;
   padding-top: 50px;
   padding-bottom: 20px;
+}
+
+.canvas {
+  width: 100%;
 }

@@ -1,0 +1,60 @@
+.correlation_matrix {
+  width: 100%;
+}
+
+/* .correlation_matrix_cell { */
+/*   border: 1px solid black; */
+/*   background-color: white; */
+/*   width: 100%; */
+/*   font-size: 40%; */
+/* } */
+
+.correlation_matrix_cell_lower_left {
+  width: 100%;
+  /* border: 1px solid #222222; */
+}
+.correlation_matrix_cell_upper_right {
+  width: 100%;
+  border: 1px solid black;
+}
+.correlation_matrix_cell_diagonal {
+  width: 100%;
+  /* border: 1px solid black; */
+  /* border-left: 2px solid black; */
+  /* border-bottom: 2px solid black; */
+}
+
+.correlation_matrix_cell_lower_left p {
+  font-size: 80%;
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+  /* align vertically & horizontally */
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+}
+
+/* .correlation_matrix_cell:after { */
+/*   content: ""; */
+/*   display: block; */
+/*   padding-bottom: 80%; */
+/* } */
+
+.correlation_matrix_cell_lower_left:after {
+  content: "";
+  display: block;
+  padding-bottom: 100%;
+}
+
+.correlation_matrix_cell_diagonal:after {
+  content: "";
+  display: block;
+  padding-bottom: 100%;
+}
+
+.correlation_matrix_cell_upper_right:after {
+  content: "";
+  display: block;
+  padding-bottom: 100%;
+}

@@ -16,9 +16,14 @@ venv
 env
 .venv
 **pyplots**
-wallpapers
-database
+media/wallpapers
 *_backup.*
+*_old.*
+*_test.*
+
+stocks.pdf
+net_worth.pdf
+database
 search_history.db
 *.png
 *.pdf

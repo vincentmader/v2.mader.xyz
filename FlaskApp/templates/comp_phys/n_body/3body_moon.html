@@ -11,7 +11,9 @@
     <h4 class="section_title">
         3-body orbits - moon
     </h4>
+
     <div class="section">
+
         <div class="canvas_holder">
             <canvas class="canvas" id="canvas"></canvas>
             <script type=module>
@@ -23,15 +25,27 @@
                 main(canvas, ctx);
             </script>
         </div>
+
         <div class="button_menu">
+            <button class="button" id="button_toggle_pause">
+                pause
+            </button>
             <button class="button" id="button_toggle_draw_tails">
-                Draw tails
+                draw tails
+            </button>
+            <button class="button" id="button_toggle_draw_orbit">
+                draw lunar orbit
+            </button>
+            <button class="button" id="button_toggle_draw_hill">
+                draw Hill sphere
             </button>
         </div>
-        <div class="latex">
-            Radius of the Hill sphere:
-            $$r_H\approx a\cdot\sqrt{\frac{m}{3M}}$$
-        </div>
+
+        <!-- <div class="latex"> -->
+        <!--     Hill radius: -->
+        <!--     $$r_H\approx a\cdot\sqrt{ \frac{m}{3M} }$$ -->
+        <!-- </div> -->
+
     </div>
 
 {% endblock %}

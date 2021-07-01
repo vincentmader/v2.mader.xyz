@@ -17,7 +17,7 @@ import { Vector2D } from "../../utils/math_utils.js";
 //var max_opening_angle = Math.PI / 20;
 var DT = 3; // TODO: make changeable
 var EPSILON = 80;
-var nr_of_asteroids = 5000;
+var nr_of_asteroids = 2500;
 var min_r_for_merger = 2;
 var belt_random_phi_distribution = true;
 var belt_min_r = 250;
@@ -37,6 +37,7 @@ var paused = false;
 
 // draw settings
 var canvas, ctx, W, H;
+var asteroid_drawing_radius = 0.4; // TODO: make changeable?
 
 // world
 var bodies, asteroids;
@@ -63,7 +64,7 @@ class Particle {
     ctx.strokeStyle = "gray";
     ctx.fillStyle = "gray";
     let ctx_coords = get_ctx_coords([this.position.x, this.position.y]);
-    let r = get_ctx_radius(0.1);
+    let r = get_ctx_radius(asteroid_drawing_radius);
     ctx.beginPath();
     ctx.arc(ctx_coords[0], ctx_coords[1], 3 * r, 0, TAU);
     ctx.stroke();

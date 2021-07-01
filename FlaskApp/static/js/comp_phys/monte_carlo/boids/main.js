@@ -11,62 +11,63 @@ import { Rectangle } from "../../../utils/math_utils.js";
 // VARIABLE DEFINITIONS
 // ============================================================================
 
-// numerical parameters
-var flock_size = 700; // nr of boids in system
-var use_quad_tree = false;
-var quad_tree_capacity = 10;
-// sensor radii
-var boid_collision_radius = 7; // TODO: make changeable
-var avoidance_radius = 20;
-var attraction_radius = 60;
-var cohesion_radius = 20;
-var evasion_radius = 50;
-// forces
-var avoidance_force = 0.3;
-var attraction_force = 0.2;
-var cohesion_force = 0.3;
-//
-var DT = 1; // TODO: make changeable
-var initial_boid_speed = 1.5; // TODO: make changeable
-var initial_predator_speed = 1.5; // TODO: make changeable
-var probability_for_random_boid_turn = 1; // TODO: make changeable
-var max_random_turn_angle = Math.PI / 10; // TODO: make changeable
-
-// world parameters
-const world_size = [400, 400];
-
-const nr_of_predators = 1;
-var quadtree;
-
-// button presets
-var bool_draw_avoidance_radius = false;
-var bool_draw_attraction_radius = false;
-var bool_draw_cohesion_radius = false;
-var bool_show_trajectories = false;
-var bool_show_quad_tree_grid = false;
-// var bool_draw_boid_sensor_radius = false;
-// var bool_draw_boid_collision_radius = false;
-var bool_draw_boid_velocity_vectors = true;
-var paused = false;
-var periodic_bounds = true;
-
-// draw settings
-var boid_drawing_radius = 1.1;
-var predator_drawing_radius = 5 * boid_drawing_radius;
-var canvas, ctx, W, H;
-
-// world & boids
-var world, flock, predators;
-
-// stats
-var time_step, delivered_food, fps;
-//var fps_values = [];
-
 // constants
 const TAU = 2 * Math.PI;
 
+// numerical parameters
+var DT = 1; // TODO: make changeable
+var flock_size = 600; // nr of boids in system, TODO: make changeable
+var initial_predator_speed = 1.5; // TODO: make changeable
+// quad tree
+var quadtree;
+var quad_tree_capacity = 10; // TODO: make changeable
+var use_quad_tree = false; // changeable via button
+// sensor radii
+var avoidance_radius = 10; // changeable via slider
+var attraction_radius = 60; // changeable via slider
+var cohesion_radius = 20; // changeable via slider
+var evasion_radius = 60; // TODO: make changeable
+var boid_collision_radius = 7; // TODO: make changeable
+// forces
+var avoidance_force = 0.4; // changeable via slider
+var attraction_force = 0.1; // changeable via slider
+var cohesion_force = 0.2; // changeable via slider
+var evasion_force = 0.5; // changeable via slider
+// freedom
+var probability_for_random_boid_turn = 0.5; // TODO: make changeable
+var initial_boid_speed = 1; // TODO: make changeable
+var max_random_turn_angle = TAU / 16; // TODO: make changeable
+
+// world parameters
+const world_size = [400, 400]; // TODO: make changeable
+const nr_of_predators = 1; // TODO: multiple? steering?
+var world, flock, predators;
+
+// button presets
+var bool_draw_avoidance_radius = false; // changeable via button
+var bool_draw_attraction_radius = false; // changeable via button
+var bool_draw_cohesion_radius = false; // changeable via button
+var bool_show_trajectories = false; // changeable via button
+var bool_show_quad_tree_grid = false; // changeable via button
+// var bool_draw_boid_sensor_radius = false;
+// var bool_draw_boid_collision_radius = false;
+var bool_draw_boid_velocity_vectors = false; // TODO: ?
+var paused = false; // changeable via button
+var periodic_bounds = true; // TODO: make changeable
+
+// draw settings
+var canvas, ctx, W, H;
+var boid_drawing_radius = 1.1;
+var predator_drawing_radius = 5 * boid_drawing_radius;
+
+// stats
+var time_step;
+// var fps
+// var fps_values = [];
+
 // CLASS DEFINITIONS
 
+// hierarchical tree for spatial division into nested squares
 class QuadTree {
   constructor(boundary, n) {
     this.boundary = boundary;
@@ -98,6 +99,7 @@ class QuadTree {
       this.southwest.insert(p);
     }
   }
+  // insert point into tree
   insert(point) {
     if (!this.boundary.contains(point)) return;
     if (this.points.length < this.capacity) {
@@ -112,6 +114,7 @@ class QuadTree {
       this.southwest.insert(point);
     }
   }
+  // draw tree grid
   show() {
     ctx.lineWidth = 1;
     ctx.strokeStyle = "gray";
@@ -124,13 +127,13 @@ class QuadTree {
     let ctx_h = get_ctx_radius(2 * this.boundary.h);
     ctx.rect(ctx_coords[0], ctx_coords[1], ctx_w, ctx_h);
     ctx.stroke();
-
     if (this.divided) {
       this.northeast.show();
       this.northwest.show();
       this.southeast.show();
       this.southwest.show();
     }
+    // draw points in tree
     // for (let p of this.points) {
     //   ctx.strokeStyle = "white";
     //   ctx.fillStyle = "white";
@@ -140,6 +143,7 @@ class QuadTree {
     //   ctx.fill();
     // }
   }
+  // search for points in range, save to input arg list
   query(range, found) {
     if (!this.boundary.intersects(range)) {
       return;
@@ -170,12 +174,15 @@ class Boid {
 
     this.collision_radius = boid_collision_radius;
     this.avoidance_force = avoidance_force;
+
+    this.possible_neighbors = [];
   }
-  apply_avoidance(possible_neighbors) {
+  // avoid collisions with other/neighboring boids
+  apply_avoidance() {
     // find list idx of closest boid
     let distance_to_closest_boid = 10000; // TODO
     let idx_of_closest_boid = -1;
-    for (let idx = 0; idx < possible_neighbors.length; idx++) {
+    for (let idx = 0; idx < this.possible_neighbors.length; idx++) {
       let boid = flock.boids[idx];
       if (boid === this) continue;
       let distance = boid.position.sub(this.position).norm_l2();
@@ -219,10 +226,11 @@ class Boid {
     // renormalize
     this.velocity = this.velocity.mult(this.speed / this.velocity.norm_l2());
   }
-  apply_attraction(possible_neighbors) {
+  // steer towards nearby boids clusters (CoM)
+  apply_attraction() {
     var center_of_mass = 0;
     var boids_in_local_flock = 0;
-    for (let idx = 0; idx < possible_neighbors.length; idx++) {
+    for (let idx = 0; idx < this.possible_neighbors.length; idx++) {
       let boid = flock.boids[idx];
       if (boid === this) continue;
       let distance = boid.position.sub(this.position).norm_l2();
@@ -250,10 +258,11 @@ class Boid {
     // renormalize
     this.velocity = this.velocity.mult(this.speed / this.velocity.norm_l2());
   }
-  apply_cohesion(possible_neighbors) {
+  // align with avg velocity vectors of nearby boid clusters
+  apply_cohesion() {
     var average_velocity = 0;
     var boids_in_local_flock = 0;
-    for (let idx = 0; idx < possible_neighbors.length; idx++) {
+    for (let idx = 0; idx < this.possible_neighbors.length; idx++) {
       let boid = flock.boids[idx];
       if (boid === this) continue;
       let distance = boid.position.sub(this.position).norm_l2();
@@ -282,6 +291,7 @@ class Boid {
     // renormalize
     this.velocity = this.velocity.mult(this.speed / this.velocity.norm_l2());
   }
+  // steer away from predators
   apply_evasion() {
     for (let p of predators) {
       // TODO: what radius?
@@ -289,7 +299,7 @@ class Boid {
         let force = p.position.sub(this.position);
         let force_norm = force.norm_l2();
         this.velocity = this.velocity.sub(
-          force.mult((1 / force_norm) * avoidance_force)
+          force.mult((1 / force_norm) * evasion_force)
         );
         this.velocity = this.velocity.mult(
           this.speed / this.velocity.norm_l2()
@@ -297,6 +307,7 @@ class Boid {
       }
     }
   }
+  // freedom
   apply_random_turns() {
     // TODO: do this every %N ? bottlenecks?
     if (Math.random() < probability_for_random_boid_turn) {
@@ -304,6 +315,7 @@ class Boid {
       this.velocity = this.velocity.rotate(turning_angle);
     }
   }
+  // update position
   update_position_values() {
     this.position = this.position.add(this.velocity.mult(DT));
     // apply periodic bounds
@@ -314,6 +326,7 @@ class Boid {
       if (this.position.y < 0) this.position.y = world.height;
     }
   }
+  // show boid on canvas (color from orientation)
   draw() {
     // get canvas coords of boid
     let ctx_coords = get_ctx_coords([this.position.x, this.position.y]);
@@ -388,7 +401,9 @@ class Boid {
       ctx.stroke();
     }
   }
+  // update boid instance
   update() {
+    // get list of neighbors
     var possible_neighbors = [];
     if (use_quad_tree) {
       let x = this.position.x;
@@ -406,15 +421,17 @@ class Boid {
       // ctx.stroke()
 
       let points = [];
+      this.possible_neighbors = [];
       quadtree.query(range, points);
       for (let p of points) {
-        possible_neighbors.push(flock.boids_from_loc[[p.x, p.y]]);
-        // console.log(possible_neighbors.length)
+        this.possible_neighbors.push(flock.boids_from_loc[[p.x, p.y]]);
       }
     } else {
-      possible_neighbors = flock.boids;
+      if (this.possible_neighbors.length === 0) {
+        this.possible_neighbors = flock.boids;
+      }
     }
-
+    // apply forces
     this.apply_attraction(possible_neighbors);
     this.apply_cohesion(possible_neighbors);
     this.apply_random_turns();
@@ -434,6 +451,7 @@ class Predator {
     let v = initial_speed * Math.sin(initial_rotation);
     this.velocity = new Vector2D(u, v);
   }
+  // freedom
   apply_random_turns() {
     // TODO: do this every %N ? bottlenecks?
     if (Math.random() < probability_for_random_boid_turn) {
@@ -441,6 +459,7 @@ class Predator {
       this.velocity = this.velocity.rotate(turning_angle);
     }
   }
+  // update predator position
   update_position_values() {
     this.position = this.position.add(this.velocity.mult(DT));
     // apply periodic bounds
@@ -451,6 +470,7 @@ class Predator {
       if (this.position.y < 0) this.position.y = world.height;
     }
   }
+  // steer towards mouse (on mouse-move)
   follow_mouse(mouse_pos) {
     let force = mouse_pos.sub(this.position);
     this.velocity = this.velocity.add(force);
@@ -458,6 +478,7 @@ class Predator {
       initial_predator_speed / this.velocity.norm_l2()
     );
   }
+  // show predator on canvas
   draw() {
     // get canvas coords of boid
     let ctx_coords = get_ctx_coords([this.position.x, this.position.y]);
@@ -494,6 +515,7 @@ class Predator {
     //   ctx.lineTo(ctx_coords[0], ctx_coords[1]);
     //   ctx.stroke();
   }
+  // update predator instance
   update() {
     this.update_position_values();
     this.apply_random_turns();
@@ -515,6 +537,7 @@ class Flock {
       this.boids.push(boid);
     }
   }
+  // update
   update() {
     this.boids_from_loc = {};
     // define quadtree if necessary
@@ -575,7 +598,6 @@ class World {
 
 const reset_time = () => {
   time_step = 0;
-  delivered_food = 0;
 };
 const get_map_coords = (ctx_coords) => {
   const map_coord_x = (ctx_coords[0] / W) * world.width;
@@ -596,87 +618,7 @@ const getCursorPosition = (canvas, event) => {
   const y = event.clientY - rect.top;
   return [x, y];
 };
-//const argmax = (arr) => {
-//  if (arr.length === 0) {
-//    return -1;
-//  }
-
-//  var max = arr[0];
-//  var maxIndex = 0;
-
-//  for (var i = 1; i < arr.length; i++) {
-//    if (arr[i] > max) {
-//      maxIndex = i;
-//      max = arr[i];
-//    }
-//  }
-
-//  return maxIndex;
-//};
-//const min_from_1D_array = (arr) => {
-//  return arr.reduce(function (a, b) {
-//    return Math.min(a, b);
-//  });
-//};
-//const max_from_1D_array = (arr) => {
-//  return arr.reduce(function (a, b) {
-//    return Math.max(a, b);
-//  });
-//};
-//const min_from_2D_array = (arr) => {
-//  var values = arr.map(function (elt) {
-//    return elt[1];
-//  });
-//  return Math.min.apply(null, values);
-//};
-//const max_from_2D_array = (arr) => {
-//  var values = arr.map(function (elt) {
-//    return elt[1];
-//  });
-//  return Math.max.apply(null, values);
-//};
-//const sigmoid = (x) => {
-//  return Math.exp(x) / (Math.exp(x) + 1);
-//};
-//const round = (num, acc) => {
-//  return Math.round((num + Number.EPSILON) * 10 ** acc) / 10 ** acc;
-//};
-//const add_info_text = () => {
-//  ctx.font = "30px Arial";
-//  ctx.fillText("t = " + time_step, 10, 50);
-//};
-//const sleep = (ms) => {
-//  return new Promise((resolve) => setTimeout(resolve, ms));
-//};
-//const sleepFor = (ms) => {
-//  var now = new Date().getTime();
-//  while (new Date().getTime() < now + ms) {
-//    /* do nothing */
-//  }
-//};
-//const remove_from_array = (arr, item) => {
-//  const index = arr.indexOf(item);
-//  if (index > -1) {
-//    arr.splice(index, 1);
-//  }
-//};
-//const mean = (arr) => {
-//  var sum = 0;
-//  for (let i of arr) {
-//    sum += i;
-//  }
-//  return sum / arr.length;
-//};
 const add_event_listeners = () => {
-  // canvas.addEventListener("keypress", function(e) {
-  //   var keynum;
-  //   if (window.event) { // I.E.
-  //     keynum = e.keyCode;
-  //   } else if (e.which) { // Netscape/Firefox/Opera
-  //     keynum = e.which;
-  //   }
-  //   alert(String.fromCharCode(keynum))
-  // })
   canvas.addEventListener("mousemove", function (e) {
     const ctx_coords = getCursorPosition(canvas, e);
     const map_coords = get_map_coords(ctx_coords);
@@ -687,40 +629,6 @@ const add_event_listeners = () => {
       predators[0].follow_mouse(mouse_pos);
     }
   });
-  // canvas.addEventListener("mousedown", function (e) {
-  //    const ctx_coords = getCursorPosition(canvas, e);
-  //    const map_coords = get_map_coords(ctx_coords);
-  //    const col_idx = Math.floor(map_coords[0]);
-  //    const row_idx = Math.floor(map_coords[1]);
-  //    if (placement_select === "food") {
-  //      world.food_sources[row_idx][col_idx] += food_placement_amount;
-  //    } else if (placement_select === "phA") {
-  //      world.pheromone_strengths[0][row_idx][col_idx] += 100;
-  //      world.active_grid_cells.push([row_idx, col_idx]);
-  //    } else if (placement_select === "phB") {
-  //      world.pheromone_strengths[1][row_idx][col_idx] += 100;
-  //      world.active_grid_cells.push([row_idx, col_idx]);
-  //    } else if (placement_select === "walls") {
-  //      for (let i = row_idx - 1; i <= row_idx + 1; i++) {
-  //        for (let j = col_idx - 1; j <= col_idx + 1; j++) {
-  //          try {
-  //            world.walls[i][j] = 1
-  //          } finally {}
-  //        }
-  //      }
-  //    } else if (placement_select === "remove_walls") {
-  //      for (let i = row_idx - 1; i <= row_idx + 1; i++) {
-  //        for (let j = col_idx - 1; j <= col_idx + 1; j++) {
-  //          try {
-  //            world.walls[i][j] = 0
-  //          } finally {}
-  //        }
-  //      }
-  //    }
-  //    // console.log(ctx_coords, [col_idx, row_idx]);
-  //  });
-
-  // BUTTONS
   // buttons for displaying force radii
   document
     .getElementById("button_display_avoidance_radius")
@@ -770,7 +678,6 @@ const add_event_listeners = () => {
   //     periodic_bounds = !periodic_bounds;
   //     console.log("toggled periodic bounds");
   //   });
-
   // document
   //   .getElementById("button_toggle_display_sensor_radius")
   //   .addEventListener("click", function () {
@@ -789,8 +696,6 @@ const add_event_listeners = () => {
   //     bool_draw_boid_velocity_vectors = !bool_draw_boid_velocity_vectors;
   //     console.log("toggled drawing of boid velocity vectors");
   //   });
-
-  // SLIDERS
   // sliders for sensor radii
   document
     .getElementById("slider_avoidance_radius")
@@ -835,63 +740,6 @@ const add_event_listeners = () => {
       cohesion_force = value / 100;
       console.log("new boid cohesion strength: ", cohesion_force);
     });
-  // other sliders
-  // document
-  //   .getElementById("slider_flock_size")
-  //   .addEventListener("click", function () {
-  //     flock_size = document.getElementById("slider_flock_size").value;
-  //     console.log("new flock size: ", flock_size);
-  //     init();
-  //  });
-  // document
-  //   .getElementById("slider_collision_radius")
-  //   .addEventListener("click", function () {
-  //     let value = document.getElementById("slider_collision_radius").value;
-  //     boid_collision_radius = (value / 5000) * world.width; // TODO: only for W=H
-  //     console.log("new boid collision radius: ", boid_collision_radius);
-  //     init();
-  //   });
-  //  document
-  //    .getElementById("button_reset")
-  //    .addEventListener("click", function () {
-  //      // animate()
-  //      init();
-  //    });
-  //  document
-  //    .getElementById("button_place_food")
-  //    .addEventListener("click", function () {
-  //      placement_select = "food";
-  //    });
-  //  document
-  //    .getElementById("button_place_walls")
-  //    .addEventListener("click", function () {
-  //      placement_select = "walls";
-  //    });
-  //  document
-  //    .getElementById("button_remove_walls")
-  //    .addEventListener("click", function () {
-  //      placement_select = "remove_walls";
-  //    });
-  //  document
-  //    .getElementById("button_place_phA")
-  //    .addEventListener("click", function () {
-  //      placement_select = "phA";
-  //    });
-  //  document
-  //    .getElementById("button_place_phB")
-  //    .addEventListener("click", function () {
-  //      placement_select = "phB";
-  //    });
-  //  document
-  //    .getElementById("button_draw_pheromones")
-  //    .addEventListener("click", function () {
-  //      bool_draw_pheromones = !bool_draw_pheromones;
-  //    });
-  //  document
-  //    .getElementById("button_periodic_bounds")
-  //    .addEventListener("click", function () {
-  //      periodic_bounds = !periodic_bounds;
-  //    });
 };
 
 // INITIALIZATION
