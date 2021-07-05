@@ -4,48 +4,38 @@ import os
 import pymongo
 
 
-# TODO: long term: make sure paths are set-up for server
+# DATABASE
+MDB = pymongo.MongoClient('localhost', 27017)['maderxyz']
+# PATHS   (TODO: long term: make sure paths are set-up for server)
 PATH_TO_PROJECT = '/home/vinc/code/mader.xyz/FlaskApp/'
 PATH_TO_CHRONOS = os.path.join(PATH_TO_PROJECT, 'chronos')
 PATH_TO_STATIC = os.path.join(PATH_TO_PROJECT, 'static/')
 PATH_TO_RAW_DATA = '/home/vinc/docs/chronos_data/'
 PATH_TO_DAILY_LOGS = '/home/vinc/org/journal'
 
-
+# GENERAL
 START_DATE = dt(2010, 1, 1)
 END_DATE = dt(dt.now().year, 12, 31)
-
-
-FACEBOOK_USER_NAME = 'Vincent Mader'
-
 PLOT_WIDTH, PLOT_HEIGHT = 400, 400
 
-MDB = pymongo.MongoClient('localhost', 27017)['maderxyz']
-
-# PARAMETERS FOR IMPORTING RAW DATA
-
-GSPREAD_CREDS_SETUP = os.path.exists(
-    os.path.join(PATH_TO_RAW_DATA, 'creds', 'gspread_creds.json')
-)
-
-
-GSHEETS_DAILY_REVIEW_LOCS = {
-    2018: (range(58, 58+9), range(46, 46+365)),
-    2019: (range(56, 56+9), range(25, 25+365)),
-    2020: (range(56, 56+9), range(25, 25+365)),
-}
-
-GSHEETS_TIMETABLE_LOCS = {
-    2017: (range(3, 3+48), range(45, 45+365)),
-    2018: (range(3, 3+48), range(46, 46+365)),
-    2019: (range(2, 2+48), range(25, 25+365)),
-    2020: (range(2, 2+48), range(25, 25+365)),
-}
-
-# COMP PHYS
+# INDEX
 
 INDEX_NAVGRID_SECTIONS = [
     {
+        'title': 'chronos',
+        'pages': [
+            {
+                'id': 'correlation_finder',
+                'link': '/chronos/stats/correlation_finder'
+            }, {
+                'id': 'test',
+                'link': '/chronos/stats/test'
+            }, {
+                'id': 'stats',
+                'link': '/chronos/stats/stats'
+            }
+        ]
+    }, {
         'title': 'n-body dynamics',
         'pages': [
             {
@@ -127,12 +117,6 @@ INDEX_NAVGRID_SECTIONS = [
             {
                 'id': 'tatooine', 'link': '/old/tatooine'
             }, {
-                # 'id': 'correlation_finder',
-                # 'link': '/chronos/stats/correlation_finder'
-                # }, {
-                # 'id': 'test',
-                # 'link': '/chronos/stats/test'
-                # }, {
                 'id': 'gas_in_a_box',
                 'link': '/comp_phys/stat_phys/thermal_motion'
             }, {
@@ -161,3 +145,91 @@ INDEX_NAVGRID_SECTIONS = [
         #     ]
     }
 ]
+
+
+# PARAMETERS FOR IMPORTING RAW DATA
+
+FACEBOOK_USER_NAME = 'Vincent Mader'
+
+GSPREAD_CREDS_SETUP = os.path.exists(
+    os.path.join(PATH_TO_RAW_DATA, 'creds', 'gspread_creds.json')
+)
+
+
+GSHEETS_DAILY_REVIEW_LOCS = {
+    2018: (range(58, 58+9), range(46, 46+365)),
+    2019: (range(56, 56+9), range(25, 25+365)),
+    2020: (range(56, 56+9), range(25, 25+365)),
+}
+
+GSHEETS_TIMETABLE_LOCS = {
+    2017: (range(3, 3+48), range(45, 45+365)),
+    2018: (range(3, 3+48), range(46, 46+365)),
+    2019: (range(2, 2+48), range(25, 25+365)),
+    2020: (range(2, 2+48), range(25, 25+365)),
+}
+
+SLEEP_CYCLE_NOTE_TRANSLATION = {  # TODO: incorporate into db hierarchy dict
+    'health': {
+        'activity': {
+            'whether I played ping pong': ['table tennis'],
+            'whether I took a walk': ['took a walk'],
+        }, 'diet': {
+            'whether I ate late': ['Ate late'],
+            'whether I drank tea': ['Tea', 'Tee getrunken'],
+            'whether I ate vegan': ['Ate Vegan'],
+            'whether I ate vegetarian': ['Ate Vegetarian'],
+            'whether I went to bed hungry': ['hungry'],
+            'whether dinner was great': ['dinner was great'],
+            'whether I cooked for myself': ['cooked for myself'],
+            'whether I ate nothing all day': ['Ate nothing'],
+        }, 'drug consumption': {
+            'whether I consumed alcohol': ['Alcohol', 'Drank Alcohol'],
+            'whether I consumed caffeine': ['Coffee'],
+            'whether I consumed mdma': ['E'],
+            'whether I consumed tabacco': ['Smoked Tabacco'],
+            'whether I consumed weed': ['Blaze', 'Smoked Weed'],
+            'whether I smoked cigarettes': ['Smoked Cigarettes'],
+            'whether I drank a bit of beer': ['drank < 1l beer'],
+            'whether I drank a lot of beer': ['drank > 1l beer'],
+            'whether I drank a bit of schnaps': ['drank a bit of Schnaps'],
+            'whether I drank a lot of schnaps': ['drank a lot of Schnaps'],
+        }, 'hygiene': {
+            'whether I took a shower': ['Shower'],
+            'whether I took a bath': ['Bath'],
+            'whether I wore braces at night': ['Zahnspange'],
+        }, 'sickness': {
+            'whether I puked': ['puked'],
+            'whether I was sick': ['Sick'],
+            'whether I had a headache': ['Headache'],
+            'whether I had back pain': ['back pain'],
+            'whether I had broken bones': ['Broken bones'],
+            'whether I had dry hands': ['dry hands'],
+        }, 'sleep analysis': {
+            'whether I listened to music before sleep': ['Listening to Music'],
+            'whether I went to bed tired': ['Tired'],
+            'whether I slept in a tent': ['Sleeping in a tent '],
+        }
+    }, 'personal': {
+        'mood': {
+            'good day': ['Good day'],
+            'sad day': ['Sad Day'],
+            'bad day': ['Bad Day'],
+            'stressful day': ['Stressful day'],
+            'whether I think life is great': ['life is great'],
+        }, 'sexual': {
+            'whether I had sex': ['Had Sex'],
+            'whether I fapped': ['Fapped'],
+            'whether I slept in bed with Selina': ['In Bed with Selina'],
+        }, 'location': {
+            'whether I was in Ulm': ['In Ulm'],
+            'whether I was in Heidelberg': ['In Heidelberg'],
+            'whether I was in Berlin': ['In Berlin'],
+        }
+    }
+    # Anstrengender Tag
+    # Sport gemacht
+    # Blaze
+    # Kaffee getrunken
+    # Spaet gegessen TODOJk
+}

@@ -40,11 +40,31 @@ from FlaskApp import config, db_config
 
 if __name__ == '__main__':
 
+    # RESET DATABASE   (TODO: remove / add option?)
+
+    db = config.MDB
+    db.load_raw.delete_many({})
+    db.stats.delete_many({})
+
     # LOAD RAW DATA INTO DB
     # =====================
 
-    chronos.load_raw.load_all()
+    # chronos.load_raw.load_all()  # TODO: remove?
 
+    # chronos.load_raw.daily_log.daily_log_history()
+    # chronos.load_raw.facebook.chat_history()
+    # chronos.load_raw.facebook.comment_history()
+    # chronos.load_raw.facebook.friends_history()
+    # chronos.load_raw.facebook.like_history()
+    # chronos.load_raw.facebook.login_history()
+    # chronos.load_raw.facebook.poke_history()
+    # chronos.load_raw.facebook.profile_update_history()
+    # chronos.load_raw.facebook.search_history()
+    # chronos.load_raw.google_sheets.daily_goal_history()
+    # chronos.load_raw.google_sheets.expenditure_history
+    # chronos.load_raw.google_sheets.income_history()
+    # chronos.load_raw.google_sheets.time_spent_history()
+    # chronos.load_raw.google_takeout.location_history()          # ready
     # chronos.load_raw.qs_export.active_calories()
     # chronos.load_raw.qs_export.cycling_distance()
     # chronos.load_raw.qs_export.distance()
@@ -52,61 +72,33 @@ if __name__ == '__main__':
     # chronos.load_raw.qs_export.heart_rate()
     # chronos.load_raw.qs_export.stand_hours()
     # chronos.load_raw.qs_export.steps()
+    # chronos.load_raw.skype.chat_history()white
 
-    # ---
-
-    # chronos.load_raw.daily_log.daily_log_history()
-    # chronos.load_raw.facebook.chat_history()
-    # ! chronos.load_raw.facebook.comment_history()
-    # ! chronos.load_raw.facebook.friends_history()
-    # ! chronos.load_raw.facebook.like_history()
-    # ! chronos.load_raw.facebook.login_history()
-    # ! chronos.load_raw.facebook.poke_history()
-    # ! chronos.load_raw.facebook.profile_update_history()
-    # ! chronos.load_raw.facebook.search_history()
-
-    # chronos.load_raw.sleep_cycle.sleep_history()
+    chronos.load_raw.sleep_cycle.sleep_history()
 
     # CREATE STATISTICS
     # =================
 
+    # create_all_stats()  # TODO: remove?
+
     # - time series
-    # mdb_hierarchy = db_config.MDB_HIERARCHY['stats']['time series']['daily']
-    # for cat in mdb_hierarchy.keys():
-    #     for subcat in mdb_hierarchy[cat].keys():
-    #         chronos.stats.time_series.sleep_analysis.daily_sleep_notes(
-    #             cat, subcat
-    #         )
-    # chronos.stats.time_series.health.sleep_analysis()
-    # chronos.stats.time_series.various.main()
+    # chronos.stats.time_series.daily_goals.from_gsheets_and_sleepcycle()
+    # TODO: remove/incorporate?
+    mdb_hierarchy = db_config.MDB_HIERARCHY['stats']['time series']['daily']
+    for cat in mdb_hierarchy.keys():
+        # print('\t', cat)
+        for subcat in mdb_hierarchy[cat].keys():
+            # print('\t\t', subcat)
+            chronos.stats.time_series.sleep_analysis.daily_sleep_notes(
+                cat, subcat
+            )
+    chronos.stats.time_series.health.sleep_analysis()  # TODO: replace?
+    chronos.stats.time_series.various.seasons_etc()
 
     # - correlations
-    # chronos.stats.correlation_finder.main()
+    chronos.stats.correlation_finder.main()
 
-    # ======
-
-    # load_all_raw()
-    # create_all_stats()
-
-    #
-
-    #
-
-    # LOAD RAW DATA
-
-    # chronos.load_raw.load_all()
-
-    # chronos.stats.create_all()
-
-    # chronos.load_raw.facebook.chat_history()
-
-    # chronos.load_raw.google_sheets.daily_goal_history()
-    # chronos.load_raw.google_sheets.expenditure_history
-    # chronos.load_raw.google_sheets.income_history()
-    # chronos.load_raw.google_sheets.time_spent_history()
-    # chronos.load_raw.google_takeout.location_history()          # ready
-
-    # chronos.load_raw.skype.chat_history()white
+    # =========================================================
 
     # chronos.load_raw.sleep_cycle.sleep_history()                # ready
 

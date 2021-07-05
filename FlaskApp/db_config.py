@@ -21,15 +21,15 @@ MDB_HIERARCHY = {
             }, 'cycling distance': {
                 'db_entry_keys': [
                     'date', 'start', 'end', 'cycling distance'
-                ], 'f': load_raw.qs_export.cycling_distance
+                ],  # 'f': load_raw.qs_export.cycling_distance
             }, 'distance': {
                 'db_entry_keys': [
                     'date', 'start', 'end', 'distance'
-                ], 'f': load_raw.qs_export.distance
+                ],  # 'f': load_raw.qs_export.distance
             }, 'heart rate': {
                 'db_entry_keys': [
                     'date', 'start', 'end', 'heart rate'
-                ], 'f': load_raw.qs_export.heart_rate
+                ],  # 'f': load_raw.qs_export.heart_rate
                 # }, 'heart rate at rest': {
                 #     'db_entry_keys': ['date', 'start', 'end', 'heart rate at rest'],
                 #     # 'f': load_raw.qs_export.heart_rate_at_rest
@@ -58,7 +58,7 @@ MDB_HIERARCHY = {
             'db_entry_keys': [
                 'date', 'start', 'end', 'sleep quality',
                 'hours in bed', 'wake-up mood'
-            ], 'f': load_raw.sleep_cycle.sleep_history,
+            ],  # 'f': load_raw.sleep_cycle.sleep_history,
         }
     }, 'stats': {
         'time series': {
@@ -77,7 +77,7 @@ MDB_HIERARCHY = {
                             # 'small bike tour': ['date', 'small bike tour'],
                             # 'large bike tour': ['date', 'large bike tour'],
                             # ...
-                        }, 'f': stats.time_series.activity
+                        },  # 'f': stats.time_series.activity
                     }, 'diet': {
                         'db_entry_keys': {
                             # 'whether I ate meat': ['date', 'whether I ate meat'],
@@ -90,7 +90,7 @@ MDB_HIERARCHY = {
                             'whether I ate nothing all day': ['date', 'whether I ate nothing all day'],
                             'whether I drank tea': ['date', 'whether I drank tea'],
                             'whether dinner was great': ['date', 'whether dinner was great'],
-                        }, 'f': stats.time_series.diet  # TODO: rename
+                        },  # 'f': stats.time_series.diet  # TODO: rename
                     }, 'drug consumption': {
                         'db_entry_keys': {
                             'whether I consumed alcohol': ['date', 'whether I consumed alcohol'],
@@ -122,6 +122,7 @@ MDB_HIERARCHY = {
                             'whether I puked': ['date', 'whether puked'],
                             'whether I had a headache': ['date', 'whether I had a headache'],
                             'whether I had dry hands': ['date', 'whether I had dry hands'],
+                            'whether I had broken bones': ['date', 'whether I had broken bones'],
                             # fnail?
                         }
                     }, 'sleep analysis': {
@@ -132,7 +133,7 @@ MDB_HIERARCHY = {
                             'sleep quality': ['date', 'sleep quality'],
                             'wake-up mood': ['date', 'wake-up mood'],
                             # 'get-up time': ['date', 'get-up time'],
-                            # 'go-to-bed time': ['date', 'go-to-bed time'],
+                            # 'bed time': ['date', 'bed time'],
                             # 'nr of sleep cycles': ['date', 'nr. of sleep cycles'],
                             'whether I went to bed tired': ['date', 'whether I went to bed tired'],
                             'sleep regularity': ['date', 'sleep regularity'],
@@ -144,7 +145,7 @@ MDB_HIERARCHY = {
                             'whether I slept in a tent': ['date', 'whether I slept in a tent'],
                             # 'sleeping under clear sky': ['date', 'sleeping under clear sky'],
                             # nap?
-                        }, 'f': stats.time_series.health.sleep_analysis
+                        },  # 'f': stats.time_series.health.sleep_analysis
                     },
                     # }, 'learning': {
                     # 'various': {
@@ -205,7 +206,7 @@ MDB_HIERARCHY = {
                             'whether it was fall': ['date', 'whether it was fall'],
                             'whether it was winter': ['date', 'whether it was winter'],
                             # semester / school / vacation
-                        }, 'f': stats.time_series.various.main
+                        },  # 'f': stats.time_series.various.seasons_etc
                     }
                 }
                 # }, 'location history': {

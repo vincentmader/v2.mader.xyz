@@ -21,12 +21,12 @@
 
     <h4 class="section_title">Correlation Finder</h4>
 
-    <div class="section">
+    <div class="section" id="section_correlation_matrix">
         <div class="correlation_matrix" id="correlation_matrix"
             style="display: grid; grid-template-columns: 
                 repeat({{ props['nr of categories'] }}, 1fr);"
         >
-        <script>
+        <script> // TODO: move into a file? (rewrite flask->js necessary)
             // get correlation matrix element from document
             corr_matrix = document.getElementById("correlation_matrix")
             // get categories
@@ -83,6 +83,9 @@
                 }
             }
         </script>
+        <!-- <div id="correlation_matrix_info_text"> -->
+        <!--     aaaaaay -->
+        <!-- </div> -->
     </div>
         <!-- <script> -->
         <!--     // const x = [1,2,3]; -->
@@ -116,120 +119,4 @@
     <!--     // }); -->
     <!-- </script> -->
 
-    <!-- x-t / y-t plot <br> -->
-    <!-- x-y plot, corr -->
-    <div class="section">
-        <canvas class="canvas" id="canvas_time_series_plot"></canvas>
-        <script type=module>
-            import { init } from "{{ url_for('static', filename='js/chronos/time_series_plot.js') }}"
-            let canvas_id = "canvas_time_series_plot"
-            const canvas = document.getElementById(canvas_id);
-            const ctx = canvas.getContext("2d");
-            init(canvas, ctx)
-        </script>
-    </div>
-
-    <div class="section"><ul>
-        {% for k, v in props['section_hierarchy'].items() %}
-            <li style="color: green">{{ k }}<ul>
-            {% for k2, v2 in v.items() %}
-                <li style="color: green">{{ k2 }}<ul>
-                {% for k3 in v2['db_entry_keys'] %}
-                    <li>
-                    <button 
-                        class="stealthy_button" style="color: white"
-                        id="button_{{ k + '/' + k2 + '/' + k3 }}"
-                    > {{ k3 }}
-                    </button>
-                    <script type="module">
-                        import { update } from "{{ url_for('static', filename='js/chronos/time_series_plot.js') }}";
-
-                        var x = [];
-                        var y = [];
-                        var dataset_is_empty = true;
-                        let date, value
-                        {% for ts in props['MDB'].find({
-                            "category": k,
-                            "subcategory": k2,
-                            "title": k3,
-                        }) %} // TODO: rules?
-                            {% for idx in range(props['funcs']['len'](ts['dates'])) %}
-                                date = new Date({{ts['timestamps'][idx]*1000}});
-                                {% if ts['values'][idx] != None %}
-                                    value = {{ts['values'][idx]}}
-                                    dataset_is_empty = false;
-                                    x.push(date)
-                                    y.push(value)
-                                {% endif %}
-
-                            {% endfor %}
-                        {% endfor %}
-                          var y_mavg = []
-                        if (true) { // TODO
-                          // assert (x.length === y.length)
-                          var N = 30
-                          for (let idx=0; idx<x.length; idx++) {
-                            y_mavg.push(0)
-                            var count = 0
-                            for (let jdx=0; jdx<Math.min(N, idx); jdx++) {
-                              y_mavg[idx] += y[idx-jdx]
-                              count++
-                            }
-                            y_mavg[idx] *= 100 / count 
-                          }
-                          x = x.slice(N, x.length)
-                          y_mavg = y_mavg.slice(N, y.length)
-                          // y.slice ?
-                        }
-
-                        const button = document.getElementById("button_{{ k + '/' + k2 + '/' + k3 }}");
-                        if (!dataset_is_empty) button.style = "color: green"
-                        button.addEventListener(
-                            "click", 
-                            () => {
-                            update("{{k}}", "{{k2}}", "{{k3}}", x, y_mavg);
-                            },
-                            false
-                        )
-                    </script>
-                    </li>
-                {% endfor %}
-                </ul></li>
-            {% endfor %}
-            </ul></li>
-        {% endfor %}
-    </ul></div>
-
-
-
-<!--     {% for k, v in props['section_hierarchy'].items() %} -->
-<!--         <div class="section"> -->
-<!--         {% for k2, v2 in v.items() %} -->
-<!--             {% for k3 in v2['db_entry_keys'] %} -->
-<!--                 <canvas class="canvas" id="2{{ k + '/' + k2 + '/' + k3 }}"></canvas> -->
-<!--                 <script type=module> -->
-<!--                     import { main } from "{{ url_for('static', filename='js/chronos/time_series_plot.js') }}" -->
-<!--                     const canvas_id = "2{{ k + '/' + k2 + '/' + k3 }}" -->
-<!--                     const canvas = document.getElementById(canvas_id); -->
-<!--                     const ctx = canvas.getContext("2d"); -->
-<!--                     var x = [] -->
-<!--                     var y = [] -->
-<!--                     {% for i in props['MDB'][k][k2][k3].find() %} -->
-<!--                         {% for j, k in props['zip'](i['date'], i[k3]) %} -->
-<!--                             {% if k %} -->
-<!--                                 x.push({{ j.timestamp() }}) -->
-<!--                                 y.push({{ k }}) -->
-<!--                             {% endif %} -->
-<!--                         {% endfor %} -->
-<!--                     {% endfor %} -->
-<!--                     main(canvas, ctx, "{{k}}", "{{k2}}", "{{k3}}", x, y); -->
-<!--                 </script> -->
-<!--                 <br/> -->
-<!--                 <br/> -->
-<!--             {% endfor %} -->
-<!--             <br/> -->
-<!--         {% endfor %} -->
-<!--         </div> -->
-<!--     {% endfor %} -->
-
-<!-- {% endblock %} -->
+{% endblock %}
