@@ -1,17 +1,24 @@
 from datetime import datetime as dt
 import json
 import os
+import sys
+
 import pymongo
 
 
 # DATABASE
 MDB = pymongo.MongoClient('localhost', 27017)['maderxyz']
 # PATHS   (TODO: long term: make sure paths are set-up for server)
-PATH_TO_PROJECT = '/home/vinc/code/mader.xyz/FlaskApp/'
+if sys.platform == 'darwin':
+    PATH_TO_PROJECT = '/Users/vinc/Documents/mader.xyz/FlaskApp/'
+    PATH_TO_RAW_DATA = '/Users/vinc/Documents/chronos_data/'
+    PATH_TO_DAILY_LOGS = '/Users/vinc/Library/Mobile Documents/com~apple~CloudDocs/org'
+elif sys.platform == 'linux':
+    PATH_TO_PROJECT = '/home/vinc/code/mader.xyz/FlaskApp/'
+    PATH_TO_RAW_DATA = '/home/vinc/docs/chronos_data/'
+    PATH_TO_DAILY_LOGS = '/home/vinc/org/journal'
 PATH_TO_CHRONOS = os.path.join(PATH_TO_PROJECT, 'chronos')
 PATH_TO_STATIC = os.path.join(PATH_TO_PROJECT, 'static/')
-PATH_TO_RAW_DATA = '/home/vinc/docs/chronos_data/'
-PATH_TO_DAILY_LOGS = '/home/vinc/org/journal'
 
 # GENERAL
 START_DATE = dt(2010, 1, 1)
