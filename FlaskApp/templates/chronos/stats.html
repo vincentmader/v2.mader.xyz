@@ -37,7 +37,7 @@
             <li style="color: green">{{ k }}<ul>
             {% for k2, v2 in v.items() %}
                 <li style="color: green">{{ k2 }}<ul>
-                {% for k3 in v2['db_entry_keys'] %}
+                {% for k3 in v2 %}
                     <li>
                     <button 
                         class="stealthy_button" style="color: white"

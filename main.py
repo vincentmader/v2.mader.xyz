@@ -48,7 +48,6 @@ if __name__ == '__main__':
 
     # LOAD RAW DATA INTO DB
     # =====================
-
     # chronos.load_raw.load_all()  # TODO: remove?
 
     # chronos.load_raw.daily_log.daily_log_history()
@@ -73,25 +72,14 @@ if __name__ == '__main__':
     # chronos.load_raw.qs_export.stand_hours()
     # chronos.load_raw.qs_export.steps()
     # chronos.load_raw.skype.chat_history()white
-
     chronos.load_raw.sleep_cycle.sleep_history()
 
     # CREATE STATISTICS
     # =================
-
     # create_all_stats()  # TODO: remove?
 
     # - time series
-    # chronos.stats.time_series.daily_goals.from_gsheets_and_sleepcycle()
-    # TODO: remove/incorporate?
-    mdb_hierarchy = db_config.MDB_HIERARCHY['stats']['time series']['daily']
-    for cat in mdb_hierarchy.keys():
-        # print('\t', cat)
-        for subcat in mdb_hierarchy[cat].keys():
-            # print('\t\t', subcat)
-            chronos.stats.time_series.sleep_analysis.daily_sleep_notes(
-                cat, subcat
-            )
+    chronos.stats.time_series.sleep_analysis.daily_sleep_notes()
     chronos.stats.time_series.health.sleep_analysis()  # TODO: replace?
     chronos.stats.time_series.various.seasons_etc()
 

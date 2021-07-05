@@ -35,11 +35,11 @@ INDEX_NAVGRID_SECTIONS = [
                 'id': 'correlation_finder',
                 'link': '/chronos/stats/correlation_finder'
             }, {
-                'id': 'test',
-                'link': '/chronos/stats/test'
-            }, {
                 'id': 'stats',
                 'link': '/chronos/stats/stats'
+            }, {
+                'id': 'test',
+                'link': '/chronos/stats/test'
             }
         ]
     }, {
@@ -162,7 +162,6 @@ GSPREAD_CREDS_SETUP = os.path.exists(
     os.path.join(PATH_TO_RAW_DATA, 'creds', 'gspread_creds.json')
 )
 
-
 GSHEETS_DAILY_REVIEW_LOCS = {
     2018: (range(58, 58+9), range(46, 46+365)),
     2019: (range(56, 56+9), range(25, 25+365)),
@@ -176,13 +175,14 @@ GSHEETS_TIMETABLE_LOCS = {
     2020: (range(2, 2+48), range(25, 25+365)),
 }
 
-SLEEP_CYCLE_NOTE_TRANSLATION = {  # TODO: incorporate into db hierarchy dict
+SLEEP_CYCLE_NOTE_TRANSLATION = {
     'health': {
         'activity': {
             'whether I played ping pong': ['table tennis'],
             'whether I took a walk': ['took a walk'],
+            'whether I exercised physically': ['Sport gemacht', 'Worked out'],
         }, 'diet': {
-            'whether I ate late': ['Ate late'],
+            'whether I ate late': ['Ate late', 'Spaet gegessen'],
             'whether I drank tea': ['Tea', 'Tee getrunken'],
             'whether I ate vegan': ['Ate Vegan'],
             'whether I ate vegetarian': ['Ate Vegetarian'],
@@ -192,7 +192,7 @@ SLEEP_CYCLE_NOTE_TRANSLATION = {  # TODO: incorporate into db hierarchy dict
             'whether I ate nothing all day': ['Ate nothing'],
         }, 'drug consumption': {
             'whether I consumed alcohol': ['Alcohol', 'Drank Alcohol'],
-            'whether I consumed caffeine': ['Coffee'],
+            'whether I consumed caffeine': ['Coffee', 'Kaffee getrunken'],
             'whether I consumed mdma': ['E'],
             'whether I consumed tabacco': ['Smoked Tabacco'],
             'whether I consumed weed': ['Blaze', 'Smoked Weed'],
@@ -214,15 +214,18 @@ SLEEP_CYCLE_NOTE_TRANSLATION = {  # TODO: incorporate into db hierarchy dict
             'whether I had dry hands': ['dry hands'],
         }, 'sleep analysis': {
             'whether I listened to music before sleep': ['Listening to Music'],
+            # 'whether I went to bed drunk': ['drunk'],
+            # 'whether I went to bed stoned': ['stoned'],
             'whether I went to bed tired': ['Tired'],
             'whether I slept in a tent': ['Sleeping in a tent '],
+            'whether I slept under clear sky': ['Sleeping under clean sky'],
         }
     }, 'personal': {
         'mood': {
             'good day': ['Good day'],
             'sad day': ['Sad Day'],
             'bad day': ['Bad Day'],
-            'stressful day': ['Stressful day'],
+            'stressful day': ['Stressful day', 'Anstrengender Tag'],
             'whether I think life is great': ['life is great'],
         }, 'sexual': {
             'whether I had sex': ['Had Sex'],
@@ -234,9 +237,4 @@ SLEEP_CYCLE_NOTE_TRANSLATION = {  # TODO: incorporate into db hierarchy dict
             'whether I was in Berlin': ['In Berlin'],
         }
     }
-    # Anstrengender Tag
-    # Sport gemacht
-    # Blaze
-    # Kaffee getrunken
-    # Spaet gegessen TODOJk
 }
