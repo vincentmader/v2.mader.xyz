@@ -1,12 +1,12 @@
 import { draw_point } from "../../utils/drawing_utils.js";
 
-const dt = 0.001;
-const r_big = 0.06;
-const r_atom = 2e-3;
-const nr_of_atoms = 2000;
+const dt = 1;
+const r_big = 0.12;
+const r_atom = 1e-3;
+const nr_of_atoms = 5000;
 const m = 1e-2;
 const M = 1;
-const v_th = 10; // TODO: fix this, it's unphysical
+const v_th = 6e-3; // TODO: fix this, it's unphysical
 var big_particle, atoms;
 var canvas, ctx;
 var W, H;
@@ -68,12 +68,14 @@ class Particle {
 
 function initialize_bodies(nr_of_atoms) {
   var x, y, u, v;
+
   // initialize big particle
   x = 0.5;
   y = 0.5;
   u = 0;
   v = 0;
   big_particle = new Particle(r_big, x, y, u, v);
+
   // initialize small atoms
   var atom, free_spot_found;
   var dx, dy;
@@ -81,8 +83,8 @@ function initialize_bodies(nr_of_atoms) {
   for (var i = 0; i < nr_of_atoms; i++) {
     free_spot_found = false;
     while (!free_spot_found) {
-      x = Math.random() * 0.9 + 0.05;
-      y = Math.random() * 0.9 + 0.05;
+      x = Math.random() * 0.99 + 0.005;
+      y = Math.random() * 0.99 + 0.005;
       dx = x - big_particle.x;
       dy = y - big_particle.y;
       if (Math.sqrt(dx ** 2 + dy ** 2) ** 0.5) {
@@ -115,7 +117,9 @@ function init() {
 
   // ctx.lineWidth = line_width;
   initialize_bodies(nr_of_atoms);
+}
 
+function animate() {
   frame_idx = 0;
   setInterval(function () {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -137,3 +141,4 @@ function init() {
 }
 
 init();
+animate();
