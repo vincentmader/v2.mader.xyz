@@ -207,7 +207,7 @@ SLEEP_CYCLE_NOTE_TRANSLATION = {
             'whether I wore braces at night': ['Zahnspange'],
         }, 'sickness': {
             'whether I puked': ['puked'],
-            'whether I was sick': ['Sick'],
+            'whether I felt sick': ['Sick'],
             'whether I had a headache': ['Headache'],
             'whether I had back pain': ['back pain'],
             'whether I had broken bones': ['Broken bones'],
@@ -235,6 +235,31 @@ SLEEP_CYCLE_NOTE_TRANSLATION = {
             'whether I was in Ulm': ['In Ulm'],
             'whether I was in Heidelberg': ['In Heidelberg'],
             'whether I was in Berlin': ['In Berlin'],
+        }
+    }, 'learning': {
+        'various': {
+            'wrote code': ['wrote code'],
+        }
+    }, 'personal': {
+        'mood': {
+            'great mood': [' great'],
+            'happy mood': [' happy'],
+            'weird mood': [' weird'],
+            'sad mood': [' sad'],
+            # TODO: the 4 above should be 'mood: great', but: split err at ':'
+            'good day': ['Good day'],
+            'bad day': ['Bad Day'],
+            'sad day': ['Sad Day'],
+            'stressful day': ['Stressful day'],
+            'whether I think life is great': ['life is great'],
+        }, 'sexual': {
+            'whether I had sex': ['Had Sex'],
+            'whether I fapped': ['Fapped'],
+            'whether I slept in bed with Selina': ['In Bed with Selina'],
+        }, 'location': {
+            'whether I was in Ulm': ['In Ulm'],
+            'whether I was in Heidelberg': ['In Heidelberg'],
+            'whether I was in Berlin': ['In Berlin '],
         }
     }
 }

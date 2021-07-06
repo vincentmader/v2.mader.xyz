@@ -13,7 +13,7 @@ MDB_HIERARCHY = {
     #         # 'f': load_raw.daily_log.daily_log_history
     #     }, 'facebook}': {
     #         # chat_history
-    #     }, 'qs_export': {  # precision of seconds/minutes
+    #     }, 'qs export': {  # precision of seconds/minutes
     #         'active calories': {
     #             'db_entry_keys': [
     #                 'date', 'start', 'end', 'active calories'
@@ -65,10 +65,13 @@ MDB_HIERARCHY = {
         'time series': {
             'health': {
                 'activity': [
-                    # 'active calories',
-                    # 'cycling distance',
-                    # 'distance',
-                    # 'heart rate',
+                    'active calories',
+                    'cycling distance',
+                    'distance',
+                    'flights climbed',
+                    'heart rate',
+                    'heart rate at rest',
+                    'steps',
                     # 'at least one pull-up/push-up',
                     'whether I exercised physically',
                     'whether I played ping pong',
@@ -108,7 +111,7 @@ MDB_HIERARCHY = {
                     'whether I wore braces at night',
                 ], 'sickness': [
                     'whether I had back pain',
-                    'whether I was sick',
+                    'whether I felt sick',
                     'whether I puked',
                     'whether I had a headache',
                     'whether I had dry hands',
@@ -152,10 +155,10 @@ MDB_HIERARCHY = {
                 ]
             }, 'personal': {
                 'mood': [
-                    # 'great mood',
-                    # 'happy mood',
-                    # 'weird mood',
-                    # 'sad mood',
+                    'great mood',
+                    'happy mood',
+                    'weird mood',
+                    'sad mood',
                     'good day',
                     'bad day',
                     'sad day',
@@ -168,7 +171,7 @@ MDB_HIERARCHY = {
                 ], 'location': [
                     'whether I was in Ulm',
                     'whether I was in Heidelberg',
-                    # 'whether I was in Berlin',
+                    'whether I was in Berlin',
                 ]
                 # }, 'various': {
                 #     'finances': {
@@ -178,11 +181,11 @@ MDB_HIERARCHY = {
                 # 'net worth': ['date', 'net worth'],
             }, 'various': {
                 'seasons etc.': [
-                    # 'whether it was spring',
-                    # 'whether it was weekend',
-                    # 'whether it was summer',
-                    # 'whether it was fall',
-                    # 'whether it was winter',
+                    'whether it was spring',
+                    'whether it was weekend',
+                    'whether it was summer',
+                    'whether it was fall',
+                    'whether it was winter',
                     # semester / school / vacation
                 ],
             }

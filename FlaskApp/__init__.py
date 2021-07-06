@@ -30,14 +30,16 @@ def index():
 @app.route('/chronos/stats/<subdir>')
 def chronos_stats_correlation_finder(subdir):
 
+    MDB = config.MDB
+
     if subdir == 'correlation_finder':
         template = 'chronos/correlation_finder.html'
         props = {
-            'section_hierarchy': MDB_HIERARCHY['stats']['time series']['daily'],
+            'section_hierarchy': MDB_HIERARCHY['stats']['time series'],
             'categories': MDB_TS_CATEGORIES,
             'nr of categories': len(MDB_TS_CATEGORIES),
-            'MDB': config.MDB['stats']['time series']['daily'],
-            'correlations': config.MDB['stats']['correlations'],
+            'MDB': MDB['stats']['time series'],
+            'correlations': MDB['stats']['correlations'],
             'zip': zip,  # TODO: sort out unused props (here & @stats)
             'funcs': {'len': len}
         }
@@ -51,11 +53,11 @@ def chronos_stats_correlation_finder(subdir):
     elif subdir == 'stats':
         template = 'chronos/stats.html'
         props = {
-            'section_hierarchy': MDB_HIERARCHY['stats']['time series']['daily'],
+            'section_hierarchy': MDB_HIERARCHY['stats']['time series'],
             'categories': MDB_TS_CATEGORIES,
             'nr of categories': len(MDB_TS_CATEGORIES),
-            'MDB': config.MDB['stats']['time series']['daily'],
-            'correlations': config.MDB['stats']['correlations'],
+            'MDB': MDB['stats']['time series'],
+            'correlations': MDB['stats']['correlations'],
             'zip': zip,
             'funcs': {'len': len}
         }

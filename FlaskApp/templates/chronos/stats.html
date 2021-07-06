@@ -39,9 +39,9 @@
                 <li style="color: green">{{ k2 }}<ul>
                 {% for k3 in v2 %}
                     <li>
-                    <button 
-                        class="stealthy_button" style="color: white"
+                    <button class="stealthy_button" 
                         id="button_{{ k + '/' + k2 + '/' + k3 }}"
+                        style="color: white"
                     > {{ k3 }}
                     </button>
                     <script type="module">
@@ -56,7 +56,8 @@
                             "subcategory": k2,
                             "title": k3,
                         }) %} // TODO: rules?
-                            {% for idx in range(props['funcs']['len'](ts['dates'])) %}
+                            // console.log("{{k3}}")
+                            {% for idx in range(props['funcs']['len'](ts['timestamps'])) %}
                                 date = new Date({{ts['timestamps'][idx]*1000}});
                                 {% if ts['values'][idx] != None %}
                                     value = {{ts['values'][idx]}}
