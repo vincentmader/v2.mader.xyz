@@ -1,17 +1,18 @@
 var W, H;
 var chart;
+var plot_type_id = "scatter";
 
 export function init(canvas, ctx) {
   W = canvas.getBoundingClientRect().width;
-  H = W;
+  H = canvas.getBoundingClientRect().height;
   canvas.width = W;
-  canvas.height = W / 2;
+  canvas.height = H;
   var x = [];
   var y = [];
   var k3 = "";
 
   chart = new Chart(ctx, {
-    type: "bar",
+    type: plot_type_id,
     data: {
       labels: x, //["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
       datasets: [

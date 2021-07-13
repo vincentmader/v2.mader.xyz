@@ -5,6 +5,7 @@
     {{ super() }}
     <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/comp_phys.css') }}" type="text/css"> -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/chronos.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chronos_stats.css') }}" type="text/css">
     <!-- <script src="https://momentjs.com/downloads/moment.min.js"></script> -->
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script> -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.js"></script> -->
@@ -19,101 +20,129 @@
 {% endblock %}
 {% block content %}
 
-    <!-- x-t / y-t plot <br> -->
-    <!-- x-y plot, corr -->
-    <div class="section">
-        <canvas class="canvas" id="canvas_time_series_plot"></canvas>
-        <script type=module>
-            import { init } from "{{ url_for('static', filename='js/chronos/time_series_plot.js') }}"
-            let canvas_id = "canvas_time_series_plot"
-            const canvas = document.getElementById(canvas_id);
-            const ctx = canvas.getContext("2d");
-            init(canvas, ctx)
-        </script>
+
+    <div id="left_colum">
+        <!-- x-t / y-t plot <br> -->
+        <!-- x-y plot, corr -->
+        <div class="section" id="section_ts_plot">
+            <canvas class="canvas" id="canvas_time_series_plot"></canvas>
+            <script type=module>
+                import { init, update } from "{{ url_for('static', filename='js/chronos/time_series_plot.js') }}"
+                let canvas_id = "canvas_time_series_plot"
+                const canvas = document.getElementById(canvas_id);
+                const ctx = canvas.getContext("2d");
+                init(canvas, ctx)
+            </script>
+
+            <div id="time_series_options">    <!-- TODO: move elsewhere -->
+                <div class="ts_option">
+                    <div class="ts_suboption">
+                        bar
+                    </div><div class="ts_suboption">
+                        line
+                    </div><div class="ts_suboption">
+                        scat
+                    </div>
+                </div>
+                <div class="ts_option">
+                    b
+                </div>
+                <div class="ts_option">
+                    c
+                </div>
+                <div class="ts_option">
+                    d
+                </div>
+            </div>
+        </div>
+        <div class="section" id="section_3">
+            ay
+        </div>
     </div>
 
-    <div class="section"><ul>
-        {% for k, v in props['section_hierarchy'].items() %}
-            <li style="color: green">{{ k }}<ul>
-            {% for k2, v2 in v.items() %}
-                <li style="color: green">{{ k2 }}<ul>
-                {% for k3 in v2 %}
-                    <li>
-                    <button class="stealthy_button" 
-                        id="button_{{ k + '/' + k2 + '/' + k3 }}"
-                        style="color: white"
-                    > {{ k3 }}
-                    </button>
-                    <script type="module">
-                        import { update } from "{{ url_for('static', filename='js/chronos/time_series_plot.js') }}";
-
-                        var x = [];
-                        var y = [];
-                        var dataset_is_empty = true;
-                        let date, value
-                        {% for ts in props['MDB'].find({
-                            "category": k,
-                            "subcategory": k2,
-                            "title": k3,
-                        }) %} // TODO: rules?
-                            // console.log("{{k3}}")
-                            {% for idx in range(props['funcs']['len'](ts['timestamps'])) %}
-                                date = new Date({{ts['timestamps'][idx]*1000}});
-                                {% if ts['values'][idx] != None %}
-                                    value = {{ts['values'][idx]}}
-                                    // console.log("{{k3}}", value)
-                                    dataset_is_empty = false;
-                                    x.push(date)
-                                    y.push(value)
-                                {% endif %}
+    <div id="right_column">
+        <div class="section" id="section_navbar"><ul id="navbar2_ul">
+            {% for k, v in props['section_hierarchy'].items() %}
+                <li style="color: green">{{ k }}<ul>
+                {% for k2, v2 in v.items() %}
+                    <li style="color: green">{{ k2 }}<ul>
+                    {% for k3 in v2 %}
+                        <li>
+                        <button class="stealthy_button" 
+                            id="button_{{ k + '/' + k2 + '/' + k3 }}"
+                            style="color: white"
+                        > {{ k3 }}
+                        </button>
+                        <script type="module">
+                            import { update } from "{{ url_for('static', filename='js/chronos/time_series_plot.js') }}";
+    
+                            var x = [];
+                            var y = [];
+                            var dataset_is_empty = true;
+                            let date, value
+                            {% for ts in props['MDB'].find({
+                                "category": k,
+                                "subcategory": k2,
+                                "title": k3,
+                            }) %} // TODO: rules?
+                                {% for idx in range(props['funcs']['len'](ts['timestamps'])) %}
+                                    date = new Date({{ts['timestamps'][idx]*1000}});
+                                    {% if ts['values'][idx] != None %}
+                                        value = {{ts['values'][idx]}}
+                                        dataset_is_empty = false;
+                                        x.push(date)
+                                        y.push(value)
+                                    {% endif %}
+                                {% endfor %}
                             {% endfor %}
-                        {% endfor %}
-                        // sort by date before calculating mvg avg
-                        // let tmp = {}
-                        // for (let idx=0; idx < x.length; idx++) {
-                        //     tmp[x[idx]] = y[idx]
-                        // }
-                        // x = x.sort()
-                        // let new_y = []
-                        // for (let x_i of x) {
-                        //     new_y.push(tmp[x_i])
-                        // }
-                        // y = new_y
-                        // console.log(y)
-                        // calculate moving average
-                        var y_mavg = []
-                        if (true) { // TODO
-                          var N = 30
-                          for (let idx=0; idx<x.length; idx++) {
-                            y_mavg.push(0)
-                            var count = 0
-                            for (let jdx=0; jdx<Math.min(N, idx); jdx++) {
-                              y_mavg[idx] += y[idx-jdx]
-                              count++
+                            // TODO: isn't this already done? -> remove?
+                            // sort by date before calculating mvg avg
+                            // let tmp = {}
+                            // for (let idx=0; idx < x.length; idx++) {
+                            //     tmp[x[idx]] = y[idx]
+                            // }
+                            // x = x.sort()
+                            // let new_y = []
+                            // for (let x_i of x) {
+                            //     new_y.push(tmp[x_i])
+                            // }
+                            // y = new_y
+                            // console.log(y)
+                            // calculate moving average
+                            var y_mavg = []
+                            if (true) { // TODO
+                              var N = 30
+                              for (let idx=0; idx<x.length; idx++) {
+                                y_mavg.push(0)
+                                var count = 0
+                                for (let jdx=0; jdx<Math.min(N, idx); jdx++) {
+                                  y_mavg[idx] += y[idx-jdx]
+                                  count++
+                                }
+                                y_mavg[idx] *= 100 / count 
+                              }
+                              x = x.slice(N, x.length)
+                              y_mavg = y_mavg.slice(N, y.length)
+                              // y.slice ?
                             }
-                            y_mavg[idx] *= 100 / count 
-                          }
-                          x = x.slice(N, x.length)
-                          y_mavg = y_mavg.slice(N, y.length)
-                          // y.slice ?
-                        }
-
-                        const button = document.getElementById("button_{{ k + '/' + k2 + '/' + k3 }}");
-                        if (!dataset_is_empty) button.style = "color: green"
-                        button.addEventListener(
-                            "click", 
-                            () => {
-                            update("{{k}}", "{{k2}}", "{{k3}}", x, y_mavg);
-                            },
-                            false
-                        )
-                    </script>
-                    </li>
+    
+                            const button = document.getElementById("button_{{ k + '/' + k2 + '/' + k3 }}");
+                            if (!dataset_is_empty) button.style = "color: green"
+                            button.addEventListener(
+                                "click", 
+                                () => {
+                                update("{{k}}", "{{k2}}", "{{k3}}", x, y_mavg);
+                                },
+                                false
+                            )
+                        </script>
+                        </li>
+                    {% endfor %}
+                    </ul></li>
                 {% endfor %}
                 </ul></li>
             {% endfor %}
-            </ul></li>
-        {% endfor %}
-    </ul></div>
+        </ul></div>
+    </div>
 
 {% endblock %}

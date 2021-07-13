@@ -1,0 +1,69 @@
+#home_div {
+  height: 5vh;
+}
+
+#content {
+  width: 80%;
+  /* margin-right: auto; /1* center *1/ */
+  /* margin-left: auto; /1* center *1/ */
+  /* padding-top: 30px; */
+  height: 90vh;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+#left_colum {
+  height: 100%;
+}
+
+#right_colum {
+  /* */
+}
+
+#section_ts_plot {
+  height: 50%;
+}
+
+#section_navbar {
+  /* height: 100%; */
+}
+
+#section_3 {
+  /* height: 45vh; */
+  border: 1px solid red;
+}
+
+#navbar2_ul {
+  height: 77vh;
+  overflow: scroll;
+}
+
+.section {
+  /* height: 600px; */
+  margin: 10px;
+  border-radius: 2.5vh;
+}
+
+#canvas_time_series_plot {
+  height: 80%;
+}
+
+#time_series_options {
+  height: 20%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.ts_option {
+  /* display: grid; */
+  /* grid-template-columns: repeat(3, 1fr); */
+
+  text-align: center;
+  margin: 10px;
+  border: 1px solid gray;
+  border-radius: 5px;
+}
+
+.ts_suboption {
+  border: 1px solid gray;
+}

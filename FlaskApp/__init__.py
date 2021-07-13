@@ -8,6 +8,7 @@ import numpy as np
 # from .chronos import plots, stats
 from .config import PATH_TO_PROJECT, PATH_TO_STATIC
 from .config import INDEX_NAVGRID_SECTIONS
+from .config import MDB
 from .db_config import MDB_HIERARCHY, MDB_TS_CATEGORIES
 
 
@@ -30,17 +31,16 @@ def index():
 @app.route('/chronos/stats/<subdir>')
 def chronos_stats_correlation_finder(subdir):
 
-    MDB = config.MDB
-
     if subdir == 'correlation_finder':
         template = 'chronos/correlation_finder.html'
         props = {
+            # TODO: sort out unused props (here & @stats)
             'section_hierarchy': MDB_HIERARCHY['stats']['time series'],
             'categories': MDB_TS_CATEGORIES,
-            'nr of categories': len(MDB_TS_CATEGORIES),
+            'nr of categories': len(MDB_TS_CATEGORIES),  # TODO: remove
             'MDB': MDB['stats']['time series'],
             'correlations': MDB['stats']['correlations'],
-            'zip': zip,  # TODO: sort out unused props (here & @stats)
+            'zip': zip,  # TODO: move to funcs
             'funcs': {'len': len}
         }
 
@@ -55,7 +55,6 @@ def chronos_stats_correlation_finder(subdir):
         props = {
             'section_hierarchy': MDB_HIERARCHY['stats']['time series'],
             'categories': MDB_TS_CATEGORIES,
-            'nr of categories': len(MDB_TS_CATEGORIES),
             'MDB': MDB['stats']['time series'],
             'correlations': MDB['stats']['correlations'],
             'zip': zip,
