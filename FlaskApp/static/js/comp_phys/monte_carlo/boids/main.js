@@ -7,15 +7,16 @@
 import { Vector2D } from "../../../utils/math_utils.js";
 import { Point } from "../../../utils/math_utils.js";
 import { Rectangle } from "../../../utils/math_utils.js";
+// import { QuadTree } from "./QuadTree.js";
 
 // VARIABLE DEFINITIONS
 // ============================================================================
 
 // constants
 const TAU = 2 * Math.PI;
+const DT = 2; // TODO: make changeable
 
 // numerical parameters
-var DT = 1; // TODO: make changeable
 var flock_size = 600; // nr of boids in system, TODO: make changeable
 var initial_predator_speed = 1.5; // TODO: make changeable
 // quad tree
@@ -25,7 +26,7 @@ var use_quad_tree = false; // changeable via button
 // sensor radii
 var avoidance_radius = 10; // changeable via slider
 var attraction_radius = 60; // changeable via slider
-var cohesion_radius = 20; // changeable via slider
+var cohesion_radius = 60; // changeable via slider
 var evasion_radius = 60; // TODO: make changeable
 var boid_collision_radius = 7; // TODO: make changeable
 // forces
