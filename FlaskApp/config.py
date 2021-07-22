@@ -3,11 +3,13 @@ import json
 import os
 import sys
 
-import pymongo
-
 
 with open('./running_on_live_server.json') as fp:
     running_on_server = json.load(fp)['running_on_server']
+
+if not running_on_server:
+    import pymongo
+
 
 # DATABASE
 MDB = pymongo.MongoClient('localhost', 27017)['maderxyz']
