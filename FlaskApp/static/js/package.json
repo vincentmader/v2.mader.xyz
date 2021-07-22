@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/vincentmader/mader.xyz#readme",
   "dependencies": {
+    "bootstrap": "^5.0.2",
     "chartjs": "^0.3.24",
     "moment": "^2.29.1",
     "momentjs": "^2.0.0",

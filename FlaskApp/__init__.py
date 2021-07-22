@@ -8,7 +8,8 @@ import numpy as np
 # from .chronos import plots, stats
 from .config import PATH_TO_PROJECT, PATH_TO_STATIC
 from .config import INDEX_NAVGRID_SECTIONS
-# from .db_config import MDB_HIERARCHY, MDB_TS_CATEGORIES
+from .config import MDB
+from .db_config import MDB_HIERARCHY, MDB_TS_CATEGORIES
 
 
 # initialize app
@@ -25,7 +26,54 @@ def index():
     return render_template('index.html', props=props)
 
 
+# chronos
+# -----------------------------------------------------------------------------
+@app.route('/chronos/stats/<subdir>')
+def chronos_stats_correlation_finder(subdir):
+
+    if subdir == 'correlation_finder':
+        template = 'chronos/correlation_finder.html'
+        props = {
+            # TODO: sort out unused props (here & @stats)
+            'section_hierarchy': MDB_HIERARCHY['stats']['time series'],
+            'categories': MDB_TS_CATEGORIES,
+            'nr of categories': len(MDB_TS_CATEGORIES),  # TODO: remove
+            'MDB': MDB['stats']['time series'],
+            'correlations': MDB['stats']['correlations'],
+            'zip': zip,  # TODO: move to funcs
+            'funcs': {'len': len}
+        }
+
+    elif subdir == 'test':
+        template = 'chronos/test.html'
+        props = json.dumps({
+            'mdb_hierarchy': MDB_HIERARCHY,
+        })
+
+    elif subdir == 'stats':
+        template = 'chronos/stats.html'
+        props = {
+            'section_hierarchy': MDB_HIERARCHY['stats']['time series'],
+            'categories': MDB_TS_CATEGORIES,
+            'MDB': MDB['stats']['time series'],
+            'correlations': MDB['stats']['correlations'],
+            'zip': zip,
+            'funcs': {'len': len}
+        }
+
+    return render_template(template, props=props)
+
+
+# @app.route('/chronos/stats/<subdir>', methods=['POST'])
+# def chronos_stats_post(subdir):
+#     if subdir == 'correlation_finder':
+#         return chronos_stats(subdir, )
+#     textfield_1 = request.form['textfield_1']
+#     return chronos_testing(subdir, textfield_1)
+
+
 # comp phys
+# -----------------------------------------------------------------------------
 @app.route('/comp_phys/n_body/<subdir>')
 def comp_phys_n_body(subdir):
 
@@ -131,37 +179,6 @@ def comp_phys_various(subdir):
         template = 'comp_phys/various/quadtree.html'
         props = {}
         return render_template(template, props=props)
-
-
-# chronos
-# @app.route('/chronos/stats/<subdir>')
-# def chronos_stats_correlation_finder(subdir):
-
-#     if subdir == 'correlation_finder':
-#         template = 'chronos/correlation_finder.html'
-#         props = {
-#             'section_hierarchy': MDB_HIERARCHY['stats']['time series']['daily'],
-#             'categories': MDB_TS_CATEGORIES,
-#             'nr of categories': len(MDB_TS_CATEGORIES),
-#             'MDB': config.MDB['stats']['time series']['daily'],
-#             'correlations': config.MDB['stats']['correlations'],
-#             'zip': zip,
-#             'funcs': {'len': len}
-#         }
-
-#     elif subdir == 'test':
-#         template = 'chronos/test.html'
-#         props = {}
-
-#     return render_template(template, props=props)
-
-
-# @app.route('/chronos/stats/<subdir>', methods=['POST'])
-# def chronos_stats_post(subdir):
-#     if subdir == 'correlation_finder':
-#         return chronos_stats(subdir, )
-#     textfield_1 = request.form['textfield_1']
-#     return chronos_testing(subdir, textfield_1)
 
 
 # debugging

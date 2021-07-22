@@ -1,41 +1,29 @@
 var W, H;
 var chart;
+var plot_type_id = "scatter";
 
 export function init(canvas, ctx) {
   W = canvas.getBoundingClientRect().width;
-  H = W;
+  H = canvas.getBoundingClientRect().height;
   canvas.width = W;
-  canvas.height = W / 2;
+  canvas.height = H;
   var x = [];
   var y = [];
   var k3 = "";
 
   chart = new Chart(ctx, {
-    type: "bar",
+    type: plot_type_id,
     data: {
       labels: x, //["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
       datasets: [
         {
+          // specific to scatter
+          // radius: 5,
+          // pointHoverRadius: 400,
           label: k3,
           data: y,
-          backgroundColor: "green",
-          // backgroundColor: [
-          //   "rgba(255, 99, 132, 0.2)",
-          //   "rgba(54, 162, 235, 0.2)",
-          //   "rgba(255, 206, 86, 0.2)",
-          //   "rgba(75, 192, 192, 0.2)",
-          //   "rgba(153, 102, 255, 0.2)",
-          //   "rgba(255, 159, 64, 0.2)",
-          // ],
-          borderColor: "green",
-          // borderColor: [
-          //   "rgba(255, 99, 132, 1)",
-          //   "rgba(54, 162, 235, 1)",
-          //   "rgba(255, 206, 86, 1)",
-          //   "rgba(75, 192, 192, 1)",
-          // "rgba(153, 102, 255, 1)",
-          // "rgba(255, 159, 64, 1)",
-          // ],
+          backgroundColor: "#0044AA",
+          borderColor: "#0044AA",
           borderWidth: 1,
         },
       ],
@@ -85,8 +73,8 @@ export function update(k, k2, k3, x, y) {
       {
         label: k3,
         data: y,
-        backgroundColor: "green",
-        borderColor: "green",
+        backgroundColor: "#0044AA",
+        borderColor: "#0044AA",
         borderWidth: 1,
         line: {
           backgroundColor: "blue",
