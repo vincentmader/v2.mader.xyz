@@ -9,22 +9,20 @@ with open('./running_on_live_server.json') as fp:
 
 if not running_on_server:
     import pymongo
-
-
-# DATABASE
-MDB = pymongo.MongoClient('localhost', 27017)['maderxyz']
-# PATHS   (TODO: long term: make sure paths are set-up for server)
-if sys.platform == 'darwin':
-    PATH_TO_PROJECT = '/Users/vinc/Documents/mader.xyz/FlaskApp/'
-    PATH_TO_RAW_DATA = '/Users/vinc/Documents/chronos_data/'
-    PATH_TO_DAILY_LOGS = '/Users/vinc/Library/Mobile Documents/com~apple~CloudDocs/org'
-elif sys.platform == 'linux':
-    if running_on_server:
-        PATH_TO_PROJECT = '/var/www/maderxyz/FlaskApp/'
-    else:
+    # DATABASE
+    MDB = pymongo.MongoClient('localhost', 27017)['maderxyz']
+    # PATHS   (TODO: long term: make sure paths are set-up for server)
+    if sys.platform == 'darwin':
+        PATH_TO_PROJECT = '/Users/vinc/Documents/mader.xyz/FlaskApp/'
+        PATH_TO_RAW_DATA = '/Users/vinc/Documents/chronos_data/'
+        PATH_TO_DAILY_LOGS = '/Users/vinc/Library/Mobile Documents/com~apple~CloudDocs/org'
+    elif sys.platform == 'linux':
         PATH_TO_PROJECT = '/home/vinc/code/mader.xyz/FlaskApp/'
         PATH_TO_RAW_DATA = '/home/vinc/docs/chronos_data/'
         PATH_TO_DAILY_LOGS = '/home/vinc/org/journal'
+else:
+    PATH_TO_PROJECT = '/var/www/maderxyz/FlaskApp/'
+
 PATH_TO_PROJECT = './FlaskApp'
 PATH_TO_CHRONOS = os.path.join(PATH_TO_PROJECT, 'chronos')
 PATH_TO_STATIC = os.path.join(PATH_TO_PROJECT, 'static/')
