@@ -19,10 +19,10 @@ if not running_on_server:
         PATH_TO_PROJECT = '/home/vinc/code/mader.xyz/FlaskApp/'
         PATH_TO_RAW_DATA = '/home/vinc/docs/chronos_data/'
         PATH_TO_DAILY_LOGS = '/home/vinc/org/journal'
+    PATH_TO_PROJECT = './FlaskApp'
 else:
     PATH_TO_PROJECT = '/var/www/maderxyz/FlaskApp/'
 
-PATH_TO_PROJECT = './FlaskApp'
 PATH_TO_CHRONOS = os.path.join(PATH_TO_PROJECT, 'chronos')
 PATH_TO_STATIC = os.path.join(PATH_TO_PROJECT, 'static/')
 
