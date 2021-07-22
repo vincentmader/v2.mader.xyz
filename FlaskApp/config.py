@@ -4,8 +4,7 @@ import os
 import sys
 
 
-with open('./running_on_live_server.json') as fp:
-    running_on_server = json.load(fp)['running_on_server']
+running_on_server = True
 
 if not running_on_server:
     import pymongo
