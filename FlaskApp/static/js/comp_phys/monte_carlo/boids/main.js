@@ -17,46 +17,21 @@ const TAU = 2 * Math.PI;
 const DT = 2; // TODO: make changeable
 
 // numerical parameters
-<<<<<<< HEAD
-var flock_size = 600; // nr of boids in system, TODO: make changeable
-var initial_predator_speed = 1.5; // TODO: make changeable
-=======
 var flock_size = 500; // nr of boids in system, TODO: make changeable
 var initial_predator_speed = 1; // TODO: make changeable
->>>>>>> boids
 // quad tree
 var quadtree;
 var quad_tree_capacity = 10; // TODO: make changeable
 var use_quad_tree = false; // changeable via button
-<<<<<<< HEAD
-// sensor radii
-var avoidance_radius = 10; // changeable via slider
-var attraction_radius = 60; // changeable via slider
-var cohesion_radius = 60; // changeable via slider
-var evasion_radius = 60; // TODO: make changeable
-var boid_collision_radius = 7; // TODO: make changeable
-// forces
-=======
 // forces
 var bool_avoidance_activated = true;
 var bool_attraction_activated = true;
 var bool_cohesion_activated = true;
 var bool_evasion_activated = true;
->>>>>>> boids
 var avoidance_force = 0.4; // changeable via slider
 var attraction_force = 0.1; // changeable via slider
 var cohesion_force = 0.2; // changeable via slider
 var evasion_force = 0.5; // changeable via slider
-<<<<<<< HEAD
-// freedom
-var probability_for_random_boid_turn = 0.5; // TODO: make changeable
-var initial_boid_speed = 1; // TODO: make changeable
-var max_random_turn_angle = TAU / 16; // TODO: make changeable
-
-// world parameters
-const world_size = [400, 400]; // TODO: make changeable
-const nr_of_predators = 1; // TODO: multiple? steering?
-=======
 // sensor radii
 var avoidance_radius = 6; // changeable via slider
 var attraction_radius = 50; // changeable via slider
@@ -71,17 +46,13 @@ var max_random_turn_angle = TAU / 32; // TODO: make changeable
 // world parameters
 const world_size = [300, 300]; // TODO: make changeable
 var predator_flock_size = 1; // TODO: multiple? steering?
->>>>>>> boids
 var world, flock, predators;
 
 // button presets
 var bool_draw_avoidance_radius = false; // changeable via button
 var bool_draw_attraction_radius = false; // changeable via button
 var bool_draw_cohesion_radius = false; // changeable via button
-<<<<<<< HEAD
-=======
 var bool_draw_evasion_radius = false;
->>>>>>> boids
 var bool_show_trajectories = false; // changeable via button
 var bool_show_quad_tree_grid = false; // changeable via button
 // var bool_draw_boid_sensor_radius = false;
@@ -92,11 +63,7 @@ var periodic_bounds = true; // TODO: make changeable
 
 // draw settings
 var canvas, ctx, W, H;
-<<<<<<< HEAD
-var boid_drawing_radius = 1.1;
-=======
 var boid_drawing_radius = 1;
->>>>>>> boids
 var predator_drawing_radius = 5 * boid_drawing_radius;
 
 // stats
@@ -221,7 +188,8 @@ class Boid {
       let boid = flock.boids[idx];
       let distance = boid.position.sub(this.position).norm_l2();
       if (distance > avoidance_radius) continue;
-      let angle = boid.position.sub(this.position).angle() - this.velocity.angle();
+      let angle =
+        boid.position.sub(this.position).angle() - this.velocity.angle();
       if (angle < -Math.PI / 2 || angle > Math.PI / 2) continue;
       if (boid === this) continue;
       if (distance < distance_to_closest_boid) {
@@ -242,7 +210,8 @@ class Boid {
       let distance_from_ahead = ahead.sub(closest_boid.position).norm_l2();
       // console.log(distance_from_ahead);
       if (
-        distance_from_ahead < closest_boid.collision_radius + this.collision_radius
+        distance_from_ahead <
+        closest_boid.collision_radius + this.collision_radius
       ) {
         collision_detected = true;
         break;
@@ -587,7 +556,7 @@ class Predator {
   }
   // update predator instance
   update() {
-    this.apply_attraction()
+    this.apply_attraction();
     this.apply_random_turns();
     this.update_position_values();
     this.apply_random_turns();
@@ -796,7 +765,6 @@ const add_event_listeners = () => {
       console.log("toggled evasion: " + String(bool_evasion_activated));
     });
 
-
   // SLIDERS
   // ===================================================
   // for flock size
@@ -810,8 +778,10 @@ const add_event_listeners = () => {
   document
     .getElementById("slider_predator_flock_size")
     .addEventListener("click", function () {
-      predator_flock_size = document.getElementById("slider_predator_flock_size").value;
-      update_predator_flock_size(predator_flock_size)
+      predator_flock_size = document.getElementById(
+        "slider_predator_flock_size"
+      ).value;
+      update_predator_flock_size(predator_flock_size);
       console.log("new predator flock size: ", predator_flock_size);
     });
   // for sensor radii
@@ -874,7 +844,6 @@ const add_event_listeners = () => {
     });
 };
 
-
 const update_predator_flock_size = (flock_size) => {
   predators = [];
   for (let idx = 0; idx < flock_size; idx++) {
@@ -886,7 +855,7 @@ const update_predator_flock_size = (flock_size) => {
     let phi0 = Math.random() * TAU;
     predators.push(new Predator(spawn_pos, v0, phi0));
   }
-}
+};
 
 // ANIMATION LOOP
 // ============================================================================
@@ -930,53 +899,35 @@ const init = () => {
   // setup world
   world = new World(world_size);
   flock = new Flock(flock_size);
-  update_predator_flock_size(predator_flock_size)
+  update_predator_flock_size(predator_flock_size);
 
   // set values of sliders
   // for flock sizes
   document.getElementById("slider_flock_size").value = flock_size;
-  document.getElementById("slider_predator_flock_size").value = predator_flock_size;
+  document.getElementById(
+    "slider_predator_flock_size"
+  ).value = predator_flock_size;
   // for sensor radii
   document.getElementById("slider_avoidance_radius").value = avoidance_radius;
   document.getElementById("slider_attraction_radius").value = attraction_radius;
   document.getElementById("slider_cohesion_radius").value = cohesion_radius;
   document.getElementById("slider_evasion_radius").value = evasion_radius;
   // for force strengths
-  document.getElementById("slider_avoidance_strength").value = avoidance_force * 100;
-  document.getElementById("slider_attraction_strength").value = attraction_force * 100;
-  document.getElementById("slider_cohesion_strength").value = cohesion_force * 100;
-  document.getElementById("slider_evasion_strength").value = evasion_force * 100;
+  document.getElementById("slider_avoidance_strength").value =
+    avoidance_force * 100;
+  document.getElementById("slider_attraction_strength").value =
+    attraction_force * 100;
+  document.getElementById("slider_cohesion_strength").value =
+    cohesion_force * 100;
+  document.getElementById("slider_evasion_strength").value =
+    evasion_force * 100;
 
   // reset time
   reset_time();
   // add_event_listeners
   add_event_listeners();
 
-  animate()
+  animate();
 };
-
-// ANIMATION LOOP
-// ============================================================================
-
-//var iteration_start_time = new Date();
-async function animate() {
-  // create animation loop
-  requestAnimationFrame(animate);
-  if (paused) {
-    return;
-  }
-  // Erase whole canvas
-  if (!bool_show_trajectories) ctx.clearRect(0, 0, canvas.width, canvas.height);
-  // update predator(s)
-  for (let p of predators) {
-    p.update();
-  }
-  // update flock
-  flock.update();
-  // show quad tree grid
-  if (bool_show_quad_tree_grid) quadtree.show();
-  // increment time
-  time_step += 1;
-}
 
 init();
