@@ -9,9 +9,8 @@
 {% endblock %}
 {% block content %}
 
-    <h4 class="section_title">
-        Boids
-    </h4>
+    <h4 class="section_title">Boids</h4>
+
     <div class="section">
         <div class="canvas_holder">
             <canvas class="canvas" id="canvas"></canvas>
@@ -50,81 +49,119 @@
         <!-- <div class="button_menu" style="grid-template-columns: repeat(2, 1fr);"> -->
         <!-- <div class="button_menu" style="grid-template-columns: repeat(2, 1fr);"> -->
     <!-- </div> -->
+    <div class="button_menu">
+        <button class="button" id="button_toggle_pause">pause</button>
+    <!--     <button class="button" id="button_toggle_periodic_bounds">toggle periodic bounds</button> -->
+        <button class="button" id="button_toggle_show_trajectories">
+            toggle trajectories
+        </button>
+    </div>
     <table class="button_menu_table">
         <tr>
             <td>interaction</td>
             <td>strength</td>
             <td>distance</td>
             <td>display</td>
+            <td>toggle</td>
         </tr>
         <!-- avoidance -->
         <tr>
             <td>avoidance</td>
-            <td>
-                <input 
-                    class="slider" id="slider_avoidance_strength"
-                    type="range" min="1" max="200" step=1
-                >
-            </td>
-            <td>
-                <input 
-                    class="slider" id="slider_avoidance_radius"
-                    type="range" min="1" max="500" step=1
-                >
-            </td>
-            <td>
-                <button class="button" id="button_display_avoidance_radius">
-                    x
-                </button>
-            </td>
+            <td><input
+                class="slider" id="slider_avoidance_strength"
+                type="range" min="0" max="100" step=1
+            ></td>
+            <td><input
+                class="slider" id="slider_avoidance_radius"
+                type="range" min="1" max="500" step=1
+            ></td>
+            <td><button
+                class="button_toggle" id="button_display_avoidance_radius"
+            >x</button></td>
+            <td><button
+                class="button_toggle" id="button_toggle_avoidance"
+            >x</button></td>
         </tr>
         <!-- attraction -->
         <tr>
             <td>attraction</td>
-            <td>
-                <input 
-                    class="slider" id="slider_attraction_strength"
-                    type="range" min="1" max="200" step=1
-                >
-            </td>
-            <td>
-                <input 
-                    class="slider" id="slider_attraction_radius"
-                    type="range" min="1" max="500" step=1
-                >
-            </td>
-            <td>
-                <button class="button" id="button_display_attraction_radius">
-                    x
-                </button>
-            </td>
+            <td><input
+                class="slider" id="slider_attraction_strength"
+                type="range" min="0" max="100" step=1
+            ></td>
+            <td><input
+                class="slider" id="slider_attraction_radius"
+                type="range" min="1" max="500" step=1
+            ></td>
+            <td><button
+                class="button_toggle" id="button_display_attraction_radius"
+            >x</button></td>
+            <td><button
+                class="button_toggle" id="button_toggle_attraction"
+            >x</button></td>
         </tr>
         <!-- cohesion -->
         <tr>
             <td>cohesion</td>
-            <td>
-                <input 
-                    class="slider" id="slider_cohesion_strength"
-                    type="range" min="1" max="200" step=1
-                >
-            </td>
-            <td>
-                <input 
-                    class="slider" id="slider_cohesion_radius"
-                    type="range" min="1" max="500" step=1
-                >
-            </td>
-            <td>
-                <button class="button" id="button_display_cohesion_radius">
-                    x
-                </button>
-            </td>
+            <td><input
+                class="slider" id="slider_cohesion_strength"
+                type="range" min="0" max="100" step=1
+            ></td>
+            <td><input
+                class="slider" id="slider_cohesion_radius"
+                type="range" min="1" max="500" step=1
+            ></td>
+            <td><button
+                class="button_toggle" id="button_display_cohesion_radius"
+            >x</button></td>
+            <td><button
+                class="button_toggle" id="button_toggle_cohesion"
+            >x</button></td>
+        </tr>
+        <tr>
+            <td>evasion</td>
+            <td><input
+                class="slider" id="slider_evasion_strength"
+                type="range" min="0" max="100" step=1
+            ></td>
+            <td><input
+                class="slider" id="slider_evasion_radius"
+                type="range" min="1" max="500" step=1
+            ></td>
+            <td><button
+                class="button_toggle" id="button_display_evasion_radius"
+            >x</button></td>
+            <td><button
+                class="button_toggle" id="button_toggle_evasion"
+            >x</button></td>
         </tr>
     </table>
-    <!-- <div class="button_menu"> -->
-    <!--     <button class="button" id="button_toggle_pause">pause</button> -->
-    <!--     <button class="button" id="button_toggle_periodic_bounds">toggle periodic bounds</button> -->
-    <!-- </div> -->
+    <div class="button_menu">
+        <button class="button" id="button_toggle_use_quad_tree">
+            toggle quad tree
+        </button>
+        <button class="button" id="button_toggle_show_quad_tree_grid">
+            toggle qt grid
+        </button>
+    </div>
+    <div class="button_menu">
+        <!-- <p style="text-align: right"> -->
+            flock size
+        <!-- </p> -->
+        <input
+            class="slider" id="slider_flock_size"
+            type="range" min="1" max="1000" step=1
+        >
+    </div>
+    <div class="button_menu">
+        <!-- <p style="text-align: right"> -->
+            predator flock size
+        <!-- </p> -->
+        <input
+            class="slider" id="slider_predator_flock_size"
+            type="range" min="0" max="10" step=1
+        >
+    </div>
     <!-- <table class="button_menu_table"> -->
     <!--     <tr> -->
     <!--         <td> -->
