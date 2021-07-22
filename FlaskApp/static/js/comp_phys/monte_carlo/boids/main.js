@@ -14,7 +14,7 @@ import { Rectangle } from "../../../utils/math_utils.js";
 
 // constants
 const TAU = 2 * Math.PI;
-const DT = 2; // TODO: make changeable
+const DT = 1.5; // TODO: make changeable
 
 // numerical parameters
 var flock_size = 500; // nr of boids in system, TODO: make changeable
@@ -28,20 +28,20 @@ var bool_avoidance_activated = true;
 var bool_attraction_activated = true;
 var bool_cohesion_activated = true;
 var bool_evasion_activated = true;
-var avoidance_force = 0.4; // changeable via slider
+var avoidance_force = 0.5; // changeable via slider
 var attraction_force = 0.1; // changeable via slider
 var cohesion_force = 0.2; // changeable via slider
 var evasion_force = 0.5; // changeable via slider
 // sensor radii
 var avoidance_radius = 6; // changeable via slider
-var attraction_radius = 50; // changeable via slider
+var attraction_radius = 40; // changeable via slider
 var cohesion_radius = 30; // changeable via slider
-var evasion_radius = 40; // TODO: make changeable
+var evasion_radius = 60; // TODO: make changeable
 var boid_collision_radius = 5; // TODO: make changeable
 // freedom
 var probability_for_random_boid_turn = 0.5; // TODO: make changeable
 var initial_boid_speed = 1; // TODO: make changeable
-var max_random_turn_angle = TAU / 32; // TODO: make changeable
+var max_random_turn_angle = TAU / 24; // TODO: make changeable // TODO: 1/16? 1/32?
 
 // world parameters
 const world_size = [300, 300]; // TODO: make changeable

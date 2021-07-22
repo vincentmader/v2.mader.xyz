@@ -1,17 +1,21 @@
+// TODO: fix momentum exchange on collision
+// TODO: implement more physical starting velocities
+
+
 import { draw_point } from "../../utils/drawing_utils.js";
 
 const dt = 1;
-const r_big = 0.12;
+const r_big = 0.05;
 const r_atom = 1e-3;
-const nr_of_atoms = 5000;
-const m = 1e-2;
+const nr_of_atoms = 3000;
+const m = 1e-1;
 const M = 1;
 const v_th = 6e-3; // TODO: fix this, it's unphysical
 var big_particle, atoms;
-var canvas, ctx;
-var W, H;
-var frame_idx;
+var canvas, ctx, W, H;
+var canvas2, ctx2, W2, H2;
 var big_particle_positions = [];
+var mean_squared_dist, chart;
 
 class Particle {
   constructor(r, x, y, u, v) {
@@ -46,7 +50,8 @@ class Particle {
         // this.v = ((2 * m) / (m + M)) * v2 + ((M - m) / (m + M)) * v1;
         // this.u += (M / m) * foo;
         // this.v += (M / m) * bar;
-        big_particle.u += (m / M) * this.u;
+
+        big_particle.u += (m / M) * this.u
         big_particle.v += (m / M) * this.v;
         this.u *= -1;
         this.v *= -1;
@@ -54,7 +59,6 @@ class Particle {
     }
   }
   updatePosition() {
-    // console.log(this.u);
     this.x += this.u * dt;
     this.y += this.v * dt;
   }
@@ -62,7 +66,10 @@ class Particle {
     const canvas_x = W * this.x;
     const canvas_y = W * this.y;
     const canvas_r = W * this.r;
-    draw_point(ctx, canvas_x, canvas_y, canvas_r);
+    draw_point(
+      ctx, canvas_x, canvas_y, canvas_r,
+      "#444444", "#444444"
+    );
   }
 }
 
@@ -91,8 +98,8 @@ function initialize_bodies(nr_of_atoms) {
         free_spot_found = true;
       }
     }
-    u = v_th * (2 * Math.random() - 1);
-    v = v_th * (2 * Math.random() - 1);
+    u = v_th * (Math.random()) * [-1, 1][Math.floor(2*Math.random())];
+    v = Math.sqrt((v_th**2 - u**2)) * [-1, 1][Math.floor(2*Math.random())];
     atom = new Particle(r_atom, x, y, u, v);
     atoms.push(atom);
   }
@@ -103,9 +110,71 @@ function draw_big_particle_positions() {
   for (const i of big_particle_positions) {
     x = W * i[0];
     y = W * i[1];
-    draw_point(ctx, x, y, 1, "red", "red");
+    draw_point(ctx, x, y, W/500, "red", "red");
   }
 }
+
+function create_chart() {
+  canvas2 = document.getElementById("canvas_chart");
+  ctx2 = canvas2.getContext("2d");
+  W2 = canvas2.getBoundingClientRect().width;
+  canvas2.height = W2 / 2;
+
+  chart = new Chart(ctx2, {
+    type: "line",
+    data: {
+      datasets: [
+        {
+          borderColor: "white",
+          pointRadius: 0,
+          data: [],
+          showLine: true, // overrides the `line` dataset default
+          label: "mean squared distance",
+        },
+        // ], [
+        // {
+        //   borderColor: "red",
+        //   pointRadius: 0,
+        //   data: [],
+        //   showLine: true, // overrides the `line` dataset default
+        //   label: "error [%]",
+        // },
+        // {
+        //   type: "scatter", // 'line' dataset default does not affect this dataset since it's a 'scatter'
+        //   data: [1, 1],
+        // },
+      ],
+    },
+    options: {
+      // scales: {
+      //   yAxes: [
+      //     {
+      //       display: true,
+      //       ticks: {
+      // suggestedMax: 1,
+      // suggestedMin: -1,
+      // beginAtZero: true   // minimum value will be 0.
+      // type: "logarithmic",
+      // },
+      // },
+      // ],
+      // },
+    },
+  });
+}
+
+function get_mean_squared_dist(positions) {
+  var mean_squared_dist = 0;
+
+  var x, y
+  for (let i of positions) {
+    x = i[0] - 0.5;
+    y = -(i[1] - 0.5);
+    mean_squared_dist += x**2 + y**2;
+  }
+  return mean_squared_dist / positions.length
+}
+
 
 function init() {
   canvas = document.getElementById("canvas");
@@ -115,30 +184,38 @@ function init() {
   canvas.height = W;
   ctx = canvas.getContext("2d");
 
-  // ctx.lineWidth = line_width;
   initialize_bodies(nr_of_atoms);
+  create_chart()
+  animate();
 }
 
 function animate() {
-  frame_idx = 0;
   setInterval(function () {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    big_particle.updateVelocity();
-    big_particle.updatePosition();
-    big_particle.draw();
-    // console.log(big_particle.u);
+    // clear screen
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // update atoms
     for (const p of atoms) {
       p.updateVelocity();
       p.updatePosition();
       p.draw();
     }
+    // update big particle
+    // big_particle.u = 0.008 * (2*Math.random() - 1)
+    // big_particle.v = 0.008 * (2*Math.random() - 1)
+    big_particle.updateVelocity();
+    big_particle.updatePosition();
+    big_particle.draw();
+    // draw big particle trajectory
     big_particle_positions.push([big_particle.x, big_particle.y]);
     draw_big_particle_positions();
 
-    frame_idx += 1;
-  }, 0.001); // TODO: make changeable
+    mean_squared_dist = get_mean_squared_dist(big_particle_positions)
+    chart.data.labels.push(""); // TODO: ?
+    chart.data.datasets[0].data.push(mean_squared_dist);
+    chart.update();
+
+  }, 1000/60); // TODO: make changeable
 }
 
 init();
-animate();

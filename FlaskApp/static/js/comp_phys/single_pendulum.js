@@ -81,8 +81,8 @@ const init = () => {
   ctx.strokeStyle = "white";
   ctx.fillStyle = "white";
 
-  L = W / 4 - 10;
-  r = W / 100;
+  L = W * 0.4;
+  r = W / 75;
 
   frame_idx = 0;
   const p = new Pendulum(W / 2, H / 2, 0.99 * π);

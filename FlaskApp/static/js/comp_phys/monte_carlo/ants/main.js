@@ -1,29 +1,31 @@
 // VARIABLE DEFINITIONS
 // ============================================================================
 
+const TAU = 2 * Math.PI
+
 // numerical parameters
-var colony_size = 1100; // nr of ants
-var sensor_radius = 5; // minimum 4.5 for ant to form streets
+var colony_size = 1000; // nr of ants
+var sensor_radius = 7; // minimum 4.5 for ant to form streets
 var ant_speed = 1;
 var min_pheromone_drop_amount = 0.1; // min. registered ph. amount
 var pheromone_drop_amount = 40; // amount of pheromone distributed by ant each turn
-var phA_evaporation_rate = 0; // = 0.99; // 1 - 1 / world.width**2;
-var phB_evaporation_rate = 0; // = 0.99; // 1 - 1 / world.width**2;
+var phA_evaporation_rate = 0.99; // 1 - 1 / world.width**2;
+var phB_evaporation_rate = 0.99; // 1 - 1 / world.width**2;
 var probability_for_random_ant_turn = 1;
 var max_ant_random_turn_angle = Math.PI / 16;
 var ant_fov = (7 / 6) * Math.PI; // 2*Math.PI
 var max_pheromone_strengths = [pheromone_drop_amount, pheromone_drop_amount];
 // world parameters
-const world_size = [150, 150];
+const world_size = [200, 200];
 const colony_radius = 8;
 const colony_pos = [
-  world_size[0] / 2 - colony_radius / 2,
-  world_size[1] / 2 - colony_radius / 2,
+  world_size[0] / 4 - colony_radius / 2,
+  world_size[1] / 4 - colony_radius / 2,
 ];
 const food_placement_amount = 8000;
 // button presets
 var paused = false;
-var periodic_bounds = true;
+var periodic_bounds = false;
 var placement_select = "food";
 // draw settings
 const ant_drawing_radius = 0.7;
@@ -35,7 +37,7 @@ var bool_draw_ant_state_colors = true;
 var canvas, ctx, W, H;
 // world & ants
 var world, ant_hill;
-const ant_eating_radius = 1;
+const ant_eating_radius = 2;
 // var ants_1, ants_2, ants_3, ants_4;
 // stats
 var time_step, delivered_food, fps;
@@ -43,8 +45,6 @@ var fps_values = [];
 // var time_01 = []; // TODO: remove
 // var time_02 = [];
 // var time_03 = [];
-// constants
-const TAU = 2 * Math.PI;
 
 // CLASS DEFINITIONS
 
@@ -214,7 +214,7 @@ class Ant {
     // change state
     this.is_carrying_food = true;
     // turn around to walk back // TODO: toggle?
-    this.theta += Math.PI / 2;
+    this.theta += Math.PI;
   }
   deliver_food() {
     if (this.is_carrying_food) {
@@ -223,11 +223,11 @@ class Ant {
       let distance_to_colony = Math.sqrt(delta_x ** 2 + delta_y ** 2);
       // check if food can be delivered
       if (distance_to_colony <= colony_radius) {
-        this.is_carrying_food = false;
         delivered_food += 1;
-        this.theta += Math.PI; // turn around
+        this.is_carrying_food = false;
+        // this.theta += Math.PI; turn around
         // } else if (distance_to_colony <= sensor_radius) {
-        //   this.theta = Math.atan2(delta_y, delta_x); // TODO: fix sign?
+        // this.theta = Math.atan2(delta_y, delta_x); TODO: fix sign?
       }
     }
   }
@@ -327,9 +327,9 @@ class Ant {
     this.assert_position_in_world();
     if (this.is_carrying_food) {
       this.detect_colony();
-      this.deliver_food();
       if (time_step % 4 == 0) this.detect_pheromones(); // TODO: how often?
       // TODO: run for each ant position ?
+      this.deliver_food();
     } else {
       this.detect_food();
       if (this.has_detected_food) {
@@ -558,8 +558,11 @@ class World {
     for (let idx = cells.length - 1; idx >= 0; idx--) {
       let row_idx = cells[idx][0];
       let col_idx = cells[idx][1];
-      this.pheromone_strengths[0][row_idx][col_idx] -= 1;
-      this.pheromone_strengths[1][row_idx][col_idx] -= 1;
+      // this.pheromone_strengths[0][row_idx][col_idx] -= 1; // TODO: make multiplicative?
+      // this.pheromone_strengths[1][row_idx][col_idx] -= 1;
+      this.pheromone_strengths[0][row_idx][col_idx] *= phA_evaporation_rate;
+      this.pheromone_strengths[1][row_idx][col_idx] *= phB_evaporation_rate;
+      // console.log(this.pheromone_strengths[1][row_idx][col_idx])
       if (
         this.pheromone_strengths[0][row_idx][col_idx] <
         min_pheromone_drop_amount
@@ -858,10 +861,10 @@ const init = () => {
   document.getElementById("slider_colony_size").value = colony_size;
   document.getElementById(
     "slider_evaporation_factor_A"
-  ).value = phA_evaporation_rate;
+  ).value = phA_evaporation_rate * 1000;
   document.getElementById(
     "slider_evaporation_factor_B"
-  ).value = phB_evaporation_rate;
+  ).value = phB_evaporation_rate * 1000;
 
   // setup ants
   colony_size = Number(document.getElementById("slider_colony_size").value);
@@ -872,6 +875,8 @@ const init = () => {
 
   // add_event_listeners
   add_event_listeners();
+
+  animate();
 };
 
 // ANIMATION LOOP
@@ -896,14 +901,13 @@ async function animate() {
   const slider_B = document.getElementById("slider_evaporation_factor_B").value;
   phA_evaporation_rate = Number(slider_A) / 1000;
   phB_evaporation_rate = Number(slider_B) / 1000;
-  document.getElementById(
-    "evaporation_factor_A"
-  ).innerHTML = phA_evaporation_rate;
+  document.getElementById("evaporation_factor_A").innerHTML = phA_evaporation_rate;
+  document.getElementById("evaporation_factor_B").innerHTML = phB_evaporation_rate;
 
   // update world every 10 time steps
-  if (time_step % 2 == 0) {
-    world.update();
-  }
+  // if (time_step % 1 == 0) {
+  world.update();
+  // }
 
   var foo = new Date();
   // time_01.push(foo - iteration_start_time);
@@ -1009,4 +1013,3 @@ async function animate() {
 // ============================================================================
 
 init();
-animate();

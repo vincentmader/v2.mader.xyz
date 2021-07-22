@@ -5,11 +5,14 @@ import sys
 from flask import Flask, render_template, request
 import numpy as np
 
-# from .chronos import plots, stats
-from .config import PATH_TO_PROJECT, PATH_TO_STATIC
+from .config import running_on_server
 from .config import INDEX_NAVGRID_SECTIONS
-from .config import MDB
-from .db_config import MDB_HIERARCHY, MDB_TS_CATEGORIES
+from .config import PATH_TO_PROJECT, PATH_TO_STATIC
+if not running_on_server:
+    # from .chronos import plots, stats
+    # TODO: make dependent on runtime environment (e.g. don't load db stuff on server (yet))
+    from .config import MDB
+    from .db_config import MDB_HIERARCHY, MDB_TS_CATEGORIES
 
 
 # initialize app
@@ -105,15 +108,22 @@ def comp_phys_n_body(subdir):
 @app.route('/comp_phys/harmonical_oscillators/<subdir>')
 def comp_phys_pendulum(subdir):
 
-    if subdir == 'pendulum':
+    if subdir == 'single_pendulum':
+        template = 'comp_phys/oscillators/single_pendulum.html'
+        props = {
+            'title': 'pendulum',
+        }
+        return render_template(template, props=props)
+
+    elif subdir == 'double_pendulum':
         path_to_output_file = os.path.join(
             PATH_TO_PROJECT, 'comp_phys/double_pendulum/out/ys.txt'
         )
         system_states = [list(i) for i in np.loadtxt(path_to_output_file)]
-        template = 'comp_phys/oscillators/pendulum.html'
+        template = 'comp_phys/oscillators/double_pendulum.html'
         props = {
             'title': 'double pendulum',
-            'description': 'theory, latex...',
+            'description': 'theory, latex...',  # TODO: remove? is this used anywhere?
             'ys': json.dumps(system_states),
         }
         return render_template(template, props=props)
@@ -142,9 +152,9 @@ def comp_phys_stat_phys(subdir):
         return render_template(template, props=props)
 
     elif subdir == 'thermal_motion':
-        system_states = np.loadtxt(
-            PATH_TO_PROJECT + 'comp_phys/gas_in_a_box/out/ys.txt'
-        )
+        system_states = np.loadtxt(os.path.join(
+            PATH_TO_PROJECT, 'comp_phys/gas_in_a_box/out/ys.txt'
+            ))
         system_states = [list(i) for i in system_states]
         template = 'comp_phys/stat_phys/thermal_motion.html'
         props = {

@@ -4,6 +4,7 @@
 
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/comp_phys.css') }}" type="text/css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
 
 {% endblock %}
 {% block content %}
@@ -16,6 +17,14 @@
         <div class="canvas_holder">
             <canvas class="canvas" id="canvas"></canvas>
             <script type="module" src="{{ url_for('static', filename='js/comp_phys/gas_in_a_box/brownian_motion.js') }}"></script>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="canvas_holder">
+            <canvas
+                class="canvas" id="canvas_chart">
+            </canvas>
         </div>
     </div>
 

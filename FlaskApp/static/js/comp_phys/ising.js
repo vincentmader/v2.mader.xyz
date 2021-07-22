@@ -105,7 +105,7 @@ function flip_random_spin(grid) {
 }
 
 function create_chart() {
-  canvas2 = document.getElementById("canvas_pi_chart");
+  canvas2 = document.getElementById("canvas_chart");
   ctx2 = canvas2.getContext("2d");
   W2 = canvas2.getBoundingClientRect().width;
   canvas2.height = W2 / 2;

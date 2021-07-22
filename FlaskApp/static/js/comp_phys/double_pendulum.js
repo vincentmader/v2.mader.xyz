@@ -4,7 +4,7 @@ import { draw_point } from "../utils/drawing_utils.js";
 const line_width = 2;
 const tail_length = 175;
 
-var paused = true;
+var paused = false;
 var frame_idx;
 var W, H, o_x, o_y;
 
