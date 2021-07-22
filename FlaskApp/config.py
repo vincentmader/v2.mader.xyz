@@ -4,7 +4,7 @@ import os
 import sys
 
 
-running_on_server = False
+running_on_server = True
 
 if not running_on_server:
     import pymongo
