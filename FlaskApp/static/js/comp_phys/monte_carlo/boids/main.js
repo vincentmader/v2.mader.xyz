@@ -17,7 +17,7 @@ const TAU = 2 * Math.PI;
 const DT = 1.5; // TODO: make changeable
 
 // numerical parameters
-var flock_size = 500; // nr of boids in system, TODO: make changeable
+var flock_size = 600; // nr of boids in system, TODO: make changeable
 var initial_predator_speed = 1; // TODO: make changeable
 // quad tree
 var quadtree;
@@ -904,9 +904,8 @@ const init = () => {
   // set values of sliders
   // for flock sizes
   document.getElementById("slider_flock_size").value = flock_size;
-  document.getElementById(
-    "slider_predator_flock_size"
-  ).value = predator_flock_size;
+  document.getElementById("slider_predator_flock_size").value =
+    predator_flock_size;
   // for sensor radii
   document.getElementById("slider_avoidance_radius").value = avoidance_radius;
   document.getElementById("slider_attraction_radius").value = attraction_radius;
