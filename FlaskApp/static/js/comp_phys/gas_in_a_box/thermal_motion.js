@@ -1,11 +1,13 @@
 import { draw_point } from "../../utils/drawing_utils.js";
 
+const TAU = 2 * Math.PI;
 const DT = 1;
+const m = 1;
 const v0 = 1;
 
-const nr_of_particles = 100;
+const nr_of_particles = 20;
 
-const particle_radius = 5;
+const particle_radius = 10;
 
 var particles;
 
@@ -14,70 +16,46 @@ var W, H, o_x, o_y;
 
 // var data = $("#canvas").data("ys");
 // var system_state;
-// var frame_idx;
-// var zoom_level = 100;
-// var foo;
+// const tail_length = 150;
+// function draw_tails(ctx, frame_idx, tail_length) {
+//   var current_system_state, previous_system_state;
 
-// const line_width = 2;
-// // const tail_length = 150;
-// // var circle_radius;
+//   for (const idx of Array(tail_length).keys()) {
+//     current_system_state = data[Math.max(0, frame_idx - idx)];
+//     previous_system_state = data[Math.max(0, frame_idx - idx - 1)];
 
-// // function draw_tails(ctx, frame_idx, tail_length) {
-// //   var current_system_state, previous_system_state;
+//     phi_1p = previous_system_state[0];
+//     phi_2p = previous_system_state[1];
+//     foo = get_positions_from_angles(phi_1p, phi_2p);
+//     x_1p = foo[0];
+//     y_1p = foo[1];
+// x_2p = foo[2];
+// y_2p = foo[3];
 
-// //   for (const idx of Array(tail_length).keys()) {
-// //     current_system_state = data[Math.max(0, frame_idx - idx)];
-// //     previous_system_state = data[Math.max(0, frame_idx - idx - 1)];
-
-// //     phi_1p = previous_system_state[0];
-// //     phi_2p = previous_system_state[1];
-// //     foo = get_positions_from_angles(phi_1p, phi_2p);
-// //     x_1p = foo[0];
-// //     y_1p = foo[1];
-// // x_2p = foo[2];
-// // y_2p = foo[3];
-
-// // phi_1c = current_system_state[0];
-// // phi_2c = current_system_state[1];
-// // foo = get_positions_from_angles(phi_1c, phi_2c);
-// // x_1c = foo[0];
-// // y_1c = foo[1];
-// // x_2c = foo[2];
-// // y_2c = foo[3];
-
-// // draw_line(ctx, x_1p, y_1p, x_1c, y_1c, "green");
-// // draw_line(ctx, x_2p, y_2p, x_2c, y_2c, "red");
-// // }
-// // }
-
-function xy_to_canvas_coords(x, y, W, H, zoom_level) {
-  // var xlim;
-  // var ylim;
-
-  // var canvas_x;
-  // var canvas_y;
-
-  x *= W;
-  y *= H;
-  // x += o_x;
-  // y += o_y;
-
-  return [x, y];
-}
+// phi_1c = current_system_state[0];
+// phi_2c = current_system_state[1];
+// foo = get_positions_from_angles(phi_1c, phi_2c);
+// x_1c = foo[0];
+// y_1c = foo[1];
+// x_2c = foo[2];
+// y_2c = foo[3];
+// draw_line(ctx, x_1p, y_1p, x_1c, y_1c, "green");
+// draw_line(ctx, x_2p, y_2p, x_2c, y_2c, "red");
+// }
+// }
 
 class Particle {
   constructor() {
+    this.mass = m;
     this.x = W * Math.random();
     this.y = H * Math.random();
-    this.u = v0 * (2 * Math.random() - 1); // TODO: thermal dist? -> no! shall be reached in eq
-    this.v = v0 * (2 * Math.random() - 1);
+    this.speed = v0 * Math.random();
+    this.theta = TAU * Math.random(); // direction of movement
+    this.update_velocity();
   }
   update_velocity() {
-    // check for boundaries
-    if (this.x < 0 || this.x > W) this.u *= -1;
-    if (this.y < 0 || this.y > H) this.v *= -1;
-    // check for collisions
-    this.handle_collisions();
+    this.u = this.speed * Math.cos(this.theta);
+    this.v = this.speed * Math.sin(this.theta);
   }
   update_position() {
     this.x += this.u * DT;
@@ -86,29 +64,75 @@ class Particle {
   draw() {
     draw_point(ctx, this.x, this.y, particle_radius);
   }
-  handle_collisions() {
-    for (let p of particles) {
-      let x1 = this.x + this.u * DT;
-      let y1 = this.y + this.v * DT;
-      let x2 = p.x + p.u * DT;
-      let y2 = p.y + p.v * DT;
-      let r = Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2);
-      if (r < 2 * particle_radius) {
-        // TODO: unique radii
-        this.u *= -1;
-        this.v *= -1;
-        p.u *= -1;
-        p.v *= -1;
-        this.x += this.u * DT;
-        this.y += this.v * DT; // TODO: proper elastic collisions!
-        p.x += p.u * DT;
-        p.y += p.v * DT;
-      }
-    }
+  handle_boundaries() {
+    let u = this.u;
+    let v = this.v;
+    if (this.x < 0 || this.x > W) u *= -1;
+    if (this.y < 0 || this.y > H) v *= -1;
+    this.theta = Math.atan2(v, u);
   }
   update() {
+    for (let p of particles) {
+      handle_particle_collision(this, p);
+    }
+    this.handle_boundaries();
     this.update_velocity();
     this.update_position();
+  }
+}
+
+function handle_particle_collision(p1, p2) {
+  // check for collision in next time step
+  let x1 = p1.x + p1.u * DT;
+  let y1 = p1.y + p1.v * DT;
+  let x2 = p2.x + p2.u * DT;
+  let y2 = p2.y + p2.v * DT;
+  let r = Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2);
+  if (r < 2 * particle_radius) {
+    // calculate new velocities
+    let phi = Math.atan2(y2 - y1, Math.max(x2 - x1, x1 - x2));
+    p1.u =
+      ((p1.speed * Math.cos(p1.theta - phi) * (p1.mass - p2.mass) +
+        2 * p2.mass * p2.speed * Math.cos(p2.theta - phi)) /
+        (p1.mass + p2.mass)) *
+        Math.cos(phi) +
+      p1.speed * Math.sin(p1.theta - phi) * Math.cos(phi + Math.PI / 2);
+    p1.v =
+      ((p1.speed * Math.cos(p1.theta - phi) * (p1.mass - p2.mass) +
+        2 * p2.mass * p2.speed * Math.cos(p2.theta - phi)) /
+        (p1.mass + p2.mass)) *
+        Math.sin(phi) +
+      p1.speed * Math.sin(p1.theta - phi) * Math.sin(phi + Math.PI / 2);
+    p2.v =
+      ((p2.speed * Math.cos(p2.theta - phi) * (p2.mass - p1.mass) +
+        2 * p1.mass * p1.speed * Math.cos(p1.theta - phi)) /
+        (p2.mass + p1.mass)) *
+        Math.cos(phi) +
+      p2.speed * Math.sin(p2.theta - phi) * Math.cos(phi + Math.PI / 2);
+    p2.v =
+      ((p2.speed * Math.cos(p2.theta - phi) * (p2.mass - p1.mass) +
+        2 * p1.mass * p1.speed * Math.cos(p1.theta - phi)) /
+        (p2.mass + p1.mass)) *
+        Math.sin(phi) +
+      p2.speed * Math.sin(p2.theta - phi) * Math.sin(phi + Math.PI / 2);
+    // recalculate speed & angle
+    p1.theta = Math.atan2(p1.v, p1.u);
+    p1.speed = Math.sqrt(p1.u ** 2 + p1.v ** 2);
+    console.log(p1.theta);
+    p2.theta = Math.atan2(p2.v, p2.u);
+    p2.speed = Math.sqrt(p2.u ** 2 + p2.v ** 2);
+
+    // TODO: unique radii
+    // this.u =
+    // this.u *= -1;
+    // this.v *= -1;
+    // p.u *= -1;
+    // p.v *= -1;
+
+    p1.x += p1.u * DT;
+    p1.y += p1.v * DT; // TODO: proper elastic collisions!
+    p2.x += p2.u * DT;
+    p2.y += p2.v * DT;
   }
 }
 

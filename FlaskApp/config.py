@@ -4,7 +4,7 @@ import os
 import sys
 
 
-running_on_server = True
+running_on_server = False
 
 if running_on_server:
     PATH_TO_PROJECT = '/var/www/maderxyz/FlaskApp/'
