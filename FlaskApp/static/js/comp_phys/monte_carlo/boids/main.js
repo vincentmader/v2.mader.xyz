@@ -904,8 +904,9 @@ const init = () => {
   // set values of sliders
   // for flock sizes
   document.getElementById("slider_flock_size").value = flock_size;
-  document.getElementById("slider_predator_flock_size").value =
-    predator_flock_size;
+  document.getElementById(
+    "slider_predator_flock_size"
+  ).value = predator_flock_size;
   // for sensor radii
   document.getElementById("slider_avoidance_radius").value = avoidance_radius;
   document.getElementById("slider_attraction_radius").value = attraction_radius;

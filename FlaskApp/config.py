@@ -4,13 +4,14 @@ import os
 import sys
 
 
-running_on_server = False
+running_on_server = True
 
-if not running_on_server:
+if running_on_server:
+    PATH_TO_PROJECT = '/var/www/maderxyz/FlaskApp/'
+else:
     import pymongo
-    # DATABASE
     MDB = pymongo.MongoClient('localhost', 27017)['maderxyz']
-    # PATHS   (TODO: long term: make sure paths are set-up for server)
+
     PATH_TO_PROJECT = './FlaskApp'
     if sys.platform == 'darwin':
         PATH_TO_RAW_DATA = '/Users/vinc/Documents/chronos_data/'
@@ -18,8 +19,6 @@ if not running_on_server:
     elif sys.platform == 'linux':
         PATH_TO_RAW_DATA = '/home/vinc/docs/chronos_data/'
         PATH_TO_DAILY_LOGS = '/home/vinc/org/journal'
-else:
-    PATH_TO_PROJECT = '/var/www/maderxyz/FlaskApp/'
 
 PATH_TO_CHRONOS = os.path.join(PATH_TO_PROJECT, 'chronos')
 PATH_TO_STATIC = os.path.join(PATH_TO_PROJECT, 'static/')

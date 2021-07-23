@@ -92,7 +92,7 @@ const init = () => {
   o_y = H / 2;
   // set pendulum rod length L & body drawing radius
   L = W / 4 - 10;
-  r = W / 100;
+  r = W / 75;
 
   // start loop, draw double pendulum
   frame_idx = 0;
