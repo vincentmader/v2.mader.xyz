@@ -4,22 +4,20 @@ import os
 import sys
 
 
-running_on_server = True
+running_on_server = False
 
 if not running_on_server:
     import pymongo
     # DATABASE
     MDB = pymongo.MongoClient('localhost', 27017)['maderxyz']
     # PATHS   (TODO: long term: make sure paths are set-up for server)
+    PATH_TO_PROJECT = './FlaskApp'
     if sys.platform == 'darwin':
-        PATH_TO_PROJECT = '/Users/vinc/Documents/mader.xyz/FlaskApp/'
         PATH_TO_RAW_DATA = '/Users/vinc/Documents/chronos_data/'
         PATH_TO_DAILY_LOGS = '/Users/vinc/Library/Mobile Documents/com~apple~CloudDocs/org'
     elif sys.platform == 'linux':
-        PATH_TO_PROJECT = '/home/vinc/code/mader.xyz/FlaskApp/'
         PATH_TO_RAW_DATA = '/home/vinc/docs/chronos_data/'
         PATH_TO_DAILY_LOGS = '/home/vinc/org/journal'
-    PATH_TO_PROJECT = './FlaskApp'
 else:
     PATH_TO_PROJECT = '/var/www/maderxyz/FlaskApp/'
 
@@ -213,7 +211,7 @@ else:
                 'whether I drank a bit of beer': ['drank < 1l beer'],
                 'whether I drank a lot of beer': ['drank > 1l beer'],
                 'whether I drank a bit of schnaps': ['drank a bit of Schnaps'],
-                'whether I drank a lot of schnaps': ['drank a lot of Schnaps'],
+                # 'whether I drank a lot of schnaps': ['drank a lot of Schnaps'],
             }, 'hygiene': {
                 'whether I took a shower': ['Shower'],
                 'whether I took a bath': ['Bath'],

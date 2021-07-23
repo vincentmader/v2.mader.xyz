@@ -65,13 +65,13 @@ MDB_HIERARCHY = {
         'time series': {
             'health': {
                 'activity': [
-                    'active calories',
-                    'cycling distance',
-                    'distance',
-                    'flights climbed',
-                    'heart rate',
-                    'heart rate at rest',
-                    'steps',
+                    # 'active calories',
+                    # 'cycling distance',
+                    # 'distance',
+                    # 'flights climbed',
+                    # 'heart rate',
+                    # 'heart rate at rest',
+                    # 'steps',
                     # 'at least one pull-up/push-up',
                     'whether I exercised physically',
                     'whether I played ping pong',
@@ -146,12 +146,12 @@ MDB_HIERARCHY = {
                 ]
             }, 'social': {
                 'instant messaging': [
-                    'messages sent',
-                    'messages received',
-                    'messages total',
-                    'nr. of characters sent',
-                    'nr. of characters received',
-                    'nr. of characters total',
+                    # 'messages sent',
+                    # 'messages received',
+                    # 'messages total',
+                    # 'nr. of characters sent',
+                    # 'nr. of characters received',
+                    # 'nr. of characters total',
                 ]
             }, 'personal': {
                 'mood': [

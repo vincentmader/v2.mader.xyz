@@ -85,7 +85,7 @@ if __name__ == '__main__':
 
     # - time series
     chronos.stats.time_series.sleep_analysis.daily_sleep_notes()
-    chronos.stats.time_series.activity()
+    # chronos.stats.time_series.activity()
     chronos.stats.time_series.health.sleep_analysis()  # TODO: replace?
     chronos.stats.time_series.various.seasons_etc()
 
