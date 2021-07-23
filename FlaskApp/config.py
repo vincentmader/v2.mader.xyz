@@ -4,7 +4,7 @@ import os
 import sys
 
 
-running_on_server = True
+running_on_server = False
 
 if running_on_server:
     PATH_TO_PROJECT = '/var/www/maderxyz/FlaskApp/'
@@ -95,6 +95,9 @@ INDEX_NAVGRID_SECTIONS = [
                 'id': 'ising',
                 'link': '/comp_phys/stat_phys/ising'
             }, {
+                'id': 'gas_in_a_box',
+                'link': '/comp_phys/stat_phys/thermal_motion'
+            }, {
                 'id': 'brownian_motion',
                 'link': '/comp_phys/stat_phys/brownian_motion'
             },
@@ -128,9 +131,6 @@ INDEX_NAVGRID_SECTIONS = [
         'pages': [
             {
                 'id': 'tatooine', 'link': '/old/tatooine'
-            }, {
-                'id': 'gas_in_a_box',
-                'link': '/comp_phys/stat_phys/thermal_motion'
             }, {
                 'id': 'forest_fire',
                 'link': '/comp_phys/cellular_automata/forest_fire'
