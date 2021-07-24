@@ -5,9 +5,9 @@ const DT = 1;
 const m = 1;
 const v0 = 1;
 
-const nr_of_particles = 20;
+const nr_of_particles = 100;
 
-const particle_radius = 10;
+const particle_radius = 7;
 
 var particles;
 
