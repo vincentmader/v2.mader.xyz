@@ -1,11 +1,16 @@
+const N = 100;
+const threshold = 3;
+const bool_apply_periodic_bounds = false; // TODO: add button
+
 const line_width = 2;
 const colors = ["#333333", "white", "red"];
-const threshold = 3;
 
 var canvas, ctx;
 var W, H;
 var paused = false;
 var currently_selected_color = 1;
+
+const fps_goal = 30;
 
 function initialize_grid(N) {
   var grid, row;
@@ -24,8 +29,8 @@ function draw_grid(grid) {
   var x, y, w, h, color, cell_value;
   const N = grid.length;
 
-  w = (W / N) * 0.9;
-  h = (H / N) * 0.9;
+  w = (W / N) * 1.2;
+  h = (H / N) * 1.2;
   for (let i = 0; i < N; i++) {
     for (let j = 0; j < N; j++) {
       // get position and geometry of cell
@@ -37,9 +42,6 @@ function draw_grid(grid) {
         color = "black";
       } else color = colors[cell_value];
       // draw rect
-      var z = 0.1;
-      // ctx.fillStyle = "#333333";
-      // ctx.fillRect(x - z * w, y - z * h, (1 + z) * w, (1 + z) * h);
       ctx.fillStyle = color;
       ctx.fillRect(x, y, w, h);
     }
@@ -59,20 +61,22 @@ function get_next_grid_state(N, grid) {
       entry = grid[i][j];
 
       neighbors = [];
-      // for (let k = Math.max(i - 1, 0); k <= Math.min(i + 1, N - 1); k++) {
-      //   for (let l = Math.max(j - 1, 0); l <= Math.min(j + 1, N - 1); l++) {
       for (let k = i - 1; k <= i + 1; k++) {
         for (let l = j - 1; l <= j + 1; l++) {
-          if (i == k && l == j) continue;
-          // apply bounds
-          if (k < 0) k_bc = k + N;
-          else if (k >= N) k_bc = k - N;
-          else k_bc = k;
-          if (l < 0) l_bc = l + N;
-          else if (l >= N) l_bc = l - N;
-          else l_bc = l;
-          neighbors.push(grid[k_bc][l_bc]);
-          // neighbors.push(grid[k][l]);
+          if (i == k && l == j) continue; // no self-interaction
+          // apply periodic bounds
+          if (bool_apply_periodic_bounds) {
+            if (k < 0) k_bc = k + N;
+            else if (k >= N) k_bc = k - N;
+            else k_bc = k;
+            if (l < 0) l_bc = l + N;
+            else if (l >= N) l_bc = l - N;
+            else l_bc = l;
+            neighbors.push(grid[k_bc][l_bc]);
+          } else {
+            if (k < 0 || k >= N || l < 0 || l >= N) continue;
+            neighbors.push(grid[k][l]);
+          }
         }
       }
 
@@ -150,7 +154,6 @@ const init = () => {
     grid = flip_grid_entry(N, grid, pos[0], pos[1]);
   });
 
-  const N = 100;
   var grid = initialize_grid(N);
 
   setInterval(function () {
@@ -158,11 +161,10 @@ const init = () => {
     draw_grid(grid);
     if (!paused) {
       grid = get_next_grid_state(N, grid);
-      frame_idx += 1;
     }
     if (paused) document.getElementById("play/pause").innerHTML = "Unpause";
     if (!paused) document.getElementById("play/pause").innerHTML = "Pause";
-  }, 30);
+  }, 1000 / fps_goal);
 };
 
 init();

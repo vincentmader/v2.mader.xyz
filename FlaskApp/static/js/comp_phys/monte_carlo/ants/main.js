@@ -1029,7 +1029,7 @@ async function animate() {
     ctx.fillStyle = "white";
     // var fps = mean(fps_values)
     if (mean(fps_values) < fps_goal) {
-      ctx.fillText("fps = " + round(mean(fps_values), 0), 0.8 * W, 0.99 * H);
+      ctx.fillText("fps = " + round(mean(fps_values), 0), 0.05 * W, 0.99 * H);
     }
     // ctx.fillText("world: " + round(mean(time_01), 1), 0.79 * W, 0.94 * H);
     // ctx.fillText("draw: " + round(mean(time_02), 1), 0.79 * W, 0.89 * H);
