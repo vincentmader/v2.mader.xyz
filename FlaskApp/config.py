@@ -46,17 +46,6 @@ INDEX_NAVGRID_SECTIONS = [{
         },
     ]
 }, {
-    'title': 'emergent behavior',
-    'pages': [
-        {
-            'id': 'boids',
-            'link': '/comp_phys/monte_carlo/boids'
-        }, {
-            'id': 'ants',
-            'link': '/comp_phys/monte_carlo/ants'
-        },
-    ]
-}, {
     'title': 'gravitational n-body dynamics',
     'pages': [
         {
@@ -71,6 +60,17 @@ INDEX_NAVGRID_SECTIONS = [{
         }, {
             'id': 'nbody_asteroids',
             'link': '/comp_phys/n_body/asteroids'
+        },
+    ]
+}, {
+    'title': 'emergent behavior',
+    'pages': [
+        {
+            'id': 'boids',
+            'link': '/comp_phys/monte_carlo/boids'
+        }, {
+            'id': 'ants',
+            'link': '/comp_phys/monte_carlo/ants'
         },
     ]
 }, {
