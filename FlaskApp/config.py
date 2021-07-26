@@ -31,7 +31,7 @@ PLOT_WIDTH, PLOT_HEIGHT = 400, 400
 # INDEX
 
 INDEX_NAVGRID_SECTIONS = [{
-    'title': 'harmonical oscillators',
+    'title': 'harmonical oscillations',
     'pages': [
         {
             'id': 'single_pendulum',
