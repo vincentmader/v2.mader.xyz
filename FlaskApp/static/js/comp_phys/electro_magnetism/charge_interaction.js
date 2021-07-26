@@ -3,13 +3,13 @@ import { draw_point } from "../../utils/drawing_utils.js";
 // CONSTANTS
 
 const TAU = 2 * Math.PI;
-const DT = 0.4;
-const m = 2;
-const k = 1; // electromagnetic interaction
+const DT = 0.5;
+const m = 1;
+const k = 2; // electromagnetic interaction
 
 // PARAMETERS
 
-const nr_of_particles = 15;
+const nr_of_particles = 20;
 const particle_radius = 15;
 var v0 = 1;
 
@@ -52,12 +52,15 @@ class Particle {
     draw_point(ctx, this.x, this.y, particle_radius, color, color);
   }
   apply_forces() {
+    // TODO: conserve energy?
+    let x = this.x;
+    let y = this.y;
     for (let p of particles) {
       if (this === p) continue;
-      let r = Math.sqrt((p.x - this.x) ** 2 + (p.y - this.y) ** 2);
+      let r = Math.sqrt((p.x - x) ** 2 + (p.y - y) ** 2);
       -(this.r + p.r);
-      let Fx = (k / r ** 2) * (this.x - p.x);
-      let Fy = (k / r ** 2) * (this.y - p.y);
+      let Fx = (k / r ** 2) * (x - p.x);
+      let Fy = (k / r ** 2) * (y - p.y);
       this.u += (Fx / this.m) * DT;
       this.v += (Fy / this.m) * DT;
       this.speed = Math.sqrt(this.u ** 2 + this.v ** 2);
