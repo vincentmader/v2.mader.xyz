@@ -63,17 +63,6 @@ INDEX_NAVGRID_SECTIONS = [{
         },
     ]
 }, {
-    'title': 'emergent behavior',
-    'pages': [
-        {
-            'id': 'boids',
-            'link': '/comp_phys/monte_carlo/boids'
-        }, {
-            'id': 'ants',
-            'link': '/comp_phys/monte_carlo/ants'
-        },
-    ]
-}, {
     'title': 'statistical physics & thermodynamics',
     'pages': [
         {
@@ -88,9 +77,15 @@ INDEX_NAVGRID_SECTIONS = [{
         },
     ]
 }, {
-    'title': 'cellular automata',
+    'title': 'emergent behavior & cellular automata',
     'pages': [
         {
+            'id': 'boids',
+            'link': '/comp_phys/monte_carlo/boids'
+        }, {
+            'id': 'ants',
+            'link': '/comp_phys/monte_carlo/ants'
+        }, {
             'id': 'game_of_life',
             'link': '/comp_phys/cellular_automata/game_of_life'
         }, {
