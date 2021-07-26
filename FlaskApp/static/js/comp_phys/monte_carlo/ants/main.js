@@ -21,11 +21,11 @@ var max_ant_random_turn_angle = Math.PI / 8;
 var max_pheromone_strengths = [pheromone_drop_amount, pheromone_drop_amount];
 
 // world parameters
-const world_size = [120, 120];
+const world_size = [70, 70];
 const colony_radius = 3;
 const colony_pos = [
-  world_size[0] / 2 - colony_radius / 2,
-  world_size[1] / 2 - colony_radius / 2,
+  (colony_radius * 3) / 2, // world_size[0] / 2 - colony_radius / 2,
+  (colony_radius * 3) / 2, // world_size[1] / 2 - colony_radius / 2,
 ];
 const food_placement_amount = 800;
 
@@ -39,7 +39,7 @@ var bool_draw_registered_pheromones = true;
 
 // draw settings
 const fps_goal = 60;
-const ant_drawing_radius = 0.6;
+const ant_drawing_radius = 0.5;
 const food_drawing_radius = 1;
 const pheromone_drawing_radius = 0.2;
 const registered_pheromone_drawing_radius = 0.5;

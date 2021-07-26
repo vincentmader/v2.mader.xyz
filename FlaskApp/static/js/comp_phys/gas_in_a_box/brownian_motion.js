@@ -1,12 +1,11 @@
 // TODO: fix momentum exchange on collision
 // TODO: implement more physical starting velocities
 
-
 import { draw_point } from "../../utils/drawing_utils.js";
 
 const dt = 1;
 const r_big = 0.05;
-const r_atom = 1e-3;
+const r_atom = 2e-3;
 const nr_of_atoms = 3000;
 const m = 1e-1;
 const M = 1;
@@ -51,7 +50,7 @@ class Particle {
         // this.u += (M / m) * foo;
         // this.v += (M / m) * bar;
 
-        big_particle.u += (m / M) * this.u
+        big_particle.u += (m / M) * this.u;
         big_particle.v += (m / M) * this.v;
         this.u *= -1;
         this.v *= -1;
@@ -66,10 +65,7 @@ class Particle {
     const canvas_x = W * this.x;
     const canvas_y = W * this.y;
     const canvas_r = W * this.r;
-    draw_point(
-      ctx, canvas_x, canvas_y, canvas_r,
-      "#444444", "#444444"
-    );
+    draw_point(ctx, canvas_x, canvas_y, canvas_r, "#444444", "#444444");
   }
 }
 
@@ -98,8 +94,8 @@ function initialize_bodies(nr_of_atoms) {
         free_spot_found = true;
       }
     }
-    u = v_th * (Math.random()) * [-1, 1][Math.floor(2*Math.random())];
-    v = Math.sqrt((v_th**2 - u**2)) * [-1, 1][Math.floor(2*Math.random())];
+    u = v_th * Math.random() * [-1, 1][Math.floor(2 * Math.random())];
+    v = Math.sqrt(v_th ** 2 - u ** 2) * [-1, 1][Math.floor(2 * Math.random())];
     atom = new Particle(r_atom, x, y, u, v);
     atoms.push(atom);
   }
@@ -110,7 +106,7 @@ function draw_big_particle_positions() {
   for (const i of big_particle_positions) {
     x = W * i[0];
     y = W * i[1];
-    draw_point(ctx, x, y, W/500, "red", "red");
+    draw_point(ctx, x, y, W / 500, "red", "red");
   }
 }
 
@@ -166,15 +162,14 @@ function create_chart() {
 function get_mean_squared_dist(positions) {
   var mean_squared_dist = 0;
 
-  var x, y
+  var x, y;
   for (let i of positions) {
     x = i[0] - 0.5;
     y = -(i[1] - 0.5);
-    mean_squared_dist += x**2 + y**2;
+    mean_squared_dist += x ** 2 + y ** 2;
   }
-  return mean_squared_dist / positions.length
+  return mean_squared_dist / positions.length;
 }
-
 
 function init() {
   canvas = document.getElementById("canvas");
@@ -185,13 +180,12 @@ function init() {
   ctx = canvas.getContext("2d");
 
   initialize_bodies(nr_of_atoms);
-  create_chart()
+  create_chart();
   animate();
 }
 
 function animate() {
   setInterval(function () {
-
     // clear screen
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     // update atoms
@@ -210,12 +204,11 @@ function animate() {
     big_particle_positions.push([big_particle.x, big_particle.y]);
     draw_big_particle_positions();
 
-    mean_squared_dist = get_mean_squared_dist(big_particle_positions)
+    mean_squared_dist = get_mean_squared_dist(big_particle_positions);
     chart.data.labels.push(""); // TODO: ?
     chart.data.datasets[0].data.push(mean_squared_dist);
     chart.update();
-
-  }, 1000/60); // TODO: make changeable
+  }, 1000 / 60); // TODO: make changeable
 }
 
 init();
