@@ -3,21 +3,23 @@ import { draw_bodies } from "./drawing_utils.js";
 import { draw_velocities } from "./drawing_utils.js";
 import { kepler_velocity } from "../physics_utils.js";
 
-const line_width = 3;
-const tail_length = 200;
-const dt = 5e-3;
 const EPSILON = 0; // 0.03
 const M = 1;
 const G = 1;
+const dt = 5e-3;
 
-var W, H, o_x, o_y;
-var zoom_level;
-var initial_nr_of_planets;
-var nr_of_planets;
-var frame_idx;
-var system_state, system_states;
+var nr_of_planets = 4;
+const R0 = 0.8;
+
 var orbits_are_eccentric = false;
 var paused = false;
+const tail_length = 200;
+
+var canvas, ctx, canvas_id;
+var W, H, o_x, o_y;
+var zoom_level, frame_idx;
+const line_width = 3;
+var system_state, system_states;
 
 function setup_initial_system_state() {
   const y0 = [];
@@ -26,7 +28,7 @@ function setup_initial_system_state() {
   }
   var r, phi, x, y, phi_v, u, v, w;
   for (const i of Array(nr_of_planets).keys()) {
-    r = 0.8;
+    r = R0;
     phi = 2 * Math.PI * (i / nr_of_planets);
     x = r * Math.cos(phi);
     y = r * Math.sin(phi);
@@ -73,10 +75,44 @@ function reset_canvas() {
   system_states = [];
   system_state = setup_initial_system_state();
   system_states.push(system_state);
-  initial_nr_of_planets = nr_of_planets;
 }
 
-export function main(canvas, ctx, canvas_id) {
+function setup_event_listeners() {
+  document.getElementById("play/pause").addEventListener("click", function () {
+    paused = !paused;
+  });
+  document
+    .getElementById("toggle_eccentricity")
+    .addEventListener("click", function () {
+      orbits_are_eccentric = !orbits_are_eccentric;
+      reset_canvas();
+    });
+
+  document
+    .getElementById("slider_nr_of_planets")
+    .addEventListener("click", function () {
+      let value = document.getElementById("slider_nr_of_planets").value;
+      nr_of_planets = Number(value);
+      reset_canvas();
+      display_nr_of_planets();
+    });
+
+  // let slider_nr_of_planets = document.getElementById("slider_nr_of_planets");
+  // slider_nr_of_planets.addEventListener("click", function () {
+  //   let value = document.getElementById("slider_nr_of_planets").value;
+  //   nr_of_planets = Number(value);
+  //   reset_canvas();
+  // });
+  // nr_of_planets = 12;
+}
+
+function display_nr_of_planets() {
+  document.getElementById("display_nr_of_planets").innerHTML =
+    "nr of planets: " + String(nr_of_planets);
+  document.getElementById("slider_nr_of_planets").value = nr_of_planets;
+}
+
+function init() {
   // define geometry
   W = canvas.getBoundingClientRect().width;
   H = W;
@@ -88,29 +124,13 @@ export function main(canvas, ctx, canvas_id) {
   o_y = H / 2;
   zoom_level = 2 / W;
 
-  document.getElementById("play/pause").addEventListener("click", function () {
-    paused = !paused;
-  });
-  document
-    .getElementById("toggle_eccentricity")
-    .addEventListener("click", function () {
-      orbits_are_eccentric = !orbits_are_eccentric;
-      reset_canvas();
-    });
-
   reset_canvas();
+  display_nr_of_planets();
+  setup_event_listeners();
+}
 
+function animate() {
   setInterval(function () {
-    nr_of_planets = Number(
-      document.getElementById("nr_of_bodies_textfield").value
-    );
-    if (nr_of_planets != initial_nr_of_planets) {
-      if (nr_of_planets == 0) {
-        nr_of_planets = initial_nr_of_planets;
-      } else {
-        reset_canvas();
-      }
-    }
     // clear screen
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     // draw
@@ -136,4 +156,14 @@ export function main(canvas, ctx, canvas_id) {
       frame_idx += 1;
     }
   }, 1);
+}
+
+export function main(canvas1, ctx1, canvas_id1) {
+  canvas = canvas1;
+  ctx = ctx1;
+  canvas_id = canvas_id1;
+  // TODO: get rid of above, rework fct call from html template
+
+  init();
+  animate();
 }

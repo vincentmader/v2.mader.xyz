@@ -369,7 +369,7 @@ const add_event_listeners = () => {
     .getElementById("slider_belt_min_r")
     .addEventListener("click", function () {
       let value = document.getElementById("slider_belt_min_r").value;
-      belt_min_r = value;
+      belt_min_r = Number(value);
       console.log("new belt min r: ", value);
       init();
     });
@@ -377,7 +377,7 @@ const add_event_listeners = () => {
     .getElementById("slider_belt_width")
     .addEventListener("click", function () {
       let value = document.getElementById("slider_belt_width").value;
-      belt_width = value;
+      belt_width = Number(value);
       console.log("new belt width: ", value);
       init();
     });
@@ -385,7 +385,7 @@ const add_event_listeners = () => {
     .getElementById("slider_belt_exp_factor")
     .addEventListener("click", function () {
       let value = document.getElementById("slider_belt_exp_factor").value;
-      belt_exp_factor = value;
+      belt_exp_factor = Number(value);
       console.log("new belt exp factor: ", value);
       init();
     });

@@ -1,16 +1,15 @@
 const N = 100;
 const threshold = 3;
-const bool_apply_periodic_bounds = false; // TODO: add button
+const fps_goal = 30;
 
-const line_width = 2;
-const colors = ["#333333", "white", "red"];
+var paused = false; // changeable via button
+var bool_apply_periodic_bounds = false; // changeable via button
+var currently_selected_color = 1; // changeable via button
 
 var canvas, ctx;
 var W, H;
-var paused = false;
-var currently_selected_color = 1;
-
-const fps_goal = 30;
+const colors = ["#333333", "white", "red"];
+const line_width = 2;
 
 function initialize_grid(N) {
   var grid, row;
@@ -153,6 +152,11 @@ const init = () => {
     const pos = getCursorPosition(canvas, e);
     grid = flip_grid_entry(N, grid, pos[0], pos[1]);
   });
+  document
+    .getElementById("button_toggle_periodic_bounds")
+    .addEventListener("click", function () {
+      bool_apply_periodic_bounds = !bool_apply_periodic_bounds;
+    });
 
   var grid = initialize_grid(N);
 

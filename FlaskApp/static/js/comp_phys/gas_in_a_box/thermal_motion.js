@@ -5,14 +5,15 @@ import { draw_point } from "../../utils/drawing_utils.js";
 const TAU = 2 * Math.PI;
 const DT = 1;
 const m = 1;
-const v0 = 3;
 
 // PARAMETERS
 
-const nr_of_particles = 100;
-const particle_radius = 4;
+const nr_of_particles = 120;
+const particle_radius = 8;
+var v0 = 5;
 
 const fps_goal = 60;
+const max_speed = 1.5 * v0;
 
 // OTHER VARIABLES
 
@@ -21,12 +22,13 @@ var canvas2, ctx2, W2, H2, chart;
 var frame_idx;
 
 var particles;
+var energy_0;
 
 // CLASSES
 
 class Particle {
   constructor() {
-    this.mass = m;
+    this.m = m;
     this.r = particle_radius;
     this.x = (W - 3 * this.r) * Math.random() + this.r;
     this.y = (H - 3 * this.r) * Math.random() + this.r;
@@ -44,30 +46,35 @@ class Particle {
     this.y += this.v * DT;
   }
   draw() {
-    draw_point(ctx, this.x, this.y, particle_radius);
+    let foo = 255 * (1 - this.speed / max_speed);
+    let color = "rgba(255," + foo + ", " + foo + ", 1)";
+    draw_point(ctx, this.x, this.y, particle_radius, color, color);
   }
   handle_boundaries() {
     // get expected particle position in next time step
     let x_new = this.x + this.u * DT;
     let y_new = this.y + this.v * DT;
     // if crossing wall: reverse vel. component & move back
-    // TODO: good?
-    if (x_new > W - this.r || x_new < this.r) {
+    if (x_new >= W - this.r) {
       this.u *= -1;
-      this.x += this.u * DT;
+      this.x = W - this.r;
+    } else if (x_new <= this.r) {
+      this.u *= -1;
+      this.x = this.r;
     }
-    if (y_new > W - this.r || y_new < this.r) {
+    if (y_new >= H - this.r) {
       this.v *= -1;
-      this.y += this.v * DT;
+      this.y = H - this.r;
+    } else if (y_new <= this.r) {
+      this.v *= -1;
+      this.y = this.r;
     }
     // update velocity angle & vector component values
+    this.speed = Math.sqrt(this.u ** 2 + this.v ** 2);
     this.theta = Math.atan2(this.v, this.u);
     this.update_velocity();
   }
   update() {
-    for (let p of particles) {
-      handle_particle_collision(this, p);
-    }
     this.handle_boundaries();
     this.update_position();
   }
@@ -76,7 +83,8 @@ class Particle {
 function handle_particle_collision(p1, p2) {
   var collision_found = false;
   var x1, x2, y1, y2;
-  for (let xi of [0.2, 0.4, 0.6, 0.8, 1]) {
+  for (let xi of [0.5, 1]) {
+    // TODO: make xi parameter continuous?
     // get expected particle positions in next time step
     x1 = p1.x + xi * p1.u * DT;
     y1 = p1.y + xi * p1.v * DT;
@@ -84,36 +92,37 @@ function handle_particle_collision(p1, p2) {
     y2 = p2.y + xi * p2.v * DT;
     // check for collision
     let d = Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2);
-    if (d < 2 * particle_radius) {
+    if (d <= p1.r + p2.r) {
       collision_found = true;
       break;
     }
   }
   if (collision_found) {
     // calculate new velocities
-    let phi = Math.atan2(y2 - y1, Math.max(x2 - x1, x1 - x2));
+    let phi = Math.atan2(y2 - y1, x2 - x1) - Math.PI;
+    // let phi = Math.atan2(y2 - y1, Math.max(x2 - x1, x1 - x2));
     p1.u =
-      ((p1.speed * Math.cos(p1.theta - phi) * (p1.mass - p2.mass) +
-        2 * p2.mass * p2.speed * Math.cos(p2.theta - phi)) /
-        (p1.mass + p2.mass)) *
+      ((p1.speed * Math.cos(p1.theta - phi) * (p1.m - p2.m) +
+        2 * p2.m * p2.speed * Math.cos(p2.theta - phi)) /
+        (p1.m + p2.m)) *
         Math.cos(phi) +
       p1.speed * Math.sin(p1.theta - phi) * Math.cos(phi + Math.PI / 2);
     p1.v =
-      ((p1.speed * Math.cos(p1.theta - phi) * (p1.mass - p2.mass) +
-        2 * p2.mass * p2.speed * Math.cos(p2.theta - phi)) /
-        (p1.mass + p2.mass)) *
+      ((p1.speed * Math.cos(p1.theta - phi) * (p1.m - p2.m) +
+        2 * p2.m * p2.speed * Math.cos(p2.theta - phi)) /
+        (p1.m + p2.m)) *
         Math.sin(phi) +
       p1.speed * Math.sin(p1.theta - phi) * Math.sin(phi + Math.PI / 2);
-    p2.v =
-      ((p2.speed * Math.cos(p2.theta - phi) * (p2.mass - p1.mass) +
-        2 * p1.mass * p1.speed * Math.cos(p1.theta - phi)) /
-        (p2.mass + p1.mass)) *
+    p2.u =
+      ((p2.speed * Math.cos(p2.theta - phi) * (p2.m - p1.m) +
+        2 * p1.m * p1.speed * Math.cos(p1.theta - phi)) /
+        (p2.m + p1.m)) *
         Math.cos(phi) +
       p2.speed * Math.sin(p2.theta - phi) * Math.cos(phi + Math.PI / 2);
     p2.v =
-      ((p2.speed * Math.cos(p2.theta - phi) * (p2.mass - p1.mass) +
-        2 * p1.mass * p1.speed * Math.cos(p1.theta - phi)) /
-        (p2.mass + p1.mass)) *
+      ((p2.speed * Math.cos(p2.theta - phi) * (p2.m - p1.m) +
+        2 * p1.m * p1.speed * Math.cos(p1.theta - phi)) /
+        (p2.m + p1.m)) *
         Math.sin(phi) +
       p2.speed * Math.sin(p2.theta - phi) * Math.sin(phi + Math.PI / 2);
     // recalculate speed & angle
@@ -122,25 +131,12 @@ function handle_particle_collision(p1, p2) {
     p2.theta = Math.atan2(p2.v, p2.u);
     p2.speed = Math.sqrt(p2.u ** 2 + p2.v ** 2);
 
-    // TODO: unique radii
-    // this.u =
-    // this.u *= -1;
-    // this.v *= -1;
-    // p.u *= -1;
-    // p.v *= -1;
-
-    // p1.x += p1.u * DT;
-    // p1.y += p1.v * DT; // TODO: proper elastic collisions!
-    // p2.x += p2.u * DT;
-    // p2.y += p2.v * DT;
-
     let d = Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
-    if (d < p2.r + p1.r) {
-      p1.x += (p1.x - p2.x) / 2; // (2 * d)) * (d - 2 * p1.r);
-      p1.y += (p1.y - p2.y) / 2; // (2 * d)) * (d - 2 * p1.r);
-      p2.x += (p2.x - p1.x) / 2; // (2 * d)) * (d - 2 * p2.r);
-      p2.y += (p2.y - p1.y) / 2; // (2 * d)) * (d - 2 * p2.r);
-    }
+    p1.x += (p1.r + p2.r - d) * Math.cos(phi); // (p1.x - p2.x) / 2; // - p1.r * Math.cos(phi); // (2 * d)) * (d - 2 * p1.r);
+    p1.y += (p1.r + p2.r - d) * Math.sin(phi); // (p1.y - p2.y) / 2; // - p1.r * Math.sin(phi); // (2 * d)) * (d - 2 * p1.r);
+    p2.x -= (p1.r + p2.r - d) * Math.cos(phi); // (p2.x - p1.x) / 2; // - p2.r * Math.cos(phi); // (2 * d)) * (d - 2 * p2.r);
+    p2.y -= (p1.r + p2.r - d) * Math.sin(phi); // (p2.y - p1.y) / 2; // - p2.r * Math.sin(phi); // (2 * d)) * (d - 2 * p2.r);
+
     p1.update_velocity();
     p2.update_velocity();
   }
@@ -161,7 +157,7 @@ function create_chart() {
           pointRadius: 0,
           data: [],
           showLine: true, // overrides the `line` dataset default
-          label: "total energy",
+          label: "total energy error (%)",
         },
       ],
     },
@@ -186,9 +182,50 @@ function create_chart() {
 function calc_system_energy() {
   let energy = 0;
   for (let p of particles) {
-    energy += p.mass * p.speed ** 2;
+    energy += p.m * p.speed ** 2;
   }
   return energy;
+}
+
+function get_possible_collision_pairs() {
+  let possible_collision_pairs = [];
+  let particle_idx_from_pos = {};
+  let xs = [];
+  for (let idx = 0; idx < particles.length; idx++) {
+    let p = particles[idx];
+    let x_new = p.x + p.v * DT;
+    xs.push(x_new);
+    particle_idx_from_pos[x_new] = idx;
+  }
+  let xs_sorted = xs.sort();
+  for (let idx = 0; idx < xs_sorted.length; idx++) {
+    let x1 = xs_sorted[idx];
+    let p1 = particles[particle_idx_from_pos[x1]];
+    for (let jdx = 0; jdx < xs_sorted.length; jdx++) {
+      let x2 = xs_sorted[jdx];
+      let p2 = particles[particle_idx_from_pos[x2]];
+      if (idx > jdx) continue;
+      if (Math.abs(p1.x - p2.x) <= p1.r + p2.r) {
+        possible_collision_pairs.push([p1, p2]);
+      }
+    }
+  }
+  return possible_collision_pairs;
+}
+
+// function handle_user_inputs() {
+// }
+
+function setup_event_listeners() {
+  // document.getElementById("slider_v0").addEventListener("click", function () {
+  //   let value = document.getElementById("slider_v0").value;
+  //   v0 = Number(value);
+  //   console.log("new v_0: ", v0);
+  //   init();
+  // });
+  // document.getElementById("slider_v0").value = v0;
+  // document.getElementById("v0_display").innerHTML =
+  //   "v0 = " + String(v0.toFixed(1));
 }
 
 function init() {
@@ -209,6 +246,7 @@ function init() {
   frame_idx = 0;
   create_chart();
   // ctx.lineWidth = line_width;
+  setup_event_listeners();
   animate();
 }
 
@@ -216,17 +254,26 @@ function animate() {
   setInterval(function () {
     // clear screen
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // get possible collisions
+    let possible_collision_pairs = get_possible_collision_pairs(); // TODO: rename
+    for (let i of possible_collision_pairs) {
+      for (let p of particles) {
+        handle_particle_collision(i[0], i[1]);
+      }
+    }
     // update & draw particles
     for (let p of particles) {
       p.update();
       p.draw();
     }
-    // if (frame_idx % (fps_goal / 4) === 0) {
-    let e = calc_system_energy();
-    chart.data.labels.push(""); // TODO: ?
-    chart.data.datasets[0].data.push(e);
-    chart.update();
-    // }
+    if (frame_idx % fps_goal === 0) {
+      let e = calc_system_energy();
+      if (frame_idx === 0) energy_0 = e;
+      chart.data.labels.push(""); // TODO: ?
+      chart.data.datasets[0].data.push(100 * (e / energy_0 - 1));
+      chart.update();
+    }
+    // handle_user_inputs();
     frame_idx += 1;
   }, 1000 / fps_goal);
 }
