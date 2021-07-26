@@ -2,6 +2,7 @@
 // ============================================================================
 
 const TAU = 2 * Math.PI;
+const fancy_pants = 2;
 
 // numerical parameters
 var colony_size = 300; // nr of ants
@@ -11,11 +12,11 @@ var ant_fov = (2 / 3) * Math.PI; // (7 / 6) * Math.PI; // 2*Math.PI
 
 var min_pheromone_drop_amount = 1; // min. registered ph. amount
 var pheromone_drop_amount = 100; // amount of pheromone distributed by ant each turn
-var phA_evaporation_rate = min_pheromone_drop_amount ** (1 / 60); // 1 - 1 / world.width**2;
-var phB_evaporation_rate = min_pheromone_drop_amount ** (1 / 60); // 1 - 1 / world.width**2;
+// var phA_evaporation_rate = min_pheromone_drop_amount ** (1 / 60); // 1 - 1 / world.width**2;
+// var phB_evaporation_rate = min_pheromone_drop_amount ** (1 / 60); // 1 - 1 / world.width**2;
 
 var probability_for_random_ant_turn = 0.5;
-var max_ant_random_turn_angle = Math.PI / 16;
+var max_ant_random_turn_angle = Math.PI / 8;
 
 var max_pheromone_strengths = [pheromone_drop_amount, pheromone_drop_amount];
 
@@ -47,7 +48,7 @@ var canvas, ctx, W, H;
 // world & ants
 var world, ant_hill;
 const ant_eating_radius = 1;
-const ant_speed = 1;
+const ant_speed = 1 / fancy_pants;
 // var ants_1, ants_2, ants_3, ants_4;
 
 // stats
@@ -348,7 +349,7 @@ class Ant {
     this.assert_position_in_world();
     if (this.is_carrying_food) {
       this.detect_colony();
-      if (time_step % 4 == 0) this.detect_pheromones(); // TODO: how often?
+      if (time_step % fancy_pants == 0) this.detect_pheromones(); // TODO: how often?
       // TODO: run for each ant position ?
       this.deliver_food();
     } else {
@@ -805,8 +806,8 @@ const add_event_listeners = () => {
     .getElementById("slider_colony_size")
     .addEventListener("click", function () {
       colony_size = document.getElementById("slider_colony_size").value;
-      // console.log("aaaaaaaa");
       console.log(colony_size);
+      display_info();
       init();
     });
   document
@@ -864,6 +865,11 @@ const draw_registered_pheromones = (x, y) => {
   // ctx.fill();
 };
 
+var display_info = () => {
+  document.getElementById("display_colony_size").innerHTML =
+    "colony size: " + String(colony_size);
+};
+
 // INITIALIZATION
 // ============================================================================
 
@@ -880,10 +886,10 @@ const init = () => {
   world = new World(world_size);
 
   document.getElementById("slider_colony_size").value = colony_size;
-  document.getElementById("slider_evaporation_factor_A").value =
-    phA_evaporation_rate * 1000;
-  document.getElementById("slider_evaporation_factor_B").value =
-    phB_evaporation_rate * 1000;
+  // document.getElementById("slider_evaporation_factor_A").value =
+  //   phA_evaporation_rate * 1000;
+  // document.getElementById("slider_evaporation_factor_B").value =
+  //   phB_evaporation_rate * 1000;
 
   // setup ants
   colony_size = Number(document.getElementById("slider_colony_size").value);
@@ -894,6 +900,7 @@ const init = () => {
 
   // add_event_listeners
   add_event_listeners();
+  display_info();
 
   animate();
 };
@@ -917,18 +924,18 @@ async function animate() {
       return;
     }
     // get slider values (TODO: add onchange event listener?)
-    const slider_A = document.getElementById("slider_evaporation_factor_A")
-      .value;
-    const slider_B = document.getElementById("slider_evaporation_factor_B")
-      .value;
-    phA_evaporation_rate = Number(slider_A) / 1000;
-    phB_evaporation_rate = Number(slider_B) / 1000;
-    document.getElementById(
-      "evaporation_factor_A"
-    ).innerHTML = phA_evaporation_rate;
-    document.getElementById(
-      "evaporation_factor_B"
-    ).innerHTML = phB_evaporation_rate;
+    // const slider_A = document.getElementById("slider_evaporation_factor_A")
+    //   .value;
+    // const slider_B = document.getElementById("slider_evaporation_factor_B")
+    //   .value;
+    // phA_evaporation_rate = Number(slider_A) / 1000;
+    // phB_evaporation_rate = Number(slider_B) / 1000;
+    // document.getElementById(
+    //   "evaporation_factor_A"
+    // ).innerHTML = phA_evaporation_rate;
+    // document.getElementById(
+    //   "evaporation_factor_B"
+    // ).innerHTML = phB_evaporation_rate;
 
     // update world every 10 time steps
     // if (time_step % 1 == 0) {
@@ -943,10 +950,10 @@ async function animate() {
 
     if (bool_draw_pheromones) {
       // draw pheromones
-      // if (time_step % 4 == 0) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height); // erase canvas
-      world.draw_pheromones();
-      // }
+      if (time_step % fancy_pants == 0) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // erase canvas
+        world.draw_pheromones();
+      }
     } else {
       ctx.clearRect(0, 0, canvas.width, canvas.height); // erase canvas
     }

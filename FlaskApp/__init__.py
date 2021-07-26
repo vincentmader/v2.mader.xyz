@@ -154,7 +154,7 @@ def comp_phys_stat_phys(subdir):
     elif subdir == 'thermal_motion':
         system_states = np.loadtxt(os.path.join(
             PATH_TO_PROJECT, 'comp_phys/gas_in_a_box/out/ys.txt'
-            ))
+        ))
         system_states = [list(i) for i in system_states]
         template = 'comp_phys/stat_phys/thermal_motion.html'
         props = {
@@ -178,6 +178,14 @@ def comp_phys_monte_carlo(subdir):
 
     if subdir == 'boids':
         template = 'comp_phys/monte_carlo/boids.html'
+        props = {}
+        return render_template(template, props=props)
+
+
+@app.route('/comp_phys/electro_magnetism/<subdir>')
+def comp_phys_electro_magnetism(subdir):
+    if subdir == 'charge_interaction':
+        template = 'comp_phys/electro_magnetism/charge_interaction.html'
         props = {}
         return render_template(template, props=props)
 

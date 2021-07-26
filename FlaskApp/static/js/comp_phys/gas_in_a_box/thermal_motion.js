@@ -8,8 +8,10 @@ const m = 1;
 
 // PARAMETERS
 
-const nr_of_particles = 30;
+const nr_of_particles = 50;
 const particle_radius = 15;
+// const nr_of_particles = 200;
+// const particle_radius = 5;
 var v0 = 5;
 
 const fps_goal = 60;

@@ -39,8 +39,8 @@ function draw_grid(grid) {
       // get position and geometry of cell
       x = (W / N) * i;
       y = (H / N) * j;
-      w = (W / N) * 0.7;
-      h = (H / N) * 0.7;
+      w = W / N; //* 0.7;
+      h = H / N; //* 0.7;
       // get color for cell
       if (grid[i][j] == -1) {
         color = "black";
@@ -48,8 +48,10 @@ function draw_grid(grid) {
         color = "white";
       }
       ctx.fillStyle = color;
+      ctx.strokeStyle = color;
       // draw rect
       ctx.fillRect(x, y, w, h);
+      ctx.strokeRect(x, y, w, h);
     }
   }
 }
