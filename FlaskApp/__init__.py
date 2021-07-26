@@ -92,7 +92,7 @@ def comp_phys_n_body(subdir):
             'system_states': json.dumps(system_states[:1000]),
             'sim_id': '3body_fig8',
             'sim_idx': 0,
-            'sim_title': '3-body orbits - stable figure eight'
+            'sim_title': 'stable 3-body orbit - figure eight'
         }]
         # return props directory
         template = 'comp_phys/n_body/n_body.html'
