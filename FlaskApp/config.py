@@ -4,7 +4,7 @@ import os
 import sys
 
 
-running_on_server = False
+running_on_server = True
 
 if running_on_server:
     PATH_TO_PROJECT = '/var/www/maderxyz/FlaskApp/'
@@ -31,31 +31,6 @@ PLOT_WIDTH, PLOT_HEIGHT = 400, 400
 # INDEX
 
 INDEX_NAVGRID_SECTIONS = [{
-    'title': 'statistical physics',
-    'pages': [
-        {
-            'id': 'gas_in_a_box',
-            'link': '/comp_phys/stat_phys/thermal_motion'
-        }, {
-            'id': 'brownian_motion',
-            'link': '/comp_phys/stat_phys/brownian_motion'
-        }, {
-            'id': 'ising',
-            'link': '/comp_phys/stat_phys/ising'
-        },
-    ]
-}, {
-    'title': 'emergent behavior',
-    'pages': [
-        {
-            'id': 'boids',
-            'link': '/comp_phys/monte_carlo/boids'
-        }, {
-            'id': 'ants',
-            'link': '/comp_phys/monte_carlo/ants'
-        },
-    ]
-}, {
     'title': 'harmonical oscillators',
     'pages': [
         {
@@ -71,7 +46,18 @@ INDEX_NAVGRID_SECTIONS = [{
         },
     ]
 }, {
-    'title': 'n-body dynamics',
+    'title': 'emergent behavior',
+    'pages': [
+        {
+            'id': 'boids',
+            'link': '/comp_phys/monte_carlo/boids'
+        }, {
+            'id': 'ants',
+            'link': '/comp_phys/monte_carlo/ants'
+        },
+    ]
+}, {
+    'title': 'gravitational n-body dynamics',
     'pages': [
         {
             'id': '3body_moon',
@@ -85,6 +71,20 @@ INDEX_NAVGRID_SECTIONS = [{
         }, {
             'id': 'nbody_asteroids',
             'link': '/comp_phys/n_body/asteroids'
+        },
+    ]
+}, {
+    'title': 'statistical physics & thermodynamics',
+    'pages': [
+        {
+            'id': 'gas_in_a_box',
+            'link': '/comp_phys/stat_phys/thermal_motion'
+        }, {
+            'id': 'brownian_motion',
+            'link': '/comp_phys/stat_phys/brownian_motion'
+        }, {
+            'id': 'ising',
+            'link': '/comp_phys/stat_phys/ising'
         },
     ]
 }, {
@@ -110,7 +110,7 @@ INDEX_NAVGRID_SECTIONS = [{
         },
     ]
 }, {
-    'title': 'monte carlo',
+    'title': 'Monte Carlo',
     'pages': [
         {
             'id': 'mc_pi_darts',

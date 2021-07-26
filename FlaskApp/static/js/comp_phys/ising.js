@@ -4,7 +4,6 @@ import { apply_periodic_bounds } from "./physics_utils.js";
 const line_width = 2;
 const J = 1;
 const mu = 1;
-// const T = 3;
 var T;
 var B;
 
@@ -39,19 +38,19 @@ function draw_grid(grid) {
       // get position and geometry of cell
       x = (W / N) * i;
       y = (H / N) * j;
-      w = W / N; //* 0.7;
-      h = H / N; //* 0.7;
+      w = (W / N) * 0.7;
+      h = (H / N) * 0.7;
       // get color for cell
       if (grid[i][j] == -1) {
         color = "black";
       } else if (grid[i][j] == +1) {
         color = "white";
       }
-      ctx.fillStyle = color;
-      ctx.strokeStyle = color;
       // draw rect
+      ctx.fillStyle = color;
       ctx.fillRect(x, y, w, h);
-      ctx.strokeRect(x, y, w, h);
+      // ctx.strokeStyle = color;
+      // ctx.strokeRect(x, y, w, h);
     }
   }
 }
