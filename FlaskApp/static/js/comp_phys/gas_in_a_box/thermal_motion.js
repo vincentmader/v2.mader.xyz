@@ -8,12 +8,12 @@ const m = 1;
 
 // PARAMETERS
 
-const nr_of_particles = 120;
-const particle_radius = 8;
+const nr_of_particles = 30;
+const particle_radius = 15;
 var v0 = 5;
 
 const fps_goal = 60;
-const max_speed = 1.5 * v0;
+const max_speed = 1 * v0;
 
 // OTHER VARIABLES
 
