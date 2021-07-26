@@ -4,7 +4,7 @@ import os
 import sys
 
 
-running_on_server = True
+running_on_server = False
 
 if running_on_server:
     PATH_TO_PROJECT = '/var/www/maderxyz/FlaskApp/'
@@ -43,6 +43,9 @@ INDEX_NAVGRID_SECTIONS = [{
             'id': 'lissajous',
             'link': '/comp_phys/harmonical_oscillators/lissajous'
             # TODO: solve analytically (-> performance)
+        }, {
+            'id': 'mc_pi_darts',
+            'link': '/comp_phys/monte_carlo/pi_darts'
         },
     ]
 }, {
@@ -102,14 +105,6 @@ INDEX_NAVGRID_SECTIONS = [{
         }, {
             'id': 'charge_interaction',
             'link': '/comp_phys/electro_magnetism/charge_interaction'
-        },
-    ]
-}, {
-    'title': 'Monte Carlo',
-    'pages': [
-        {
-            'id': 'mc_pi_darts',
-            'link': '/comp_phys/monte_carlo/pi_darts'
         },
     ]
 }, {
