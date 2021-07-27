@@ -1,36 +1,36 @@
-.body {
-  background-size: cover;
-  background-repeat: no-repeat;
-  /* background-position: center center; /1* optional, center the image */
-  color: white;
-  font-family: Arial, Helvetica, sans-serif; /* ? */
-  /* text-align: center; */
+#body {
   margin: 0px;
-  overflow-x: hidden;
+  overflow-x: hidden; /* -> scrolling */
+  background-color: black;
+  background-size: cover;
+  background-repeat: no-repeat; /* also; background-position: center center; */
+  font-family: Arial, Helvetica, sans-serif; /* TODO: change? */
+  /* debugging, probably not needed later */
+  color: white; /* TODO: move into <p> css */
 }
 
 #content {
-  width: 50%;
+  padding-top: 20px;
   margin-right: auto; /* center */
   margin-left: auto; /* center */
-  padding-top: 30px;
+  width: 90%;
 }
-@media only screen and (max-width: 1200px) {
-  .body {
-    /* padding-top: 40px; */
-  }
-  #content {
-    width: 80%;
-  }
-}
-@media only screen and (max-width: 641px) {
-  .body {
-    /* padding-top: 20px; */
-  }
-  #content {
-    width: 80%;
-  }
-}
+/* @media only screen and (max-width: 1200px) { */
+/*   #body { */
+/*     /1* padding-top: 40px; *1/ */
+/*   } */
+/*   #content { */
+/*     width: 80%; */
+/*   } */
+/* } */
+/* @media only screen and (max-width: 641px) { */
+/*   #body { */
+/*     /1* padding-top: 20px; *1/ */
+/*   } */
+/*   #content { */
+/*     width: 80%; */
+/*   } */
+/* } */
 
 .section {
   padding: 5%;

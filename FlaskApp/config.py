@@ -31,6 +31,23 @@ PLOT_WIDTH, PLOT_HEIGHT = 400, 400
 # INDEX
 
 INDEX_NAVGRID_SECTIONS = [{
+    'title': 'gravitational n-body dynamics',
+    'pages': [
+        {
+            'id': '3body_moon',
+            'link': '/comp_phys/n_body/3body_moon'
+        }, {
+            'id': '3body_fig8',
+            'link': '/comp_phys/n_body/3body_fig8'
+        }, {
+            'id': 'nbody_flowers',
+            'link': '/comp_phys/n_body/flowers'
+        }, {
+            'id': 'nbody_asteroids',
+            'link': '/comp_phys/n_body/asteroids'
+        },
+    ]
+}, {
     'title': 'harmonical oscillations',
     'pages': [
         {
@@ -46,23 +63,6 @@ INDEX_NAVGRID_SECTIONS = [{
         }, {
             'id': 'mc_pi_darts',
             'link': '/comp_phys/monte_carlo/pi_darts'
-        },
-    ]
-}, {
-    'title': 'gravitational n-body dynamics',
-    'pages': [
-        {
-            'id': '3body_moon',
-            'link': '/comp_phys/n_body/3body_moon'
-        }, {
-            'id': '3body_fig8',
-            'link': '/comp_phys/n_body/3body_fig8'
-        }, {
-            'id': 'nbody_flowers',
-            'link': '/comp_phys/n_body/flowers'
-        }, {
-            'id': 'nbody_asteroids',
-            'link': '/comp_phys/n_body/asteroids'
         },
     ]
 }, {

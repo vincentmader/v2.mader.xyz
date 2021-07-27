@@ -186,7 +186,7 @@ const init = () => {
 
   setInterval(function () {
     temperature_slider = document.getElementById("temperature_slider");
-    T = 10 ** Number(temperature_slider.value / 60);
+    T = 3 * 10 ** Number(temperature_slider.value / 100);
     document.getElementById("temperature_display").innerHTML =
       // "$$T=" +
       "T = " + T.toFixed(3);

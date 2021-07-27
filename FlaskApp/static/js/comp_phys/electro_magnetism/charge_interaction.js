@@ -57,8 +57,7 @@ class Particle {
     let y = this.y;
     for (let p of particles) {
       if (this === p) continue;
-      let r = Math.sqrt((p.x - x) ** 2 + (p.y - y) ** 2);
-      -(this.r + p.r);
+      let r = Math.sqrt((p.x - x) ** 2 + (p.y - y) ** 2) - (this.r + p.r);
       let Fx = (k / r ** 2) * (x - p.x);
       let Fy = (k / r ** 2) * (y - p.y);
       this.u += (Fx / this.m) * DT;
