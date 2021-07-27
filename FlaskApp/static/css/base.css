@@ -1,7 +1,7 @@
 #body {
   margin: 0px;
   overflow-x: hidden; /* -> scrolling */
-  background-color: black;
+  /* background-color: black; */
   background-size: cover;
   background-repeat: no-repeat; /* also; background-position: center center; */
   font-family: Arial, Helvetica, sans-serif; /* TODO: change? */
