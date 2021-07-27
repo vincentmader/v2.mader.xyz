@@ -4,40 +4,40 @@
 import { draw_tails } from "./drawing_utils.js";
 import { kepler_velocity } from "../physics_utils.js";
 import { draw_point } from "../../utils/drawing_utils.js";
-
 const v_K = kepler_velocity;
 
-// Physical constants
+// physical constants
 const m = 0.15;
 const M = 1;
 const G = 1;
 const TAU = 2 * Math.PI;
-// Simulation parameters
-const dt = 5e-3;
+// simulation parameters
+const dt = 1.5e-2;
 const r1 = 0.4;
-const r2 = 0.05;
+const r2 = 0.065;
 const w1 = v_K(r1);
 const w2 = v_K(r2);
 const r_H = r1 * Math.sqrt(m / (3 * M));
-// World
+
+// world
 var system_states = [];
-// Drawing
-var W, H;
+var t;
+// drawing
+var canvas, ctx, W, H;
 const line_width = 3;
-const tail_length = 700; // TODO: make changeable
+const tail_length = 250; // TODO: make changeable
 const color_sun = "white";
 const color_planet = "white";
 const color_moon = "white";
-const drawing_radius_sun = 20;
-const drawing_radius_planet = 7;
-const drawing_radius_moon = 2;
-// Settings
+var drawing_radius_sun; // = 20;
+var drawing_radius_planet; // = 7;
+var drawing_radius_moon; // = 2;
+
+// settings
 var paused = false;
 var draw_tails_bool = false;
 var draw_orbit_bool = false;
 var draw_hill_bool = false;
-// Statistics
-var frame_idx = 0;
 
 // setup event listeners for button menu
 function setup_event_listeners() {
@@ -47,6 +47,8 @@ function setup_event_listeners() {
       paused = !paused;
       if (paused) {
         document.getElementById("button_toggle_pause").innerHTML = "unpause";
+      } else {
+        document.getElementById("button_toggle_pause").innerHTML = "pause";
       }
     });
   document
@@ -91,31 +93,16 @@ function setup_event_listeners() {
     });
 }
 
-// main
-export function main(canvas, ctx) {
-  // define canvas geometry
-  W = canvas.getBoundingClientRect().width;
-  H = W;
-  canvas.width = W;
-  canvas.height = W;
-  ctx.lineWidth = line_width;
-
-  // other stuff, TODO: move towards beginning
-  const zoom_level = 1 / W;
-  var x1, y1, x2, y2;
-  var t = 0;
-  var system_state;
-
-  // setup events for button menu
-  setup_event_listeners();
-
-  // run animation loop
+function animate() {
   setInterval(function () {
     // clear screen
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     // draw star
     draw_point(ctx, W / 2, H / 2, drawing_radius_sun, color_sun, color_sun);
     // draw planet
+    var x1, y1, x2, y2;
+    const zoom_level = 1 / W;
+    var system_state;
     x1 = r1 * Math.cos(w1 * t);
     y1 = r1 * Math.sin(w1 * t);
     draw_point(
@@ -176,7 +163,33 @@ export function main(canvas, ctx) {
     // increment time if not on pause
     if (!paused) {
       t += dt;
-      frame_idx += 1;
     }
-  }, 1); // TODO: influence step size?
+  }, 1000 / 60); // TODO: influence step size?
+}
+
+function init() {
+  // define canvas geometry
+  W = canvas.getBoundingClientRect().width;
+  H = W;
+  canvas.width = W;
+  canvas.height = W;
+  ctx.lineWidth = line_width;
+
+  drawing_radius_sun = W / 10;
+  drawing_radius_planet = W / 35;
+  drawing_radius_moon = W / 100;
+
+  t = 0;
+  // setup events for button menu
+  setup_event_listeners();
+}
+
+// main
+export function main(canvas2, ctx2) {
+  canvas = canvas2;
+  ctx = ctx2;
+  // TODO: get rid of above?
+
+  init();
+  animate();
 }

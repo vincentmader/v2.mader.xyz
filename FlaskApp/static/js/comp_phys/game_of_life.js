@@ -131,8 +131,8 @@ const init = () => {
 
   document.getElementById("play/pause").addEventListener("click", function () {
     paused = !paused;
-    if (paused) document.getElementById("play/pause").innerHTML = "Unpause";
-    if (!paused) document.getElementById("play/pause").innerHTML = "Pause";
+    if (paused) document.getElementById("play/pause").innerHTML = "unpause";
+    if (!paused) document.getElementById("play/pause").innerHTML = "pause";
   });
   canvas.addEventListener("mousedown", function (e) {
     const pos = getCursorPosition(canvas, e);

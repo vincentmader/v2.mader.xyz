@@ -49,9 +49,9 @@ const draw_boxes = () => {
 const handle_button_click_playpause = () => {
   paused = !paused;
   if (paused) {
-    document.getElementById("play/pause").innerHTML = "Unpause";
+    document.getElementById("play/pause").innerHTML = "unpause";
   } else {
-    document.getElementById("play/pause").innerHTML = "Pause";
+    document.getElementById("play/pause").innerHTML = "pause";
   }
 };
 

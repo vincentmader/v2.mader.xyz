@@ -22,24 +22,29 @@ const line_width = 3;
 var system_state, system_states;
 
 function setup_initial_system_state() {
+  const r = R0;
+  const phi = 2 * Math.PI;
+  const phi_v = phi + Math.PI / 2;
+
   const y0 = [];
   for (const i of [1, 1, 0, 0, 0, 0]) {
     y0.push(i);
   }
-  var r, phi, x, y, phi_v, u, v, w;
+  var w;
+  // set intial speed
+  if (!orbits_are_eccentric) {
+    w = kepler_velocity(r); // .03
+  } else {
+    w = 0.6;
+  }
+  // rotate & add other planets
+  var x, y, u, v;
   for (const i of Array(nr_of_planets).keys()) {
-    r = R0;
-    phi = 2 * Math.PI * (i / nr_of_planets);
-    x = r * Math.cos(phi);
-    y = r * Math.sin(phi);
-    phi_v = phi + Math.PI / 2;
-    if (!orbits_are_eccentric) {
-      w = kepler_velocity(r); // .03
-    } else {
-      w = 0.6;
-    }
-    u = w * Math.cos(phi_v);
-    v = w * Math.sin(phi_v);
+    let delta_phi = (2 * Math.PI * i) / nr_of_planets;
+    x = r * Math.cos(phi + delta_phi);
+    y = r * Math.sin(phi + delta_phi);
+    u = w * Math.cos(phi_v + delta_phi);
+    v = w * Math.sin(phi_v + delta_phi);
     for (const i of [1, 1, x, y, u, v]) {
       y0.push(i);
     }
@@ -78,14 +83,28 @@ function reset_canvas() {
 }
 
 function setup_event_listeners() {
-  document.getElementById("play/pause").addEventListener("click", function () {
-    paused = !paused;
-  });
   document
-    .getElementById("toggle_eccentricity")
+    .getElementById("button_toggle_pause")
+    .addEventListener("click", function () {
+      paused = !paused;
+      if (paused) {
+        document.getElementById("button_toggle_pause").innerHTML = "unpause";
+      } else {
+        document.getElementById("button_toggle_pause").innerHTML = "pause";
+      }
+    });
+  document
+    .getElementById("button_toggle_eccentricity")
     .addEventListener("click", function () {
       orbits_are_eccentric = !orbits_are_eccentric;
       reset_canvas();
+      if (orbits_are_eccentric) {
+        document.getElementById("button_toggle_eccentricity").innerHTML =
+          "circ. orbits";
+      } else {
+        document.getElementById("button_toggle_eccentricity").innerHTML =
+          "ecc. orbits";
+      }
     });
 
   document

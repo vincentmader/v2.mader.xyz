@@ -11,7 +11,7 @@ var o_x, o_y;
 // Drawing
 var W, H;
 var zoom_level;
-var drawing_radius = 8;
+var drawing_radius;
 // Statistics
 var frame_idx = 0;
 // Settings
@@ -81,6 +81,8 @@ export function main(canvas, ctx, canvas_id, system_states) {
   zoom_level = 2.5 / W; // TODO: move up (default value?)
   // setup event listeners
   setup_event_listeners(canvas_id);
+
+  drawing_radius = W / 80;
 
   // animation loop
   setInterval(function () {

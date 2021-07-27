@@ -166,8 +166,8 @@ const init = () => {
     if (!paused) {
       grid = get_next_grid_state(N, grid);
     }
-    if (paused) document.getElementById("play/pause").innerHTML = "Unpause";
-    if (!paused) document.getElementById("play/pause").innerHTML = "Pause";
+    if (paused) document.getElementById("play/pause").innerHTML = "unpause";
+    if (!paused) document.getElementById("play/pause").innerHTML = "pause";
   }, 1000 / fps_goal);
 };
 

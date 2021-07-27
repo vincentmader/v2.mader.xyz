@@ -5,54 +5,51 @@
   /* background-repeat: no-repeat; /1* also; background-position: center center; *1/ */
   font-family: Arial, Helvetica, sans-serif; /* TODO: change? */
 }
-
+#home_div {
+  width: 100%;
+  height: 2em;
+  display: flex;
+  font-size: 18px;
+  padding: 0.15em;
+  /* align-items: center; */
+}
 #content {
-  padding-top: 20px;
+  padding-top: 40px;
   margin-right: auto; /* center */
   margin-left: auto; /* center */
-  width: 90%;
+  width: 40%;
 }
-/* @media only screen and (max-width: 1200px) { */
-/*   #body { */
-/*     /1* padding-top: 40px; *1/ */
-/*   } */
-/*   #content { */
-/*     width: 80%; */
-/*   } */
-/* } */
-/* @media only screen and (max-width: 641px) { */
-/*   #body { */
-/*     /1* padding-top: 20px; *1/ */
-/*   } */
-/*   #content { */
-/*     width: 80%; */
-/*   } */
-/* } */
+
+@media only screen and (max-width: 1200px) {
+  #content {
+    width: 80%;
+    padding-top: 20px;
+  }
+}
+@media only screen and (max-width: 641px) {
+  #content {
+    width: 90%;
+    padding-top: 20px;
+  }
+}
 
 .section {
-  padding: 5%;
+  padding: 2%;
   background-color: rgba(48, 48, 48, 0.7);
-  border-radius: 40px;
+  border-radius: 20px;
   margin-top: 20px;
   margin-bottom: 20px;
+  padding: 20px;
 }
-
 .section_title {
   color: white;
-  margin: 0px;
   text-align: center;
+  margin: 0px;
 }
 
-/* h1.main_title { */
-/*   /1* font-family: Tahoma; *1/ */
-/*   text-align: center; */
-/*   /1* color: rgba(64, 64, 64, 0.7); *1/ */
-/*   color: green; */
-/*   /1* color: white; *1/ */
-/*   /1* background-color: blue; *1/ */
-/*   /1* /2* font: "80px Arial, sans-serif"; *2/ *1/ */
-/*   /1*   /\* border: "1px solid black"; *\/ *1/ */
-/* } */
+.canvas {
+  width: 100%;
+}
 
 a.stealthy_link {
   /* color: white; */
@@ -61,7 +58,6 @@ a.stealthy_link {
   height: 80%;
   /* font-family: "Arial"; */
 }
-
 button.stealthy_button {
   /* color: white; */
   text-decoration: none;
@@ -71,22 +67,6 @@ button.stealthy_button {
   border: 0px;
   padding: 0px;
   margin: 0px;
-}
-
-#home_div {
-  width: 100%;
-  /* height: 500px; */
-  /* padding-top: 30px; */
-  /* margin-left: 30px; */
-  /* padding: 50px; */
-  /* margin-top: 80px; */
-  /* border: 1px solid red; */
-  font-size: 24px;
-  height: 2em;
-  display: flex;
-  /* justify-content: center; */
-  align-items: center;
-  padding: 0.15em;
 }
 
 #home_link {
@@ -110,8 +90,4 @@ button.stealthy_button {
   padding: 20px;
   padding-top: 50px;
   padding-bottom: 20px;
-}
-
-.canvas {
-  width: 100%;
 }
