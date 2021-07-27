@@ -9,10 +9,10 @@ const m = 1;
 // PARAMETERS
 
 const nr_of_particles = 50;
-const particle_radius = 15;
+var particle_radius = 1 / 30;
 // const nr_of_particles = 200;
 // const particle_radius = 5;
-var v0 = 5;
+var v0 = 3;
 
 const fps_goal = 60;
 const max_speed = 1 * v0;
@@ -31,7 +31,7 @@ var energy_0;
 class Particle {
   constructor() {
     this.m = m;
-    this.r = particle_radius;
+    this.r = particle_radius * W;
     this.x = (W - 3 * this.r) * Math.random() + this.r;
     this.y = (H - 3 * this.r) * Math.random() + this.r;
     this.speed = v0 * Math.random();
@@ -50,7 +50,7 @@ class Particle {
   draw() {
     let foo = 255 * (1 - this.speed / max_speed);
     let color = "rgba(255," + foo + ", " + foo + ", 1)";
-    draw_point(ctx, this.x, this.y, particle_radius, color, color);
+    draw_point(ctx, this.x, this.y, this.r, color, color);
   }
   handle_boundaries() {
     // get expected particle position in next time step
