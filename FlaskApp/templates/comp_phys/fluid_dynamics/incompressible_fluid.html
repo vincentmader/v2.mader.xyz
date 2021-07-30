@@ -1,0 +1,88 @@
+{% extends "base/page_design_1.html" %}
+
+{% block head %}
+
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/comp_phys.css') }}" type="text/css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+    <!-- <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script> -->
+    <!-- <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> -->
+
+{% endblock %}
+{% block content %}
+
+    <h4 class="section_title">
+        incompressible fluid
+    </h4>
+
+    <div class="section">
+        <div class="canvas_holder">
+            <canvas class="canvas" id="canvas"></canvas>
+            <script type="module" src="{{ url_for('static', filename='js/comp_phys/fluid_dynamics/incompressible_fluid.js') }}"></script>
+        </div>
+        <!-- <div class="button_menu"> -->
+        <!--     <div id="v0_display"></div> -->
+        <!--     <input --> 
+        <!--         type="range" --> 
+        <!--         class="slider" id="slider_v0" -->
+        <!--         min="0" max="10" value="0" --> 
+        <!--     > -->
+        <!-- </div> -->
+    </div>
+
+    <div class="section">
+        <div class="latex">
+            <ul>
+                <li>
+                    Navier-Stokes equations for an incompressible fluid:
+                    <!-- specification, not implementation! -->
+                    <ul>
+                        <li>
+                            mass conservation
+                            $$\nabla\cdot\vec u=0$$
+                        </li>
+                        <li>
+                            acceleration of a fluid cell
+                            <!-- $$\rho\cdot\frac{\textnormal{D}\vec u}{\textnormal{D}t} -->
+                            <!-- =-\nabla p+\mu\cdot\nabla^2\vec u+\rho\cdot\vec F$$ -->
+                            $$\rho\frac{\textnormal{D}\vec u}{\textnormal{D}t}
+                            =-\nabla p+\mu \nabla^2\vec u+\rho\vec F$$
+                            <!-- The acceleration of a fluid element is calculated by --> 
+                            <!-- taking both internal & external forces into --> 
+                            <!-- account. Internal forces include the effect of --> 
+                            <!-- pressure gradients as well the effect of velocity diffusion -->
+                            <!-- via viscosity (internal friction). External forces could be --> 
+                            <!-- gravity, or the interference with e.g. walls or wind. -->
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    density update at time-step:
+                    <ul>
+                        <li>calculation of mean density in surrounding cells
+                            $$s_{x,y} = \frac{1}{4}(
+                                s_{x-1,y}+s_{x+1,y}+s_{x,y-1}+s_{x,y+1}
+                            )$$
+                        <li>linear interpolation from difference to mean
+                            $$\rho_n = \rho_c + k\cdot(s_c-\rho_c)$$
+                        </li>
+                        <li>rewritten implicitly (preventing overshoot)
+                            $$\rho_c = \rho_n - k\cdot(s_n-\rho_n)$$
+                            $$\Rightarrow \rho_n = \frac{\rho_c+k\cdot s_n}{1+k}$$
+                        </li>
+                        <li>$$s_n$$ values are obtained utilizing an 
+                            iterative Gauss-Seidel algorithm.
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- <div class="section"> -->
+    <!--     <div class="canvas_holder"> -->
+    <!--         <canvas class="canvas" id="canvas_chart"></canvas> -->
+    <!--     </div> -->
+    <!-- </div> -->
+
+{% endblock %}

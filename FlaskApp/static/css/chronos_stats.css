@@ -4,8 +4,8 @@
   /* margin-left: auto; /1* center *1/ */
   /* padding-top: 30px; */
   height: 90vh;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  /* display: grid; */
+  /* grid-template-columns: repeat(2, 1fr); */
 }
 
 #left_colum {
@@ -24,11 +24,6 @@
   /* height: 100%; */
 }
 
-#section_3 {
-  /* height: 45vh; */
-  border: 1px solid red;
-}
-
 #navbar2_ul {
   height: 77vh;
   overflow: scroll;
@@ -41,7 +36,7 @@
 }
 
 #canvas_time_series_plot {
-  height: 80%;
+  height: 100%;
 }
 
 #time_series_options {

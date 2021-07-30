@@ -143,6 +143,15 @@ def comp_phys_cellular_automata(subdir):
         return render_template(template, props=props)
 
 
+@app.route('/comp_phys/fluid_dynamics/<subdir>')
+def comp_phys_fluid_dynamics(subdir):
+
+    if subdir in ['incompressible_fluid']:
+        template = f'comp_phys/fluid_dynamics/{subdir}.html'
+        props = {}
+        return render_template(template, props=props)
+
+
 @app.route('/comp_phys/stat_phys/<subdir>')
 def comp_phys_stat_phys(subdir):
 

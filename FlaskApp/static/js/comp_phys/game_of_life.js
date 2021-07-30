@@ -1,9 +1,13 @@
-// declare variables
-var canvas, ctx, W, H;
+const N = 20; // TODO: make changeable
+
 var paused = true;
+const fps_goal = 10;
+
+var canvas, ctx, W, H;
+var grid;
 
 // initialization of grid
-function initialize_grid(N) {
+const initialize_grid = (N) => {
   var grid, row;
 
   grid = [];
@@ -15,10 +19,10 @@ function initialize_grid(N) {
     grid.push(row);
   }
   return grid;
-}
+};
 
 // draw grid
-function draw_grid(grid) {
+const draw_grid = (grid) => {
   const N = grid.length;
   var x, y;
   var w = W / N;
@@ -44,9 +48,9 @@ function draw_grid(grid) {
       ctx.fillRect(x, y, w, h);
     }
   }
-}
+};
 
-function get_next_grid_state(N, grid) {
+const get_next_grid_state = (N, grid) => {
   var new_grid, new_row;
   var entry, new_entry;
   var k_bc, l_bc;
@@ -59,8 +63,6 @@ function get_next_grid_state(N, grid) {
       entry = grid[i][j];
 
       nr_of_neighbors = 0;
-      // for (let k = Math.max(i - 1, 0); k <= Math.min(i + 1, N - 1); k++) {
-      //   for (let l = Math.max(j - 1, 0); l <= Math.min(j + 1, N - 1); l++) {
       for (let k = i - 1; k <= i + 1; k++) {
         for (let l = j - 1; l <= j + 1; l++) {
           if (i == k && l == j) {
@@ -100,22 +102,44 @@ function get_next_grid_state(N, grid) {
     new_grid.push(new_row);
   }
   return new_grid;
-}
+};
 
-function flip_grid_entry(N, grid, x, y) {
+const flip_grid_entry = (N, grid, x, y) => {
   const i = Math.floor((x / W) * N);
   const j = Math.floor((y / H) * N);
   grid[i][j] *= -1;
   return grid;
-}
+};
 
-function getCursorPosition(canvas, event) {
+const getCursorPosition = (canvas, event) => {
   const rect = canvas.getBoundingClientRect();
   const x = event.clientX - rect.left;
   const y = event.clientY - rect.top;
-  // console.log("x: " + x + " y: " + y);
   return [x, y];
-}
+};
+
+const add_event_listeners = () => {
+  let button_toggle_pause = document.getElementById("button_toggle_pause");
+  button_toggle_pause.addEventListener("click", function () {
+    paused = !paused;
+    if (paused) button_toggle_pause.innerHTML = "unpause";
+    if (!paused) button_toggle_pause.innerHTML = "pause";
+  });
+  canvas.addEventListener("mousedown", function (e) {
+    const pos = getCursorPosition(canvas, e);
+    grid = flip_grid_entry(N, grid, pos[0], pos[1]);
+  });
+};
+
+const animate = () => {
+  setInterval(function () {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    draw_grid(grid);
+    if (!paused) {
+      grid = get_next_grid_state(N, grid);
+    }
+  }, 1000 / fps_goal);
+};
 
 const init = () => {
   canvas = document.getElementById("canvas");
@@ -123,34 +147,14 @@ const init = () => {
   H = W;
   canvas.width = W;
   canvas.height = W;
-
   ctx = canvas.getContext("2d");
   ctx.lineWidth = 2;
   ctx.strokeStyle = "white";
   ctx.fillStyle = "white";
 
-  document.getElementById("play/pause").addEventListener("click", function () {
-    paused = !paused;
-    if (paused) document.getElementById("play/pause").innerHTML = "unpause";
-    if (!paused) document.getElementById("play/pause").innerHTML = "pause";
-  });
-  canvas.addEventListener("mousedown", function (e) {
-    const pos = getCursorPosition(canvas, e);
-    grid = flip_grid_entry(N, grid, pos[0], pos[1]);
-  });
-
-  const N = 20;
-  var grid = initialize_grid(N);
-
-  var frame_idx = 0;
-  setInterval(function () {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    draw_grid(grid);
-    if (!paused) {
-      grid = get_next_grid_state(N, grid);
-      frame_idx += 1;
-    }
-  }, 150);
+  add_event_listeners();
+  grid = initialize_grid(N);
+  animate();
 };
 
 init();

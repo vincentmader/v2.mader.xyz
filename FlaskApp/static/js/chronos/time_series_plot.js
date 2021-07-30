@@ -1,6 +1,6 @@
 var W, H;
 var chart;
-var plot_type_id = "scatter";
+var plot_type = "bar";
 
 export function init(canvas, ctx) {
   W = canvas.getBoundingClientRect().width;
@@ -12,7 +12,7 @@ export function init(canvas, ctx) {
   var k3 = "";
 
   chart = new Chart(ctx, {
-    type: plot_type_id,
+    type: plot_type,
     data: {
       labels: x, //["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
       datasets: [
@@ -65,6 +65,11 @@ export function init(canvas, ctx) {
   });
 }
 
+export function update_plot_type(plot_type) {
+  chart.type = plot_type;
+  chart.update();
+}
+
 export function update(k, k2, k3, x, y) {
   console.log("displaying dataset: ", y);
   chart.data = {
@@ -101,7 +106,7 @@ export function update(k, k2, k3, x, y) {
           display: true,
           ticks: {
             //min: 0,
-            //max: 100,
+            suggestedMax: 100,
             //beginAtZero: true,
             suggestedMin: 0,
           },

@@ -108,6 +108,14 @@ INDEX_NAVGRID_SECTIONS = [{
         },
     ]
 }, {
+    'title': 'fluid dynamics',
+    'pages': [
+        {
+            'id': 'incompressible_fluid',
+            'link': '/comp_phys/fluid_dynamics/incompressible_fluid'
+        },
+    ]
+}, {
     'title': 'chronos',
     'pages': [
         {

@@ -33,16 +33,25 @@
                 const ctx = canvas.getContext("2d");
                 init(canvas, ctx)
             </script>
+        </div>
 
+        <div class="section">
             <div id="time_series_options">    <!-- TODO: move elsewhere -->
                 <div class="ts_option">
                     <div class="ts_suboption">
-                        bar
+                        <button id="button_options_plot_type_bar">bar</button>
                     </div><div class="ts_suboption">
                         line
                     </div><div class="ts_suboption">
                         scat
                     </div>
+                    <script type="module">
+                        import { update_plot_type } from "{{ url_for('static', filename='js/chronos/time_series_plot.js') }}";
+                        const button = document.getElementById("button_options_plot_type_bar");
+                        button.addEventListener("click", () => {
+                            update_plot_type("line")
+                        }, false)
+                    </script>
                 </div>
                 <div class="ts_option">
                     b
@@ -55,10 +64,6 @@
                 </div>
             </div>
         </div>
-        <!-- <div class="section" id="section_3"> -->
-        <!--     ay -->
-        <!-- </div> -->
-    <!-- </div> -->
 
     <!-- <div id="right_column"> -->
         <div class="section" id="section_navbar"><ul id="navbar2_ul">
