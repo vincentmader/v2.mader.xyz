@@ -113,6 +113,9 @@ INDEX_NAVGRID_SECTIONS = [{
         {
             'id': 'incompressible_fluid',
             'link': '/comp_phys/fluid_dynamics/incompressible_fluid'
+        }, {
+            'id': 'diffusion',
+            'link': '/comp_phys/fluid_dynamics/diffusion'
         },
     ]
 }, {

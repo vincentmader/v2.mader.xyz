@@ -43,6 +43,14 @@
 /* .button_menu p { */
 /* } */
 
+button {
+  background-color: black;
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+}
+
+/* TODO: rename to button-holder or sth? */
 .button {
   width: 90%;
   font-family: Arial, Helvetica, sans-serif; /* ? */
