@@ -8,8 +8,8 @@ const m = 1;
 
 // PARAMETERS
 
-const nr_of_particles = 50;
-var particle_radius = 1 / 30;
+const nr_of_particles = 75; // TODO: add sliders
+var particle_radius = 1 / 50;
 // const nr_of_particles = 200;
 // const particle_radius = 5;
 var v0 = 3;

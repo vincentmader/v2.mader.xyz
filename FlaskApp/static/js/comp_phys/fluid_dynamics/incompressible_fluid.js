@@ -2,12 +2,12 @@
 
 const TAU = 2 * Math.PI;
 const DT = 1;
-const fps_goal = 60;
+const fps_goal = 10;
 
 // // PARAMETERS
 
 const k = 0.001;
-var N = 25;
+var N = 100;
 const nr_of_GS_iterations = 5;
 
 // SETTINGS

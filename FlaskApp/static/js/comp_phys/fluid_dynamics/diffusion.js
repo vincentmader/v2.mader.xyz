@@ -2,18 +2,20 @@
 
 const TAU = 2 * Math.PI;
 const DT = 1;
-const fps_goal = 60;
+const fps_goal = 30;
 
 // // PARAMETERS
 
 const k = 0.01;
-var N = 25;
-const nr_of_GS_iterations = 10;
+var N = 100;
+const nr_of_GS_iterations = 5;
 
 // SETTINGS
 
+var bool_paused = false;
 var bool_draw_velocity = true;
 var bool_draw_density = true;
+var placement_radius = Math.floor(N / 30);
 
 // // OTHER VARIABLES
 
@@ -105,11 +107,56 @@ class Fluid {
   }
 }
 
+const get_map_coords = (ctx_coords) => {
+  const map_coord_x = (ctx_coords[0] / W) * N;
+  const map_coord_y = (ctx_coords[1] / H) * N;
+  return [map_coord_x, map_coord_y];
+};
+
+const getCursorPosition = (canvas, event) => {
+  const rect = canvas.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  const y = event.clientY - rect.top;
+  return [x, y];
+};
+
 function setup_event_listeners() {
+  canvas.addEventListener("mousedown", function (e) {
+    let ctx_coords = getCursorPosition(canvas, e);
+    let map_coords = get_map_coords(ctx_coords);
+    let x = Math.floor(map_coords[0]);
+    let y = Math.floor(map_coords[1]);
+
+    for (let dy = -placement_radius; dy < placement_radius; dy++) {
+      for (let dx = -placement_radius; dx < placement_radius; dx++) {
+        // if (dx ** 2 + dy ** 2 > placement_radius ** 2) continue;
+        fluid.density[y + dy][x + dx] = 1;
+      }
+    }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    fluid.draw_density();
+  });
+
   // BUTTONS
   let button_reset = document.getElementById("button_reset");
   button_reset.addEventListener("click", () => {
     init();
+  });
+  let button_pause = document.getElementById("button_pause");
+  button_pause.addEventListener("click", () => {
+    bool_paused = !bool_paused;
+  });
+  let button_clear_dens = document.getElementById("button_clear_dens");
+  button_clear_dens.addEventListener("click", () => {
+    fluid.density = [];
+    for (let y = 0; y < N; y++) {
+      fluid.density[y] = [];
+      for (let x = 0; x < N; x++) {
+        fluid.density[y][x] = 0;
+      }
+    }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    fluid.draw_density();
   });
   // SLIDERS
   document.getElementById("slider_N").addEventListener("click", function () {
@@ -137,6 +184,7 @@ function init() {
 
 function animate() {
   setInterval(function () {
+    if (bool_paused) return;
     // clear screen
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     // update fluid cells
