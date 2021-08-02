@@ -2,12 +2,12 @@
 
 const TAU = 2 * Math.PI;
 const DT = 1;
-const fps_goal = 10;
+const fps_goal = 6;
 
 // // PARAMETERS
 
-const k = 0.001;
-var N = 100;
+const k = 0.01;
+var N = 20;
 const nr_of_GS_iterations = 5;
 
 // SETTINGS
@@ -39,8 +39,10 @@ class Fluid {
         } else {
           this.density[y][x] = 0;
         }
-        this.v_x[y][x] = Math.random();
-        this.v_y[y][x] = Math.random();
+
+        let theta = TAU * Math.random();
+        this.v_x[y][x] = 3 * Math.cos(theta); // TODO: add length
+        this.v_y[y][x] = 3 * Math.sin(theta);
       }
     }
   }
@@ -143,11 +145,6 @@ class Fluid {
           return x;
         }
 
-        // if (x_floor >= N - 1) x_floor -= N;
-        // if (y_floor >= N - 1) y_floor -= N;
-        // if (x_floor < 0) x_floor += N;
-        // if (y_floor < 0) y_floor += N;
-
         let z_1 = linear_interpolate(
           this.density[apply_bounds(y_floor)][apply_bounds(x_floor)],
           this.density[apply_bounds(y_floor)][apply_bounds(x_floor + 1)],
@@ -197,7 +194,7 @@ class Fluid {
   update() {
     this.draw_density();
     if (N < 30) this.draw_velocity();
-    this.diffuse();
+    // this.diffuse();
     // this.advect();
     this.move();
   }

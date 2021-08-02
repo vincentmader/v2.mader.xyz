@@ -2,7 +2,7 @@
 
 const TAU = 2 * Math.PI;
 const DT = 1;
-const fps_goal = 30;
+const fps_goal = 60;
 
 // // PARAMETERS
 
