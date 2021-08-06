@@ -29,6 +29,11 @@ def index():
     return render_template('index.html', props=props)
 
 
+@app.route('/react')
+def react_test():
+    return render_template('react.html')
+
+
 # chronos
 # -----------------------------------------------------------------------------
 @app.route('/chronos/stats/<subdir>')

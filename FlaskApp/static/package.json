@@ -1,0 +1,24 @@
+{
+  "name": "maderxyz-frontend",
+  "version": "1.0.0",
+  "description": "frontend of mader.xyz",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --progress --config webpack.config.js",
+    "dev-build": "webpack --progress -d --config webpack.config.js",
+    "watch": "webpack --progress -d --config webpack.config.js --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.15.0",
+    "@babel/preset-env": "^7.15.0",
+    "@babel/preset-react": "^7.14.5",
+    "babel-loader": "^8.2.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "webpack": "^5.49.0",
+    "webpack-cli": "^4.7.2"
+  }
+}

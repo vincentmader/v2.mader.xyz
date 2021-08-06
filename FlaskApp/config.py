@@ -146,6 +146,9 @@ INDEX_NAVGRID_SECTIONS = [{
         }, {
             'id': 'nbody_cloud',
             'link': '/comp_phys/n_body/cloud'
+        }, {
+            'id': 'react_test',
+            'link': '/react'
         },
         # {'id': 'orbit'},
         # {'id': 'solar'},
@@ -166,8 +169,7 @@ INDEX_NAVGRID_SECTIONS = [{
 # handle privacy on server: don't display chronos in nav view
 if running_on_server:
     INDEX_NAVGRID_SECTIONS = [
-        i for i in INDEX_NAVGRID_SECTIONS
-        if i['title'] != 'chronos'
+        i for i in INDEX_NAVGRID_SECTIONS if i['title'] != 'chronos'
     ]
 else:
     # PARAMETERS FOR IMPORTING RAW DATA
@@ -258,11 +260,10 @@ else:
             }
         }, 'personal': {
             'mood': {
-                'great mood': [' great'],
-                'happy mood': [' happy'],
-                'weird mood': [' weird'],
-                'sad mood': [' sad'],
-                # TODO: the 4 above should be 'mood: great', but: split err at ':'
+                'great mood': [' great'],  # should be 'mood: great'
+                'happy mood': [' happy'],  # but: split err at ':'
+                'weird mood': [' weird'],  # same
+                'sad mood': [' sad'],      # same
                 'good day': ['Good day'],
                 'bad day': ['Bad Day'],
                 'sad day': ['Sad Day'],
