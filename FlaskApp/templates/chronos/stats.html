@@ -21,7 +21,7 @@
 {% block content %}
 
 
-    <!-- <div id="left_colum"> -->
+    <div id="left_colum">
         <!-- x-t / y-t plot <br> -->
         <!-- x-y plot, corr -->
         <div class="section" id="section_ts_plot">
@@ -34,9 +34,12 @@
                 init(canvas, ctx)
             </script>
         </div>
+    </div>
 
-        <div class="section">
-            <div id="time_series_options">    <!-- TODO: move elsewhere -->
+    <div id="right_column">
+
+        <div class="section" id="section_time_series_options">
+            <!-- <div id="time_series_options">    <!-1- TODO: move elsewhere -1-> -->
                 <div class="ts_option">
                     <div class="ts_suboption">
                         <button id="button_options_plot_type_bar">bar</button>
@@ -62,10 +65,9 @@
                 <div class="ts_option">
                     d
                 </div>
-            </div>
+            <!-- </div> -->
         </div>
 
-    <!-- <div id="right_column"> -->
         <div class="section" id="section_navbar"><ul id="navbar2_ul">
             {% for k, v in props['section_hierarchy'].items() %}
                 <li style="color: green">{{ k }}<ul>
@@ -148,6 +150,6 @@
                 </ul></li>
             {% endfor %}
         </ul></div>
-    <!-- </div> -->
+    </div>
 
 {% endblock %}

@@ -1,23 +1,30 @@
 #content {
-  width: 80%;
+  width: 90%;
   /* margin-right: auto; /1* center *1/ */
   /* margin-left: auto; /1* center *1/ */
   /* padding-top: 30px; */
-  height: 90vh;
-  /* display: grid; */
-  /* grid-template-columns: repeat(2, 1fr); */
+  /* height: 90vh; */
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+.section {
+  /* height: 600px; */
+  border-radius: 2.5vh;
 }
 
 #left_colum {
+  /* height: 90vh; */
   height: 100%;
 }
 
 #right_colum {
+  /* height: 90vh; */
+  height: 100%;
   /* */
 }
 
 #section_ts_plot {
-  height: 50%;
+  height: 100%;
 }
 
 #section_navbar {
@@ -29,17 +36,11 @@
   overflow: scroll;
 }
 
-.section {
-  /* height: 600px; */
-  margin: 10px;
-  border-radius: 2.5vh;
-}
-
 #canvas_time_series_plot {
   height: 100%;
 }
 
-#time_series_options {
+#section_time_series_options {
   height: 20%;
   display: grid;
   grid-template-columns: repeat(4, 1fr);

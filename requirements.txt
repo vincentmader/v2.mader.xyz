@@ -1,6 +1,8 @@
+flask
+python-dotenv
+
 bokeh
 Pillow
-flask
 colour
 gspread
 matplotlib
