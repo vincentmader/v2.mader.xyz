@@ -1,0 +1,52 @@
+#+TITLE: mader.xyz
+#+AUTHOR: Vincent C. Mader
+
+This repo contains the code running [[http://mader.xyz][my website]].
+
+* Installation
+To contribute, you need to install the server locally via the following steps:
+
+- download the repo
+  #+begin_src shell
+  git clone https://github.com/vincentmader/mader.xyz
+  cd mader.xyz
+  #+end_src
+
+- make sure you have python3 and pip installed
+
+- create a virtual python environment
+  #+begin_src shell
+  python -m venv venv
+  #+end_src
+
+- install python dependencies
+  #+begin_src shell
+  pip3 install -r requirements.txt
+  #+end_src
+
+- test-run the server
+  #+begin_src shell
+  cd FlaskApp
+  python3 __init__.py
+  #+end_src
+
+- head to your browser (localhost:5000) and check if it works
+  (if not, continue with the next section and check again afterwards)
+* Setup
+After completing the installation, you should take a look at the file
+
+    ./FlaskApp/config.py
+
+and initialize the path variables. You also need to create the file
+
+    ./.env
+
+and define your application secret key (used for encryption).
+This file is loaded from
+
+    ./flaskapp.wsgi
+
+and should look like this:
+#+begin_src shell
+SECRET_KEY="<your secret key goes here>"
+#+end_src
