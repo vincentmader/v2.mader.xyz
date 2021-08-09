@@ -31,7 +31,7 @@ npm install
 cd FlaskApp
 python3 __init__.py
 #+end_src
-- Open your browser and head to localhost:5000 to check if it works.
+- Open your browser and head to [[localhost:5000][localhost:5000]] to check if it works.
   If not, continue with the next section and try again afterwards.
 * Basic setup
 After completing the installation, you should take a look at the file
