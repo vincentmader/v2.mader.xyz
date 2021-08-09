@@ -1,12 +1,13 @@
 #!/usr/bin/python3
 
-import logging
-logging.basicConfig(stream=sys.stderr)
 
 import sys
 sys.path.insert(0, '/var/www/maderxyz')
 sys.path.insert(0, '/var/www/maderxyz/FlaskApp')
 from FlaskApp import app as application
+
+import logging
+logging.basicConfig(stream=sys.stderr)
 
 import os
 from dotenv import load_dotenv
