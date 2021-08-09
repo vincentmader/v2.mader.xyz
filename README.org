@@ -6,12 +6,12 @@ This repo contains the code running [[http://mader.xyz][my website]].
 * Installation
 To contribute, you need to install the server locally via the following steps:
 
+- make sure you have python3, pip, nodejs & npm installed
 - download the repo
 #+begin_src shell
 git clone https://github.com/vincentmader/mader.xyz
 cd mader.xyz
 #+end_src
-- make sure you have python3 and pip installed
 - create a virtual python environment
 #+begin_src shell
 python -m venv venv
