@@ -1,0 +1,38 @@
+{
+  "name": "react_frontend",
+  "version": "0.1.0",
+  "description": "mader.xyz frontend",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "react-scripts start",
+    "start-api": "sh $CODE/mader.xyz/run.sh",
+    "build": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Vincent C. Mader",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/core": "^7.15.0",
+    "@babel/preset-env": "^7.15.0",
+    "@babel/preset-react": "^7.14.5",
+    "babel-loader": "^8.2.2",
+    "jsx-loader": "^0.13.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-scripts": "^4.0.3",
+    "webpack": "^4.46.0",
+    "webpack-cli": "^4.7.2"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
