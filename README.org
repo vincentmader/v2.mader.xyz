@@ -12,13 +12,19 @@ To contribute, you need to install the server locally via the following steps:
 git clone https://github.com/vincentmader/mader.xyz
 cd mader.xyz
 #+end_src
-- create a virtual python environment
+- create a virtual python environment & source it
 #+begin_src shell
 python -m venv venv
+source venv/bin/activate
 #+end_src
 - install python dependencies
 #+begin_src shell
 pip3 install -r requirements.txt
+#+end_src
+- navigate into the frontend code & install javascript dependencies
+#+begin_src shell
+cd FlaskApp/static/js/react_frontend
+npm install
 #+end_src
 - test-run the server
 #+begin_src shell
