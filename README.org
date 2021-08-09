@@ -24,7 +24,7 @@ python -m venv venv
 #+begin_src shell
 cd FlaskApp
 python3 __init__.py
-#+end_src
+  #+end_src
 - head to your browser (localhost:5000) and check if it works
   (if not, continue with the next section and check again afterwards)
 * Setup
