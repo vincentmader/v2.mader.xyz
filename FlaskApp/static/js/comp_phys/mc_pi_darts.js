@@ -84,6 +84,13 @@ const init = () => {
     data: {
       datasets: [
         {
+          borderColor: "red",
+          pointRadius: 0,
+          data: [],
+          showLine: true, // overrides the `line` dataset default
+          label: "difference to true value",
+        },
+        {
           borderColor: "green",
           pointRadius: 0,
           data: [],
@@ -162,13 +169,14 @@ const init = () => {
     // }
     var label = "";
     chart.data.labels.push(label);
-    chart.data.datasets[0].data.push(pi);
+    chart.data.datasets[0].data.push(pi - Math.PI);
+    chart.data.datasets[1].data.push(0);
     // chart.data.datasets[1].data.push(Math.abs(Math.PI - pi) / Math.PI);
     // chart.data.datasets.forEach((dataset) => {
     //   dataset.data.push(Math.abs(Math.PI - pi) / Math.PI);
     // });
     chart.update();
-  }, 1);
+  }, 1000 / 60);
 };
 
 init();

@@ -1,18 +1,16 @@
-creds
-running_on_live_server.json
+__pycache__
+.DS_Store
+.venv
+env
+node_modules
+venv
 
+creds
 database
 database_*
 
-env
-venv
-.venv
-node_modules
 
 debug.py
-
-.DS_Store
-__pycache__
 
 *.aux
 *.fdb_latexmk

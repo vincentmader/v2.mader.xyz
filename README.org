@@ -6,7 +6,7 @@ This repo contains the code running [[http://mader.xyz][my website]].
 * Installation
 To contribute, you'll need to install the server locally via the following steps:
 
-- Make sure you have python3+pip and nodejs+npm installed
+- Make sure you have python3 + pip, nodejs + npm as well as mongodb installed
 - Download the repo
 #+begin_src shell
 git clone https://github.com/vincentmader/mader.xyz
@@ -39,17 +39,17 @@ After completing the installation, you should take a look at the file
 ./FlaskApp/config.py
 #+end_src
 and initialize the path variables.
-# * Further steps
-# You may also need to create the file
-# #+begin_src shell
-# ./.env
-# #+end_src
-# and define your application secret key (used for encryption).
-# This file is loaded from
-# #+begin_src shell
-# ./flaskapp.wsgi
-# #+end_src
-# and should look like this:
-# #+begin_src shell
-# SECRET_KEY="<your secret key goes here>"
-# #+end_src
+* Further steps
+You may also need to create the file
+#+begin_src shell
+./.env
+#+end_src
+and define your application secret key (used for encryption).
+This file is loaded from
+#+begin_src shell
+./flaskapp.wsgi
+#+end_src
+and should look like this:
+#+begin_src shell
+SECRET_KEY="<your secret key goes here>"
+#+end_src
