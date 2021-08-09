@@ -2,7 +2,7 @@ import json
 import os
 import sys
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_from_directory
 import numpy as np
 
 from .config import running_on_server
@@ -31,6 +31,7 @@ def index():
 
 @app.route('/react')
 def react_test():
+    # return send_from_directory('static/js/react_frontend/public', 'index.html')
     return render_template('react.html')
 
 

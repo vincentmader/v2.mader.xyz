@@ -1,17 +1,21 @@
 flask
 python-dotenv
 
-bokeh
-Pillow
-colour
+pymongo
+
 gspread
-matplotlib
+oauth2client
+
 numpy
 scipy
-oauth2client
+
+bokeh
+colour
+matplotlib
+
+Pillow
 tqdm
 pygame
-pymongo
 pyPDF2
 
 autopep8
