@@ -13,12 +13,12 @@ To contribute, you need to install the server locally via the following steps:
   #+end_src
 - make sure you have python3 and pip installed
 - create a virtual python environment
-#+begin_src shell
+  #+begin_src shell
 python -m venv venv
 #+end_src
 - install python dependencies
-#+begin_src shell
-pip3 install -r requirements.txt
+  #+begin_src shell
+  pip3 install -r requirements.txt
 #+end_src
 - test-run the server
 #+begin_src shell
