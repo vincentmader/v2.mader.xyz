@@ -2,7 +2,7 @@ import { draw_line } from "../utils/drawing_utils.js";
 import { draw_point } from "../utils/drawing_utils.js";
 
 const line_width = 2;
-const tail_length = 175;
+var tail_length = 175;
 
 var paused = false;
 var frame_idx;
@@ -77,6 +77,27 @@ function draw_double_pendulum(ctx, frame_idx) {
   draw_line(ctx, x_1, y_1, x_2, y_2, "white");
 }
 
+const setup_event_listeners = () => {
+  // event listeners
+  document
+    .getElementById("restart_double_pendulum")
+    .addEventListener("click", function () {
+      frame_idx = 0;
+      // zoom_level = W / 2;
+    });
+  let button_toggle_pause = document.getElementById(
+    "play/pause_double_pendulum"
+  );
+  button_toggle_pause.addEventListener("click", function () {
+    paused = !paused;
+    if (paused) {
+      button_toggle_pause.innerHTML = "unpause";
+    } else {
+      button_toggle_pause.innerHTML = "pause";
+    }
+  });
+};
+
 const init = () => {
   const canvas = document.getElementById("double_pendulum_canvas");
   W = canvas.getBoundingClientRect().width;
@@ -94,27 +115,21 @@ const init = () => {
   L = W / 4 - 10;
   r = W / 75;
 
+  setup_event_listeners();
+
   // start loop, draw double pendulum
   frame_idx = 0;
   setInterval(function () {
+    if (paused) return;
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     draw_double_pendulum(ctx, frame_idx);
-    if (!paused) {
-      frame_idx += 1;
-    }
-    // event listeners
-    document
-      .getElementById("restart_double_pendulum")
-      .addEventListener("click", function () {
-        frame_idx = 0;
-        // zoom_level = W / 2;
-      });
-    document
-      .getElementById("play/pause_double_pendulum")
-      .addEventListener("click", function () {
-        paused = !paused;
-      });
-  }, 20);
+
+    // let slider_tail_length = document.getElementById("slider_tail_length");
+    // tail_length = Number(slider_tail_length.value);
+
+    frame_idx += 1;
+  }, 1000 / 60);
 };
 
 init();

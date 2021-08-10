@@ -18,20 +18,7 @@
   padding-top: 40px;
   margin-right: auto; /* center */
   margin-left: auto; /* center */
-  width: 40%;
-}
-
-@media only screen and (max-width: 1200px) {
-  #content {
-    width: 80%;
-    padding-top: 20px;
-  }
-}
-@media only screen and (max-width: 641px) {
-  #content {
-    width: 90%;
-    padding-top: 20px;
-  }
+  width: 45%;
 }
 
 .section {
@@ -48,6 +35,23 @@
   text-align: center;
   margin: 0px;
 }
+
+@media only screen and (max-width: 1200px) {
+  #content {
+    width: 80%;
+    padding-top: 20px;
+  }
+}
+@media only screen and (max-width: 641px) {
+  #content {
+    width: 95%;
+    padding-top: 20px;
+  }
+  #section_nav_grid {
+    padding: 14px;
+  }
+}
+
 
 .canvas {
   width: 100%;

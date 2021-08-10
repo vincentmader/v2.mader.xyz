@@ -7,7 +7,7 @@ const fps_goal = 6;
 // // PARAMETERS
 
 const k = 0.01;
-var N = 20;
+var N = 100;
 const nr_of_GS_iterations = 5;
 
 // SETTINGS
