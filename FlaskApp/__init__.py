@@ -425,12 +425,14 @@ def old(subdir):
 
 
 if __name__ == '__main__':
+    # if running_on_server:
     app.run()
+    # else:
+    #     app.run(host="localhost", port=5001, debug=True)
 
-    # the code code should make flask server auto-restart on change of
-    # templates, but doesn't apparently?
-    # restart is need only for html & css? not for py & js I believe
-
+    # TODO: auto-restatrt flask on template change
+    # restart is need only for html & py? not for css & js
+    # -----
     # extra_dirs = ['./', ]
     # extra_files = extra_dirs[:]
     # for extra_dir in extra_dirs:

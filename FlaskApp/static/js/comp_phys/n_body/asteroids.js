@@ -32,7 +32,7 @@ const world_size = [1000, 1000];
 // button presets
 var bool_show_trajectories = false;
 //var bool_show_quad_tree_grid = !use_quad_tree;
-var paused = false;
+var paused = false; // TODO: add restart button
 //// var periodic_bounds = false;
 
 // draw settings
@@ -61,8 +61,8 @@ class Particle {
     this.velocity = vel_0;
   }
   draw() {
-    ctx.strokeStyle = "gray";
-    ctx.fillStyle = "gray";
+    ctx.strokeStyle = "white";
+    ctx.fillStyle = "white";
     let ctx_coords = get_ctx_coords([this.position.x, this.position.y]);
     let r = get_ctx_radius(asteroid_drawing_radius);
     ctx.beginPath();
