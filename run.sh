@@ -6,7 +6,7 @@
 # kill $pid
 pid="$(ps -p $(lsof -ti tcp:5000) o pid=)"
 kill $pid
-# killall flask  # ?
+killall flask 
 
 # kill mongo demon instances
 killall mongod
