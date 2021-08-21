@@ -1,5 +1,6 @@
 #body {
   margin: 0px;
+  padding: 0px;
   overflow-x: hidden; /* -> scrolling */
   /* background-size: cover; */
   /* background-repeat: no-repeat; /1* also; background-position: center center; *1/ */
@@ -15,20 +16,20 @@
 }
 #content {
   height: 90%;
-  padding-top: 40px;
+  padding-top: 20px;
   margin-right: auto; /* center */
   margin-left: auto; /* center */
   width: 45%;
 }
 
 .section {
-  padding: 2%;
   background-color: rgba(48, 48, 48, 0.7);
   border-radius: 20px;
   margin: 20px;
   /* margin-top: 20px; */
   /* margin-bottom: 20px; */
   padding: 20px;
+  /* padding: 2%; */
 }
 .section_title {
   color: white;
@@ -51,7 +52,6 @@
     padding: 14px;
   }
 }
-
 
 .canvas {
   width: 100%;

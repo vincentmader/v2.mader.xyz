@@ -1,7 +1,10 @@
+import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 
+import "./css/base.css";
+
 ReactDOM.render(
-  <App currentView="index" />,
+  <App currentViewID="index" />,
   document.getElementById("react-root")
 );
