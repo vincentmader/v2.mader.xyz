@@ -32,6 +32,7 @@ var avoidance_force = 0.5; // changeable via slider
 var attraction_force = 0.1; // changeable via slider
 var cohesion_force = 0.2; // changeable via slider
 var evasion_force = 0.5; // changeable via slider
+var friction = 0;
 // sensor radii
 var avoidance_radius = 6; // changeable via slider
 var attraction_radius = 40; // changeable via slider
@@ -447,6 +448,9 @@ class Boid {
     this.apply_random_turns();
     if (bool_evasion_activated) this.apply_evasion();
     if (bool_avoidance_activated) this.apply_avoidance(possible_neighbors);
+    // this.velocity.x *= 1 - friction;
+    // this.velocity.y *= 1 - friction;
+    this.speed *= 1 - friction;
     this.update_position_values();
     this.draw();
   }
