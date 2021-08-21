@@ -5,11 +5,11 @@ import { draw_point } from "../../utils/drawing_utils.js";
 const TAU = 2 * Math.PI;
 const DT = 0.5;
 const m = 1;
-const k = 2; // electromagnetic interaction
+const k = 20; // electromagnetic interaction
 
 // PARAMETERS
 
-const nr_of_particles = 20;
+const nr_of_particles = 50;
 const particle_radius = 15;
 var v0 = 1;
 
@@ -28,11 +28,11 @@ var energy_0;
 // CLASSES
 
 class Particle {
-  constructor() {
+  constructor(x, y, r) {
     this.m = m;
-    this.r = particle_radius;
-    this.x = (W - 3 * this.r) * Math.random() + this.r;
-    this.y = (H - 3 * this.r) * Math.random() + this.r;
+    this.r = r;
+    this.x = x;
+    this.y = y;
     this.speed = v0 * Math.random();
     this.theta = TAU * Math.random(); // direction of movement
     this.update_velocity(); // TODO: rename? (get u and v from speed/theta)
@@ -58,8 +58,8 @@ class Particle {
     for (let p of particles) {
       if (this === p) continue;
       let r = Math.sqrt((p.x - x) ** 2 + (p.y - y) ** 2) - (this.r + p.r);
-      let Fx = (k / r ** 2) * (x - p.x);
-      let Fy = (k / r ** 2) * (y - p.y);
+      let Fx = (k / r ** 3) * (x - p.x);
+      let Fy = (k / r ** 3) * (y - p.y);
       this.u += (Fx / this.m) * DT;
       this.v += (Fy / this.m) * DT;
       this.speed = Math.sqrt(this.u ** 2 + this.v ** 2);
@@ -164,9 +164,33 @@ function init() {
   o_x = W / 2;
   o_y = H / 2;
 
+  // particles = [];
+  // for (let idx = 0; idx < nr_of_particles; idx++) {
+  // let x = (W - 3 * particle_radius) * Math.random() + particle_radius;
+  // let y = (H - 3 * particle_radius) * Math.random() + particle_radius;
+  // let p = new Particle(x, y, particle_radius);
+  // particles.push(p);
+  // console.log(free_spot_found);
   particles = [];
   for (let idx = 0; idx < nr_of_particles; idx++) {
-    let p = new Particle();
+    let r = particle_radius;
+    let x = (W - 3 * r) * Math.random() + r;
+    let y = (H - 3 * r) * Math.random() + r;
+    let collision_found = true;
+    while (collision_found) {
+      collision_found = false;
+      x = (W - 3 * r) * Math.random() + r;
+      y = (H - 3 * r) * Math.random() + r;
+      for (let jdx = 0; jdx < idx; jdx++) {
+        let neighbor = particles[jdx];
+        let distance = Math.sqrt((neighbor.x - x) ** 2 + (neighbor.y - y) ** 2);
+        collision_found = distance < 2 * (neighbor.r + r);
+        if (collision_found) {
+          break;
+        }
+      }
+    }
+    let p = new Particle(x, y, r);
     particles.push(p);
   }
   frame_idx = 0;
