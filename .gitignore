@@ -33,7 +33,13 @@ wallpapers
 stocks.pdf
 net_worth.pdf
 search_history.db
-*.png
 *.pdf
+
+*1.png
+*2.png
+*3.png
+*4.png
+*5.png
+*6.png
 
 main_precompute_directions.js
