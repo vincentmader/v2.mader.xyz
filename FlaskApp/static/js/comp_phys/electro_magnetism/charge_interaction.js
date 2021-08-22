@@ -5,16 +5,16 @@ import { draw_point } from "../../utils/drawing_utils.js";
 const TAU = 2 * Math.PI;
 const DT = 0.5;
 const m = 1;
-const k = 20; // electromagnetic interaction
+const k = 30; // electromagnetic interaction
 
 // PARAMETERS
 
-const nr_of_particles = 50;
+const nr_of_particles = 40; // 50-60 is lower bound for divergence on init
 const particle_radius = 15;
 var v0 = 1;
 
 const fps_goal = 60;
-const max_speed = 2 * v0;
+var max_speed = v0;
 
 // OTHER VARIABLES
 
@@ -36,7 +36,7 @@ class Particle {
     this.speed = v0 * Math.random();
     this.theta = TAU * Math.random(); // direction of movement
     this.update_velocity(); // TODO: rename? (get u and v from speed/theta)
-    this.color = "white"; // TODO: make speed-dep. transition to red
+    this.color = "white";
   }
   update_velocity() {
     this.u = this.speed * Math.cos(this.theta);
@@ -154,6 +154,13 @@ function setup_event_listeners() {
   //   "v0 = " + String(v0.toFixed(1));
 }
 
+function update_max_speed() {
+  for (let idx = 0; idx < nr_of_particles; idx++) {
+    let particle_speed = particles[idx].speed;
+    if (particle_speed > max_speed) max_speed = particle_speed;
+  }
+}
+
 function init() {
   canvas = document.getElementById("canvas");
   W = canvas.getBoundingClientRect().width;
@@ -207,6 +214,9 @@ function animate() {
     // update & draw particles
     for (let p of particles) {
       p.update();
+    }
+    update_max_speed();
+    for (let p of particles) {
       p.draw();
     }
     if (frame_idx % fps_goal === 0) {
