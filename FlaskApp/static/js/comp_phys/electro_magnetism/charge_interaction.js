@@ -48,7 +48,7 @@ class Particle {
   }
   draw() {
     let foo = 255 * (1 - this.speed / max_speed);
-    let color = "rgba(255," + foo + ", " + foo + ", 1)";
+    let color = "rgba(" + foo + ", " + foo + ", 255, 1)";
     draw_point(ctx, this.x, this.y, particle_radius, color, color);
   }
   apply_forces() {
