@@ -14,6 +14,15 @@ body {
   padding: 0.15em;
   /* align-items: center; */
 }
+#header_home {
+  color: white;
+  text-decoration: none;
+  text-align: right;
+  padding-right: 0.7em;
+  padding-top: 0.2em;
+  width: 100%;
+}
+
 #content {
   height: 90%;
   padding-top: 20px;
@@ -73,15 +82,6 @@ button.stealthy_button {
   border: 0px;
   padding: 0px;
   margin: 0px;
-}
-
-#header_home {
-  color: white;
-  text-decoration: none;
-  text-align: right;
-  padding-right: 0.7em;
-  padding-top: 0.2em;
-  width: 100%;
 }
 
 .divider {

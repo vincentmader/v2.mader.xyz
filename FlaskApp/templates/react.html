@@ -1,75 +1,19 @@
 <!doctype html>
-
 <html lang="en">
-    <head>
-        <meta charset="utf-8"/>
-        <title>chronos</title>
-    </head>
-    <body>
 
-        <noscript>
-            You need to enable JavaScript to run this app.
-        </noscript>
+<head>
+    <meta charset="utf-8"/>
+    <title>chronos</title>
+</head>
 
-        <!-- run production frontend from build -->
-        <div id="react-root"></div>
-        <!-- <script src="{{url_for('static', filename='react_app_old/dist/bundle.js') }}"></script> -->
-        <!-- <script src="{{url_for('static', filename='js/react_frontend/dist/bundle.js') }}"></script> -->
-        <script src="{{url_for('static', filename='js/react_frontend/dist/index.js') }}"></script>
-        
+<body>
+    <noscript>
+        You need to enable JavaScript to run this app.
+    </noscript>
 
-
- <!-- <div class="container"> -->
- <!--      <h1>Flask React</h1> -->
- <!--      <br> -->
-      <!-- <div id="content"></div> -->
- <!--    </div> -->
-    <!-- scripts -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.1.0/react.min.js"></script> -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.1.0/react-dom.min.js"></script> -->
-    <!-- <script src="http://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script> -->
-
-    <!-- <script type="text/jsx"> -->
-    <!--   var realPython = React.createClass({ -->
-    <!--     render: function() { -->
-    <!--       return (<h2>Greetings, from Real Python!</h2>); -->
-    <!--     } -->
-    <!--   }); -->
-
-    <!--   ReactDOM.render( -->
-    <!--     React.createElement(realPython, null), -->
-    <!--     document.getElementById('content') -->
-    <!--   ); -->
-    <!-- </script> -->
-
-    <!-- <script> -->
-    <!--     console.log( -->
-<!-- "{{ url_for('static', filename='scripts/index.js') }}" -->
-    <!--             ) -->
-    <!-- </script> -->
-
-    <!-- <script src="{{ url_for('static', filename='scripts/index.js') }}" type="module/jsx"> -->
-    <!--     main() -->
-    <!-- </script> -->
-
-    <!-- <script src="{{ url_for('static', filename='scripts/index.js') }}" type="module/jsx"></script> -->
-
-    <!-- <script type="module"> -->
-    <!--     console.log('hireneshijn') -->
-    <!-- </script> -->
-
-    <!-- <script type="module/jsx"> -->
-    <!--     //import {main} from "{{ url_for('static', filename='scripts/index.js') }}" -->
-    <!--     console.log('hireaaaaaaaneshijn') -->
-    <!--     //main() -->
-    <!-- </script> -->
-
-    <!-- <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script> -->
-    <!-- <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script> -->
-    <!-- <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script> -->
-
-    <!-- <script type="module/jsx" src="{{ url_for('static', filename='scripts/index.js') }}"> -->
-    <!-- </script> -->
-
-    </body>
+    <div id="react-root"></div>
+    <script src="{{url_for('static', filename='js/react_frontend/dist/index.js') }}"></script>
+    <!-- <script src="{{url_for('static', filename='react_app_old/dist/bundle.js') }}"></script> -->
+    <!-- <script src="{{url_for('static', filename='js/react_frontend/dist/bundle.js') }}"></script> -->
+</body>
 </html>

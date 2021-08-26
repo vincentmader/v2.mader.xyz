@@ -2,43 +2,45 @@
 /* ========================================================================= */
 
 body {
-  margin: 0px;
+  overflow-x: hidden; /* -> scrolling */
   background-color: black;
-  font-family: Arial, Helvetica, sans-serif;
   color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0px;
+  padding: 0px;
 }
 
 #header {
-  /* margin: "5%"; */
-  /* background-color: black; */
-  /* borderRadius: "20px"; */
+  font-size: 20px;
+  font-weight: 690;
   width: 100%;
-  /* height: 3em; */
-  /* position: fixed; */
+  height: 2em; /* needed? */
+  /* display: flex; */
   text-align: right;
-  /* text-align: "right"; */
+  padding: 0.15em;
   /* border: 1px solid green; */
 }
 
 #header_home {
-  margin: 0.5em;
-  font-weight: 690;
-  font-size: 20px;
+  color: white;
+  text-decoration: none;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  /* margin-right: 5px; */
+  /* border: 1px solid green; */
   border: 0px;
-  background-color: black;
   outline: none;
   cursor: pointer;
-  /* border: 1px solid green; */
 }
 
 #navbar {
 }
 
 #content {
+  /* height: 95%; */
   /* margin-top: 15px; */
   padding-top: 10px;
   padding-bottom: 30px;
-
   padding-left: 300px;
   padding-right: 300px;
   /* border: 1px solid green; */
