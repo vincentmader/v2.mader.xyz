@@ -1,33 +1,11 @@
-/* .section { */
-/*   padding-left: 30%; */
-/*   padding-right: 30%; */
-/* } */
-
-/* #content { */
-/* padding-top: 3%; */
-/* } */
-
-.canvas_holder {
-  /* border: 2px solid gray; */
-  background-color: black;
-  border-radius: 20px;
-  padding: 20px;
-}
-
-/* #two_plot_container { */
-/*   text-align: center; */
-/*   display: grid; */
-/*   grid-template-columns: repeat(2, 1fr); */
-/*   width: 100%; /1* of container /* */
-/*   /1* border: 1px solid blue; *1/ */
-/* } */
-
 .button_menu {
-  /* text-align: center; */
-  margin-top: 15px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  width: 100%;
+  width: 95%;
+  margin-top: 0px;
+  margin-bottom: 5%;
+  margin-left: 2.5%;
+  margin-right: 2.5%;
 }
 
 .button_menu_table {
@@ -40,66 +18,72 @@
   padding-top: 10px;
 }
 
-/* .button_menu p { */
-/* } */
-
 button {
   background-color: black;
   margin: 0px;
   padding: 0px;
   border: 0px;
+  outline: none;
 }
 
 /* TODO: rename to button-holder or sth? */
 .button {
-  width: 90%;
-  font-family: Arial, Helvetica, sans-serif; /* ? */
-  /* font-weight: bold; */
-  font-size: 16px;
-  color: white;
-  height: 2em; /* center text vertically */
-  background-color: black;
   border: 3px solid black;
   border-radius: 10000px;
-  margin-right: auto;
-  margin-left: auto;
+  background-color: black;
+
+  font-family: Arial, Helvetica, sans-serif; /* ? */
+  font-size: 16px;
+  color: white;
+
+  width: 90%;
+  height: 2em; /* center text vertically */
+
   margin-top: 5px;
   margin-bottom: 5px;
+  margin-right: auto;
+  margin-left: auto;
   padding: 0px;
-  /* margin: 10px; */
 }
 
 .button_toggle {
-  width: 30px;
-  height: 30px;
+  background-color: black;
   border: 3px solid black;
   border-radius: 10000px;
+  width: 30px;
+  height: 30px;
   color: white;
-  background-color: black;
-  height: 2em; /* center text vertically */
+  /* height: 2em; /1* center text vertically *1/ */
 }
 
 #nr_of_bodies_textfield {
-  width: 90%;
+  border: 0px;
+  border-radius: 10000px;
+  background-color: black;
+  text-align: center;
+  padding: 0px;
+
   font-family: Arial, Helvetica, sans-serif; /* ? */
   font-size: 16px;
   color: white;
+
+  width: 90%;
   height: 2em;
-  background-color: black;
-  border-radius: 10000px;
-  border: 0px;
-  margin-right: auto;
-  margin-left: auto;
   margin-top: 5px;
   margin-bottom: 5px;
-  text-align: center;
-  /* margin: 0px; */
-  padding: 0px;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .latex {
-  /* padding: 20px; */
-  /* padding-top: 50px; */
-  /* padding-bottom: 20px; */
-    text-align: left;
+  text-align: left;
+  padding: 5%;
 }
+
+/* #two_plot_container { */
+/*   text-align: center; */
+/*   display: grid; */
+/*   grid-template-columns: repeat(2, 1fr); */
+/*   width: 100%; /1* of container /* */
+/*   /1* border: 1px solid blue; *1/ */
+/* } */

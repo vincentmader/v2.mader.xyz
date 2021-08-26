@@ -25,7 +25,7 @@
         <!-- x-t / y-t plot <br> -->
         <!-- x-y plot, corr -->
         <div class="section" id="section_ts_plot">
-            <canvas class="canvas" id="canvas_time_series_plot"></canvas>
+            <canvas id="canvas_time_series_plot"></canvas>
             <script type=module>
                 import { init, update } from "{{ url_for('static', filename='js/chronos/time_series_plot.js') }}"
                 let canvas_id = "canvas_time_series_plot"

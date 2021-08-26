@@ -2,59 +2,67 @@
 /* ========================================================================= */
 
 body {
-  overflow-x: hidden; /* -> scrolling */
   background-color: black;
-  color: white;
-  font-family: Arial, Helvetica, sans-serif;
+  width: 100%;
   margin: 0px;
   padding: 0px;
+  overflow-x: hidden; /* -> scrolling */
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 #header {
-  font-size: 20px;
-  font-weight: 690;
-  width: 100%;
-  height: 2em; /* needed? */
-  /* display: flex; */
+  padding-top: 7px;
+  padding-bottom: 7px;
+  padding-right: 10px;
+  width: calc(100% - 14px);
   text-align: right;
-  padding: 0.15em;
-  /* border: 1px solid green; */
 }
 
 #header_home {
   color: white;
+  font-size: 20px;
+  font-weight: 690;
   text-decoration: none;
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
-  /* margin-right: 5px; */
-  /* border: 1px solid green; */
+
+  background-color: black;
   border: 0px;
   outline: none;
   cursor: pointer;
+
+  /* margin-top: 50px; */
+  /* height: 1em; */
+  /* margin-top: 0.5em; */
+  /* margin-bottom: 0.5em; */
+  /* margin-right: 10px; */
+  /* border: 1px solid green; */
 }
 
 #navbar {
 }
 
 #content {
+  width: 50%;
+  padding-left: 25%;
+  padding-right: 25%;
   /* height: 95%; */
   /* margin-top: 15px; */
-  padding-top: 10px;
-  padding-bottom: 30px;
-  padding-left: 300px;
-  padding-right: 300px;
+  /* padding-top: 10px; */
+  /* padding-bottom: 30px; */
   /* border: 1px solid green; */
 }
 @media only screen and (max-width: 1201px) {
   #content {
-    padding-left: 100px;
-    padding-right: 100px;
+    width: 65%;
+    padding-left: 17.5%;
+    padding-right: 17.5%;
   }
 }
 @media only screen and (max-width: 751px) {
   #content {
-    padding-left: 30px;
-    padding-right: 30px;
+    width: 90%;
+    padding-left: 5%;
+    padding-right: 5%;
   }
 }
 
@@ -64,10 +72,6 @@ body {
   border: 2px solid #555555;
   margin-bottom: 25px;
   text-align: center;
-}
-
-.canvas {
-  width: 100%;
 }
 
 /* INDEX */
@@ -164,19 +168,21 @@ body {
 /* ========================================================================= */
 
 .canvas_holder {
+  border-radius: 20px;
   width: 90%;
-  border-radius: 20px; /* if changed: also change for navgrid_section? */
+  margin-top: 5%;
+  margin-bottom: 5%;
+  margin-left: 5%;
+  margin-right: 5%;
 }
 
-.canvas {
-  border-radius: 20px; /* if changed: also change for navgrid_section? */
-  width: 94%;
-  height: 100%;
-  margin: 3%;
-}
-
-#canvas_boids {
+canvas {
   background-color: black;
+  /* border: 2px solid #555555; */
+  border-radius: 20px; /* if changed: also change for navgrid_section? */
+  width: 100%;
+  /* width: 94%; */
+  /* margin: 3%; */
 }
 
 /* OLD */

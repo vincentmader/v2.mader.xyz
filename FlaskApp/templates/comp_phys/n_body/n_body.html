@@ -3,7 +3,6 @@
 {% block head %}
 
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='js/react_frontend/css/comp_phys.css') }}" type="text/css">
 
 {% endblock %}
 {% block content %}
@@ -17,7 +16,6 @@
         <div class="section">
             <div class="canvas_holder">
                 <canvas 
-                    class="canvas" 
                     id="canvas_{{ sim['sim_idx'] }}" 
                     data-system_states={{ sim['system_states']|tojson }}
                 ></canvas>

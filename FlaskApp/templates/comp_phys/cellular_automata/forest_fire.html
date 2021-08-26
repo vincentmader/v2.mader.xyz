@@ -3,7 +3,6 @@
 {% block head %}
 
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='js/react_frontend/css/comp_phys.css') }}" type="text/css">
 
 {% endblock %}
 {% block content %}
@@ -13,7 +12,7 @@
     </h4>
     <div class="section">
         <div class="canvas_holder">
-            <canvas class="canvas" id="canvas"></canvas>
+            <canvas id="canvas"></canvas>
             <script type="module" src="{{ url_for('static', filename='js/comp_phys/forest_fire.js') }}"></script>
         </div>
         <div class="button_menu">

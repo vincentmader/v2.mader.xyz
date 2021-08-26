@@ -1,3 +1,6 @@
+
+# IMPORTS
+# =============================================================================
 import json
 import os
 import sys
@@ -15,12 +18,13 @@ if not running_on_server:
     from .db_config import MDB_HIERARCHY, MDB_TS_CATEGORIES
 
 
-# initialize app
+# WEB-APP INITIALIZATION
+# =============================================================================
 app = Flask(__name__)
-
 
 # view functions
 # =============================================================================
+
 
 # index
 @app.route('/')
@@ -29,9 +33,12 @@ def index():
     return render_template('index.html', props=props)
 
 
+# test (TODO: remove? -> make index)
 @app.route('/react')
 def react_test():
-    # return send_from_directory('static/js/react_frontend/public', 'index.html')
+    # return send_from_directory(
+    #    'static/js/react_frontend/public', 'index.html'
+    # )
     return render_template('react.html')
 
 
