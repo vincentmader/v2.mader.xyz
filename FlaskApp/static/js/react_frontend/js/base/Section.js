@@ -1,6 +1,5 @@
 import React from "react";
 
-import "../css/base.css";
 
 class Section extends React.Component {
   constructor(props) {

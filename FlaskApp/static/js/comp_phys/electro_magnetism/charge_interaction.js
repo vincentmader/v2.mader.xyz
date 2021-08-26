@@ -191,7 +191,7 @@ function init() {
       for (let jdx = 0; jdx < idx; jdx++) {
         let neighbor = particles[jdx];
         let distance = Math.sqrt((neighbor.x - x) ** 2 + (neighbor.y - y) ** 2);
-        collision_found = distance < 2 * (neighbor.r + r);
+        collision_found = distance < 1.5 * (neighbor.r + r);
         if (collision_found) {
           break;
         }

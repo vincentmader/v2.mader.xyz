@@ -3,7 +3,6 @@ import React from "react";
 import Section from "./Section";
 // import Calendar from "../chronos/calendar/Calendar";
 
-import "../css/base.css";
 
 class Content extends React.Component {
   constructor(props) {

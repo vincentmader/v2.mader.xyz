@@ -10,6 +10,8 @@ const nr_of_atoms = 3000;
 const m = 1e-1;
 const M = 1;
 const v_th = 6e-3; // TODO: fix this, it's unphysical
+const particle_color = "#666666";
+const big_particle_color = "#222222";
 var big_particle, atoms;
 var canvas, ctx, W, H;
 var canvas2, ctx2, W2, H2;
@@ -65,7 +67,13 @@ class Particle {
     const canvas_x = W * this.x;
     const canvas_y = W * this.y;
     const canvas_r = W * this.r;
-    draw_point(ctx, canvas_x, canvas_y, canvas_r, "#444444", "#444444");
+    let color;
+    if (this.r === r_big) {
+      color = big_particle_color;
+    } else {
+      color = particle_color;
+    }
+    draw_point(ctx, canvas_x, canvas_y, canvas_r, color, color);
   }
 }
 

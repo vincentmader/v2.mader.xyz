@@ -20,7 +20,7 @@ body {
   /* border: 1px solid green; */
 }
 
-.header_home {
+#header_home {
   margin: 0.5em;
   font-weight: 690;
   font-size: 20px;
@@ -32,14 +32,6 @@ body {
 }
 
 #navbar {
-}
-
-.section {
-  background-color: #222222;
-  border-radius: 20px; /* if changed: also change for navgrid_section? */
-  border: 2px solid #555555;
-  margin-bottom: 25px;
-  text-align: center;
 }
 
 #content {
@@ -57,11 +49,23 @@ body {
     padding-right: 100px;
   }
 }
-@media only screen and (max-width: 641px) {
+@media only screen and (max-width: 751px) {
   #content {
     padding-left: 30px;
     padding-right: 30px;
   }
+}
+
+.section {
+  background-color: #222222;
+  border-radius: 20px; /* if changed: also change for navgrid_section? */
+  border: 2px solid #555555;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.canvas {
+  width: 100%;
 }
 
 /* INDEX */
@@ -70,16 +74,16 @@ body {
 .index {
 }
 
-#navgrid_section {
+#section_navgrid {
   background-color: #222222;
   border-radius: 20px; /* if changed: also change for normal section? */
   border: 2px solid #555555;
-  margin-bottom: 25px;
+  margin-bottom: 20px; /* if changed: also change for .section*/
 }
 
 #navgrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
 
   padding-left: 10px;
   padding-right: 10px;
@@ -91,6 +95,14 @@ body {
   #navgrid {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+.navgrid_section_title {
+  width: 100%;
+  text-align: center;
+  font-weight: 690;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .section_title {
@@ -109,7 +121,7 @@ body {
   outline: none;
 }
 
-.thumbnail {
+.navgrid_thumbnail {
   background-color: black;
   border: 2px solid #222222;
   border-radius: 30px;
@@ -127,24 +139,24 @@ body {
   filter: grayscale(100%);
   outline: none;
 }
-.thumbnail:after {
+.navgrid_thumbnail:after {
   content: "";
   display: block;
   padding-bottom: 100%;
 }
-.thumbnail:hover {
+.navgrid_thumbnail:hover {
   border: 2px solid #555555;
   transform: scale(1.1);
   -webkit-filter: grayscale(0%); /* Safari 6.0 - 9.0 */
   filter: grayscale(0%);
   cursor: pointer;
 }
-@media only screen and (max-width: 641px) {
-  .thumbnail {
-    -webkit-filter: grayscale(0%); /* Safari 6.0 - 9.0 */
-    filter: grayscale(0%);
-  }
-}
+/* @media only screen and (max-width: 641px) { */
+/*   .navgrid_thumbnail { */
+/*     -webkit-filter: grayscale(0%); /1* Safari 6.0 - 9.0 *1/ */
+/*     filter: grayscale(0%); */
+/*   } */
+/* } */
 
 /* COMP PHYS / SIMULATIONS */
 /* ========================================================================= */

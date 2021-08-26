@@ -1,7 +1,17 @@
+const path = require("path");
+const CopyPlugin = require("copy-webpack-plugin");
+const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin");
+
+const dist = path.resolve(__dirname, "dist");
+
 module.exports = {
-  mode: "development",
+  mode: "production", // development?
+  entry: {
+    index: "./js/index.js",
+  },
   output: {
-    filename: "bundle.js",
+    path: dist,
+    filename: "[name].js", // bundle.js?
   },
   module: {
     rules: [
@@ -20,5 +30,17 @@ module.exports = {
         use: ["style-loader", "css-loader"],
       },
     ],
+  },
+  devServer: {
+    contentBase: dist,
+  },
+  plugins: [
+    new CopyPlugin([path.resolve(__dirname, "static")]),
+    new WasmPackPlugin({
+      crateDirectory: __dirname,
+    }),
+  ],
+  experiments: {
+    asyncWebAssembly: true,
   },
 };

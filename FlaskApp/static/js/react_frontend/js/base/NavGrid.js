@@ -2,7 +2,6 @@ import React from "react";
 
 import Thumbnail from "./Thumbnail";
 
-import "../css/base.css";
 
 class NavGrid extends React.Component {
   constructor(props) {

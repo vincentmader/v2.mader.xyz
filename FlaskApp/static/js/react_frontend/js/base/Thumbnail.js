@@ -13,6 +13,8 @@ class Thumbnail extends React.Component {
 
   render() {
     // return <div style={styles.thumbnail}></div>;
+
+      // TODO: return link?
     return (
       <button
         onClick={() => {
@@ -20,7 +22,7 @@ class Thumbnail extends React.Component {
         }}
         className="navgrid_cell"
       >
-        <img className="thumbnail" src={this.source} alt={this.id} />
+        <img className="navgrid_thumbnail" src={this.source} alt={this.id} />
       </button>
     );
   }

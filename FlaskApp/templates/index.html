@@ -1,35 +1,26 @@
 {% extends "base/page_design_1.html" %}
 
-{% block title %}
-    Index
-{% endblock %}
 {% block head %}
-
     {{ super() }}
-    <!-- <style type="text/css"> -->
-    <!--     .important { color: #336699; } -->
-    <!-- </style> -->
-    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}" type="text/css"> -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" type="text/css">
-
 {% endblock %}
+
 {% block content %}
 
     {% for grid_items in props['nav_grid_sections'] %}
         <h4 class="section_title">
             {{ grid_items["title"] }}
         </h4>
-        <div class="section" id="section_nav_grid">
-            <div class="nav_grid">
+        <div id="section_navgrid">
+            <div id="navgrid">
             {% for grid_item in grid_items['pages'] %}
-            <a class="nav_grid_cell" href="{{ grid_item['link'] }}">
-                <div class="nav_grid_thumbnail_frame">
-                    <img class="nav_grid_thumbnail"
-                        src="{{url_for('static', 
-                            filename='media/thumbnails/' + 
-                            grid_item['id'] + '.png'
-                    )}}">
-                </div>
+            <a class="navgrid_cell" href="{{ grid_item['link'] }}">
+                <!-- <div class="navgrid_thumbnail_frame"> -->
+                <img class="navgrid_thumbnail"
+                    src="{{url_for('static', 
+                        filename='media/thumbnails/' + 
+                        grid_item['id'] + '.png'
+                )}}">
+                <!-- </div> -->
             </a>
             {% endfor %}
         </div>

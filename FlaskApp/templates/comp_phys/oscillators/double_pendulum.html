@@ -3,7 +3,7 @@
 {% block head %}
 
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/comp_phys.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='js/react_frontend/css/comp_phys.css') }}" type="text/css">
 
 {% endblock %}
 {% block content %}
@@ -41,8 +41,8 @@
                 $$T=\frac{m}{2}\bigg(v_1^2+v_2^2\bigg)+\frac{I}{2}
                     \bigg(\dot{\theta}_1^2+\dot{\theta}_2^2\bigg),$$
                 $$\text{and}$$
-                $$V=mg(y_1+y_2),$$ respectively.
-            From this, we can construct the Lagrangian 
+                $$V=mg\cdot(y_1+y_2),$$ respectively.
+            From this, one can construct the Lagrangian 
                 $$\mathcal{L}=T-V.$$
             The Euler-Lagrange equation reads
                 $$\frac{\partial\mathcal L}{\partial q}-\frac{d}{dt}
