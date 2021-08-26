@@ -501,9 +501,6 @@ class World {
     const ctx_coords = get_ctx_coords([colony_pos[0], colony_pos[1]]); // TODO: switch indices?
     ctx.fillStyle = "#181818";
     ctx.strokeStyle = "#181818";
-    // ctx.fillRect(
-    //   ctx_coords[0], ctx_coords[1], ant_drawing_radius, ant_drawing_radius
-    // );
     const ctx_radius = get_ctx_radius(colony_radius);
     ctx.beginPath();
     ctx.arc(ctx_coords[0], ctx_coords[1], ctx_radius, 0, TAU);

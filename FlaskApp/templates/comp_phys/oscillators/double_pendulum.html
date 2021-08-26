@@ -10,11 +10,15 @@
     <h4 class="section_title">
         double pendulum
     </h4>
+
     <div class="section">
         <div class="canvas_holder">
             <canvas id="double_pendulum_canvas" data-ys={{ props['ys']|tojson }}></canvas>
             <script type="module" src="{{ url_for('static', filename='js/comp_phys/double_pendulum.js') }}"></script>
         </div>
+    </div>
+
+    <div class="section">
         <div class="button_menu">
             <button class="button" id="restart_double_pendulum">
                 restart

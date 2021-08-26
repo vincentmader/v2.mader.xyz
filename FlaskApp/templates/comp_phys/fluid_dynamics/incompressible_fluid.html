@@ -4,8 +4,6 @@
 
     {{ super() }}
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
-    <!-- <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script> -->
-    <!-- <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> -->
 
 {% endblock %}
 {% block content %}
@@ -19,6 +17,9 @@
             <canvas id="canvas"></canvas>
             <script type="module" src="{{ url_for('static', filename='js/comp_phys/fluid_dynamics/incompressible_fluid.js') }}"></script>
         </div>
+    </div>
+
+    <div class="section">
         <div class="button_menu">
             <!--     <div id="v0_display"></div> -->
             <!--     <input --> 
