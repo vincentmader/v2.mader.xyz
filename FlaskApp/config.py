@@ -48,7 +48,7 @@ INDEX_NAVGRID_SECTIONS = [{
         },
     ]
 }, {
-    'title': 'harmonical oscillations',
+    'title': 'oscillators',
     'pages': [
         {
             'id': 'single_pendulum',
@@ -60,9 +60,6 @@ INDEX_NAVGRID_SECTIONS = [{
             'id': 'lissajous',
             'link': '/comp_phys/harmonical_oscillators/lissajous'
             # TODO: solve analytically (-> performance)
-        }, {
-            'id': 'mc_pi_darts',
-            'link': '/comp_phys/monte_carlo/pi_darts'
         },
     ]
 }, {
@@ -91,9 +88,6 @@ INDEX_NAVGRID_SECTIONS = [{
         }, {
             'id': 'game_of_life',
             'link': '/comp_phys/cellular_automata/game_of_life'
-        }, {
-            'id': 'rock_paper_scissors',
-            'link': '/comp_phys/cellular_automata/rock_paper_scissors'
         },
     ]
 }, {
@@ -119,6 +113,20 @@ INDEX_NAVGRID_SECTIONS = [{
         },
     ]
 }, {
+    'title': 'various',
+    'pages': [
+        {
+            'id': 'mc_pi_darts',
+            'link': '/comp_phys/monte_carlo/pi_darts'
+        }, {
+            'id': 'rock_paper_scissors',
+            'link': '/comp_phys/cellular_automata/rock_paper_scissors'
+        }, {
+            'id': 'quadtree',
+            'link': '/comp_phys/various/quadtree'
+        }
+    ]
+}, {
     'title': 'chronos',
     'pages': [
         {
@@ -140,9 +148,6 @@ INDEX_NAVGRID_SECTIONS = [{
         }, {
             'id': 'forest_fire',
             'link': '/comp_phys/cellular_automata/forest_fire'
-        }, {
-            'id': 'quadtree',
-            'link': '/comp_phys/various/quadtree'
         }, {
             'id': 'nbody_cloud',
             'link': '/comp_phys/n_body/cloud'
