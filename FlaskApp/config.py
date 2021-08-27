@@ -114,9 +114,6 @@ INDEX_NAVGRID_SECTIONS = [{
             'id': 'quadtree',
             'link': '/comp_phys/various/quadtree'
         }, {
-            'id': 'incompressible_fluid',
-            'link': '/comp_phys/fluid_dynamics/incompressible_fluid'
-        }, {
             'id': 'diffusion',
             'link': '/comp_phys/fluid_dynamics/diffusion'
         }, {
@@ -125,6 +122,9 @@ INDEX_NAVGRID_SECTIONS = [{
         }, {
             'id': 'nbody_cloud',
             'link': '/comp_phys/n_body/cloud'
+        }, {
+            'id': 'incompressible_fluid',
+            'link': '/comp_phys/fluid_dynamics/incompressible_fluid'
         }, {
             'id': 'tatooine', 'link': '/old/tatooine'
         }, {
