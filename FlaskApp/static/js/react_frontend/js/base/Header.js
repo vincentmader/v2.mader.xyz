@@ -1,7 +1,6 @@
 import React from "react";
 import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 
-
 class Header extends React.Component {
   constructor(props) {
     super(props);
@@ -11,12 +10,9 @@ class Header extends React.Component {
   render() {
     return (
       <div id="header">
-        <button
-          id="header_home"
-          onClick={() => this.updateViewID("index")}
-        >
+        <div id="header_home" onClick={() => this.updateViewID("index")}>
           mader.xyz
-        </button>
+        </div>
       </div>
     );
 

@@ -1,4 +1,5 @@
 const line_width = 2;
+const FPS_GOAL = 30;
 
 var canvas, ctx;
 var W, H;
@@ -38,7 +39,7 @@ function draw_grid(grid) {
       // get color for cell
       cell_value = grid[i][j];
       if (cell_value == 1) {
-        color = "green";
+        color = "#004400";
       } else if (cell_value == 2) {
         color = "blue";
       } else if (cell_value == 3) {
@@ -113,10 +114,11 @@ function flip_grid_entry(N, grid, x, y) {
   if (currently_selected_color == 3) {
     draw_radius = 1;
   } else {
-    draw_radius = 20;
+    draw_radius = 7;
   }
   for (let k = i - draw_radius; k < i + draw_radius; k++) {
     for (let l = j - draw_radius; l < j + draw_radius; l++) {
+      if (Math.sqrt((k - i) ** 2 + (l - j) ** 2) > draw_radius) continue;
       grid[k][l] = currently_selected_color;
     }
   }
@@ -168,11 +170,13 @@ const init = () => {
     draw_grid(grid);
     if (!paused) {
       grid = get_next_grid_state(N, grid);
-      frame_idx += 1;
     }
-    if (paused) document.getElementById("play/pause").innerHTML = "Unpause";
-    if (!paused) document.getElementById("play/pause").innerHTML = "Pause";
-  }, 80);
+    if (paused) {
+      document.getElementById("play/pause").innerHTML = "unpause";
+    } else {
+      document.getElementById("play/pause").innerHTML = "pause";
+    }
+  }, 1000 / FPS_GOAL);
 };
 
 init();

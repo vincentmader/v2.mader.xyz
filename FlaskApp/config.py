@@ -42,9 +42,6 @@ INDEX_NAVGRID_SECTIONS = [{
         }, {
             'id': 'nbody_flowers',
             'link': '/comp_phys/n_body/flowers'
-        }, {
-            'id': 'nbody_asteroids',
-            'link': '/comp_phys/n_body/asteroids'
         },
     ]
 }, {
@@ -102,18 +99,7 @@ INDEX_NAVGRID_SECTIONS = [{
         },
     ]
 }, {
-    'title': 'fluid dynamics',
-    'pages': [
-        {
-            'id': 'incompressible_fluid',
-            'link': '/comp_phys/fluid_dynamics/incompressible_fluid'
-        }, {
-            'id': 'diffusion',
-            'link': '/comp_phys/fluid_dynamics/diffusion'
-        },
-    ]
-}, {
-    'title': 'various',
+    'title': 'various / work in progress',
     'pages': [
         {
             'id': 'mc_pi_darts',
@@ -122,9 +108,35 @@ INDEX_NAVGRID_SECTIONS = [{
             'id': 'rock_paper_scissors',
             'link': '/comp_phys/cellular_automata/rock_paper_scissors'
         }, {
+            'id': 'nbody_asteroids',
+            'link': '/comp_phys/n_body/asteroids'
+        }, {
             'id': 'quadtree',
             'link': '/comp_phys/various/quadtree'
-        }
+        }, {
+            'id': 'incompressible_fluid',
+            'link': '/comp_phys/fluid_dynamics/incompressible_fluid'
+        }, {
+            'id': 'diffusion',
+            'link': '/comp_phys/fluid_dynamics/diffusion'
+        }, {
+            'id': 'forest_fire',
+            'link': '/comp_phys/cellular_automata/forest_fire'
+        }, {
+            'id': 'nbody_cloud',
+            'link': '/comp_phys/n_body/cloud'
+        }, {
+            'id': 'tatooine', 'link': '/old/tatooine'
+        }, {
+            'id': 'react',
+            'link': '/react'
+        },
+        # {'id': 'orbit'},
+        # {'id': 'solar'},
+        # {'id': 'factfulness'},
+        # {'id': 'bachelor_thesis'},
+        # {'id': 'spotify'},
+        # {'id': 'boltzmann', 'link': '/comp_phys/boltzmann'},
     ]
 }, {
     'title': 'chronos',
@@ -139,28 +151,6 @@ INDEX_NAVGRID_SECTIONS = [{
             'id': 'test',
             'link': '/chronos/stats/test'
         }
-    ]
-}, {
-    'title': 'stuff/unfinished',
-    'pages': [
-        {
-            'id': 'tatooine', 'link': '/old/tatooine'
-        }, {
-            'id': 'forest_fire',
-            'link': '/comp_phys/cellular_automata/forest_fire'
-        }, {
-            'id': 'nbody_cloud',
-            'link': '/comp_phys/n_body/cloud'
-        }, {
-            'id': 'react_test',
-            'link': '/react'
-        },
-        # {'id': 'orbit'},
-        # {'id': 'solar'},
-        # {'id': 'factfulness'},
-        # {'id': 'bachelor_thesis'},
-        # {'id': 'spotify'},
-        # {'id': 'boltzmann', 'link': '/comp_phys/boltzmann'},
     ]
     # }, {
     #     'title': 'unfinished',
