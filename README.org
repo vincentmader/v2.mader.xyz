@@ -21,7 +21,7 @@ source venv/bin/activate
 #+begin_src shell
 pip3 install -r requirements.txt
 #+end_src
-- Navigate into the frontend directory and install js dependencies:
+- Navigate into the frontend directory and install js dependencies by running the following:
 #+begin_src shell
 cd FlaskApp/static/js/react_frontend
 npm install
