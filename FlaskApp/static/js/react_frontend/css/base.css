@@ -84,7 +84,7 @@ body {
   background-color: #222222;
   border-radius: 20px; /* if changed: also change for normal section? */
   border: 2px solid #555555;
-  margin-bottom: 20px; /* if changed: also change for .section*/
+  margin-bottom: 30px; /* if changed: also change for .section*/
 }
 
 #navgrid {
@@ -124,6 +124,13 @@ body {
   height: 100%;
   background-color: #222222;
   outline: none;
+  position: relative;
+}
+
+.navgrid_thumbnail_title {
+  position: absolute;
+  top: 20%;
+  left: 20%;
 }
 
 .navgrid_thumbnail {
@@ -173,13 +180,13 @@ body {
   margin-bottom: 4%;
   margin-left: 4%;
   margin-right: 4%;
-}
+  /* } */
 
-canvas {
+  /* canvas { */
   background-color: black;
   /* border: 2px solid #555555; */
-  border-radius: 20px; /* if changed: also change for navgrid_section? */
-  width: 100%;
+  /* border-radius: 20px; /1* if changed: also change for navgrid_section? *1/ */
+  /* width: 100%; */
   /* width: 94%; */
   /* margin: 3%; */
 }

@@ -13,15 +13,14 @@
         <div id="section_navgrid">
             <div id="navgrid">
             {% for grid_item in grid_items['pages'] %}
-            <a class="navgrid_cell" href="{{ grid_item['link'] }}">
-                <!-- <div class="navgrid_thumbnail_frame"> -->
-                <img class="navgrid_thumbnail"
-                    src="{{url_for('static', 
-                        filename='media/thumbnails/' + 
-                        grid_item['id'] + '.png'
-                )}}">
-                <!-- </div> -->
-            </a>
+                <a class="navgrid_cell" href="{{ grid_item['link'] }}">
+                    <img class="navgrid_thumbnail"
+                        src="{{ url_for('static', 
+                            filename='media/thumbnails/' + 
+                            grid_item['id'] + '.png'
+                    )}}">
+                    <!-- <div class="navgrid_thumbnail_title">{{ grid_item['title'] }}</div> -->
+                </a>
             {% endfor %}
         </div>
     </div>

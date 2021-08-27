@@ -2,12 +2,13 @@
 // ============================================================================
 
 const TAU = 2 * Math.PI;
-const fancy_pants = 2;
+const fancy_pants = 2; // TODO
 
 // numerical parameters
 var colony_size = 300; // nr of ants
 
-var r_sa = 15; // ant sensor radius   (minimum for street formation: ~4.5)
+var r_sa = 10; // ant sensor radius   (minimum for street formation: ~4.5)
+var r_s_food = 3;
 var ant_fov = (2 / 3) * Math.PI; // (7 / 6) * Math.PI; // 2*Math.PI
 
 var min_pheromone_drop_amount = 1; // min. registered ph. amount
@@ -192,7 +193,7 @@ class Ant {
     for (let y = y_min; y < y_max; y++) {
       for (let x = x_min; x < x_max; x++) {
         distance_to_food = Math.sqrt((x - this.x) ** 2 + (y - this.y) ** 2);
-        if (distance_to_food <= r_sa && world.food_sources[y][x] > 0) {
+        if (distance_to_food <= r_s_food && world.food_sources[y][x] > 0) {
           food_locations.push([x, y]); // TODO: go for largest src?
         }
       }
