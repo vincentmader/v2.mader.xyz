@@ -46,3 +46,9 @@ search_history.db
 main_precompute_directions.js
 
 _old
+
+node_modules
+dist
+target
+pkg
+wasm-pack.log
