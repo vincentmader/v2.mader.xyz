@@ -6,27 +6,27 @@ This repo contains the code running [[http://mader.xyz][my website]].
 * Installation
 To contribute, you'll need to install the server locally via the following steps:
 
-- Make sure you have python3 + pip, nodejs + npm as well as mongodb installed
-- Download the repo
+- Make sure you have python3 + pip, nodejs + npm, and mongodb installed.
+- Download the repo:
 #+begin_src shell
 git clone https://github.com/vincentmader/mader.xyz
 cd mader.xyz
 #+end_src
-- Create a virtual python environment & source it
+- Create a virtual environment for python & source it (optional):
 #+begin_src shell
 python -m venv venv
 source venv/bin/activate
 #+end_src
-- Install python dependencies
+- Install python dependencies:
 #+begin_src shell
 pip3 install -r requirements.txt
 #+end_src
-- Navigate into the frontend code and install js dependencies
+- Navigate into the frontend directory and install js dependencies:
 #+begin_src shell
 cd FlaskApp/static/js/react_frontend
 npm install
 #+end_src
-- Test-run the server
+- Run the backend:
 #+begin_src shell
 cd FlaskApp
 python3 __init__.py
