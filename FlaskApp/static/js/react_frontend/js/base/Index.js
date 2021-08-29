@@ -22,7 +22,11 @@ const subsections = {
     { id: "nbody_flowers" },
     // { id: "nbody_asteroids" },
   ],
-  oscillators: [{ id: "single_pendulum" }, { id: "double_pendulum" }],
+  oscillators: [
+    { id: "single_pendulum" },
+    { id: "double_pendulum" },
+    { id: "lissajous" },
+  ],
   "statistical physics & thermodynamics": [
     { id: "gas_in_a_box" },
     { id: "brownian_motion" },
@@ -36,11 +40,7 @@ const subsections = {
   "electro-magnetism": [{ id: "lorentz" }, { id: "charge_interaction" }],
   "fluid dynamics": [{ id: "incompressible_fluid" }, { id: "diffusion" }],
   chronos: [{ id: "correlation_finder" }, { id: "stats" }],
-  various: [
-    { id: "mc_pi_darts" },
-    { id: "rock_paper_scissors" },
-    { id: "lissajous" },
-  ],
+  various: [{ id: "mc_pi_darts" }, { id: "rock_paper_scissors" }],
 };
 
 class Index extends React.Component {

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 // import Index from "./components/index/Index";
 import Index from "./base/Index";
-// import Boids from "./comp_phys/boids/Boids";
+import Boids from "./comp_phys/boids/Boids";
 
 import "../css/base.css";
 
@@ -21,8 +21,8 @@ export default class App extends Component {
   render() {
     if (this.state.currentViewID === "index") {
       return <Index updateViewID={this.updateViewID} />;
-      // } else if (this.state.currentViewID === "boids") {
-      //   return <Boids updateViewID={this.updateViewID} />;
+    } else if (this.state.currentViewID === "boids") {
+      return <Boids updateViewID={this.updateViewID} />;
     } else {
       return this.state.currentViewID + " is not yet implemented :(";
     }

@@ -1,9 +1,15 @@
 import React from "react";
 
+// import("../../../pkg/index.js").catch(console.error);
+// import("../../../pkg/index").catch(console.error);
+// import { main_js } from "../../../pkg/index.js";
+// import "../../../pkg/index.js";
+import { main_js } from "../../../pkg/index.js";
+
 // import { fib } from "wasm_test";
 // import * as wasm_test from "wasm_test/wasm_test_bg";
 // import { greet } from "wasm_test/wasm_test_bg";
-let wasm_test = require("wasm_test/wasm_test_bg");
+// let wasm_test = require("wasm_test/wasm_test_bg");
 // import init, { greet } from "wasm_test";
 // import { greet } from "wasm_test";
 // import("wasm_test").then((module) => {
@@ -51,30 +57,6 @@ class Animation extends React.Component {
   }
 
   updateAnimationState() {
-    // const [ptr0, len0] = wasm.greet("aa");
-    // try {
-    //   const ret = wasm.greet(ptr0, len0);
-    //   const ptr = wasm.__wbindgen_boxed_str_ptr(ret);
-    //   const len = wasm.__wbindgen_boxed_str_len(ret);
-    //   const realRet = getStringFromWasm(ptr, len);
-    //   wasm.__wbindgen_boxed_str_free(ret);
-    //   return realRet;
-    // } finally {
-    //   wasm.__wbindgen_free(ptr0, len0);
-    // }
-    // console.log(fib);
-    // fib();
-    // console.log(wasm_test);
-    // init().then(() => {
-    //   greet("WebAssembly");
-    // });
-    // let a = wasm_test.greet("aa");
-    wasm_test.greet("aa");
-    // greet("World!");
-    // greet("aa");
-
-    // wasm_test.then((m) => m.greet("World!")).catch(console.error);
-
     this.setState((prevState) => ({}));
     this.rAF = requestAnimationFrame(this.updateAnimationState);
   }
@@ -94,6 +76,7 @@ export default class Boids extends React.Component {
     this.updateViewID = props.updateViewID;
     this.canvasRef = React.createRef();
     this.frame_idx = 0;
+    main_js();
   }
 
   render() {

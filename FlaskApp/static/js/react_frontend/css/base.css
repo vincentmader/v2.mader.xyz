@@ -74,6 +74,10 @@ body {
   text-align: center;
 }
 
+.slider {
+  outline: none;
+}
+
 /* INDEX */
 /* ========================================================================= */
 
@@ -120,17 +124,23 @@ body {
 }
 
 .navgrid_cell {
+  border: 0px;
   width: 100%;
   height: 100%;
   background-color: #222222;
   outline: none;
   position: relative;
+  padding: 0px;
 }
 
 .navgrid_thumbnail_title {
   position: absolute;
   top: 20%;
   left: 20%;
+  color: transparent;
+}
+.navgrid_thumbnail_title:hover {
+  color: white;
 }
 
 .navgrid_thumbnail {

@@ -1,11 +1,16 @@
 import { get_boltzmann_probability } from "./physics_utils.js";
 import { apply_periodic_bounds } from "./physics_utils.js";
 
+const fps_goal = 60;
 const line_width = 2;
 const J = 1;
 const mu = 1;
 var T;
 var B;
+
+const N = 70;
+const flips_before_draw = 500;
+const z = 0.7;
 
 var canvas, ctx;
 var W, H;
@@ -38,8 +43,8 @@ function draw_grid(grid) {
       // get position and geometry of cell
       x = (W / N) * i;
       y = (H / N) * j;
-      w = (W / N) * 0.7;
-      h = (H / N) * 0.7;
+      w = (W / N) * z;
+      h = (H / N) * z;
       // get color for cell
       if (grid[i][j] == -1) {
         color = "black";
@@ -177,8 +182,6 @@ const init = () => {
   ctx.strokeStyle = "white";
   ctx.fillStyle = "white";
 
-  const N = 75;
-  const flips_before_draw = 500;
   var grid = initialize_spin_grid(N);
   var temperature_slider, Bfield_slider;
 
@@ -212,7 +215,7 @@ const init = () => {
     chart.data.labels.push(label);
     chart.data.datasets[0].data.push(magnetization);
     chart.update();
-  }, 1);
+  }, 1000 / fps_goal);
 };
 
 init();

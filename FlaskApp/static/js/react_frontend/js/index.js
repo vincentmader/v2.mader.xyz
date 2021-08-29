@@ -4,7 +4,7 @@ import App from "./App";
 
 import "../css/base.css";
 
-import("../pkg/index.js").catch(console.error);
+// import("../pkg/index.js").catch(console.error);
 
 ReactDOM.render(
   <App currentViewID="index" />,

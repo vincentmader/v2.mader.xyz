@@ -39,6 +39,10 @@ module.exports = {
     new WasmPackPlugin({
       crateDirectory: __dirname,
     }),
+    // new HtmlWebPackPlugin({
+    //   template: path.resolve(__dirname, "static/index.html"),
+    //   filename: "index.html",
+    // }),
   ],
   experiments: {
     asyncWebAssembly: true,
