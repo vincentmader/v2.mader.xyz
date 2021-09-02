@@ -174,13 +174,13 @@ def comp_phys_stat_phys(subdir):
         return render_template(template, props=props)
 
     elif subdir == 'thermal_motion':
-        system_states = np.loadtxt(os.path.join(
-            PATH_TO_PROJECT, 'comp_phys/gas_in_a_box/out/ys.txt'
-        ))
-        system_states = [list(i) for i in system_states]
+        # system_states = np.loadtxt(os.path.join(
+        #     PATH_TO_PROJECT, 'comp_phys/gas_in_a_box/out/ys.txt'
+        # ))
+        # system_states = [list(i) for i in system_states]
         template = 'comp_phys/stat_phys/thermal_motion.html'
         props = {
-            'ys': json.dumps(system_states),
+            # 'ys': json.dumps(system_states),
         }
         return render_template(template, props=props)
 
