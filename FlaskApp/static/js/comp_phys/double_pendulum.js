@@ -1,6 +1,7 @@
 import { draw_line } from "../utils/drawing_utils.js";
 import { draw_point } from "../utils/drawing_utils.js";
 
+const fps_goal = 60;
 const line_width = 2;
 var tail_length = 175;
 
@@ -129,7 +130,7 @@ const init = () => {
     // tail_length = Number(slider_tail_length.value);
 
     frame_idx += 1;
-  }, 1000 / 60);
+  }, 1000 / fps_goal);
 };
 
 init();

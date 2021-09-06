@@ -3,6 +3,7 @@
 
 import { draw_point } from "../../utils/drawing_utils.js";
 
+const fps_goal = 60;
 const dt = 1;
 const r_big = 0.05;
 const r_atom = 2e-3;
@@ -216,7 +217,7 @@ function animate() {
     chart.data.labels.push(""); // TODO: ?
     chart.data.datasets[0].data.push(mean_squared_dist);
     chart.update();
-  }, 1000 / 60); // TODO: make changeable
+  }, 1000 / fps_goal);
 }
 
 init();

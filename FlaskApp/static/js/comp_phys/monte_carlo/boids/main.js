@@ -14,35 +14,35 @@ import { Rectangle } from "../../../utils/math_utils.js";
 
 // constants
 const TAU = 2 * Math.PI;
-const DT = 1.5; // TODO: make changeable
+const DT = 1; // TODO: make changeable
 
 // numerical parameters
-var flock_size = 600; // nr of boids in system, TODO: make changeable
+var flock_size = 200; // nr of boids in system, TODO: make changeable
 var initial_predator_speed = 1; // TODO: make changeable
 // quad tree
 var quadtree;
 var quad_tree_capacity = 10; // TODO: make changeable
 var use_quad_tree = false; // changeable via button
 // forces
-var bool_avoidance_activated = true;
-var bool_attraction_activated = true;
+var bool_separation_activated = true;
 var bool_cohesion_activated = true;
+var bool_alignment_activated = true;
 var bool_evasion_activated = true;
-var avoidance_force = 0.5; // changeable via slider
-var attraction_force = 0.1; // changeable via slider
-var cohesion_force = 0.2; // changeable via slider
-var evasion_force = 0.5; // changeable via slider
+var separation_force = 0.6; // changeable via slider
+var cohesion_force = 0.1; // changeable via slider
+var alignment_force = 0.1; // changeable via slider
+var evasion_force = 0.4; // changeable via slider
 var friction = 0;
 // sensor radii
-var avoidance_radius = 6; // changeable via slider
-var attraction_radius = 40; // changeable via slider
-var cohesion_radius = 30; // changeable via slider
-var evasion_radius = 60; // TODO: make changeable
+var separation_radius = 6; // changeable via slider
+var cohesion_radius = 20; // changeable via slider
+var alignment_radius = 20; // changeable via slider
+var evasion_radius = 30; // TODO: make changeable
 var boid_collision_radius = 5; // TODO: make changeable
 // freedom
-var probability_for_random_boid_turn = 0.5; // TODO: make changeable
+var probability_for_random_boid_turn = 0.1; // TODO: make changeable
 var initial_boid_speed = 1; // TODO: make changeable
-var max_random_turn_angle = TAU / 24; // TODO: make changeable // TODO: 1/16? 1/32?
+var max_random_turn_angle = TAU / 12; // TODO: make changeable // TODO: 1/16? 1/32?
 
 // world parameters
 const world_size = [300, 300]; // TODO: make changeable
@@ -50,9 +50,9 @@ var predator_flock_size = 1; // TODO: multiple? steering?
 var world, flock, predators;
 
 // button presets
-var bool_draw_avoidance_radius = false; // changeable via button
-var bool_draw_attraction_radius = false; // changeable via button
+var bool_draw_separation_radius = false; // changeable via button
 var bool_draw_cohesion_radius = false; // changeable via button
+var bool_draw_alignment_radius = false; // changeable via button
 var bool_draw_evasion_radius = false;
 var bool_show_trajectories = false; // changeable via button
 var bool_show_quad_tree_grid = false; // changeable via button
@@ -69,6 +69,7 @@ var predator_drawing_radius = 5 * boid_drawing_radius;
 
 // stats
 var time_step;
+const fps_goal = 60;
 // var fps
 // var fps_values = [];
 
@@ -181,14 +182,14 @@ class Boid {
     this.possible_neighbors = [];
   }
   // avoid collisions with other/neighboring boids
-  apply_avoidance() {
+  apply_separation() {
     // to check for collisions: find list idx of closest boid
     let distance_to_closest_boid = 10000; // TODO
     let idx_of_closest_boid = -1;
     for (let idx = 0; idx < this.possible_neighbors.length; idx++) {
       let boid = flock.boids[idx];
       let distance = boid.position.sub(this.position).norm_l2();
-      if (distance > avoidance_radius) continue;
+      if (distance > separation_radius) continue;
       let angle =
         boid.position.sub(this.position).angle() - this.velocity.angle();
       if (angle < -Math.PI / 2 || angle > Math.PI / 2) continue;
@@ -221,23 +222,23 @@ class Boid {
     // continue if there are no collisions on present trajectory
     if (!collision_detected) return;
     // TODO: choose random point, check for collision, repeat until empty spot found
-    // apply repulsion force to velocity
+    // apply separation force to velocity
     let force = ahead.sub(closest_boid.position);
     let force_norm = force.norm_l2();
-    force = force.mult(avoidance_force / force_norm);
+    force = force.mult(separation_force / force_norm);
     this.velocity = this.velocity.add(force);
     // renormalize
     this.velocity = this.velocity.mult(this.speed / this.velocity.norm_l2());
   }
   // steer towards nearby boids clusters (CoM)
-  apply_attraction() {
+  apply_cohesion() {
     var center_of_mass = 0;
     var boids_in_local_flock = 0;
     for (let idx = 0; idx < this.possible_neighbors.length; idx++) {
       let boid = flock.boids[idx];
       if (boid === this) continue;
       let distance = boid.position.sub(this.position).norm_l2();
-      if (distance > attraction_radius) continue;
+      if (distance > cohesion_radius) continue;
       let angle =
         boid.position.sub(this.position).angle() - this.velocity.angle();
       if (angle < -Math.PI / 2 || angle > Math.PI / 2) continue;
@@ -256,20 +257,20 @@ class Boid {
     let force = center_of_mass.sub(this.position);
     let force_norm = force.norm_l2();
     this.velocity = this.velocity.add(
-      force.mult((1 / force_norm) * attraction_force)
+      force.mult((1 / force_norm) * cohesion_force)
     );
     // renormalize
     this.velocity = this.velocity.mult(this.speed / this.velocity.norm_l2());
   }
   // align with avg velocity vectors of nearby boid clusters
-  apply_cohesion() {
+  apply_alignment() {
     var average_velocity = 0;
     var boids_in_local_flock = 0;
     for (let idx = 0; idx < this.possible_neighbors.length; idx++) {
       let boid = flock.boids[idx];
       if (boid === this) continue;
       let distance = boid.position.sub(this.position).norm_l2();
-      if (distance > cohesion_radius) continue;
+      if (distance > alignment_radius) continue;
       let angle =
         boid.position.sub(this.position).angle() - this.velocity.angle();
       if (angle < -Math.PI / 2 || angle > Math.PI / 2) continue;
@@ -289,7 +290,7 @@ class Boid {
     if (!force) console.log(force);
     let force_norm = force.norm_l2();
     this.velocity = this.velocity.add(
-      force.mult((1 / force_norm) * cohesion_force)
+      force.mult((1 / force_norm) * alignment_force)
     );
     // renormalize
     this.velocity = this.velocity.mult(this.speed / this.velocity.norm_l2());
@@ -348,24 +349,24 @@ class Boid {
     ctx.stroke();
 
     // draw sensor radii
-    if (bool_draw_avoidance_radius && this === flock.boids[0]) {
-      let ctx_radius = get_ctx_radius(avoidance_radius);
+    if (bool_draw_separation_radius && this === flock.boids[0]) {
+      let ctx_radius = get_ctx_radius(separation_radius);
       ctx.beginPath();
       ctx.arc(ctx_coords[0], ctx_coords[1], ctx_radius, 0, TAU);
       ctx.strokeStyle = "red";
       ctx.lineWidth = 3;
       ctx.stroke();
     }
-    if (bool_draw_attraction_radius && this === flock.boids[0]) {
-      let ctx_radius = get_ctx_radius(attraction_radius);
+    if (bool_draw_cohesion_radius && this === flock.boids[0]) {
+      let ctx_radius = get_ctx_radius(cohesion_radius);
       ctx.beginPath();
       ctx.arc(ctx_coords[0], ctx_coords[1], ctx_radius, 0, TAU);
       ctx.strokeStyle = "green";
       ctx.lineWidth = 3;
       ctx.stroke();
     }
-    if (bool_draw_cohesion_radius && this === flock.boids[0]) {
-      let ctx_radius = get_ctx_radius(cohesion_radius);
+    if (bool_draw_alignment_radius && this === flock.boids[0]) {
+      let ctx_radius = get_ctx_radius(alignment_radius);
       ctx.beginPath();
       ctx.arc(ctx_coords[0], ctx_coords[1], ctx_radius, 0, TAU);
       ctx.strokeStyle = "blue";
@@ -419,7 +420,7 @@ class Boid {
     if (use_quad_tree) {
       let x = this.position.x;
       let y = this.position.y;
-      let w = Math.max(attraction_radius, cohesion_radius);
+      let w = Math.max(cohesion_radius, alignment_radius);
       let h = w;
       let range = new Rectangle(x, y, w, h);
 
@@ -443,11 +444,11 @@ class Boid {
       }
     }
     // apply forces
-    if (bool_attraction_activated) this.apply_attraction(possible_neighbors);
     if (bool_cohesion_activated) this.apply_cohesion(possible_neighbors);
+    if (bool_alignment_activated) this.apply_alignment(possible_neighbors);
     this.apply_random_turns();
     if (bool_evasion_activated) this.apply_evasion();
-    if (bool_avoidance_activated) this.apply_avoidance(possible_neighbors);
+    if (bool_separation_activated) this.apply_separation(possible_neighbors);
     // this.velocity.x *= 1 - friction;
     // this.velocity.y *= 1 - friction;
     this.speed *= 1 - friction;
@@ -474,7 +475,7 @@ class Predator {
     }
   }
   // steer towards nearby boids clusters (CoM)  TODO: this was copied from Boid (merge/inherit?)
-  apply_attraction() {
+  apply_cohesion() {
     var center_of_mass = 0;
     var boids_in_local_flock = 0;
     for (let idx = 0; idx < flock.boids.length; idx++) {
@@ -497,7 +498,7 @@ class Predator {
     let force = center_of_mass.sub(this.position);
     let force_norm = force.norm_l2();
     this.velocity = this.velocity.add(
-      force.mult((1 / force_norm) * attraction_force)
+      force.mult((1 / force_norm) * cohesion_force)
     );
     // renormalize
     this.velocity = this.velocity.mult(this.speed / this.velocity.norm_l2());
@@ -560,7 +561,7 @@ class Predator {
   }
   // update predator instance
   update() {
-    this.apply_attraction();
+    this.apply_cohesion();
     this.apply_random_turns();
     this.update_position_values();
     this.apply_random_turns();
@@ -720,22 +721,22 @@ const add_event_listeners = () => {
 
   // for displaying force radii
   document
-    .getElementById("button_display_avoidance_radius")
+    .getElementById("button_display_separation_radius")
     .addEventListener("click", function () {
-      bool_draw_avoidance_radius = !bool_draw_avoidance_radius;
-      console.log("toggled drawing of avoidance radius");
-    });
-  document
-    .getElementById("button_display_attraction_radius")
-    .addEventListener("click", function () {
-      bool_draw_attraction_radius = !bool_draw_attraction_radius;
-      console.log("toggled drawing of attraction radius");
+      bool_draw_separation_radius = !bool_draw_separation_radius;
+      console.log("toggled drawing of separation radius");
     });
   document
     .getElementById("button_display_cohesion_radius")
     .addEventListener("click", function () {
       bool_draw_cohesion_radius = !bool_draw_cohesion_radius;
       console.log("toggled drawing of cohesion radius");
+    });
+  document
+    .getElementById("button_display_alignment_radius")
+    .addEventListener("click", function () {
+      bool_draw_alignment_radius = !bool_draw_alignment_radius;
+      console.log("toggled drawing of alignment radius");
     });
   document
     .getElementById("button_display_evasion_radius")
@@ -745,22 +746,22 @@ const add_event_listeners = () => {
     });
   // for toggling forces
   document
-    .getElementById("button_toggle_avoidance")
+    .getElementById("button_toggle_separation")
     .addEventListener("click", function () {
-      bool_avoidance_activated = !bool_avoidance_activated;
-      console.log("toggled avoidance: " + String(bool_avoidance_activated));
-    });
-  document
-    .getElementById("button_toggle_attraction")
-    .addEventListener("click", function () {
-      bool_attraction_activated = !bool_attraction_activated;
-      console.log("toggled attraction: " + String(bool_attraction_activated));
+      bool_separation_activated = !bool_separation_activated;
+      console.log("toggled separation: " + String(bool_separation_activated));
     });
   document
     .getElementById("button_toggle_cohesion")
     .addEventListener("click", function () {
       bool_cohesion_activated = !bool_cohesion_activated;
       console.log("toggled cohesion: " + String(bool_cohesion_activated));
+    });
+  document
+    .getElementById("button_toggle_alignment")
+    .addEventListener("click", function () {
+      bool_alignment_activated = !bool_alignment_activated;
+      console.log("toggled alignment: " + String(bool_alignment_activated));
     });
   document
     .getElementById("button_toggle_evasion")
@@ -790,18 +791,11 @@ const add_event_listeners = () => {
     });
   // for sensor radii
   document
-    .getElementById("slider_avoidance_radius")
+    .getElementById("slider_separation_radius")
     .addEventListener("click", function () {
-      let value = document.getElementById("slider_avoidance_radius").value;
-      avoidance_radius = (value / 1000) * world.width; // TODO: only for W=H
-      console.log("new boid avoidance radius: ", avoidance_radius);
-    });
-  document
-    .getElementById("slider_attraction_radius")
-    .addEventListener("click", function () {
-      let value = document.getElementById("slider_attraction_radius").value;
-      attraction_radius = (value / 1000) * world.width; // TODO: only for W=H
-      console.log("new boid attraction radius: ", attraction_radius);
+      let value = document.getElementById("slider_separation_radius").value;
+      separation_radius = (value / 1000) * world.width; // TODO: only for W=H
+      console.log("new boid separation radius: ", separation_radius);
     });
   document
     .getElementById("slider_cohesion_radius")
@@ -809,6 +803,13 @@ const add_event_listeners = () => {
       let value = document.getElementById("slider_cohesion_radius").value;
       cohesion_radius = (value / 1000) * world.width; // TODO: only for W=H
       console.log("new boid cohesion radius: ", cohesion_radius);
+    });
+  document
+    .getElementById("slider_alignment_radius")
+    .addEventListener("click", function () {
+      let value = document.getElementById("slider_alignment_radius").value;
+      alignment_radius = (value / 1000) * world.width; // TODO: only for W=H
+      console.log("new boid alignment radius: ", alignment_radius);
     });
   document
     .getElementById("slider_evasion_radius")
@@ -819,18 +820,11 @@ const add_event_listeners = () => {
     });
   // for force strengths
   document
-    .getElementById("slider_avoidance_strength")
+    .getElementById("slider_separation_strength")
     .addEventListener("click", function () {
-      let value = document.getElementById("slider_avoidance_strength").value;
-      avoidance_force = value / 100;
-      console.log("new boid avoidance force: ", avoidance_force);
-    });
-  document
-    .getElementById("slider_attraction_strength")
-    .addEventListener("click", function () {
-      let value = document.getElementById("slider_attraction_strength").value;
-      attraction_force = value / 100;
-      console.log("new boid attraction strength: ", attraction_force);
+      let value = document.getElementById("slider_separation_strength").value;
+      separation_force = value / 100;
+      console.log("new boid separation force: ", separation_force);
     });
   document
     .getElementById("slider_cohesion_strength")
@@ -838,6 +832,13 @@ const add_event_listeners = () => {
       let value = document.getElementById("slider_cohesion_strength").value;
       cohesion_force = value / 100;
       console.log("new boid cohesion strength: ", cohesion_force);
+    });
+  document
+    .getElementById("slider_alignment_strength")
+    .addEventListener("click", function () {
+      let value = document.getElementById("slider_alignment_strength").value;
+      alignment_force = value / 100;
+      console.log("new boid alignment strength: ", alignment_force);
     });
   document
     .getElementById("slider_evasion_strength")
@@ -866,26 +867,30 @@ const update_predator_flock_size = (flock_size) => {
 
 async function animate() {
   // create animation loop
-  requestAnimationFrame(animate);
-  // handle pausing
-  if (paused) {
-    return;
-  }
+  // requestAnimationFrame(animate);
 
-  // erase whole canvas
-  if (!bool_show_trajectories) ctx.clearRect(0, 0, canvas.width, canvas.height);
-  // show quad tree grid
-  if (bool_show_quad_tree_grid) quadtree.show();
+  setInterval(function () {
+    // handle pausing
+    if (paused) {
+      return;
+    }
 
-  // update flock
-  flock.update();
-  // update predator(s)
-  for (let p of predators) {
-    p.update();
-  }
+    // erase whole canvas
+    if (!bool_show_trajectories)
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // show quad tree grid
+    if (bool_show_quad_tree_grid) quadtree.show();
 
-  // increment time
-  time_step += 1;
+    // update flock
+    flock.update();
+    // update predator(s)
+    for (let p of predators) {
+      p.update();
+    }
+
+    // increment time
+    time_step += 1;
+  }, 1000 / fps_goal);
 }
 
 // INITIALIZATION
@@ -912,17 +917,17 @@ const init = () => {
     "slider_predator_flock_size"
   ).value = predator_flock_size;
   // for sensor radii
-  document.getElementById("slider_avoidance_radius").value = avoidance_radius;
-  document.getElementById("slider_attraction_radius").value = attraction_radius;
+  document.getElementById("slider_separation_radius").value = separation_radius;
   document.getElementById("slider_cohesion_radius").value = cohesion_radius;
+  document.getElementById("slider_alignment_radius").value = alignment_radius;
   document.getElementById("slider_evasion_radius").value = evasion_radius;
   // for force strengths
-  document.getElementById("slider_avoidance_strength").value =
-    avoidance_force * 100;
-  document.getElementById("slider_attraction_strength").value =
-    attraction_force * 100;
+  document.getElementById("slider_separation_strength").value =
+    separation_force * 100;
   document.getElementById("slider_cohesion_strength").value =
     cohesion_force * 100;
+  document.getElementById("slider_alignment_strength").value =
+    alignment_force * 100;
   document.getElementById("slider_evasion_strength").value =
     evasion_force * 100;
 
