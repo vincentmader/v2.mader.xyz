@@ -220,6 +220,16 @@ def comp_phys_various(subdir):
         props = {}
         return render_template(template, props=props)
 
+# various
+# =============================================================================
+
+
+@app.route('/various/draw')
+def various_draw():
+    template = 'various/draw.html'
+    props = {}
+    return render_template(template, props=props)
+
 
 # debugging
 # =============================================================================

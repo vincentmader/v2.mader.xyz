@@ -35,12 +35,15 @@ INDEX_NAVGRID_SECTIONS = [{
     'pages': [
         {
             'id': '3body_moon',
+            'title': '3-body problem - moon',
             'link': '/comp_phys/n_body/3body_moon'
         }, {
             'id': '3body_fig8',
+            'title': '3-body problem - figure 8',
             'link': '/comp_phys/n_body/3body_fig8'
         }, {
             'id': 'nbody_flowers',
+            'title': 'symmetric satellite constellation',
             'link': '/comp_phys/n_body/flowers'
         },
     ]
@@ -49,12 +52,15 @@ INDEX_NAVGRID_SECTIONS = [{
     'pages': [
         {
             'id': 'single_pendulum',
+            'title': 'pendulum',
             'link': '/comp_phys/harmonical_oscillators/single_pendulum'
         }, {
             'id': 'double_pendulum',
+            'title': 'double pendulum',
             'link': '/comp_phys/harmonical_oscillators/double_pendulum'
         }, {
             'id': 'lissajous',
+            'title': 'Lissajous figures',
             'link': '/comp_phys/harmonical_oscillators/lissajous'
             # TODO: solve analytically (-> performance)
         },
@@ -64,12 +70,15 @@ INDEX_NAVGRID_SECTIONS = [{
     'pages': [
         {
             'id': 'gas_in_a_box',
+            'title': 'elastic collisions',
             'link': '/comp_phys/stat_phys/thermal_motion'
         }, {
             'id': 'brownian_motion',
+            'title': 'Brownian motion',
             'link': '/comp_phys/stat_phys/brownian_motion'
         }, {
             'id': 'ising',
+            'title': 'Ising model',
             'link': '/comp_phys/stat_phys/ising'
         },
     ]
@@ -78,12 +87,15 @@ INDEX_NAVGRID_SECTIONS = [{
     'pages': [
         {
             'id': 'boids',
+            'title': 'Boids',
             'link': '/comp_phys/monte_carlo/boids'
         }, {
             'id': 'ants',
+            'title': 'Ants',
             'link': '/comp_phys/monte_carlo/ants'
         }, {
             'id': 'game_of_life',
+            'title': 'Conway\'s game of life',
             'link': '/comp_phys/cellular_automata/game_of_life'
         },
     ]
@@ -92,9 +104,11 @@ INDEX_NAVGRID_SECTIONS = [{
     'pages': [
         {
             'id': 'lorentz',
+            'title': 'Wien filter',
             'link': '/old/lorentz'
         }, {
             'id': 'charge_interaction',
+            'title': 'charge interaction',
             'link': '/comp_phys/electro_magnetism/charge_interaction'
         },
     ]
@@ -103,33 +117,48 @@ INDEX_NAVGRID_SECTIONS = [{
     'pages': [
         {
             'id': 'mc_pi_darts',
+            'title': 'Monte Carlo pi',
             'link': '/comp_phys/monte_carlo/pi_darts'
         }, {
             'id': 'rock_paper_scissors',
+            'title': 'rock-paper-scissors',
             'link': '/comp_phys/cellular_automata/rock_paper_scissors'
         }, {
             'id': 'nbody_asteroids',
+            'title': 'asteroids around binary',
             'link': '/comp_phys/n_body/asteroids'
         }, {
             'id': 'quadtree',
+            'title': 'quad tree',
             'link': '/comp_phys/various/quadtree'
         }, {
             'id': 'diffusion',
+            'title': 'diffusion',
             'link': '/comp_phys/fluid_dynamics/diffusion'
         }, {
             'id': 'forest_fire',
+            'title': 'forest fire',
             'link': '/comp_phys/cellular_automata/forest_fire'
         }, {
             'id': 'nbody_cloud',
+            'title': 'work in progress',
             'link': '/comp_phys/n_body/cloud'
         }, {
             'id': 'incompressible_fluid',
+            'title': 'incompressible fluid',
             'link': '/comp_phys/fluid_dynamics/incompressible_fluid'
         }, {
-            'id': 'tatooine', 'link': '/old/tatooine'
+            'id': 'tatooine',
+            'title': 'Tatooine',
+            'link': '/old/tatooine'
         }, {
             'id': 'react',
+            'title': 'React frontend',
             'link': '/react'
+        }, {
+            'id': 'draw',
+            'title': 'draw on canvas',
+            'link': '/various/draw'
         },
         # {'id': 'orbit'},
         # {'id': 'solar'},
