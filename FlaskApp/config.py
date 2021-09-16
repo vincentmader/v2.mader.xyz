@@ -69,7 +69,7 @@ INDEX_NAVGRID_SECTIONS = [{
     'title': 'statistical physics & thermodynamics',
     'pages': [
         {
-            'id': 'gas_in_a_box',
+            'id': 'thermal_motion',
             'title': 'elastic collisions',
             'link': '/comp_phys/stat_phys/thermal_motion'
         }, {
