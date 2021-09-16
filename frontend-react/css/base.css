@@ -20,7 +20,8 @@ body {
 }
 
 #header_home {
-  color: white;
+  /* needed? */
+  color: black;
   font-size: 20px;
   font-weight: 690;
   text-decoration: none;
@@ -81,9 +82,6 @@ body {
 /* INDEX */
 /* ========================================================================= */
 
-.index {
-}
-
 #section_navgrid {
   background-color: #222222;
   border-radius: 20px; /* if changed: also change for normal section? */
@@ -93,7 +91,7 @@ body {
 
 #navgrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
 
   padding-left: 10px;
   padding-right: 10px;
@@ -101,9 +99,14 @@ body {
   padding-bottom: 10px;
   /* align-items: center; */
 }
+@media only screen and (max-width: 1201px) {
+  #navgrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
 @media only screen and (max-width: 751px) {
   #navgrid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
@@ -144,6 +147,7 @@ body {
 }
 
 .navgrid_thumbnail {
+  outline: none;
   background-color: black;
   border: 2px solid #222222;
   border-radius: 30px;
@@ -157,9 +161,8 @@ body {
   margin-bottom: 7%;
   /* transition (with :hover) */
   transition: all 0.3s ease-in-out;
-  -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
   filter: grayscale(100%);
-  outline: none;
+  -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
 }
 .navgrid_thumbnail:after {
   content: "";
@@ -194,11 +197,8 @@ body {
 
 canvas {
   background-color: black;
-  /* border: 2px solid #555555; */
   border-radius: 20px; /* if changed: also change for navgrid_section? */
   width: 100%;
-  /* width: 94%; */
-  /* margin: 3%; */
 }
 
 /* OLD */

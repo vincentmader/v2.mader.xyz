@@ -128,7 +128,7 @@ INDEX_NAVGRID_SECTIONS = [{
             'title': 'asteroids around binary',
             'link': '/comp_phys/n_body/asteroids'
         }, {
-            'id': 'quadtree',
+            'id': 'quad_tree',
             'title': 'quad tree',
             'link': '/comp_phys/various/quadtree'
         }, {

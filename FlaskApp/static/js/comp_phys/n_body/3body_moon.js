@@ -168,7 +168,8 @@ function animate() {
 }
 
 function init() {
-  // define canvas geometry
+  canvas = document.getElementById("canvas");
+  ctx = canvas.getContext("2d");
   W = canvas.getBoundingClientRect().width;
   H = W;
   canvas.width = W;
@@ -184,12 +185,9 @@ function init() {
   setup_event_listeners();
 }
 
-// main
-export function main(canvas2, ctx2) {
-  canvas = canvas2;
-  ctx = ctx2;
-  // TODO: get rid of above?
+// canvas = canvas2;
+// ctx = ctx2;
+// TODO: get rid of above?
 
-  init();
-  animate();
-}
+init();
+animate();

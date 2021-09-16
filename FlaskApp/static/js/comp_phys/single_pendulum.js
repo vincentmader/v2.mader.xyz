@@ -67,7 +67,7 @@ function draw_tail(ctx, frame_idx, tail_length) {
 }
 
 const init = () => {
-  canvas = document.getElementById("single_pendulum_canvas");
+  canvas = document.getElementById("canvas");
   W = canvas.getBoundingClientRect().width;
   H = W;
   canvas.width = W;

@@ -7,6 +7,6 @@ import "../css/base.css";
 // import("../pkg/index.js").catch(console.error);
 
 ReactDOM.render(
-  <App currentViewID="index" />,
+  <App currentViewID="single_pendulum" />,
   document.getElementById("react-root")
 );

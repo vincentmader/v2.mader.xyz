@@ -52,12 +52,12 @@ class Animation extends React.Component {
     this.updateAnimationState = this.updateAnimationState.bind(this);
   }
 
-  componentDidMount() {
+  updateAnimationState() {
+    this.setState((prevState) => ({}));
     this.rAF = requestAnimationFrame(this.updateAnimationState);
   }
 
-  updateAnimationState() {
-    this.setState((prevState) => ({}));
+  componentDidMount() {
     this.rAF = requestAnimationFrame(this.updateAnimationState);
   }
 
