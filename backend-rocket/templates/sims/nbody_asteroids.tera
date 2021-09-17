@@ -1,0 +1,38 @@
+{% extends "sims/base" %}
+
+{% block sim_script %}
+    <script type="module" src="/static/js/comp_phys/n_body/asteroids.js"> </script>
+{% endblock sim_script %}
+
+{% block content %}
+    {{ super() }}
+
+    {% block button_menu %}
+        <div class="section">
+            <div class="button_menu">
+                <button class="button" id="button_toggle_pause">
+                    pause
+                </button>
+                <button class="button" id="button_toggle_random_phi_distribution">
+                    toggle random phi distribution
+                </button>
+        
+                <p>belt min. r</p>
+                <input 
+                    class="slider" id="slider_belt_min_r"
+                    type="range" min="50" max="450" step=1
+                />
+                <p>belt width</p>
+                <input 
+                    class="slider" id="slider_belt_width"
+                    type="range" min="0" max="500" step=1
+                />
+                <p>density exp. drop-off</p>
+                <input 
+                    class="slider" id="slider_belt_exp_factor"
+                    type="range" min="1" max="8" step=1
+                />
+            </div>
+        </div>
+    {% endblock button_menu %}
+{% endblock content %}

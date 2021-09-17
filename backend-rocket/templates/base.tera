@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+
+        {% block head %}
+            <link rel="icon" type="image/png" href="/static/favicon.ico"/>
+            <link rel="stylesheet" href="../static/css/base.css"/>
+            <title>
+                {% block title %}
+                {% endblock title %} - mader.xyz
+            </title>
+        {% endblock head %}
+
+    </head>
+    <body>
+
+        <div id="header">
+            {% block header %}
+                <a href="../" id="header_home">
+                    mader.xyz 
+                </a>
+            {% endblock header %}
+        </div>
+
+        <div id="content">
+            {% block content %}{% endblock content %}
+        </div>
+
+        <div id="footer">
+            {% block footer %}{% endblock footer %}
+        </div>
+
+    </body>
+</html>

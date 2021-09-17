@@ -1,0 +1,20 @@
+{% extends "sims/base" %}
+
+{% block sim_script %}
+    <script type="module" src="/static/js/comp_phys/forest_fire.js"> </script>
+{% endblock sim_script %}
+
+{% block content %}
+    {{ super() }}
+
+    {% block button_menu %}
+        <div class="section">
+            <div class="button_menu">
+                <button class="button" id="play/pause">pause</button>
+                <button class="button" id="button_1">place grass</button>
+                <button class="button" id="button_2">place water</button>
+                <button class="button" id="button_3">place fire</button>
+            </div>
+        </div>
+    {% endblock button_menu %}
+{% endblock content %}

@@ -1,0 +1,11 @@
+{% extends "sims/base" %}
+
+{% block sim_script %}
+    <script type="module" src="/static/js/lorentz.js"> </script>
+{% endblock sim_script %}
+
+{% block content %}
+    {{ super() }}
+{% endblock content %}
+
+{% block button_menu %} {% endblock button_menu %}
