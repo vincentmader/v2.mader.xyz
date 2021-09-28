@@ -1,0 +1,22 @@
+# pack-refs with: peeled fully-peeled sorted 
+32762a4439eb8cfeb2836e3b289ce01f72eb6183 refs/remotes/origin/dependabot/add-v2-config-file
+b19b8a23618d394c4c4108ad9e2c55a9a8ee8a5b refs/remotes/origin/dependabot/npm_and_yarn/copy-webpack-plugin-6.4.1
+ce4cf0a643b3c09046070e7e842391ee4e19f734 refs/remotes/origin/dependabot/npm_and_yarn/dns-packet-1.3.4
+3bfd203bf91e2fa815d68aefaf6f0d7e804db5b7 refs/remotes/origin/dependabot/npm_and_yarn/elliptic-6.5.4
+6ea4f8e224ab57d20ea275bde998e019733954b7 refs/remotes/origin/dependabot/npm_and_yarn/http-proxy-1.18.1
+0b2f51ce6ac5f9cf50fc581ff408930885e8f46e refs/remotes/origin/dependabot/npm_and_yarn/ini-1.3.8
+6a767816c0c30a602fc3b1aade802d48aacbe602 refs/remotes/origin/dependabot/npm_and_yarn/lodash-4.17.21
+207cfc6bfdfa28df3c6100f4beaf16b7ca03f9c6 refs/remotes/origin/dependabot/npm_and_yarn/ssri-6.0.2
+94d6414825b99d25a946da969fb973dc7179faec refs/remotes/origin/dependabot/npm_and_yarn/tar-4.4.15
+9715e32c0e3c776bef3a544eb83f31ca5ebea3a6 refs/remotes/origin/dependabot/npm_and_yarn/url-parse-1.5.3
+6f2f6de704a4523a139fb60dd2ffdf9c141d9247 refs/remotes/origin/dependabot/npm_and_yarn/webpack-4.39.3
+f2db0a3c9171e45cce56032b63e82a552b7c78a2 refs/remotes/origin/dependabot/npm_and_yarn/webpack-4.46.0
+102b870bf7c84d8953de4a0addd45a421519b1f7 refs/remotes/origin/dependabot/npm_and_yarn/webpack-cli-4.7.2
+30fc5d36abd1a5aeaf3bd54490e8478dd02371dc refs/remotes/origin/dependabot/npm_and_yarn/webpack-dev-server-3.11.2
+4133469fc0d1d9ceef328b49fc7a2a95da22db54 refs/remotes/origin/dependabot/npm_and_yarn/ws-6.2.2
+130b5973a16fe31fcd752465d4994172f0f829d6 refs/remotes/origin/dependabot/npm_and_yarn/y18n-4.0.3
+03bb772e46f6a027302fbd334b96012824f391c7 refs/remotes/origin/deps
+d2169dbc1c68e530037dd564cdf103b9816767a0 refs/remotes/origin/make-git-go
+64876e0ea469b73e559a84eb07dc07087f019aaa refs/remotes/origin/make-npm-init-work
+9ac3dff9ebea4675e5c478bcdcbc0fd547d1529f refs/remotes/origin/master
+eba20e5bf6138fdcabb60ae05c96c50a3eb3fbfc refs/tags/0.1.0
