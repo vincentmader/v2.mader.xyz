@@ -1,13 +1,22 @@
-__pycache__
 .DS_Store
+
+__pycache__
 .venv
 env
-node_modules
 venv
 
+node_modules
+dist
+target
+pkg
+wasm-pack.log
+
+maderxyz-database
+
+
+
+
 creds
-database
-database_*
 
 
 debug.py
@@ -47,8 +56,3 @@ main_precompute_directions.js
 
 _old
 
-node_modules
-dist
-target
-pkg
-wasm-pack.log

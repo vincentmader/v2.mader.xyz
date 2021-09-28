@@ -1,5 +1,7 @@
 #!/bin/sh
 
+source $CODE/mader.xyz/.flaskenv
+
 # DEACTIVATE RUNNING SERVER SCRIPTS (if running)
 # =============================================================================
 
@@ -32,7 +34,8 @@ cd $CODE/mader.xyz
 # =============================================================================
 
 # start database & flask server
-mongod --dbpath=$CODE/mader.xyz/database &
+# mongod --dbpath=$CODE/mader.xyz/maderxyz-database &
+
 flask run &
 # $CODE/mader.xyz/venv/bin/flask run --no-debugger
 
