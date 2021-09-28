@@ -121,6 +121,8 @@ fn index() -> Template {
             Section::new("react", "react.js frontend"),
             Section::new("diffusion", "diffusion"),
             Section::new("incompressible_fluid", "incompressible fluid"),
+            Section::new("game_of_life_wasm", "game of life"),
+            Section::new("wasm", "wasm"),
         ].iter().cloned().collect()), 
     ].iter().cloned().collect();
 
