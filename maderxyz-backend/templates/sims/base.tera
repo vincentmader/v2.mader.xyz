@@ -28,7 +28,7 @@
 {% block content %}
 
     <h4 class="section_title">
-        {{ id }}
+        {{ title }}
     </h4>
 
     {% block canvas %}

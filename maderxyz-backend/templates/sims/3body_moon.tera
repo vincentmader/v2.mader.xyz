@@ -8,7 +8,7 @@
 {% block content%}
     {{ super() }}
 
-{% block button_menu %}
+    {% block button_menu %}
         <div class="section">
             <div class="button_menu">
                 <button class="button" id="button_toggle_pause">
@@ -30,4 +30,5 @@
             <!-- </div> -->
         </div>
     {% endblock button_menu %}
+
 {% endblock content%}

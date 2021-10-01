@@ -2,9 +2,11 @@
 <html lang="en">
     <head>
 
+        <meta charset="UTF-8">
+        <link rel="icon" type="image/png" href="/static/favicon.ico"/>
+        <link rel="stylesheet" href="../static/css/base.css"/>
+        
         {% block head %}
-            <link rel="icon" type="image/png" href="/static/favicon.ico"/>
-            <link rel="stylesheet" href="../static/css/base.css"/>
             <title>
                 {% block title %}
                 {% endblock title %} - mader.xyz
@@ -23,11 +25,13 @@
         </div>
 
         <div id="content">
-            {% block content %}{% endblock content %}
+            {% block content %}
+            {% endblock content %}
         </div>
 
         <div id="footer">
-            {% block footer %}{% endblock footer %}
+            {% block footer %}
+            {% endblock footer %}
         </div>
 
     </body>

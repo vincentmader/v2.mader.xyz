@@ -67,8 +67,10 @@ struct FancyPants<'a> {
 
 #[get("/sims/<id>")]
 fn sims(id: String) -> Template {
+    let title = String::from(&id);  // TODO: get title
     let context: HashMap<&str, &String> = [
-        ("id", &id)
+        ("id", &id),
+        ("title", &title),
     ].iter().cloned().collect();
     Template::render(format!("sims/{}", id), &context)
 }
@@ -97,8 +99,8 @@ fn index() -> Template {
         ].iter().cloned().collect()), 
         // ("fluid dynamics", [
             // Section::new("diffusion", "diffusion"),
-        //     Section::new("incompressible fluid"),
-        //     Section::new("flow through pipe"),
+            // Section::new("incompressible fluid"),
+            // Section::new("flow through pipe"),
         // ].iter().cloned().collect()), 
         ("electro-magnetism", [
             Section::new("charge_interaction", "charged-particle interaction"),
@@ -114,7 +116,6 @@ fn index() -> Template {
             Section::new("rock_paper_scissors", "rock-paper-scissors"),
             Section::new("nbody_asteroids", "n-body interaction: asteroids around binary"),
             Section::new("quad_tree", "quad-tree"),
-        //     Section::new("gas cloud"),
             Section::new("tatooine", "Tatooine"),
             Section::new("mc_pi_darts", "Monte Carlo pi calculation"),
             Section::new("draw", "canvas drawing demo"),
@@ -126,11 +127,19 @@ fn index() -> Template {
         ].iter().cloned().collect()), 
     ].iter().cloned().collect();
 
-    let mut sections: Vec<&str> = Vec::new();
-    for (k, _) in &subsections {
-        sections.push(k);
-    }
-    sections.sort();
+    // let mut sections: Vec<&str> = Vec::new();
+    // for (k, _) in &subsections {
+    //     sections.push(k);
+    // }
+    // sections.sort();
+    let sections = vec![
+        "gravitational n-body dynamics",
+        "emergent behavior & cellular automata",
+        "oscillators",
+        "statistical physics & thermodynamics",
+        "electro-magnetism",
+        "various",
+    ];
 
     let fp: FancyPants = FancyPants {
         sections,

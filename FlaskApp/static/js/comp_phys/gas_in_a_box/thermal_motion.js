@@ -272,7 +272,8 @@ function animate() {
       let e = calc_system_energy();
       if (frame_idx === 0) energy_0 = e;
       chart.data.labels.push(""); // TODO: ?
-      chart.data.datasets[0].data.push(100 * (e / energy_0 - 1));
+      let energy_error = 100 * (e / energy_0 - 1);
+      chart.data.datasets[0].data.push(energy_error);
       chart.update();
     }
     // handle_user_inputs();
