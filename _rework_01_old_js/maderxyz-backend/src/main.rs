@@ -8,6 +8,7 @@
 use std::collections::HashMap;
 use rocket_contrib::templates::Template;
 use rocket_contrib::serve::StaticFiles;
+// use rocket::fs::FileServer;
 
 use serde::{Serialize, Deserialize};
 
@@ -170,5 +171,6 @@ fn main() {
         .attach(Template::fairing())
         .launch();
 }
+
 
 
