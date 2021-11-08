@@ -71,7 +71,7 @@ class Particle {
     let x_new = this.x + this.u * DT;
     let y_new = this.y + this.v * DT;
     // if crossing wall: reverse vel. component & move back
-    let r_walls = 3 * this.r;
+    let r_walls = 2 * this.r; // TODO: set back to 1? (coll. dist.)
     if (x_new >= W - r_walls) {
       this.u *= -1;
       this.x = W - r_walls;
