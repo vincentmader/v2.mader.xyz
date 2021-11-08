@@ -71,19 +71,20 @@ class Particle {
     let x_new = this.x + this.u * DT;
     let y_new = this.y + this.v * DT;
     // if crossing wall: reverse vel. component & move back
-    if (x_new >= W - this.r) {
+    let r_walls = 3 * this.r;
+    if (x_new >= W - r_walls) {
       this.u *= -1;
-      this.x = W - this.r;
-    } else if (x_new <= this.r) {
+      this.x = W - r_walls;
+    } else if (x_new <= r_walls) {
       this.u *= -1;
-      this.x = this.r;
+      this.x = r_walls;
     }
-    if (y_new >= H - this.r) {
+    if (y_new >= H - r_walls) {
       this.v *= -1;
-      this.y = H - this.r;
-    } else if (y_new <= this.r) {
+      this.y = H - r_walls;
+    } else if (y_new <= r_walls) {
       this.v *= -1;
-      this.y = this.r;
+      this.y = r_walls;
     }
     // update velocity angle & vector component values
     this.speed = Math.sqrt(this.u ** 2 + this.v ** 2);
