@@ -268,14 +268,14 @@ function animate() {
       p.update();
       p.draw();
     }
-    if (frame_idx % fps_goal === 0) {
-      let e = calc_system_energy();
-      if (frame_idx === 0) energy_0 = e;
-      chart.data.labels.push(""); // TODO: ?
-      let energy_error = 100 * (e / energy_0 - 1);
-      chart.data.datasets[0].data.push(energy_error);
-      chart.update();
-    }
+    // if (frame_idx % fps_goal === 0) {
+    let e = calc_system_energy();
+    if (frame_idx === 0) energy_0 = e;
+    chart.data.labels.push(""); // TODO: ?
+    let energy_error = 100 * (e / energy_0 - 1);
+    chart.data.datasets[0].data.push(energy_error);
+    chart.update();
+    // }
     // handle_user_inputs();
     frame_idx += 1;
   }, 1000 / fps_goal);
