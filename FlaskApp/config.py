@@ -74,7 +74,7 @@ INDEX_NAVGRID_SECTIONS = [{
             'link': '/comp_phys/stat_phys/thermal_motion'
         }, {
             'id': 'brownian_motion',
-            'title': 'Brownian motion',
+            'title': 'Brownian motion (work in progress)',
             'link': '/comp_phys/stat_phys/brownian_motion'
         }, {
             'id': 'ising',
@@ -90,7 +90,7 @@ INDEX_NAVGRID_SECTIONS = [{
             'title': 'Boids',
             'link': '/comp_phys/monte_carlo/boids'
         }, {
-            'id': 'ants',
+            'id': 'ants (work in progress)',
             'title': 'Ants',
             'link': '/comp_phys/monte_carlo/ants'
         }, {
@@ -108,7 +108,7 @@ INDEX_NAVGRID_SECTIONS = [{
             'link': '/old/lorentz'
         }, {
             'id': 'charge_interaction',
-            'title': 'charge interaction',
+            'title': 'charge interaction (unstable)',
             'link': '/comp_phys/electro_magnetism/charge_interaction'
         },
     ]
@@ -125,41 +125,42 @@ INDEX_NAVGRID_SECTIONS = [{
             'link': '/comp_phys/cellular_automata/rock_paper_scissors'
         }, {
             'id': 'nbody_asteroids',
-            'title': 'asteroids around binary',
+            'title': 'asteroids around binary (non-interacting)',
             'link': '/comp_phys/n_body/asteroids'
         }, {
-            'id': 'quad_tree',
-            'title': 'quad tree',
-            'link': '/comp_phys/various/quadtree'
-        }, {
+            # 'id': 'quad_tree',
+            # 'title': 'quad tree',
+            # 'link': '/comp_phys/various/quadtree'
+        # }, {
             'id': 'diffusion',
-            'title': 'diffusion',
+            'title': 'diffusion (work in progress)',
             'link': '/comp_phys/fluid_dynamics/diffusion'
         }, {
-            'id': 'forest_fire',
-            'title': 'forest fire',
-            'link': '/comp_phys/cellular_automata/forest_fire'
-        }, {
-            'id': 'nbody_cloud',
-            'title': 'work in progress',
-            'link': '/comp_phys/n_body/cloud'
-        }, {
-            'id': 'incompressible_fluid',
-            'title': 'incompressible fluid',
-            'link': '/comp_phys/fluid_dynamics/incompressible_fluid'
-        }, {
-            'id': 'tatooine',
-            'title': 'Tatooine',
-            'link': '/old/tatooine'
-        }, {
-            'id': 'react',
-            'title': 'React frontend',
-            'link': '/react'
-        }, {
-            'id': 'draw',
-            'title': 'draw on canvas',
-            'link': '/various/draw'
-        },
+            # 'id': 'forest_fire',
+            # 'title': 'forest fire',
+            # 'link': '/comp_phys/cellular_automata/forest_fire'
+        # }, {
+            # 'id': 'nbody_cloud',
+            # 'title': 'work in progress',
+            # 'link': '/comp_phys/n_body/cloud'
+        # }, {
+            # 'id': 'incompressible_fluid',
+            # 'title': 'incompressible fluid',
+            # 'link': '/comp_phys/fluid_dynamics/incompressible_fluid'
+        # }, {
+            # 'id': 'tatooine',
+            # 'title': 'Tatooine',
+            # 'link': '/old/tatooine'
+        # }, {
+            # 'id': 'react',
+            # 'title': 'React frontend',
+            # 'link': '/react'
+        # }, {
+            # 'id': 'draw',
+            # 'title': 'draw on canvas',
+            # 'link': '/various/draw'
+        # },
+
         # {'id': 'orbit'},
         # {'id': 'solar'},
         # {'id': 'factfulness'},
