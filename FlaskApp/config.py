@@ -90,8 +90,8 @@ INDEX_NAVGRID_SECTIONS = [{
             'title': 'Boids',
             'link': '/comp_phys/monte_carlo/boids'
         }, {
-            'id': 'ants (work in progress)',
-            'title': 'Ants',
+            'id': 'ants',
+            'title': 'Ants (work in progress)',
             'link': '/comp_phys/monte_carlo/ants'
         }, {
             'id': 'game_of_life',
