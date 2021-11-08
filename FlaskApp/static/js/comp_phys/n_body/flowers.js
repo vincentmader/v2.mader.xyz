@@ -11,7 +11,7 @@ const dt = 5e-3;
 var nr_of_planets = 4;
 const R0 = 0.8;
 
-var orbits_are_eccentric = false;
+var orbits_are_eccentric = true;
 var paused = false;
 const tail_length = 200;
 
