@@ -159,7 +159,7 @@ INDEX_NAVGRID_SECTIONS = [{
             # 'id': 'draw',
             # 'title': 'draw on canvas',
             # 'link': '/various/draw'
-        # },
+        },
 
         # {'id': 'orbit'},
         # {'id': 'solar'},
