@@ -35,8 +35,8 @@ var drawing_radius_moon; // = 2;
 
 // settings
 var paused = false;
-var draw_tails_bool = false;
-var draw_orbit_bool = false;
+var draw_tails_bool = true;
+var draw_orbit_bool = true;
 var draw_hill_bool = false;
 
 // setup event listeners for button menu
