@@ -168,6 +168,11 @@ body {
   /* transition (with :hover) */
   transition: border 0.35s, filter 0.35s, transform 0.35s ease-in-out;
 }
+@media only screen and (max-width: 551px) {
+  .navgrid_thumbnail {
+    filter: grayscale(0%);
+  }
+}
 .navgrid_thumbnail:after {
   content: "";
   display: block;
