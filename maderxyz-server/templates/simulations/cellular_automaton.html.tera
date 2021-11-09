@@ -1,0 +1,29 @@
+{% extends "simulations/base" %}
+
+
+{% block content %}
+
+    {{ super() }}
+
+    <script type="module">
+        import init, { CellularAutomaton } from "../../static/pkg/maderxyz_frontend.js";
+        let sim_id = "{{ sim_id }}";
+        
+        (async () => {
+          await init();
+        
+          var simulation = CellularAutomaton.new(sim_id);
+          simulation.init();
+        
+          let N = 1;
+          const loop = () => {
+            for (let i = 0; i < N; i++) {
+              simulation.step();
+            }
+            requestAnimationFrame(loop);
+          };
+          loop();
+        })();
+    </script>
+
+{% endblock content %}
