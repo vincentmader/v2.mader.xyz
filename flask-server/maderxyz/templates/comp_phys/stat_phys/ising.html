@@ -1,0 +1,47 @@
+{% extends "base/page_design_1.html" %}
+
+{% block head %}
+
+    {{ super() }}
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+
+{% endblock %}
+{% block content %}
+
+    <h4 class="section_title">
+        Ising model
+    </h4>
+
+    <!-- <div class="section"> -->
+        <div class="canvas_holder">
+            <canvas id="canvas"></canvas>
+            <script type="module" src="{{ url_for('static', filename='js/comp_phys/ising.js') }}"></script>
+        </div>
+    <!-- </div> -->
+
+    <div class="section">
+        <div class="button_menu">
+            <!-- <p>Temperature:</p> -->
+            <div id="temperature_display"></div>
+            <input 
+                type="range" 
+                class="slider" id="temperature_slider"
+                min="-100" max="100" value="0" 
+            >
+            <!-- <p>Magnetic field strength:</p> -->
+            <div id="Bfield_display"></div>
+            <input 
+                type="range" 
+                class="slider" id="Bfield_slider"
+                min="-5" max="5" value="0" 
+            >
+        </div>
+    </div>
+
+    <!-- <div class="section"> -->
+        <div class="canvas_holder">
+            <canvas id="canvas_chart"></canvas>
+        </div>
+    <!-- </div> -->
+
+{% endblock %}

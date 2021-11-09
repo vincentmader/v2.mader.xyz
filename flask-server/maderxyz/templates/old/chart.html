@@ -1,0 +1,46 @@
+<html>
+    <head>
+        <title>Funky!</title>
+        <script src=https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js></script>
+        <script src=https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css></script>
+	<script>
+	</script>
+    </head> 
+    <body>
+	<canvas id="chart" width=200 height=200></canvas>
+	<div id="container">
+            <script>
+                ctx = document.getElementById('chart') 
+
+		data = {
+                    datasets: [{
+                    	data: [1, 1, 1, 1, 1, 1, 1],
+			backgroundColor: ['red', 'green', 'blue', 'black', 'magenta', 'yellow', 'orange'],
+                    }], 
+		}
+
+		options = {
+		    cutoutPercentage: 30,
+		}
+
+    	        function changeData() {
+                    document.getElementById('container').innerHTML = '{{ ayy }}'
+    		    data.datasets[0]['data'] = [
+		        Math.random() * 2 * data.datasets[0]['data'][0], 
+		        Math.random() * 2 * data.datasets[0]['data'][1], 
+		        Math.random() * 2 * data.datasets[0]['data'][2], 
+		        Math.random() * 2 * data.datasets[0]['data'][3], 
+		        Math.random() * 2 * data.datasets[0]['data'][4], 
+		        Math.random() * 2 * data.datasets[0]['data'][5], 
+		        Math.random() * 2 * data.datasets[0]['data'][6], 
+		    ];
+		    chart.update()
+    	        }	
+	
+
+                var chart = new Chart(ctx, { type: 'pie', data: data, options: options })
+            </script>
+        </div>
+        <button onclick="changeData()">change data {{ ayy }}</button>
+    </body>
+</html>

@@ -1,0 +1,22 @@
+{% extends "base" %}
+
+
+{% block content %}
+
+    {{ super() }}
+
+    <div class="section_title">
+        {{ title }}
+    </div>
+
+    <div class="canvas_holder">
+
+        <canvas id="canvas_main"> </canvas>
+        <script> 
+            let cnv = document.getElementById("canvas_main");
+            cnv.height = cnv.width;
+        </script>
+
+    </div>
+
+{% endblock content %}

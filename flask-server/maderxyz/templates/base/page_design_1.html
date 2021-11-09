@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+    {% block head %}
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>mader.xyz</title>
+        <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='media/bohr_atom.png') }}"/>
+    
+        <link rel="stylesheet" href="{{ url_for('static', filename='js/react_frontend/css/base.css') }}" type="text/css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='js/react_frontend/css/comp_phys.css') }}" type="text/css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='js/react_frontend/css/chronos.css') }}" type="text/css">
+        <!-- <link rel="stylesheet" href="{{ url_for('static', filename='js/react_frontend/css/chronos_stats.css') }}" type="text/css"> -->
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous"> -->
+    
+        <!-- Bokeh -->
+        <script src="https://cdn.bokeh.org/bokeh/release/bokeh-2.0.1.min.js"></script>
+        <script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.0.1.min.js"></script>
+        <script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.0.1.min.js"></script>
+        <script src="https://cdn.bokeh.org/bokeh/release/bokeh-api-2.0.1.min.js"></script>
+        <!-- jQuery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <!-- MathJax -->
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+        <!-- TODO: remove drawing_utils import? -> import from js -->
+        <script type="module" src="{{ url_for('static', filename='js/utils/drawing_utils.js') }}"></script>    
+    {% endblock %}
+    </head>
+    
+    <body>
+    {% block body %}
+        <div id="header">
+            {% block header %}
+                <a id="header_home" href="/">mader.xyz</a>
+            {% endblock %}
+        </div>
+    
+        <div id="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+    
+        <div id="footer">
+            {% block footer %}
+            {% endblock %}
+        </div>    
+    {% endblock %}
+    </body>
+</html>
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html> -->
+<!-- <head> -->
+<!-- </head> -->
+<!-- <body> -->
+<!--     <!-1- <table id="mainMenuGrid"> -1-> -->
+<!--     <!-1-     <tr> -1-> -->
+<!--     <!-1-         <td><a class="stealthy_link" href="/chronos/test"> -1-> -->
+<!--     <!-1-             <img src="{{ url_for('static', filename='media/thumbnails/boltzmann.png') }}" width="200px" height="200px"> -1-> -->
+<!--     <!-1-         </a></td> -1-> -->
+<!--     <!-1-     </tr> -1-> -->
+<!--         <!-1- <tr> -1-> -->
+<!--             <!-1- <td><a class="stealthyLink" href="boltzmann"> -1-> -->
+<!--             <!-1-     <img src="{{ url_for('static', filename='media/thumbnails/boltzmann.png') }}" width="200px" height="200px"> -1-> -->
+<!--             <!-1- </a></td> -1-> -->
+<!-- <!-1-             <td><a class="stealthyLink" href="orbit"> -1-> -->
+<!-- <!-1-                 <img src="{{ url_for('static', filename='media/thumbnails/orbit.png') }}" width="200px" height="200px"> -1-> -->
+<!-- <!-1-             </a></td> -1-> -->
+<!-- <!-1-             <td><a class="stealthyLink" href="tatooine"> -1-> -->
+<!-- <!-1-                 <img src="{{ url_for('static', filename='media/thumbnails/tatooine.png') }}" width="200px" height="200px"> -1-> -->
+<!-- <!-1-             </a></td> -1-> -->
+<!-- <!-1-             <td><a class="stealthyLink" href="lorentz"> -1-> -->
+<!-- <!-1-                 <img src="{{ url_for('static', filename='media/thumbnails/lorentz.png') }}" width="200px" height="200px"> -1-> -->
+<!-- <!-1-             </a></td> -1-> -->
+<!--         <!-1- </tr> -1-> -->
+<!-- <!-1-         <tr> -1-> -->
+<!-- <!-1-             <td><a class="stealthyLink" href="solar"> -1-> -->
+<!-- <!-1-                 <img src="{{ url_for('static', filename='media/thumbnails/solar.png') }}" width="200px" height="200px"> -1-> -->
+<!-- <!-1-             </a></td> -1-> -->
+<!-- <!-1-             <td><a class="stealthyLink" href="solar_binary"> -1-> -->
+<!-- <!-1-                 <img src="{{ url_for('static', filename='media/thumbnails/solar.png') }}" width="200px" height="200px"> -1-> -->
+<!-- <!-1-             </a></td> -1-> -->
+<!-- <!-1-             <td><a class="stealthyLink" href="pendulum"> -1-> -->
+<!-- <!-1-                 <img src="{{ url_for('static', filename='media/thumbnails/pendulum.png') }}" width="200px" height="200px"> -1-> -->
+<!-- <!-1-             </a></td> -1-> -->
+<!-- <!-1-             <td><a class="stealthyLink" href="balls"> -1-> -->
+<!-- <!-1-                 <img src="{{ url_for('static', filename='media/thumbnails/balls.png') }}" width="200px" height="200px"> -1-> -->
+<!-- <!-1-             </a></td> -1-> -->
+<!-- <!-1-         </tr> -1-> -->
+<!-- <!-1-         <tr> -1-> -->
+<!-- <!-1-             <td><a class="stealthyLink" href="bokeh"> -1-> -->
+<!-- <!-1-                 <img src="{{ url_for('static', filename='media/thumbnails/bokeh.png') }}" width="200px" height="200px"> -1-> -->
+<!-- <!-1-             </a></td> -1-> -->
+<!-- <!-1-         </tr> -1-> -->
+<!--     <!-1- </table> -1-> -->
+<!-- </body> -->
+<!-- </html> -->
+
+
+<!-- <!-1- <\!--     <ul> -\-> -1-> -->
+<!-- <!-1- <\!--         <li> -\-> -1-> -->
+<!-- <!-1- <\!--             <a class="stealthyLink" href="tatooine">tatooine</a> -\-> -1-> -->
+<!-- <!-1- <\!--         </li> -\-> -1-> -->
+<!-- <!-1- <\!--         <li> -\-> -1-> -->
+<!-- <!-1- <\!--             <a class="stealthyLink" href="orbit">orbit</a> -\-> -1-> -->
+<!-- <!-1- <\!--         </li> -\-> -1-> -->
+<!-- <!-1- <\!--         <li> -\-> -1-> -->
+<!-- <!-1- <\!--             <a class="stealthyLink" href="boltzmann">boltzmann</a> -\-> -1-> -->
+<!-- <!-1- <\!--         </li> -\-> -1-> -->
+<!-- <!-1- <\!--         <li> -\-> -1-> -->
+<!-- <!-1- <\!--             <a class="stealthyLink" href="balls">balls</a> -\-> -1-> -->
+<!-- <!-1- <\!--         </li> -\-> -1-> -->
+<!-- <!-1- <\!--         <li> -\-> -1-> -->
+<!-- <!-1- <\!--             <a class="stealthyLink" href="spaceship">spaceship</a> -\-> -1-> -->
+<!-- <!-1- <\!--         </li> -\-> -1-> -->
+<!-- <!-1- <\!--         <li> -\-> -1-> -->
+<!-- <!-1- <\!--             <a class="stealthyLink" href="solar">solar</a> -\-> -1-> -->
+<!-- <!-1- <\!--         </li> -\-> -1-> -->
+<!-- <!-1- <\!--         <li> -\-> -1-> -->
+<!-- <!-1- <\!--             <a class="stealthyLink" href="lorentz">lorentz</a> -\-> -1-> -->
+<!-- <!-1- <\!--         </li> -\-> -1-> -->
+<!-- <!-1- <\!--         <li> -\-> -1-> -->
+<!-- <!-1- <\!--             <a class="stealthyLink" href="chart_test">chart_test</a> -\-> -1-> -->
+<!-- <!-1- <\!--         </li> -\-> -1-> -->
+<!-- <!-1- <\!--         <li> -\-> -1-> -->
+<!-- <!-1- <\!--             <a class="stealthyLink" href="bokeh">bokeh</a> -\-> -1-> -->
+<!-- <!-1- <\!--         </li> -\-> -1-> -->
+<!-- <!-1- <\!--         <li> -\-> -1-> -->
+<!-- <!-1- <\!--             <a class="stealthyLink" href="heatmap">heatmap</a> -\-> -1-> -->
+<!-- <!-1- <\!--         </li> -\-> -1-> -->
+<!-- <!-1- <\!--         <li> -\-> -1-> -->
+<!-- <!-1- <\!--             <a class="stealthyLink" href="pendulum">pendulum</a> -\-> -1-> -->
+<!-- <!-1- <\!--         </li> -\-> -1-> -->
+<!-- <!-1- <\!--     </ul> -\-> -1-> -->
+
+
+
+<!-- <body class="body" style="background-image: url({{ url_for('static', filename='media/wallpapers/sickel.jpg') }})"> -->

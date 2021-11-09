@@ -1,0 +1,55 @@
+{% extends "base/page_design_1.html" %}
+
+{% block head %}
+
+    {{ super() }}
+
+{% endblock %}
+{% block content %}
+
+    {% for sim in props['simulations'] %}
+
+        <h4 class="section_title">
+            {{ sim['sim_title'] }}
+        </h4>
+
+        <!-- <div class="section"> -->
+            <div class="canvas_holder">
+                <canvas 
+                    id="canvas_{{ sim['sim_idx'] }}" 
+                    data-system_states={{ sim['system_states']|tojson }}
+                ></canvas>
+                <script type=module>
+                    import { main } from "{{ url_for('static', filename='js/comp_phys/n_body/n_body.js') }}"
+                    // get canvas from unique canvas_name
+                    const canvas_id = 'canvas_{{ sim['sim_idx'] }}'
+                    const canvas = document.getElementById(canvas_id);
+                    const ctx = canvas.getContext("2d");
+                    // load simulation data from canvas html tag attribute data
+                    const system_states = $("#" + canvas_id).data("system_states");
+
+                    main(canvas, ctx, canvas_id, system_states);
+                </script>
+            </div>
+        <!-- </div> -->
+
+        <div class="section">
+            <div class="button_menu">
+                <button class="button" id="restart_canvas_{{ sim['sim_idx'] }}">
+                    restart
+                </button>
+                <button class="button" id="play/pause_canvas_{{ sim['sim_idx'] }}">
+                    pause
+                </button>
+                <!-- <button class="button" id="zoom_in"> -->
+                <!--     zoom in -->
+                <!-- </button> -->
+                <!-- <button class="button" id="zoom_out"> -->
+                <!--     zoom out -->
+                <!-- </button> -->
+            </div>
+        </div>
+
+    {% endfor %}
+
+{% endblock %}

@@ -1,9 +1,0 @@
-{% extends "sims/base" %}
-
-{% block sim_script %}
-    <script type="module" src="/static/js/comp_phys/single_pendulum.js"> </script>
-{% endblock sim_script %}
-
-{% block content %}
-    {{ super() }}
-{% endblock content %}

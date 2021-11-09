@@ -1,0 +1,33 @@
+{% extends "base" %}
+
+    {% block head %}
+    
+        {{ super() }}
+    
+    {% endblock head %}
+    
+    {% block title %}
+        Index
+    {% endblock title %}
+    
+    {% block content %}
+    
+        <!--
+        -->
+        {% include "index/navgrid" %}
+        <!--
+        -->
+    
+        <!--
+            <div id="react-root"></div>
+            <script src="static/js/react_frontend/dist/index.js"></script>
+        -->
+        <!--
+            <maderxyz-index> </maderxyz-index>
+            <script 
+                src="static/frontend-js/index.js"
+                type="module"
+            > </script>
+        -->
+    
+    {% endblock content %}
