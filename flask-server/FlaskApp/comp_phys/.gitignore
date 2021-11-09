@@ -1,0 +1,12 @@
+*.pyc
+*.pyo
+.DS_Store
+__pycache__
+env
+node_modules
+venv
+README.tex
+README.pdf
+.auctex-auto
+testing
+n_body_old
