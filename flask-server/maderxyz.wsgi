@@ -2,7 +2,7 @@
 
 import sys
 sys.path.insert(0, '/var/www/maderxyz')
-sys.path.insert(0, '/var/www/maderxyz/maderxyz/flask-server')
+sys.path.insert(0, '/var/www/maderxyz/flask-server/maderxyz')
 from maderxyz import app as application
 
 import logging
