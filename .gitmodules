@@ -1,6 +1,6 @@
-[submodule "FlaskApp/chronos"]
-	path = FlaskApp/chronos
+[submodule "flask-server/maderxyz/chronos"]
+	path = flask-server/maderxyz/chronos
 	url = https://github.com/vincentmader/chronos
-[submodule "FlaskApp/comp_phys"]
-	path = FlaskApp/comp_phys
+[submodule "flask-server/maderxyz/comp_phys"]
+	path = flask-server/maderxyz/comp_phys
 	url = https://github.com/vincentmader/comp_phys
