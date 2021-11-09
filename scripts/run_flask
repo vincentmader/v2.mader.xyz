@@ -1,6 +1,6 @@
 #!/bin/sh
 
-source $CODE/mader.xyz/.flaskenv
+source $CODE/mader.xyz/flask-server/.flaskenv
 
 # DEACTIVATE RUNNING SERVER SCRIPTS (if running)
 # =============================================================================
@@ -25,7 +25,7 @@ killall node
 # =============================================================================
 
 # move into project directory
-cd $CODE/mader.xyz
+cd $CODE/mader.xyz/flask-server
 
 # TODO: launch virtualenv
 # source venv/bin/activate
