@@ -1,0 +1,4 @@
+#!/bin/sh
+
+pid="$(ps -p $(lsof -ti tcp:8000) o pid=)"
+kill $pid
