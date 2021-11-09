@@ -38,9 +38,9 @@ pub fn route() -> Template {
 
     let subsections: HashMap<&str, Vec<Section>> = [
         ("emergent behavior", [
-            Section::new("ants", "ants"),
             // Section::new("ant war"),
             Section::new("boids", "boids"),
+            Section::new("ants", "ants"),
             Section::new("game_of_life", "game of life"),
             // Section::new("", "light thingies"),
         ].iter().cloned().collect()), 
@@ -48,6 +48,7 @@ pub fn route() -> Template {
             // Section::new("", "2-body interaction"),
             Section::new("3body_moon", "3-body interaction: moon"),
             Section::new("3body_fig8", "3-body interaction: figure-8"),
+            Section::new("nbody_flowers", "symmetric satellite constellation"),
             // Section::new("nbody_cloud", "3-body interaction: stellar cluster"),
         ].iter().cloned().collect()), 
         ("oscillators", [
@@ -92,9 +93,9 @@ pub fn route() -> Template {
     // sections.sort();
     let sections = vec![
         "gravitational dynamics",
-        "emergent behavior",
         "oscillators",
         "thermodynamics",
+        "emergent behavior",
         "electro-magnetism",
         "various",
     ];
