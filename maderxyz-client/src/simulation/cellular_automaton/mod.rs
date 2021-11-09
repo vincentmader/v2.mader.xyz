@@ -7,25 +7,37 @@ use renderer::Renderer;
 
 #[wasm_bindgen]
 pub struct CellularAutomaton {
-    sim_id: String,
+    page_id: String,
     engine: Engine,
     renderer: Renderer,
     N: usize,
 }
 #[wasm_bindgen]
 impl CellularAutomaton {
-    pub fn new(sim_id: String) -> Self {
+    pub fn new(page_id: String) -> Self {
 
+        // set grid geometry 
+        let N: usize = match page_id.as_str() {
+            "ising" => 150,
+            "diffusion" => 50,
+            _ => 4,
+        };
+        // create parameter hashmap
         // use std::collections::HashMap;
-        // let params = HashMap::from([
-        //     ("sim_id", sim_id.clone()),
-        //     ("N", 100),
+        // let params: HashMap<&str, String> = HashMap::from([
+        //     ("page_id", page_id.clone()),
+        //     ("N", format!("{}", N)),
         // ]);
-        let N: usize = 150; // TODO: move where?
-        let engine = Engine::new(sim_id.clone(), N);
-        let renderer = Renderer::new(sim_id.clone());
+
+        let engine = Engine::new(
+            page_id.clone(), 
+            N
+        ); 
+        let renderer = Renderer::new(
+            page_id.clone()
+        );
         CellularAutomaton {
-            sim_id, engine, renderer, N
+            page_id, engine, renderer, N
         }
     }
     pub fn init(&mut self) {

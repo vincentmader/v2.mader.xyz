@@ -5,3 +5,5 @@ cd `dirname "$0"`
 
 cd ../maderxyz-server
 cargo run
+
+cd ../

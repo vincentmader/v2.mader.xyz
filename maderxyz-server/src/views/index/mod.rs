@@ -37,14 +37,14 @@ struct FancyPants<'a> {
 pub fn route() -> Template {
 
     let subsections: HashMap<&str, Vec<Section>> = [
-        ("emergent behavior & cellular automata", [
+        ("emergent behavior", [
             Section::new("ants", "ants"),
             // Section::new("ant war"),
             Section::new("boids", "boids"),
             Section::new("game_of_life", "game of life"),
             // Section::new("", "light thingies"),
         ].iter().cloned().collect()), 
-        ("gravitational n-body dynamics", [
+        ("gravitational dynamics", [
             // Section::new("", "2-body interaction"),
             Section::new("3body_moon", "3-body interaction: moon"),
             Section::new("3body_fig8", "3-body interaction: figure-8"),
@@ -64,7 +64,7 @@ pub fn route() -> Template {
             Section::new("charge_interaction", "charged-particle interaction"),
             Section::new("lorentz", "Wien filter"),
         ].iter().cloned().collect()), 
-        ("statistical physics & thermodynamics", [
+        ("thermodynamics", [
             Section::new("thermal_motion", "thermal motion"),
             Section::new("brownian_motion", "Brownian motion"),
             Section::new("ising", "Ising model"),
@@ -91,10 +91,10 @@ pub fn route() -> Template {
     // }
     // sections.sort();
     let sections = vec![
-        "gravitational n-body dynamics",
-        "emergent behavior & cellular automata",
+        "gravitational dynamics",
+        "emergent behavior",
         "oscillators",
-        "statistical physics & thermodynamics",
+        "thermodynamics",
         "electro-magnetism",
         "various",
     ];

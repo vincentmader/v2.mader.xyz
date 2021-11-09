@@ -19,6 +19,7 @@ pub use renderer::Renderer;
 // ===================================================
 
 mod cellular_automaton;
+mod n_body_interaction;
 
 
 // SIMULATION
@@ -26,14 +27,14 @@ mod cellular_automaton;
 
 #[wasm_bindgen]
 pub struct Simulation {
-    sim_id: String,
+    page_id: String,
     engine: Engine,
     renderer: Renderer,
     step_idx: u32,
 }
 #[wasm_bindgen]
 impl Simulation {
-    pub fn new(sim_id: String) -> Simulation {
+    pub fn new(page_id: String) -> Simulation {
 
         let step_idx: u32 = 0;
         let nr_of_bodies: u32 = 100;  // TODO: make changeable
@@ -41,14 +42,14 @@ impl Simulation {
 
         let engine = Engine::new(nr_of_bodies, dt);
 
-        let renderer = match sim_id.as_str() {
+        let renderer = match page_id.as_str() {
             "3body_fig8" => Renderer::new(),
             // "3body_moon" => Renderer2::new(),
             _ => Renderer::new() // default
         };
 
         Simulation {
-            sim_id, engine, renderer, step_idx, 
+            page_id, engine, renderer, step_idx, 
         }
     }
     pub fn init(&mut self) {
@@ -202,14 +203,14 @@ impl NB {
 
 //         let engine = Engine::new(nr_of_bodies, dt);
 
-//         let renderer = match sim_id.as_str() {
+//         let renderer = match page_id.as_str() {
 //             "3body_fig8" => Renderer::new(),
 //             // "3body_moon" => Renderer2::new(),
 //             _ => Renderer::new() // default
 //         };
 
 //         Simulation {
-//             sim_id, engine, renderer, step_idx, 
+//             page_id, engine, renderer, step_idx, 
 //         }
 //     }
 //     pub fn init(&mut self) {

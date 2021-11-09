@@ -5,19 +5,19 @@ extern crate rocket_dyn_templates;
 use rocket_dyn_templates::Template;
 
 
-#[get("/simulations/<sim_id>")]
-pub fn routes(sim_id: &str) -> Template {
+#[get("/simulations/<page_id>")]
+pub fn routes(page_id: &str) -> Template {
 
-    let context: HashMap<&str, &str> = [
-        ("sim_id", sim_id),
-        ("title", sim_id),
-    ].iter().cloned().collect();
-
-    let template = match sim_id {
+    let template = match page_id {
         "3body_fig8" => "simulations/nbody",
-        "ising" => "simulations/cellular_automaton",
+        "ising" | "diffusion" => "simulations/cellular_automaton",
         _ => "simulations/base",
     };
+
+    let context: HashMap<&str, &str> = [
+        ("page_id", page_id),
+        ("title", page_id),
+    ].iter().cloned().collect();
 
     Template::render(template, &context)
 }

@@ -3,13 +3,13 @@ use rand::Rng;
 
 pub struct Engine {
     pub state: Vec<f64>,
-    sim_id: String,
+    page_id: String,
 }
 impl Engine {
-    pub fn new(sim_id: String, N: usize) -> Self {
+    pub fn new(page_id: String, N: usize) -> Self {
         let state = vec![0.; N.pow(2)];
         Engine {
-            state, sim_id,
+            state, page_id,
         }
     }
     pub fn init(&mut self, N: usize) {
