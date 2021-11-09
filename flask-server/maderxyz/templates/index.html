@@ -7,9 +7,9 @@
 {% block content %}
 
     {% for grid_items in props['nav_grid_sections'] %}
-        <h4 class="navgrid_section_title">
+        <div class="navgrid_section_title">
             {{ grid_items["title"] }}
-        </h4>
+        </div>
         <div id="section_navgrid">
             <div id="navgrid">
             {% for grid_item in grid_items['pages'] %}

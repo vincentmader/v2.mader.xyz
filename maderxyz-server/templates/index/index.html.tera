@@ -12,11 +12,9 @@
     
     {% block content %}
     
-        <!--
-        -->
+        <!-- -->
         {% include "index/navgrid" %}
-        <!--
-        -->
+        <!-- -->
     
         <!--
             <div id="react-root"></div>
