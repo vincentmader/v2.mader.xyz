@@ -2,8 +2,8 @@
 
 import sys
 sys.path.insert(0, '/var/www/maderxyz')
-sys.path.insert(0, '/var/www/maderxyz/FlaskApp')
-from FlaskApp import app as application
+sys.path.insert(0, '/var/www/maderxyz/maderxyz/flask-server')
+from maderxyz import app as application
 
 import logging
 logging.basicConfig(stream=sys.stderr)
