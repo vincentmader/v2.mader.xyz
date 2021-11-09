@@ -1,3 +1,9 @@
+
+target/
+Cargo.lock
+_trash
+
+
 .DS_Store
 
 __pycache__
