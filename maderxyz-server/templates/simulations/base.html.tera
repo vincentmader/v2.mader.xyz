@@ -5,9 +5,29 @@
 
     {{ super() }}
 
-    <div class="section_title">
-        {{ title }}
-    </div>
+    <div class="section_title"> {{ title }} </div>
+
+    <script type="module">
+        import init, { Simulation } from "../../static/pkg/maderxyz_frontend.js";
+        let category = "{{ category }}";
+        let page_id = "{{ page_id }}";
+
+        (async () => {
+          await init();
+        
+          var simulation = Simulation.new(category, page_id);
+          simulation.init();
+        
+          let N = 1;
+          const loop = () => {
+            for (let i = 0; i < N; i++) {
+              simulation.step();
+            }
+            requestAnimationFrame(loop);
+          };
+          loop();
+        })();
+    </script>
 
     <div class="canvas_holder">
 

@@ -1,19 +1,18 @@
-{% for section_title in fp.sections %}
+{% for section in navgrid.sections %}
 
     <div class="navgrid_section_title">
-        {{ section_title }}
+        {{ section.title }}
     </div>
 
     <div id="section_navgrid">
         <div id="navgrid">
-            {% for subsection in fp.subsections[section_title] %}
-                <a
-                  href="./simulations/{{ subsection.id }}" 
+            {% for item in section.items %}
+                <a href="./simulations/{{ section.title }}/{{ item.id }}" 
                   class="navgrid_cell"
                 > <img 
                     class="navgrid_thumbnail" 
-                    src="{{ subsection.path_to_thumbnail }}" 
-                    alt="{{ subsection.title }}"
+                    src="{{ item.path_to_thumbnail }}" 
+                    alt="{{ item.id }}"
                 /> </a>
             {% endfor %}
         </div>

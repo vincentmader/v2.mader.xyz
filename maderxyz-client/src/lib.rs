@@ -6,12 +6,6 @@ mod utils;
 
 // ===================================================
 
-// pub fn console_log() {
-//     // TODO
-//     let array = js_sys::Array::new();
-//     array.push(&x.into());
-//     web_sys::console::log(&array);
-// }
 
 // #[wasm_bindgen]
 // pub fn frontend_init(page_id: &str) {

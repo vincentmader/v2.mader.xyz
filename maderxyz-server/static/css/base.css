@@ -40,8 +40,8 @@
   outline: none;
   border: 2px solid #555555;
   border-radius: 30px;
-        box-shadow: inset 0px 0px 0px 0px black;
-        box-sizing: border-box;
+  box-shadow: inset 0px 0px 0px 0px black;
+  box-sizing: border-box;
 
   /* make square (with :after) */
   width: 86%;
@@ -101,9 +101,10 @@ body {
 }
 
 #header {
-  padding-top: 7px;
-  padding-bottom: 7px;
-  padding-right: 10px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  /* padding-right: 0px; */
+  /* margin-right: 0px; */
   width: calc(100% - 14px);
   text-align: right;
   margin-bottom: 13px;
@@ -112,7 +113,7 @@ body {
 #header_home {
   /* needed? */
   color: #dddddd;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 690;
   text-decoration: none;
 
@@ -208,8 +209,8 @@ canvas {
   /* overflow: hidden; */
   width: 100%;
 
-        box-shadow: inset 0px 0px 0px 0px black;
-        box-sizing: border-box;
+  box-shadow: inset 0px 0px 0px 0px black;
+  box-sizing: border-box;
 }
 
 /* OLD */

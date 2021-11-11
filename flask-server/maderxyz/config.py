@@ -31,6 +31,24 @@ PLOT_WIDTH, PLOT_HEIGHT = 400, 400
 # INDEX
 
 INDEX_NAVGRID_SECTIONS = [{
+    'title': 'oscillators',
+    'pages': [
+        {
+            'id': 'single_pendulum',
+            'title': 'pendulum',
+            'link': '/comp_phys/harmonical_oscillators/single_pendulum'
+        }, {
+            'id': 'double_pendulum',
+            'title': 'double pendulum',
+            'link': '/comp_phys/harmonical_oscillators/double_pendulum'
+        }, {
+            'id': 'lissajous',
+            'title': 'Lissajous figures',
+            'link': '/comp_phys/harmonical_oscillators/lissajous'
+            # TODO: solve analytically (-> performance)
+        },
+    ]
+}, {
     'title': 'gravitational n-body dynamics',
     'pages': [
         {
@@ -48,21 +66,16 @@ INDEX_NAVGRID_SECTIONS = [{
         },
     ]
 }, {
-    'title': 'oscillators',
+    'title': 'electro-magnetism',
     'pages': [
         {
-            'id': 'single_pendulum',
-            'title': 'pendulum',
-            'link': '/comp_phys/harmonical_oscillators/single_pendulum'
+            'id': 'lorentz',
+            'title': 'Wien filter',
+            'link': '/old/lorentz'
         }, {
-            'id': 'double_pendulum',
-            'title': 'double pendulum',
-            'link': '/comp_phys/harmonical_oscillators/double_pendulum'
-        }, {
-            'id': 'lissajous',
-            'title': 'Lissajous figures',
-            'link': '/comp_phys/harmonical_oscillators/lissajous'
-            # TODO: solve analytically (-> performance)
+            'id': 'charge_interaction',
+            'title': 'charge interaction (unstable)',
+            'link': '/comp_phys/electro_magnetism/charge_interaction'
         },
     ]
 }, {
@@ -97,19 +110,6 @@ INDEX_NAVGRID_SECTIONS = [{
             'id': 'game_of_life',
             'title': 'Conway\'s game of life',
             'link': '/comp_phys/cellular_automata/game_of_life'
-        },
-    ]
-}, {
-    'title': 'electro-magnetism',
-    'pages': [
-        {
-            'id': 'lorentz',
-            'title': 'Wien filter',
-            'link': '/old/lorentz'
-        }, {
-            'id': 'charge_interaction',
-            'title': 'charge interaction (unstable)',
-            'link': '/comp_phys/electro_magnetism/charge_interaction'
         },
     ]
 }, {
