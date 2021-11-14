@@ -7,7 +7,7 @@
     <div id="section_navgrid">
         <div id="navgrid">
             {% for item in section.items %}
-                <a href="./simulations/{{ section.title }}/{{ item.id }}" 
+                <a href="./simulations/{{ section.id }}/{{ item.id }}" 
                   class="navgrid_cell"
                 > <img 
                     class="navgrid_thumbnail" 

@@ -43,16 +43,16 @@ impl NavGrid {
     pub fn new() -> Self {
 
         let grid_section_titles: Vec<(&str, &str)> = Vec::from([
+            ("gravity", "classical gravity"),
             // ("oscillators", "oscillators"),
-            ("gravitational dynamics", "gravity"),
-            // ("electro-magnetism", "electro-magnetism"),
+            ("electro-magnetism", "electro-magnetism"),
             ("thermodynamics", "thermodynamics"),
-            // ("emergent behavior", "emergent-behavior"),
+            // ("emergent-behavior", "emergent behavior"),
             // ("various", "various"),
         ]);
 
         let mut sections: Vec<NavGridSection> = Vec::new();
-        for (title, id) in grid_section_titles.iter() {
+        for (id, title) in grid_section_titles.iter() {
             sections.push(NavGridSection::new(id, title));
         }
 
@@ -77,15 +77,17 @@ impl NavGridSection {
             // ]),
             "gravity" => Vec::from([
                 NavGridItem::new("3body-moon"),
+                NavGridItem::new("nbody-flowers"),
+                NavGridItem::new("nbody"),
                 NavGridItem::new("3body-fig8"),
+                NavGridItem::new("nbody-asteroids"),
                 // NavGridItem::new("nbody"),
                 // NavGridItem::new("nbody-binary"),
                 // NavGridItem::new("nbody-cluster"),
             ]),
-            // "electro-magnetism" => Vec::from([
-            //     NavGridItem::new("single-pendulum"),
-            //     NavGridItem::new("double-pendulum"),
-            // ]),
+            "electro-magnetism" => Vec::from([
+                NavGridItem::new("charge-interaction"),
+            ]),
             "thermodynamics" => Vec::from([
                 NavGridItem::new("ising"),
             ]),

@@ -55,17 +55,19 @@ pub struct Canvas {
     context: web_sys::CanvasRenderingContext2d,
     dimensions: (f64, f64),
     centered: bool,
+    log_scale: bool,
 }
 impl Canvas {
-    pub fn new(canvas_id: &str, centered: bool) -> Self {
+    pub fn new(canvas_id: &str, centered: bool, log_scale: bool) -> Self {
         let element = canvas(canvas_id);
         let context = ctx(&element);
         let canvas_width = f64::from(element.width());
         let canvas_height = f64::from(element.height());
         let dimensions = (canvas_width, canvas_height);
-        let centered = centered;
+        // let centered = centered;
+        // let log_scale = log_scale;
         Canvas {
-            element, context, dimensions, centered
+            element, context, dimensions, centered, log_scale,
         }
     }
     pub fn clear(&mut self) {
@@ -84,27 +86,30 @@ impl Canvas {
         mut from: (f64, f64), 
         mut to: (f64, f64),
     ) {
+        // re-scale
+        let mut zoom = 1.;
+        if self.centered {
+            zoom = 0.5;
+        } else { }
+        from = (
+            zoom * from.0 * self.dimensions.0,
+            zoom * from.1 * self.dimensions.1,
+        );
+        to = (
+            zoom * to.0 * self.dimensions.0,
+            zoom * to.1 * self.dimensions.1,
+        );
         // center
         if self.centered {
             from = (
-                from.0 + 0.5,
-                from.1 + 0.5,
+                from.0 + 0.5*self.dimensions.0,
+                from.1 + 0.5*self.dimensions.1,
             );
             to = (
-                to.0 + 0.5,
-                to.1 + 0.5,
+                to.0 + 0.5*self.dimensions.0,
+                to.1 + 0.5*self.dimensions.1,
             );
-        }
-        // re-scale
-        from = (
-            from.0 * self.dimensions.0,
-            from.1 * self.dimensions.1,
-        );
-        to = (
-            to.0 * self.dimensions.0,
-            to.1 * self.dimensions.1,
-        );
-
+        } else { }
         // draw
         self.context.begin_path();
             self.context.move_to(from.0, from.1);
@@ -118,19 +123,30 @@ impl Canvas {
         fill: bool
     ) {
         const TAU: f64 = 2.0 * std::f64::consts::PI;
+        // re-scale
+        let mut zoom = 1.;
+        if self.centered {
+            zoom = 0.5;
+        } else { }
+        center = (
+            zoom * center.0 * self.dimensions.0,
+            zoom * center.1 * self.dimensions.1,
+        );
+        let radius = zoom * radius * 0.5 * self.dimensions.1;  // TODO: only works for square
+        // log
+        if self.log_scale {
+            center = (
+                center.0, // .log(10.),
+                center.1, // .log(10.),
+            )
+        }
         // center
         if self.centered {
             center = (
-                center.0 + 0.5,
-                center.1 + 0.5,
+                center.0 + 0.5*self.dimensions.0,
+                center.1 + 0.5*self.dimensions.1,
             );
-        }
-        // re-scale
-        center = (
-            center.0 * self.dimensions.0,
-            center.1 * self.dimensions.1,
-        );
-        let radius = radius * 0.5 * self.dimensions.1;  // TODO: only works for square
+        } else { }
         // draw
         self.context.begin_path();
         self.context.arc( center.0, center.1, radius, 0.0, TAU ).unwrap();
@@ -173,3 +189,23 @@ pub fn console_log(x: &str) {
     web_sys::console::log(&array);
 }
 
+
+pub fn set_panic_hook() {
+    // When the `console_error_panic_hook` feature is enabled, 
+    // we can call the `set_panic_hook` function at least 
+    // once during initialization, and then we will get 
+    // better error messages if our code ever panics.
+    //
+    // For more details see
+    // https://github.com/rustwasm/console_error_panic_hook#readme
+    #[cfg(feature = "console_error_panic_hook")]
+    console_error_panic_hook::set_once();
+}
+
+
+use wasm_bindgen::prelude::*;
+
+#[wasm_bindgen]
+extern {
+    pub fn alert(s: &str);
+}

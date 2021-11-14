@@ -1,5 +1,8 @@
 use std::ops; // for operator overload
 
+use crate::utils;
+use crate::utils::dom::console_log;
+
 
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub struct Vector2D { pub x: f64, pub y: f64 }
@@ -72,4 +75,67 @@ impl ops::Div<f64> for Vector2D {
             y: self.y / _rhs,
         }
     }
+}
+
+pub mod integrators {
+
+    pub fn euler_exp(
+        body: &mut Vec<f64>, 
+        other: &Vec<f64>, 
+        force: &fn(&Vec<f64>, &Vec<f64>, f64) -> (f64, f64),
+        dt: f64,
+        eps: f64,
+    ) {
+        let force = force(&body, &other, eps);
+        let acc_x = force.0;
+        let acc_y = force.0;
+        let m = body[0];
+        // if m != 0. {
+        //     body[3] /= m;
+        //     body[4] /= m;
+        // }
+        body[3] += acc_x * dt;  // u
+        body[4] += acc_y * dt;  // v
+    }
+
+    pub fn euler_imp(
+        body: &mut Vec<f64>, 
+        other: &Vec<f64>, 
+        force: fn(&Vec<f64>, &Vec<f64>, f64) -> (f64, f64),
+        dt: f64,
+        eps: f64,
+    ) {}
+
+    pub fn verlet(
+        body: &mut Vec<f64>, 
+        other: &Vec<f64>, 
+        force: fn(&Vec<f64>, &Vec<f64>, f64) -> (f64, f64),
+        dt: f64,
+        eps: f64,
+    ) {}
+
+    pub fn leap_frog(
+        body: &mut Vec<f64>, 
+        other: &Vec<f64>, 
+        force: fn(&Vec<f64>, &Vec<f64>, f64) -> (f64, f64),
+        dt: f64,
+        eps: f64,
+    ) {}
+    pub fn runge_kutta_2(
+
+        body: &mut Vec<f64>, 
+        other: &Vec<f64>, 
+        force: fn(&Vec<f64>, &Vec<f64>, f64) -> (f64, f64),
+        dt: f64,
+        eps: f64,
+    ) {}
+
+    pub fn runge_kutta_4(
+        body: &mut Vec<f64>, 
+        other: &Vec<f64>, 
+        force: fn(&Vec<f64>, &Vec<f64>, f64) -> (f64, f64),
+        dt: f64,
+        eps: f64,
+    ) {}
+
 }

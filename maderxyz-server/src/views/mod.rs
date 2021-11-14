@@ -14,6 +14,9 @@ pub fn routes( category: &str, page_id: &str ) -> Template {
     let title = match page_id {
         "3body-fig8" => "3-body orbits: figure-8",
         "3body-moon" => "3-body orbits: Moon",
+        "nbody-flowers" => "symmetrical satellite constellation",
+        "nbody-asteroids" => "asteroids around binary",
+        "charge-interaction" => "interaction of charged particles",
         "ising" => "Ising model",
         _ => "TODO: title"
     };
