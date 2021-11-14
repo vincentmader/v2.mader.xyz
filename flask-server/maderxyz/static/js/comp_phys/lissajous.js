@@ -5,13 +5,14 @@ const line_width = 2;
 
 var canvas, ctx;
 var W, H;
-var a_x, a_y, w_x, w_y, phi, tail_length;
+var a_x, a_y, w_x, w_y, omega, tail_length;
+var phi = 0;
 
 var slider_a_x = document.getElementById("slider_a_x");
 var slider_a_y = document.getElementById("slider_a_y");
 var slider_w_x = document.getElementById("slider_w_x");
 var slider_w_y = document.getElementById("slider_w_y");
-var slider_phi = document.getElementById("slider_phi");
+var slider_omega = document.getElementById("slider_omega");
 var slider_tail_length = document.getElementById("slider_tail_length");
 
 const get_slider_values = () => {
@@ -19,7 +20,7 @@ const get_slider_values = () => {
   a_y = slider_a_y.value / 1000;
   w_x = slider_w_x.value;
   w_y = slider_w_y.value;
-  phi = slider_phi.value / 1000;
+  omega = 0.05 * slider_omega.value / 1000;
   tail_length = slider_tail_length.value;
 };
 
@@ -49,7 +50,7 @@ const init = () => {
     document.getElementById("display_a_y").innerHTML = "a_y = " + a_y;
     document.getElementById("display_w_x").innerHTML = "w_x = " + w_x;
     document.getElementById("display_w_y").innerHTML = "w_y = " + w_y;
-    document.getElementById("display_phi").innerHTML = "phi = " + phi;
+    document.getElementById("display_omega").innerHTML = "rotation = " + omega;
     document.getElementById("display_tail_length").innerHTML =
       "L = " + tail_length;
     //   // "$$T=" +
@@ -78,7 +79,7 @@ const init = () => {
       //   past_positions.shift()
       // }
     }
-
+    phi += omega;
     t += dt;
   }, 1);
 };
