@@ -18,7 +18,10 @@ const initialize_grid = (N) => {
     }
     grid.push(row);
   }
+  return grid;
+};
 
+const initialize_example = (grid, N) => {
   let x = 2;
   let y = 2;
   grid[y][x + 1] = 1;
@@ -30,13 +33,8 @@ const initialize_grid = (N) => {
   grid[N - 3][N - 5] = 1;
   grid[N - 2][N - 6] = 1;
   grid[N - 3][N - 6] = 1;
-  // grid[y][x + 1] = 1;
-  // grid[y + 1][x + 1] = 1;
-  // grid[y + 1][x + 2] = 1;
-
   return grid;
 };
-
 // draw grid
 const draw_grid = (grid) => {
   const N = grid.length;
@@ -141,6 +139,10 @@ const add_event_listeners = () => {
     if (paused) button_toggle_pause.innerHTML = "unpause";
     if (!paused) button_toggle_pause.innerHTML = "pause";
   });
+  let button_reset = document.getElementById("button_reset");
+  button_reset.addEventListener("click", function () {
+    grid = initialize_grid(N);
+  });
   canvas.addEventListener("mousedown", function (e) {
     const pos = getCursorPosition(canvas, e);
     grid = flip_grid_entry(N, grid, pos[0], pos[1]);
@@ -170,6 +172,7 @@ const init = () => {
 
   add_event_listeners();
   grid = initialize_grid(N);
+  grid = initialize_example(grid, N);
   animate();
 };
 
