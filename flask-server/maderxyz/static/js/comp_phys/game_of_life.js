@@ -142,6 +142,9 @@ const add_event_listeners = () => {
   let button_reset = document.getElementById("button_reset");
   button_reset.addEventListener("click", function () {
     grid = initialize_grid(N);
+    paused = true;
+    if (paused) button_toggle_pause.innerHTML = "unpause";
+    if (!paused) button_toggle_pause.innerHTML = "pause";
   });
   canvas.addEventListener("mousedown", function (e) {
     const pos = getCursorPosition(canvas, e);
