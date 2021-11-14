@@ -66,6 +66,23 @@ INDEX_NAVGRID_SECTIONS = [{
         },
     ]
 }, {
+    'title': 'statistical physics & thermodynamics',
+    'pages': [
+        {
+            'id': 'ising',
+            'title': 'Ising model',
+            'link': '/comp_phys/stat_phys/ising'
+        }, {
+            'id': 'thermal_motion',
+            'title': 'elastic collisions',
+            'link': '/comp_phys/stat_phys/thermal_motion'
+        }, {
+            'id': 'brownian_motion',
+            'title': 'Brownian motion (work in progress)',
+            'link': '/comp_phys/stat_phys/brownian_motion'
+        },
+    ]
+}, {
     'title': 'electro-magnetism',
     'pages': [
         {
@@ -76,23 +93,6 @@ INDEX_NAVGRID_SECTIONS = [{
             'id': 'charge_interaction',
             'title': 'charge interaction (unstable)',
             'link': '/comp_phys/electro_magnetism/charge_interaction'
-        },
-    ]
-}, {
-    'title': 'statistical physics & thermodynamics',
-    'pages': [
-        {
-            'id': 'thermal_motion',
-            'title': 'elastic collisions',
-            'link': '/comp_phys/stat_phys/thermal_motion'
-        }, {
-            'id': 'brownian_motion',
-            'title': 'Brownian motion (work in progress)',
-            'link': '/comp_phys/stat_phys/brownian_motion'
-        }, {
-            'id': 'ising',
-            'title': 'Ising model',
-            'link': '/comp_phys/stat_phys/ising'
         },
     ]
 }, {
