@@ -1,6 +1,6 @@
 const N = 20; // TODO: make changeable
 
-var paused = true;
+var paused = false;
 const fps_goal = 10;
 
 var canvas, ctx, W, H;
@@ -18,6 +18,22 @@ const initialize_grid = (N) => {
     }
     grid.push(row);
   }
+
+  let x = 2;
+  let y = 2;
+  grid[y][x + 1] = 1;
+  grid[y - 1][x + 1] = 1;
+  grid[y][x] = 1;
+  grid[y + 1][x] = 1;
+  grid[y - 1][x - 1] = 1;
+  grid[N - 2][N - 5] = 1;
+  grid[N - 3][N - 5] = 1;
+  grid[N - 2][N - 6] = 1;
+  grid[N - 3][N - 6] = 1;
+  // grid[y][x + 1] = 1;
+  // grid[y + 1][x + 1] = 1;
+  // grid[y + 1][x + 2] = 1;
+
   return grid;
 };
 
