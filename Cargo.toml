@@ -4,6 +4,7 @@
         "maderxyz-database",
         "maderxyz-server",
         "maderxyz-simulations",
+        "maderxyz-chronos",
     ]
 
 [profile.dev]

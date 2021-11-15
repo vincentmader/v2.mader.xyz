@@ -170,10 +170,10 @@ const add_event_listeners = () => {
     .getElementById("button_toggle_random_phi_distribution")
     .addEventListener("click", function () {
       belt_random_phi_distribution = !belt_random_phi_distribution;
-      console.log(
-        "toggled drawing of random phi distribution,",
-        belt_random_phi_distribution
-      );
+      // console.log(
+      //   "toggled drawing of random phi distribution,",
+      //   belt_random_phi_distribution
+      // );
       init();
     });
   document
