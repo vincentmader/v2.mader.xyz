@@ -61,12 +61,8 @@ impl Engine {
         };
     }
     pub fn update_bodies(&mut self) -> Vec<f64> {
-        // setup boundaries
-        let boundary_variant = match self.page_id.as_str() {
-            "charge-interaction" => Boundary::Elastic,
-            _ => Boundary::Null
-        };
-        // TODO: set in match arms?
+
+        // setup numerical parameters
         let (mut dt, mut eps) = (0., 0.);
         match self.page_id.as_str() {
             "charge-interaction" => {
@@ -76,20 +72,32 @@ impl Engine {
                 dt = 0.01;
                 eps = 0.1;
             }, "nbody-asteroids" => {
-                dt = 0.001;
+                dt = 0.002;
                 eps = 0.;
+            }, "3body-fig8" => {
+                dt = 0.01;
+                eps = 0.;
+            }, "3body-moon" => {
+                dt = 0.002;
+                eps = 0.001;
             }, _ => {
                 dt = 0.01;
                 eps = 0.;
             }
         };
-        // choose interaction force
+        // setup boundary variant
+        let boundary_variant = match self.page_id.as_str() {
+            "charge-interaction" => Boundary::Elastic,
+            _ => Boundary::Null
+        };
+
+        // setup interaction-force variant
         let interaction_force = match self.interaction_variant {
             Interaction::Coulomb => utils::physics::force_coulomb,
             Interaction::NewtonianGravity => utils::physics::force_newton,
             _ => utils::physics::force_coulomb // TODO
         };
-        // choose integrator
+        // setup integrator variant
         let integrator = match self.integrator_variant {
             // Integrator::EulerExplicit => utils::math::integrators::euler_exp,
             // Integrator::EulerImplicit => utils::math::integrators::euler_imp,
@@ -99,42 +107,49 @@ impl Engine {
             // Integrator::RungeKutta4 => utils::math::integrators::runge_kutta_4,
             _ => utils::math::integrators::euler_exp,
         };
-        // choose length of individual body &Vec
+
+        // setup length of individual body &Vec slice
         let n = match self.interaction_variant {
             Interaction::Coulomb => 6,
             _ => 5, 
         };
-        let nr_of_bodies = self.state.len() / n;
-        // quad-tree setup (or skip)
+
+        // setup quad-tree (or skip)
         let using_quad_tree = false;
         let quad_tree = match using_quad_tree {
             false => QuadTree::new(&Vec::new()),
             true => QuadTree::new(&self.state)  // TODO: populate quad-tree
         };
+
         // loop over all bodies & append updated to new_state
         let mut new_state: Vec<f64> = Vec::new();
+        let nr_of_bodies = self.state.len() / n;
         for body_idx in 0..nr_of_bodies {
-            // choose relevant neighbors (from quad-tree, or all)
+
+            // setup "list" of relevant neighbors/attractors (from qt, or all)
             let other_indices = match using_quad_tree {
-                false => (0..nr_of_bodies).collect(),
-                true => quad_tree.walk(body_idx)
+                true => quad_tree.walk(body_idx),
+                false => (0..nr_of_bodies).collect()
             };
-            // loop over neighbors, apply interaction
+
+            // loop over all attractors & apply interaction
             let mut body = Vec::from(self.state.get(n*body_idx..n*(body_idx+1)).unwrap());
             for other_idx in other_indices.iter() {
+                // no self-interaction
                 if body_idx == *other_idx { continue }
                 let other = Vec::from(self.state.get(n*other_idx..n*(other_idx+1)).unwrap());
+                // apply integrator
                 integrator(&mut body, &other, &interaction_force, dt, eps);
             }
-            // update position
+
+            // update body position
             body[1] += body[3] * dt;
             body[2] += body[4] * dt;
-            // other (e.g. bounds) TODO
             apply_bounds(&mut body, &boundary_variant);
+
             // append to new state
             new_state.extend_from_slice(&body);
-
-            // utils::dom::console_log(&format!("{}", other_idx));
+                // utils::dom::console_log(&format!("{}", other_idx));
         }
         new_state
     }
@@ -530,59 +545,71 @@ pub fn get_initial_state_nbody(page_id: &str) -> Vec<f64> {
 
     let mut state: Vec<f64> = Vec::new();
 
-    let k = 0.1; // TODO: why?
+    // let k = 0.1; // TODO: why?
+    let k = 10.; // TODO: why?
+
     match page_id {
         "2body-kepler" => {
 
         }, "3body-moon" => {
+            let (r, dr) = (0.8, 0.2);
             // add Sun
-            let (m, x, y, u, v) = (1., 0., 0., 0., 0.);
-            state.extend_from_slice(&[m, x, y, u, v]);
+            let (M, x, y, u, v) = (1.0, 0., 0., 0., 0.);
+            state.extend_from_slice(&[M, x, y, u, v]);
             // add Earth
-            let r: f64 = 0.8;
-            let v = k * v_kepler(1., r);  // TODO: add G*M vars?
-            let (m, x, y, u, v) = (1.0e-3, r, 0., 0., v);
+            let v = k*v_kepler(M, r);  // TODO: add G*M vars?
+            let (m, x, y, u, v) = (1.0e-2, r, 0., 0., v);
             state.extend_from_slice(&[m, x, y, u, v]);
             // add Moon
-            let dr: f64 = 0.03;
-            let v = k * (v_kepler(1., r+dr) + v_kepler(1e-3, dr));
-            // let dv = k * (1.*1.0e-3/(r+dr)).sqrt();
-            let (m, x, y, u, v) = (1.0e-6, r+dr, 0., 0., v);
+            let v = k*v_kepler(M, r+dr) + k*v_kepler(m, dr);
+            let (m, x, y, u, v) = (1.0e-4, r+dr, 0., 0., v);
             state.extend_from_slice(&[m, x, y, u, v]);
+            // TODO: fix Moon orbit
+            //  - what happened?
+            //  - move to mass-less particles for moons/rings?
+
         }, "3body-fig8" => {
-            // body 1
-            let (m, x, y, u, v) = (1., -0.7775727187509279270, -0.6287930240184685937, -0.06507160612095737318, 0.6324957346748190101);
+            let m = 1.;
+            // body 1 & 3
+            let (x, y, u, v) = (
+               0.7775727187509279270, 0.6287930240184685937, 
+               -0.06507160612095737318, 0.6324957346748190101
+            );
             state.extend_from_slice(&[m, x, y, u, v]);
+            state.extend_from_slice(&[m, -x, -y, u, v]);
             // body 2 (center)
-            let (m, x, y, u, v) = (1., 0.0, 0.0, 0.1301432122419148851, -1.264991469349638020);
+            let (x, y, u, v) = (
+                0., 0., 
+                0.1301432122419148851, -1.264991469349638020
+            );
             state.extend_from_slice(&[m, x, y, u, v]);
-            // body 3
-            let (m, x, y, u, v) = (1., 0.7775727187509279270, 0.6287930240184685937, -0.06507160612095737318, 0.6324957346748190101);
-            state.extend_from_slice(&[m, x, y, u, v]);
+
         }, "nbody-flowers" => {
             // add Sun
             let (m, x, y, u, v) = (1., 0., 0., 0., 0.);
             state.extend_from_slice(&[m, x, y, u, v]);
             // // add satellites
-            let N = 50; // TODO: make changeable
+            let m = 0.;  // TODO: unphysical of course, but stable!
+            let r = 0.9;
+            let v0 = 0.45;
+            let N = 20; // TODO: make changeable
             for id in 0..N {
-                let m = 0.;  // TODO: unphysical of course, but stable!
-                let r = 0.9;
                 let phi = id as f64 / N as f64 * TAU;
                 let x = r * phi.cos();
                 let y = r * phi.sin();
-                let v0 = 0.26;
                 let u = -v0 * phi.sin();
                 let v = v0 * phi.cos();
                 state.extend_from_slice(&[m,x,y,u,v]);
             }
+
         }, "nbody-asteroids" => {
             // add binary stars
-            let (m, x, y, u, v) = (1., -0.05, 0., 0., 0.21);
-            state.extend_from_slice(&[m, x, y, u, v]);
-            let (m, x, y, u, v) = (1., 0.05, 0., 0., -0.21);
-            state.extend_from_slice(&[m, x, y, u, v]);
-            // // add satellites
+            let (M, r, v0) = (1., 0.1, 1.575);
+            let (m, x, y, u, v) = (1., r, 0., 0., v0);
+            state.extend_from_slice(&[m, x, y, u, v0]);
+            state.extend_from_slice(&[m, -M/m*x, y, u, -v0]);
+
+            // add satellites
             let N = 100; // TODO: make changeable
             for id in 0..N {
                 // let mut phi: f64 = rng.gen();
@@ -593,21 +620,22 @@ pub fn get_initial_state_nbody(page_id: &str) -> Vec<f64> {
                 let r = 0.8;
                 let phi = id as f64 / N as f64 * TAU;
                 // let r = 0.42 + 0.44 * id as f64 / N as f64;;
-                let v0 = k * v_kepler(2., r);
+                let v0 = v_kepler(2., r);
                 let m = 0.;  // TODO: unphysical of course, but stable!
                 let x = r * phi.cos();
                 let y = r * phi.sin();
                 let u = -v0 * phi.sin();
                 let v = v0 * phi.cos();
-                state.extend_from_slice(&[m,x,y,u,v]);
+                state.extend_from_slice(&[m, x, y, u, v]);
             }
-            let r = 0.6;
-            let m = 1e-3;
-            let (m, x, y, u, v) = (m, r, 0., 0., -k*v_kepler(2., r));
-            state.extend_from_slice(&[m, x, y, u, v]);
-            let dr = 0.02;
-            let (m, x, y, u, v) = (0., r+dr, 0., 0., -k*(v_kepler(2., r+dr)+v_kepler(m, dr)));
-            state.extend_from_slice(&[m, x, y, u, v]);
+            // let r = 0.6;
+            // let m = 1e-3;
+            // let (m, x, y, u, v) = (m, r, 0., 0., -v_kepler(2., r));
+            // state.extend_from_slice(&[m, x, y, u, v]);
+            // let dr = 0.02;
+            // let (m, x, y, u, v) = (0., r+dr, 0., 0., -(v_kepler(2., r+dr)+v_kepler(m, dr)));
+            // state.extend_from_slice(&[m, x, y, u, v]);
+
         }, _ => {} // TODO: raise exc.?
     }
     state

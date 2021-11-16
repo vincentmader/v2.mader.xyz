@@ -87,15 +87,14 @@ pub mod integrators {
         eps: f64,
     ) {
         let force = force(&body, &other, eps);
-        let acc_x = force.0;
-        let acc_y = force.0;
         let m = body[0];
-        // if m != 0. {
-        //     body[3] /= m;
-        //     body[4] /= m;
-        // }
-        body[3] += acc_x * dt;  // u
-        body[4] += acc_y * dt;  // v
+        if m == 0. {  // TODO: handle this (?)
+            body[3] += force.0 * dt;  // u
+            body[4] += force.1 * dt;  // v
+        } else {
+            body[3] += force.0 / m * dt;  // u
+            body[4] += force.1 / m * dt;  // v
+        }
     }
 
     pub fn euler_imp(

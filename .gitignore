@@ -1,7 +1,8 @@
 
 target/
 Cargo.lock
-_trash
+__trash
+__old
 
 
 .DS_Store
@@ -59,5 +60,4 @@ search_history.db
 
 main_precompute_directions.js
 
-_old
 

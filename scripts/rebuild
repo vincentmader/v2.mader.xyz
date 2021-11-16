@@ -8,3 +8,4 @@ rm -r maderxyz-server/static/pkg
 rm -r target
 cd scripts
 ./build
+./run

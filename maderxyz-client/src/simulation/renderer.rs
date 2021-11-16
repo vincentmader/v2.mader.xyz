@@ -68,7 +68,6 @@ fn display_bodies(
     };
 
     // drawing
-
     canvas.clear();
     let mut color = "#666666"; // TODO: useless
 
@@ -93,6 +92,97 @@ fn display_bodies(
         let r = 0.015; // TODO
         canvas.draw_circle((x, y), r, true);
     }
+
+
+    // get (then draw) fields
+    let grid_size = 20;  // nr. of cells per row
+    let mut field: Vec<f64> = Vec::new();
+    for y in 0..grid_size {
+        for x in 0..grid_size {
+            let mut Fx = 0.;
+            let mut Fy = 0.;
+
+            let grid_size = grid_size as f64;
+            let x = x as f64 / grid_size;
+            let y = y as f64 / grid_size;
+
+            let body = [0., 1., x, y, 0., 0.];
+            for id in 0..nr_of_bodies {
+
+                let M = state[n*id];
+                let X = state[n*id+1];
+                let Y = state[n*id+2];
+                // let Q = new_state[n*id+5];
+
+                // let other = new_state.get(n*id..n*(id+1)).unwrap();
+                // let other = [
+                //     new_state[n*id],
+                //     new_state[n*id+1],
+                //     new_state[n*id+2],
+                //     new_state[n*id+3],
+                //     new_state[n*id+4],
+                //     new_state[n*id+5],
+                // ];
+
+                let dist = ((X-x).powf(2.) + (Y-y).powf(2.)).sqrt();
+                let force = -M / dist.powf(2.);
+                let force_x = force * (X-x)/dist;
+                let force_y = force * (Y-y)/dist;
+
+                // let force = -K * Q / dist.powf(2.);
+                // let force = utils::physics::force_coulomb(
+                //     &body, 
+                //     &other
+                // );
+                // Fx += force.0;
+                // Fy += force.1;
+                Fx += force_x;
+                Fy += force_y;
+            }
+            field.extend_from_slice(&[Fx, Fy]);
+        }
+    }
+
+    // display field
+    let F_max = 100.; // TODO: make changeable via slider
+    // let mut F_max = 1.;
+    // for y in 0..grid_size {
+    //     for x in 0..grid_size {
+    //         let Fx = state[start_idx+2*y*grid_size+2*x];
+    //         let Fy = state[start_idx+2*y*grid_size+2*x+1];
+    //         let F = (Fx.powf(2.) + Fy.powf(2.)).sqrt();
+    //         if F > F_max { F_max = F }
+    //     }
+    // }
+
+    for y in 0..grid_size {
+        for x in 0..grid_size {
+            // get field strength (TODO: calc here?)
+            let mut Fx = field[2*y*grid_size+2*x];
+            let mut Fy = field[2*y*grid_size+2*x+1];
+            let F = (Fx.powf(2.) + Fy.powf(2.)).sqrt();
+            // set color from field strength (relative to max)
+            // let r = (F / F_max * 255.) as u8;
+            // let (b, g) = (r, r);
+            // let color = format!("rgb({}, {}, {})", r, g, b);
+            // let color = format!("rgba(255, 255, 255, {})", F/F_max);
+            let alpha = (F/F_max*255.) as u8;
+            let color = format!("rgb({}, {}, {})", alpha, alpha, alpha);
+            canvas.set_stroke_style(&color);
+            // draw field line
+            let grid_size = grid_size as f64;
+            let x = x as f64 / grid_size;
+            let y = y as f64 / grid_size;
+            Fx *= 0.6 / grid_size / F; // normalize
+            Fy *= 0.6 / grid_size / F; // normalize
+            canvas.draw_line((x, y), (x+Fx, y+Fy));
+            // draw "arrow" tip
+            let r = 0.004;
+            canvas.set_fill_style(&color);
+            canvas.draw_circle((x+Fx, y+Fy), r, true);
+        }
+    }
+
 
 }
 fn display_particles() {
@@ -162,47 +252,7 @@ fn display_charge_interaction(page_id: &str, state: &Vec<f64>) {
     canvas.clear();
     let mut color = "#666666"; // TODO: useless
 
-    // display field
-    let grid_size = 35; // TODO
-    let F_max = 100.; // TODO: make changeable via slider
-    // let mut F_max = 1.;
-    // for y in 0..grid_size {
-    //     for x in 0..grid_size {
-    //         let Fx = state[start_idx+2*y*grid_size+2*x];
-    //         let Fy = state[start_idx+2*y*grid_size+2*x+1];
-    //         let F = (Fx.powf(2.) + Fy.powf(2.)).sqrt();
-    //         if F > F_max { F_max = F }
-    //     }
-    // }
 
-    // let start_idx = nr_of_bodies * n;
-    // for y in 0..grid_size {
-    //     for x in 0..grid_size {
-    //         // get field strength (TODO: calc here?)
-    //         let mut Fx = state[start_idx+2*y*grid_size+2*x];
-    //         let mut Fy = state[start_idx+2*y*grid_size+2*x+1];
-    //         let F = (Fx.powf(2.) + Fy.powf(2.)).sqrt();
-    //         // set color from field strength (relative to max)
-    //         // let r = (F / F_max * 255.) as u8;
-    //         // let (b, g) = (r, r);
-    //         // let color = format!("rgb({}, {}, {})", r, g, b);
-    //         // let color = format!("rgba(255, 255, 255, {})", F/F_max);
-    //         let alpha = (F/F_max*255.) as u8;
-    //         let color = format!("rgb({}, {}, {})", alpha, alpha, alpha);
-    //         canvas.set_stroke_style(&color);
-    //         // draw field line
-    //         let grid_size = grid_size as f64;
-    //         let x = x as f64 / grid_size;
-    //         let y = y as f64 / grid_size;
-    //         Fx *= 0.6 / grid_size / F; // normalize
-    //         Fy *= 0.6 / grid_size / F; // normalize
-    //         canvas.draw_line((x, y), (x+Fx, y+Fy));
-    //         // draw "arrow" tip
-    //         let r = 0.004;
-    //         canvas.set_fill_style(&color);
-    //         canvas.draw_circle((x+Fx, y+Fy), r, true);
-    //     }
-    // }
 
     // display bodies
     let r = 0.015; // TODO
