@@ -54,7 +54,7 @@ pub struct Canvas {
     element: web_sys::HtmlCanvasElement,
     context: web_sys::CanvasRenderingContext2d,
     dimensions: (f64, f64),
-    centered: bool,
+    pub centered: bool,
     log_scale: bool,
 }
 impl Canvas {

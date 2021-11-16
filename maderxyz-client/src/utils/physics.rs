@@ -64,7 +64,7 @@ pub fn force_coulomb(body: &Vec<f64>, other: &Vec<f64>, eps: f64) -> (f64, f64) 
     let dist = ((X-x).powf(2.) + (Y-y).powf(2.)).sqrt();
     // 
     // const k: f64 = 1.;
-    let force = -Q / (dist.powf(2.) + eps.powf(2.)); // k:=1.
+    let force = -q*Q / (dist.powf(2.) + eps.powf(2.)); // k:=1.
     let force_x = force * (X-x)/dist;
     let force_y = force * (Y-y)/dist;
     (force_x, force_y)

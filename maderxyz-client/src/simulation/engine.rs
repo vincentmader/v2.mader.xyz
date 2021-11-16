@@ -66,7 +66,7 @@ impl Engine {
         let (mut dt, mut eps) = (0., 0.);
         match self.page_id.as_str() {
             "charge-interaction" => {
-                dt = 0.001;
+                dt = 0.0005;
                 eps = 0.1;
             }, "nbody-flowers" => {
                 dt = 0.01;
@@ -671,7 +671,7 @@ pub fn get_initial_state_charge_interaction(page_id: &str) -> Vec<f64> {
     let mut state: Vec<f64> = Vec::new();
 
     // initialize bodies
-    let nr_of_bodies = 40;
+    let nr_of_bodies = 10;
 
     for id in 0..nr_of_bodies {
         let positive_charge: bool = rng.gen();

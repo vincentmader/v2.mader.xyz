@@ -71,31 +71,11 @@ fn display_bodies(
     canvas.clear();
     let mut color = "#666666"; // TODO: useless
 
-    // display bodies
-    for id in 0..nr_of_bodies {
-
-        // set color depending on charge
-        if n == 6 { // TODO: might fail on non-charge-int
-            let q = state[n*id+5];
-            if q < 0. {
-                color = "rgba(0, 0, 255, 1)";  // blue
-            } else {
-                color = "rgba(255, 0, 0, 1)";  // red
-            }
-        }
-
-        canvas.set_fill_style(&color);
-        canvas.set_stroke_style(&color);
-        // draw
-        let x = state[n*id+1];
-        let y = state[n*id+2];
-        let r = 0.015; // TODO
-        canvas.draw_circle((x, y), r, true);
-    }
 
 
     // get (then draw) fields
-    let grid_size = 20;  // nr. of cells per row
+    let q = 1.;
+    let grid_size = 30;  // nr. of cells per row
     let mut field: Vec<f64> = Vec::new();
     for y in 0..grid_size {
         for x in 0..grid_size {
@@ -103,16 +83,23 @@ fn display_bodies(
             let mut Fy = 0.;
 
             let grid_size = grid_size as f64;
-            let x = x as f64 / grid_size;
-            let y = y as f64 / grid_size;
+            let mut x = x as f64 / grid_size;
+            let mut y = y as f64 / grid_size;
+            if canvas.centered {
+                x = x*2. - 1.;
+                y = y*2. - 1.;
+            }
 
-            let body = [0., 1., x, y, 0., 0.];
+            // let body = [0., 1., x, y, 0., 0.];
             for id in 0..nr_of_bodies {
 
                 let M = state[n*id];
                 let X = state[n*id+1];
                 let Y = state[n*id+2];
-                // let Q = new_state[n*id+5];
+                let Q = match page_id {
+                    "charge-interaction" => state[n*id+5],
+                    _ => 1000. // TODO 
+                };
 
                 // let other = new_state.get(n*id..n*(id+1)).unwrap();
                 // let other = [
@@ -125,7 +112,10 @@ fn display_bodies(
                 // ];
 
                 let dist = ((X-x).powf(2.) + (Y-y).powf(2.)).sqrt();
-                let force = -M / dist.powf(2.);
+                let force = match page_id {
+                    "charge-interaction" => -q*Q / dist.powf(2.),
+                    _ => M / dist.powf(2.)
+                };
                 let force_x = force * (X-x)/dist;
                 let force_y = force * (Y-y)/dist;
 
@@ -144,7 +134,14 @@ fn display_bodies(
     }
 
     // display field
-    let F_max = 100.; // TODO: make changeable via slider
+    let F_max = match page_id { // TODO: make changeable via slider
+        "charge-interaction" => 100.,
+        "3body-fig8" => 20.,
+        "3body-moon" => 5.,
+        "nbody-asteroids" => 20.,
+        "nbody-flowers" => 20.,
+        _ => 1.
+    };
     // let mut F_max = 1.;
     // for y in 0..grid_size {
     //     for x in 0..grid_size {
@@ -171,8 +168,12 @@ fn display_bodies(
             canvas.set_stroke_style(&color);
             // draw field line
             let grid_size = grid_size as f64;
-            let x = x as f64 / grid_size;
-            let y = y as f64 / grid_size;
+            let mut x = x as f64 / grid_size;
+            let mut y = y as f64 / grid_size;
+            if canvas.centered {
+                x = (x - 0.5) * 2.;
+                y = (y - 0.5) * 2.;
+            }
             Fx *= 0.6 / grid_size / F; // normalize
             Fy *= 0.6 / grid_size / F; // normalize
             canvas.draw_line((x, y), (x+Fx, y+Fy));
@@ -181,6 +182,29 @@ fn display_bodies(
             canvas.set_fill_style(&color);
             canvas.draw_circle((x+Fx, y+Fy), r, true);
         }
+    }
+
+
+    // display bodies
+    for id in 0..nr_of_bodies {
+
+        // set color depending on charge
+        if n == 6 { // TODO: might fail on non-charge-int
+            let q = state[n*id+5];
+            if q < 0. {
+                color = "rgba(0, 0, 255, 1)";  // blue
+            } else {
+                color = "rgba(255, 0, 0, 1)";  // red
+            }
+        }
+
+        canvas.set_fill_style(&color);
+        canvas.set_stroke_style(&color);
+        // draw
+        let x = state[n*id+1];
+        let y = state[n*id+2];
+        let r = 0.015; // TODO
+        canvas.draw_circle((x, y), r, true);
     }
 
 

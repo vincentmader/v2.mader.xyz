@@ -6,6 +6,8 @@ use engine::Engine;
 use renderer::Renderer;
 use crate::utils;
 
+mod new;
+
 // ===================================================
 
 #[wasm_bindgen]
