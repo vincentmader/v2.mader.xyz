@@ -69,13 +69,13 @@ fn display_bodies(
 
     // drawing
     canvas.clear();
-    let mut color = "#666666"; // TODO: useless
 
 
 
     // get (then draw) fields
     let q = 1.;
     let grid_size = 30;  // nr. of cells per row
+    let eps = 1. / grid_size as f64;  // TODO
     let mut field: Vec<f64> = Vec::new();
     for y in 0..grid_size {
         for x in 0..grid_size {
@@ -113,7 +113,8 @@ fn display_bodies(
 
                 let dist = ((X-x).powf(2.) + (Y-y).powf(2.)).sqrt();
                 let force = match page_id {
-                    "charge-interaction" => -q*Q / dist.powf(2.),
+                    "charge-interaction" 
+                        => -q*Q / (dist.powf(2.)+eps.powf(2.)),
                     _ => M / dist.powf(2.)
                 };
                 let force_x = force * (X-x)/dist;
@@ -139,7 +140,7 @@ fn display_bodies(
         "3body-fig8" => 20.,
         "3body-moon" => 5.,
         "nbody-asteroids" => 20.,
-        "nbody-flowers" => 20.,
+        "nbody-flowers" => 3.,
         _ => 1.
     };
     // let mut F_max = 1.;
@@ -174,8 +175,8 @@ fn display_bodies(
                 x = (x - 0.5) * 2.;
                 y = (y - 0.5) * 2.;
             }
-            Fx *= 0.6 / grid_size / F; // normalize
-            Fy *= 0.6 / grid_size / F; // normalize
+            Fx *= 0.8 / grid_size / F; // normalize
+            Fy *= 0.8 / grid_size / F; // normalize
             canvas.draw_line((x, y), (x+Fx, y+Fy));
             // draw "arrow" tip
             let r = 0.004;
@@ -185,6 +186,7 @@ fn display_bodies(
     }
 
 
+    let mut color = "#666666"; 
     // display bodies
     for id in 0..nr_of_bodies {
 
@@ -195,6 +197,12 @@ fn display_bodies(
                 color = "rgba(0, 0, 255, 1)";  // blue
             } else {
                 color = "rgba(255, 0, 0, 1)";  // red
+            }
+        }
+        if page_id == "nbody-asteroids" {
+            color = match id {
+                0|1 => "orange",
+                _ => "#666666"
             }
         }
 

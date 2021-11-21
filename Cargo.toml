@@ -2,6 +2,7 @@
     members = [
         "maderxyz-client",
         "maderxyz-database",
+        "maderxyz-numerics",
         "maderxyz-server",
     ]
 

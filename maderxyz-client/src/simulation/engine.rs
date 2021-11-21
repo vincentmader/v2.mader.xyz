@@ -605,7 +605,8 @@ pub fn get_initial_state_nbody(page_id: &str) -> Vec<f64> {
         }, "nbody-asteroids" => {
             // add binary stars
             let (M, r, v0) = (1., 0.1, 1.575);
-            let (m, x, y, u, v) = (1., r, 0., 0., v0);
+            let v0 = v_kepler(0.1*M, r);
+            let (m, x, y, u, v) = (M, r, 0., 0., v0);
             state.extend_from_slice(&[m, x, y, u, v0]);
             state.extend_from_slice(&[m, -M/m*x, y, u, -v0]);
 
