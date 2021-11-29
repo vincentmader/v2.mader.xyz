@@ -57,32 +57,32 @@
 // }
 
 // TODO: actually: fields! not forces
-pub fn force_coulomb(body: &Vec<f64>, other: &Vec<f64>, eps: f64) -> (f64, f64) {
-    // operates on bodies of type [f64; 6] = [m,x,y,u,v,q]
-    let (q, x, y) = (body[5], body[1], body[2]);
-    let (Q, X, Y) = (other[5], other[1], other[2]);
-    let dist = ((X-x).powf(2.) + (Y-y).powf(2.)).sqrt();
-    // 
-    // const k: f64 = 1.;
-    let force = -q*Q / (dist.powf(2.) + eps.powf(2.)); // k:=1.
-    let force_x = force * (X-x)/dist;
-    let force_y = force * (Y-y)/dist;
-    (force_x, force_y)
-}
+//pub fn force_coulomb(body: &Vec<f64>, other: &Vec<f64>, eps: f64) -> (f64, f64) {
+//    // operates on bodies of type [f64; 6] = [m,x,y,u,v,q]
+//    let (q, x, y) = (body[5], body[1], body[2]);
+//    let (Q, X, Y) = (other[5], other[1], other[2]);
+//    let dist = ((X-x).powf(2.) + (Y-y).powf(2.)).sqrt();
+//    // 
+//    // const k: f64 = 1.;
+//    let force = -q*Q / (dist.powf(2.) + eps.powf(2.)); // k:=1.
+//    let force_x = force * (X-x)/dist;
+//    let force_y = force * (Y-y)/dist;
+//    (force_x, force_y)
+//}
 
-pub fn force_newton(body: &Vec<f64>, other: &Vec<f64>, eps: f64) -> (f64, f64) {
-    // operates on bodies of type [f64; 5] = [m,x,y,u,v]
-    let (m, x, y) = (body[0], body[1], body[2]);
-    let (M, X, Y) = (other[0], other[1], other[2]);
-    let dist = ((X-x).powf(2.) + (Y-y).powf(2.)).sqrt();
-    // 
-    // const G: f64 = 1.;
-    let force = M / (dist.powf(2.) + eps.powf(2.)); // G:=1.
-    let force_x = force * (X-x)/dist;
-    let force_y = force * (Y-y)/dist;
-    (force_x, force_y)
-}
+//pub fn force_newton(body: &Vec<f64>, other: &Vec<f64>, eps: f64) -> (f64, f64) {
+//    // operates on bodies of type [f64; 5] = [m,x,y,u,v]
+//    let (m, x, y) = (body[0], body[1], body[2]);
+//    let (M, X, Y) = (other[0], other[1], other[2]);
+//    let dist = ((X-x).powf(2.) + (Y-y).powf(2.)).sqrt();
+//    // 
+//    // const G: f64 = 1.;
+//    let force = M / (dist.powf(2.) + eps.powf(2.)); // G:=1.
+//    let force_x = force * (X-x)/dist;
+//    let force_y = force * (Y-y)/dist;
+//    (force_x, force_y)
+//}
 
-pub fn v_kepler(M: f64, r: f64) -> f64 {
-    (M/r).sqrt() // G:=1.
-}
+// pub fn v_kepler(M: f64, r: f64) -> f64 {
+//     (M/r).sqrt() // G:=1.
+// }

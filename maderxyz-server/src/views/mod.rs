@@ -1,5 +1,7 @@
 pub mod index;
 
+use crate::utils::load_config;
+
 // ----------
 
 use std::collections::HashMap;
@@ -20,6 +22,10 @@ pub fn routes( category: &str, page_id: &str ) -> Template {
         "ising" => "Ising model",
         _ => "TODO: title"
     };
+
+    // let config = load_config();
+    // let pages = config.pages;
+    // let context = &pages[page_id];
 
     let context: HashMap<&str, &str> = [
         ("category", category),  

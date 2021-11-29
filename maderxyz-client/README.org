@@ -1,1 +1,1 @@
-* maderxyz-frontend
+* maderxyz-client

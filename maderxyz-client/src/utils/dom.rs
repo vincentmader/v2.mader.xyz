@@ -4,6 +4,7 @@
 
 // use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
+use gloo::{events::EventListener};
 
 
 pub fn window() -> web_sys::Window {
@@ -51,23 +52,25 @@ pub fn ctx(canvas: &web_sys::HtmlCanvasElement) -> web_sys::CanvasRenderingConte
 use wasm_bindgen::JsValue;
 
 pub struct Canvas {
-    element: web_sys::HtmlCanvasElement,
-    context: web_sys::CanvasRenderingContext2d,
+    // element: web_sys::HtmlCanvasElement,
+    pub context: web_sys::CanvasRenderingContext2d,
     dimensions: (f64, f64),
     pub centered: bool,
-    log_scale: bool,
+    scale: f64,
+    pub zoom: f64,
 }
 impl Canvas {
-    pub fn new(canvas_id: &str, centered: bool, log_scale: bool) -> Self {
+    pub fn new(canvas_id: &str, centered: bool) -> Self {
         let element = canvas(canvas_id);
         let context = ctx(&element);
-        let canvas_width = f64::from(element.width());
-        let canvas_height = f64::from(element.height());
+        let scale   = 1.;
+        let canvas_width  = scale * f64::from(element.width());
+        let canvas_height = scale * f64::from(element.height());
         let dimensions = (canvas_width, canvas_height);
-        // let centered = centered;
-        // let log_scale = log_scale;
+        let zoom = match centered { true => 0.5, _ => 1.}; // TODO make changeable
         Canvas {
-            element, context, dimensions, centered, log_scale,
+            // element, 
+            context, dimensions, centered, scale, zoom,
         }
     }
     pub fn clear(&mut self) {
@@ -81,106 +84,79 @@ impl Canvas {
     pub fn set_fill_style(&mut self, color: &str) {
         self.context.set_fill_style(&JsValue::from_str(&color));
     }
+    pub fn rescale_vec(&self, vec: (f64, f64)) -> (f64, f64) {
+        // re-scale to canvas dimensions [px]   // TODO include scale
+        let mut vec = vec;
+        vec.0 *= self.zoom * self.dimensions.0 / self.scale;
+        vec.1 *= self.zoom * self.dimensions.1 / self.scale;
+        // center
+        if self.centered {
+            vec.0 += 0.5*self.dimensions.0;
+            vec.1 += 0.5*self.dimensions.1;
+        } 
+        vec
+    }
+    pub fn rescale_dist(&self, dist: f64) -> f64 {
+        dist * self.dimensions.1 * self.zoom / self.scale  // only works for square
+    }
     pub fn draw_line(
         &mut self, 
         mut from: (f64, f64), 
-        mut to: (f64, f64),
+        mut to:   (f64, f64),
     ) {
-        // re-scale
-        let mut zoom = 1.;
-        if self.centered {
-            zoom = 0.5;
-        } else { }
-        from = (
-            zoom * from.0 * self.dimensions.0,
-            zoom * from.1 * self.dimensions.1,
-        );
-        to = (
-            zoom * to.0 * self.dimensions.0,
-            zoom * to.1 * self.dimensions.1,
-        );
-        // center
-        if self.centered {
-            from = (
-                from.0 + 0.5*self.dimensions.0,
-                from.1 + 0.5*self.dimensions.1,
-            );
-            to = (
-                to.0 + 0.5*self.dimensions.0,
-                to.1 + 0.5*self.dimensions.1,
-            );
-        } else { }
+        from = self.rescale_vec(from);
+        to   = self.rescale_vec(to);
         // draw
         self.context.begin_path();
-            self.context.move_to(from.0, from.1);
-            self.context.line_to(to.0, to.1);
+        self.context.move_to(from.0, from.1);
+        self.context.line_to(to.0, to.1);
         self.context.stroke();
     }
     pub fn draw_circle(
         &mut self, 
-        mut center: (f64, f64), 
-        radius: f64,
-        fill: bool
+        center: (f64, f64), 
+        radius:  f64,
+        fill:    bool
     ) {
         const TAU: f64 = 2.0 * std::f64::consts::PI;
-        // re-scale
-        let mut zoom = 1.;
-        if self.centered {
-            zoom = 0.5;
-        } else { }
-        center = (
-            zoom * center.0 * self.dimensions.0,
-            zoom * center.1 * self.dimensions.1,
-        );
-        let radius = zoom * radius * 0.5 * self.dimensions.1;  // TODO: only works for square
-        // log
-        if self.log_scale {
-            center = (
-                center.0, // .log(10.),
-                center.1, // .log(10.),
-            )
-        }
-        // center
-        if self.centered {
-            center = (
-                center.0 + 0.5*self.dimensions.0,
-                center.1 + 0.5*self.dimensions.1,
-            );
-        } else { }
+
+        let center = self.rescale_vec(center);
+        let radius = self.rescale_dist(radius);
+
         // draw
         self.context.begin_path();
-        self.context.arc( center.0, center.1, radius, 0.0, TAU ).unwrap();
+        self.context.arc(center.0, center.1, radius, 0.0, TAU).unwrap();
         self.context.stroke();
         if fill {
             self.context.fill();
         }
     }
-    pub fn fill_rect(
-        &mut self, 
-        mut center: (f64, f64), 
-        width: f64,
-        height: f64,
-    ) {
-        // center
-        if self.centered {
-            center = (
-                center.0 + 0.5,
-                center.1 + 0.5,
-            );
-        }
-        // re-scale
-        center = (
-            center.0 * self.dimensions.0,
-            center.1 * self.dimensions.1,
-        );
-        let width = width * self.dimensions.0;
-        let height = height * self.dimensions.1;
-        // draw
-        self.context.begin_path();
-        self.context.fill_rect(
-            center.0, center.1, width, height
-        )
-    }
+    // pub fn fill_rect(
+    //     &mut self, 
+    //     mut center: (f64, f64), 
+    //     width: f64,
+    //     height: f64,
+    // ) {
+    //     // center
+    //     if self.centered {
+    //         center = (
+    //             center.0 + 0.5,
+    //             center.1 + 0.5,
+    //         );
+    //     }
+    //     // re-scale
+    //     center = (
+    //         center.0 * self.dimensions.0,
+    //         center.1 * self.dimensions.1,
+    //     );
+    //     let width = width * self.dimensions.0;
+    //     let height = height * self.dimensions.1;
+    //     // draw
+    //     self.context.begin_path();
+    //     self.context.fill_rect(
+    //         center.0, center.1, width, height
+    //     )
+    // }
 }
 
 pub fn console_log(x: &str) {
@@ -209,3 +185,33 @@ use wasm_bindgen::prelude::*;
 extern {
     pub fn alert(s: &str);
 }
+
+pub fn add_button_to_menu<F>(
+    text: &str,
+    callback: F,
+) where F: FnMut () {
+    let document = document();
+    let section = document.get_element_by_id("button_menu").unwrap();
+	
+	let button = document.create_element("button").unwrap()
+		.dyn_into::<web_sys::HtmlButtonElement>().unwrap();
+	button.set_text_content(Some(text));
+	
+	// let paragraph = document.create_element("p").unwrap()
+	// 	.dyn_into::<web_sys::HtmlParagraphElement>().unwrap();                    
+    // section.append_child(&paragraph).unwrap();
+
+	let on_click = EventListener::new(
+        &button, "click", 
+        move |_event| {
+		    web_sys::console::log_2(
+                &"Hello World Gloo :%s".into(),
+				&"WebAssemblyMan".into()
+            );
+		    // paragraph.set_text_content(Some("Gloo: Hello World"));
+            // callback()
+	    }
+    );
+	on_click.forget();     
+	section.append_child(&button).unwrap();
+}	

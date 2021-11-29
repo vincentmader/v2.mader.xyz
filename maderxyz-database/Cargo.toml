@@ -1,3 +1,4 @@
+
 [package]
     name = "maderxyz-database"
     version = "0.1.0"
@@ -7,3 +8,4 @@
 [dependencies]
     diesel = { version = "1.4.4", features = ["postgres"] }
     dotenv = "0.15.0"
+

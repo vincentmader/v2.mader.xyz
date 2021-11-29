@@ -1,416 +1,223 @@
-use crate::utils;
+
+use std::cmp;
+use std::f64::consts::TAU;
+
+use maderxyz_numerics::state::State;
+use maderxyz_numerics::state::ObjectFamily;
+use maderxyz_numerics::state::ObjectType;
+use maderxyz_numerics::state::ObjectAttribute;
+use maderxyz_numerics::state::Field;
+
+use crate::utils::dom;
+use crate::utils::dom::Canvas;
+use crate::utils::dom::console_log;
 
 
 pub struct Renderer {
-    category: String,
     page_id: String,
+    canvas: Canvas,  // TODO multiple?
+    frame_idx: usize,
+    is_paused: bool,
 }
 impl Renderer {
-    pub fn new(category: &str, page_id: &str) -> Self {
-        Renderer {
-            category: String::from(category), 
-            page_id: String::from(page_id), 
+    pub fn new(page_id: &str) -> Self {
+
+        let canvas_centered = is_canvas_centered(page_id);
+        let mut canvas = Canvas::new("canvas_main", canvas_centered);
+        match page_id {
+            "3body-broucke" => {canvas.zoom /= 2.5;},
+            _ => {}
+        }
+
+        let (frame_idx, is_paused) = (0, false);
+        Renderer { 
+            page_id: String::from(page_id),
+            canvas,
+            frame_idx,
+            is_paused,
         }
     }
     pub fn init(&mut self) {
-        // TODO: setup charts, button event listeners, ...
-        match self.page_id {
-            _ => ()
-        }
+        // TODO add button handlers (-> to engine?)
+        // fn pause_handler(&mut self) {self.pause()}
+        // let pause_handler = || self.pause();
+        // dom::add_button_to_menu("pause", pause_handler); 
     }
-    pub fn display(&mut self, state: &Vec<f64>) {
+    pub fn display(&mut self, states: &Vec<State>) {
+        if self.is_paused { return (); }
+        self.canvas.clear();
 
-        let n = match self.page_id.as_str() {
-            "charge-interaction" => 6,
-            _ => 5
+        self.display_fields(states);
+        self.display_objects(states);
+        self.display_menu(states);
+
+        self.frame_idx += 1;
+    }
+    fn display_fields(&mut self, states: &Vec<State>) {
+        let current_state   = &states[self.frame_idx];
+        let fields          = &current_state.fields;
+        for field in fields.iter() {
+            self.display_field(&states, field);
+        }
+
+    }
+    fn display_objects(&mut self, states: &Vec<State>) {
+        let current_state   = &states[self.frame_idx];
+        let object_families = &current_state.object_families;
+        for object_family in object_families.iter() {
+            self.display_object_family(&states, object_family);
+        } 
+    }
+    fn display_field(&mut self, states: &Vec<State>, field: &Field) {
+
+    }
+    fn display_object_family(&mut self, states: &Vec<State>, object_family: &ObjectFamily) {
+
+        let family_idx = object_family.id;
+        let objects = &object_family.objects;
+        let nr_of_objects = objects.len();
+
+        let iteration_step = states.len() - 1;
+        let particles_carry_charge = object_family.attributes.contains(&ObjectAttribute::Charge);
+
+        let object_color_mode = ObjectColorMode::Speed;
+        let get_object_color = match object_color_mode {
+            ObjectColorMode::HSLVelocity => get_object_color_from_velocity_angle, 
+            ObjectColorMode::HSLPosition => get_object_color_from_position_angle, 
+            ObjectColorMode::Speed => get_object_color_from_speed,
+            ObjectColorMode::Distance => get_object_color_from_distance, // NOTE from origin
         };
-        let nr_of_bodies: usize = state.len() / n;
-        // utils::dom::console_log(&format!("{}", nr_of_bodies));
 
-        match self.page_id.as_str() {
-            // "3body-fig8" | "3body-moon" | 
-            // "nbody-flowers" | "nbody-asteroids"
-                // => display_nbody(&self.page_id, state),
-                // => display_bodies(&self.page_id, state, nr_of_bodies),
-            // "charge-interaction" 
-                // => display_charge_interaction(&self.page_id, state),
-                // => display_bodies(&self.page_id, state, nr_of_bodies),
-            "ising" 
-                => display_cellauto(&self.page_id, state),
-            // "mc-pi" => display_graph(&self.page_id, state),
-            _ => display_bodies(
-                &self.page_id, 
-                state, 
-                nr_of_bodies
-            ),
-        }
-    }
-}
+        // draw tails
+        // ==========
+        let tail_length = cmp::min(object_family.tail_length, self.frame_idx);
 
-fn display_bodies(
-    page_id: &str, 
-    state: &Vec<f64>,
-    nr_of_bodies: usize, 
-) {
-
-    let canvas_centered = match page_id {
-        "charge-interaction" => false,
-        _ => true
-    };
-    let mut canvas = utils::dom::Canvas::new(
-        "canvas_main", // TODO: page_id
-        canvas_centered, 
-        false // TODO (log scale)
-    ); 
-    let n = match page_id {
-        "charge-interaction" => 6,
-        _ => 5
-    };
-
-    // drawing
-    canvas.clear();
-
-
-
-    // get (then draw) fields
-    let q = 1.;
-    let grid_size = 30;  // nr. of cells per row
-    let eps = 1. / grid_size as f64;  // TODO
-    let mut field: Vec<f64> = Vec::new();
-    for y in 0..grid_size {
-        for x in 0..grid_size {
-            let mut Fx = 0.;
-            let mut Fy = 0.;
-
-            let grid_size = grid_size as f64;
-            let mut x = x as f64 / grid_size;
-            let mut y = y as f64 / grid_size;
-            if canvas.centered {
-                x = x*2. - 1.;
-                y = y*2. - 1.;
-            }
-
-            // let body = [0., 1., x, y, 0., 0.];
-            for id in 0..nr_of_bodies {
-
-                let M = state[n*id];
-                let X = state[n*id+1];
-                let Y = state[n*id+2];
-                let Q = match page_id {
-                    "charge-interaction" => state[n*id+5],
-                    _ => 1000. // TODO 
-                };
-
-                // let other = new_state.get(n*id..n*(id+1)).unwrap();
-                // let other = [
-                //     new_state[n*id],
-                //     new_state[n*id+1],
-                //     new_state[n*id+2],
-                //     new_state[n*id+3],
-                //     new_state[n*id+4],
-                //     new_state[n*id+5],
-                // ];
-
-                let dist = ((X-x).powf(2.) + (Y-y).powf(2.)).sqrt();
-                let force = match page_id {
-                    "charge-interaction" 
-                        => -q*Q / (dist.powf(2.)+eps.powf(2.)),
-                    _ => M / dist.powf(2.)
-                };
-                let force_x = force * (X-x)/dist;
-                let force_y = force * (Y-y)/dist;
-
-                // let force = -K * Q / dist.powf(2.);
-                // let force = utils::physics::force_coulomb(
-                //     &body, 
-                //     &other
-                // );
-                // Fx += force.0;
-                // Fy += force.1;
-                Fx += force_x;
-                Fy += force_y;
-            }
-            field.extend_from_slice(&[Fx, Fy]);
-        }
-    }
-
-    // display field
-    let F_max = match page_id { // TODO: make changeable via slider
-        "charge-interaction" => 100.,
-        "3body-fig8" => 20.,
-        "3body-moon" => 5.,
-        "nbody-asteroids" => 20.,
-        "nbody-flowers" => 3.,
-        _ => 1.
-    };
-    // let mut F_max = 1.;
-    // for y in 0..grid_size {
-    //     for x in 0..grid_size {
-    //         let Fx = state[start_idx+2*y*grid_size+2*x];
-    //         let Fy = state[start_idx+2*y*grid_size+2*x+1];
-    //         let F = (Fx.powf(2.) + Fy.powf(2.)).sqrt();
-    //         if F > F_max { F_max = F }
-    //     }
-    // }
-
-    for y in 0..grid_size {
-        for x in 0..grid_size {
-            // get field strength (TODO: calc here?)
-            let mut Fx = field[2*y*grid_size+2*x];
-            let mut Fy = field[2*y*grid_size+2*x+1];
-            let F = (Fx.powf(2.) + Fy.powf(2.)).sqrt();
-            // set color from field strength (relative to max)
-            // let r = (F / F_max * 255.) as u8;
-            // let (b, g) = (r, r);
-            // let color = format!("rgb({}, {}, {})", r, g, b);
-            // let color = format!("rgba(255, 255, 255, {})", F/F_max);
-            let alpha = (F/F_max*255.) as u8;
-            let color = format!("rgb({}, {}, {})", alpha, alpha, alpha);
-            canvas.set_stroke_style(&color);
-            // draw field line
-            let grid_size = grid_size as f64;
-            let mut x = x as f64 / grid_size;
-            let mut y = y as f64 / grid_size;
-            if canvas.centered {
-                x = (x - 0.5) * 2.;
-                y = (y - 0.5) * 2.;
-            }
-            Fx *= 0.8 / grid_size / F; // normalize
-            Fy *= 0.8 / grid_size / F; // normalize
-            canvas.draw_line((x, y), (x+Fx, y+Fy));
-            // draw "arrow" tip
-            let r = 0.004;
-            canvas.set_fill_style(&color);
-            canvas.draw_circle((x+Fx, y+Fy), r, true);
-        }
-    }
-
-
-    let mut color = "#666666"; 
-    // display bodies
-    for id in 0..nr_of_bodies {
-
-        // set color depending on charge
-        if n == 6 { // TODO: might fail on non-charge-int
-            let q = state[n*id+5];
-            if q < 0. {
-                color = "rgba(0, 0, 255, 1)";  // blue
-            } else {
-                color = "rgba(255, 0, 0, 1)";  // red
-            }
-        }
-        if page_id == "nbody-asteroids" {
-            color = match id {
-                0|1 => "orange",
-                _ => "#666666"
+        self.canvas.context.set_line_width(1.);
+        for tail_idx in 0..tail_length {
+            let idx = self.frame_idx - tail_length + tail_idx;
+            let previous_idx = cmp::max(0, idx as i32 - 1) as usize;
+            let alpha = (tail_idx as f64) / (tail_length as f64);
+            // loop over objects
+            for object_idx in 0..nr_of_objects {
+                let object = &states[idx].object_families[family_idx].objects[object_idx];
+                let previous = &states[previous_idx].object_families[family_idx].objects[object_idx];
+                // draw
+                let color = get_object_color(&object);
+                self.canvas.set_stroke_style(&color);
+                self.canvas.draw_line(
+                    // (0., 0.),   // this is cool
+                    (previous[1], previous[2]), 
+                    (object[1], object[2]),
+                );  
             }
         }
 
-        canvas.set_fill_style(&color);
-        canvas.set_stroke_style(&color);
-        // draw
-        let x = state[n*id+1];
-        let y = state[n*id+2];
-        let r = 0.015; // TODO
-        canvas.draw_circle((x, y), r, true);
-    }
-
-
-}
-fn display_particles() {
-
-}
-fn display_fields() {
-    // let grid_size = 35;  // nr. of cells per row
-    // for y in 0..grid_size {
-    //     for x in 0..grid_size {
-    //         let mut Fx = 0.;
-    //         let mut Fy = 0.;
-
-    //         let grid_size = grid_size as f64;
-    //         let x = x as f64 / grid_size;
-    //         let y = y as f64 / grid_size;
-
-    //         let body = [0., 1., x, y, 0., 0.];
-
-    //         for id in 0..nr_of_bodies {
-
-    //             let X = new_state[n*id+1];
-    //             let Y = new_state[n*id+2];
-    //             let Q = new_state[n*id+5];
-
-    //             // let other = new_state.get(n*id..n*(id+1)).unwrap();
-    //             // let other = [
-    //             //     new_state[n*id],
-    //             //     new_state[n*id+1],
-    //             //     new_state[n*id+2],
-    //             //     new_state[n*id+3],
-    //             //     new_state[n*id+4],
-    //             //     new_state[n*id+5],
-    //             // ];
-
-    //             let dist = ((X-x).powf(2.) + (Y-y).powf(2.)).sqrt();
-    //             let force = -K * Q / (dist.powf(2.) + eps.powf(2.));
-
-    //             let force_x = force * (X-x)/dist;
-    //             let force_y = force * (Y-y)/dist;
-
-    //             // let force = -K * Q / dist.powf(2.);
-    //             // let force = utils::physics::force_coulomb(
-    //             //     &body, 
-    //             //     &other
-    //             // );
-    //             // Fx += force.0;
-    //             // Fy += force.1;
-    //             Fx += force_x;
-    //             Fy += force_y;
-    //         }
-    //         new_state.extend_from_slice(&[Fx, Fy]);
-    //     }
-    // }
-}
-
-
-fn display_charge_interaction(page_id: &str, state: &Vec<f64>) {
-    let mut canvas = utils::dom::Canvas::new(
-        "canvas_main", 
-        false,
-        false // TODO
-    ); // TODO: page_id
-
-    let nr_of_bodies = 7; // TODO
-    let n = 6; // TODO (?)
-
-    canvas.clear();
-    let mut color = "#666666"; // TODO: useless
-
-
-
-    // display bodies
-    let r = 0.015; // TODO
-    for id in 0..nr_of_bodies {
-        // set color depending on charge
-        let q = state[n*id+5];
-        if q < 0. {
-            color = "rgba(0, 0, 255, 1)";  // blue
-        } else {
-            color = "rgba(255, 0, 0, 1)";  // red
-        }
-        canvas.set_fill_style(&color);
-        canvas.set_stroke_style(&color);
-        // draw
-        let x = state[n*id+1];
-        let y = state[n*id+2];
-        canvas.draw_circle((x, y), r, true);
-    }
-}
-
-
-fn display_nbody(page_id: &str, state: &Vec<f64>) {
-    let mut canvas = utils::dom::Canvas::new(
-        "canvas_main", 
-        true,
-        true // TODO
-    ); // TODO: page_id
-
-    // drawing setup
-    canvas.set_fill_style("white");
-    canvas.set_stroke_style("white");
-    let mut colors: Vec<&str> = Vec::from([]);
-    match page_id {
-        "3body-moon" => {
-            colors = Vec::from([ "white", "blue", "red" ]);
-        }, "3body-fig8" => {
-            colors = Vec::from([ "red", "blue", "white" ]);
-        },
-        _ => {}
-    }
-
-    // clear canvas
-    canvas.clear();
-
-    // rotation
-    let delta_phi = match page_id {
-        // "3body-fig8" => 0.235 * 2.*3.14159, 
-        _ => 0.
-    };
-    // radius
-    let radius = match page_id {
-        "3body-fig8" => 0.1,
-        _ => 0.005
-    };
-
-    let n = 5;
-    let N = state.len() / n;
-    for id in 0..N {
-        // get point mass info
-        let m = state[n*id];
-        let mut x = state[n*id+1];
-        let mut y = state[n*id+2];
-            // let u = state[n*id + 3];
-            // let v = state[n*id + 4];
-        // apply rotation
-        // if delta_phi != 0. {
-        //     let pol_r = (x.powf(2.) + y.powf(2.)).sqrt();
-        //     let phi = y.atan2(x) + delta_phi;
-        //     x = pol_r*phi.cos();
-        //     y = pol_r*phi.sin();
-        // }
-        // apply colors
-        if colors.len() > 0 {
-            canvas.set_fill_style(colors[id]);
-            canvas.set_stroke_style(colors[id]);
-        }
-        // configure drawing radius
-        let r = radius;
-        // draw
-        canvas.draw_circle((x, y), r, true);
-    }
-}
-
-fn display_cellauto(page_id: &str, state: &Vec<f64>) {
-    let mut canvas = utils::dom::Canvas::new(
-        "canvas_main", 
-        false,
-        false
-    ); // TODO: page_id
-    // clear canvas
-    canvas.clear();
-
-    // draw on canvas
-    // match page_id {
-    //     "ising" => ising_draw(state),
-    //     _ => ()
-    // }
-
-    let N = (state.len() as f64).sqrt() as usize; // TODO: only works for square
-
-    canvas.set_fill_style("white");
-    for i in 0..N {
-        for j in 0..N {
-            let N = N as f64;
-            let x = i as f64 / N;
-            let y = j as f64 / N;
-            let z = 0.8; // TODO move elsewhere
-            let center = (
-                x + (1.-z) / (2.*N), 
-                y + (1.-z) / (2.*N)
-            );
-            let width = 1. / N * z;
-            let height = 1. / N * z;
-            if state[i*N as usize+j] == 1. {
-                canvas.fill_rect(center, width, height);
-                // console_log(&format!("{}, {}", i, j))
+        // draw objects
+        // ==========
+        let drawing_radius: f64 = match object_family.object_type {
+            ObjectType::Static => 0.025,
+            ObjectType::Body => 0.015,
+            ObjectType::Particle => 0.0025,
+        };
+        for object in objects.iter() {
+            // load object state
+            let m = object[0];
+            let x = object[1];
+            let y = object[2];
+            let u = object[3];
+            let v = object[4];
+            // handle charge
+            let mut q = 0.;
+            if particles_carry_charge { q = object[5]; }
+            // set color
+            let mut color = get_object_color(&object);
+            match object_family.object_type {
+                ObjectType::Static => {color = String::from("white");},
+                _ => {}
             }
+            // draw
+            self.canvas.set_fill_style(&color);
+            self.canvas.set_stroke_style(&color);
+            self.canvas.context.set_line_width(1.);  // TODO
+            self.canvas.draw_circle((x, y), drawing_radius, true);
         }
+    }
+    pub fn display_menu(&self, states: &Vec<State>) {  // TODO ?
+        let iteration_step = states.len();
+        let current_state = &states[iteration_step-1];
+
+        let elm_frame = dom::document().get_element_by_id("display_frame_idx").unwrap();
+        elm_frame.set_inner_html(&format!("frame idx: {}", self.frame_idx));
+
+        let iter_idx = current_state.iteration_idx;
+        let elm_iter = dom::document().get_element_by_id("display_iteration_idx").unwrap();
+        elm_iter.set_inner_html(&format!("iteration idx: {}", iter_idx));
+    }
+    fn pause(&mut self) {
+        self.is_paused = !self.is_paused;
     }
 }
 
 
-// pub fn ising_draw(state: &Vec<f64>) {}
+pub fn get_hsl_from_vec(vec: [f64; 2]) -> String {
+    let phi = vec[1].atan2(vec[0]) / TAU * 360.;
+    let (h, s, l) = (phi, 100, 50);
+    format!("hsl({}, {}%, {}%)", h, s, l)
+}
 
-// fn display_graph(page_id: u32, state: &Vec<f64>) {
-//     let mut canvas = Canvas::new("canvas_main", false); // TODO: page_id
-//     canvas.fill_rect((10., 10.), 20.,30.);
-// }
+pub fn get_unit_vec_from_angle(phi: f64) -> [f64; 2] {
+    [phi.cos(), phi.sin()]
+}
+
+pub fn is_canvas_centered(page_id: &str) -> bool {
+   match page_id {
+       "charge-interaction" => false,
+       _ => true,
+   }
+}
+
+enum ObjectColorMode {
+    // Preset,
+    HSLPosition,
+    HSLVelocity,
+    // Mass,
+    Speed,
+    Distance,
+    // Charge,
+}
+
+// TODO only return rgb values, apply alpha later! (from tail_idx)
+
+fn get_object_color_from_velocity_angle(obj: &Vec<f64>) -> String {
+    get_hsl_from_vec([obj[3], obj[4]])
+}
+fn get_object_color_from_position_angle(obj: &Vec<f64>) -> String {
+    get_hsl_from_vec([obj[1], obj[2]])
+}
+fn get_object_color_from_speed(obj: &Vec<f64>) -> String {
+    const MAX_SPEED: f64 = 1.5;
+    let u = obj[3];
+    let v = obj[4];
+    let speed = (u.powf(2.) + v.powf(2.)).sqrt();
+    let foo = f64::min(1., speed / MAX_SPEED) * 255.;
+
+    // TODO generalize gradients
+    let r = foo;
+    let g = 255. - (255. * (foo-127.).abs()/128.);  
+    let b = 255. - foo;
+    format!("rgb({}, {}, {})", r, g, b)
+}
+fn get_object_color_from_distance(obj: &Vec<f64>) -> String {
+    const MAX_DIST: f64 = 1.;
+    let x = obj[1];
+    let y = obj[2];
+    let dist = (x.powf(2.) + y.powf(2.)).sqrt();
+    let foo = f64::min(1., dist / MAX_DIST) * 255.;
+
+    let r = foo;
+    let r = 255. - r; // flip blue & red
+    let g = 255. - (255. * (r-127.).abs()/128.);
+    let b = 255. - r;
+    format!("rgb({}, {}, {})", r, g, b)
+}
 

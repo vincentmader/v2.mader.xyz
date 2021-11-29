@@ -1,164 +1,36 @@
-/* INDEX */
-/* ================================================ */
-
-/* navgrid section title */
-.navgrid_section_title {
-  width: 100%;
-  text-align: center;
-  font-weight: 690;
-  /* color: white; */
-  /* margin-bottom: 15px; */
-  /* margin-top: 25px; */
-  /* margin-bottom: 0px; */
-}
-
-/* #section_navgrid { */
-/*   width: 100%; */
-/* background-color: #222222; */
-/* border-radius: 20px; /1* if changed: also change for normal section? *1/ */
-/* border: 2px solid #555555; */
-/* margin-bottom: 30px; /* if changed: also change for .section*/
-/* background-color: black; */
-/* } */
-/* navgrid */
-
-#navgrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  margin-bottom: 35px;
-}
-@media only screen and (max-width: 1201px) {
-  #navgrid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-@media only screen and (max-width: 751px) {
-  #navgrid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-/* navgrid cell */
-.navgrid_cell {
-  /* border: 0px; */
-  /* width: 100%; */
-  /* height: 100%; */
-  /* background-color: #222222; */
-  /* outline: none; */
-  /* position: relative; */
-  /* padding: 0px; */
-  text-decoration: none;
-  /* margin-top: 15px; */
-  color: #dddddd;
-}
-
-.navgrid_cell_title {
-  text-align: center;
-  margin: 0px;
-  padding: 0px;
-
-  /* font-variant: normal; */
-}
-
-/* navgrid thumbnail */
-.navgrid_thumbnail {
-  outline: none;
-  border: 2px solid #555555;
-  border-radius: 30px;
-  box-shadow: inset 0px 0px 0px 0px black;
-  box-sizing: border-box;
-
-  /* make square (with :after) */
-  width: 86%;
-  /* center */
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 7%; /* left & right done autom. through align */
-  margin-bottom: 7%;
-
-  /* transition (with :hover) */
-  transition: border 0.35s, filter 0.35s, transform 0.35s ease-in-out;
-  /* grayscale */
-  filter: grayscale(100%);
-  -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
-}
-@media only screen and (max-width: 551px) {
-  .navgrid_thumbnail {
-    filter: grayscale(0%);
-  }
-}
-.navgrid_thumbnail:after {
-  content: "";
-  display: block;
-  padding-bottom: 100%;
-}
-.navgrid_thumbnail:hover {
-  border: 2px solid #555555;
-  transform: scale(1.1);
-  -webkit-filter: grayscale(0%); /* Safari 6.0 - 9.0 */
-  filter: grayscale(0%);
-  cursor: pointer;
-}
-
-/* navgrid thumbnail title */
-/* .navgrid_thumbnail_title { */
-/*   position: absolute; */
-/*   top: 20%; */
-/*   left: 20%; */
-/*   color: transparent; */
-/* } */
-/* .navgrid_thumbnail_title:hover { */
-/*   color: white; */
-/* } */
-
-/* BASE */
-/* ========================================================================= */
-
 body {
-  background-color: #111111;
   width: 100%;
   margin: 0px;
   padding: 0px;
-  overflow-x: hidden; /* -> scrolling */
-  color: #dddddd;
+  overflow-x: hidden;
   font-family: Arial, Helvetica, sans-serif;
+  background-color: #111111;
+  color: #dddddd;
 }
+
+/* HEADER ====================================== */
 
 #header {
-  padding-top: 6px;
-  padding-bottom: 6px;
-  /* padding-right: 0px; */
-  /* margin-right: 0px; */
   width: calc(100% - 14px);
   text-align: right;
+  padding-top: 6px;
+  padding-bottom: 6px;
   margin-bottom: 13px;
 }
 
 #header_home {
-  /* needed? */
+  cursor: pointer;
+  background-color: black;
   color: #dddddd;
   font-size: 18px;
   font-weight: 690;
   text-decoration: none;
-
-  background-color: black;
-  border: 0px;
-  outline: none;
-  cursor: pointer;
-
-  /* margin-top: 50px; */
-  /* height: 1em; */
-  /* margin-top: 0.5em; */
-  /* margin-bottom: 0.5em; */
-  /* margin-right: 10px; */
-  /* border: 1px solid green; */
+  /* border: 0px; */
+  /* outline: none; */
 }
 
-#navbar {
-}
+/* CONTENT ====================================== */
 
-/* content geometry (dependent on screen-size) */
 #content {
   width: 50%;
   padding-left: 25%;
@@ -179,16 +51,14 @@ body {
   }
 }
 
+/* SECTION ====================================== */
+
 .section {
   background-color: #222222;
   border-radius: 20px; /* if changed: also change for navgrid_section? */
   border: 3px solid #555555;
   margin-bottom: 25px;
   text-align: center;
-}
-
-.slider {
-  outline: none;
 }
 
 .section_title {
@@ -198,15 +68,7 @@ body {
   margin-bottom: 8px;
 }
 
-/* @media only screen and (max-width: 641px) { */
-/*   .navgrid_thumbnail { */
-/*     -webkit-filter: grayscale(0%); /1* Safari 6.0 - 9.0 *1/ */
-/*     filter: grayscale(0%); */
-/*   } */
-/* } */
-
-/* COMP PHYS / SIMULATIONS */
-/* ========================================================================= */
+/* CANVAS ====================================== */
 
 .canvas_holder {
   /* border: 2px solid #555555; */
@@ -221,12 +83,18 @@ body {
 canvas {
   border: 3px solid #555555;
   background-color: black;
-  border-radius: 20px; /* if changed: also change for navgrid_section? */
+  border-radius: 20px; /* if changed: also change for section/navgrid_section? */
   /* overflow: hidden; */
   width: 100%;
 
   box-shadow: inset 0px 0px 0px 0px black;
   box-sizing: border-box;
+}
+
+/* OTHER ====================================== */
+
+.slider {
+  outline: none;
 }
 
 /* OLD */

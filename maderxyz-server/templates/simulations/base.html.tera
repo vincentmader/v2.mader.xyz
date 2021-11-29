@@ -1,6 +1,14 @@
 {% extends "base" %}
 
 
+{% block head %}
+
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href="/static/css/simulation.css">
+
+{% endblock head %}
+
+
 {% block content %}
 
     {{ super() }}
@@ -8,14 +16,13 @@
     <div class="section_title"> {{ title }} </div>
 
     <script type="module">
-        import init, { Simulation } from "../../static/pkg/maderxyz_frontend.js";
-        let category = "{{ category }}";
+        import init, { Simulation } from "../../static/pkg/maderxyz_client.js";
         let page_id = "{{ page_id }}";
 
         (async () => {
           await init();
         
-          var simulation = Simulation.new(category, page_id);
+          var simulation = Simulation.new(page_id);
           simulation.init();
         
           let N = 1;
@@ -30,13 +37,20 @@
     </script>
 
     <div class="canvas_holder">
-
-        <canvas id="canvas_main"> </canvas>
+        <canvas id="canvas_main"
+            width="1000px" heigh="1000px"
+        > </canvas>
         <script> 
             let cnv = document.getElementById("canvas_main");
             cnv.height = cnv.width;
         </script>
+    </div>
 
+    <div class="section" id="button_menu">
+        <div>
+            <p id="display_frame_idx"></p>
+            <p id="display_iteration_idx"></p>
+        </div>
     </div>
 
 {% endblock content %}

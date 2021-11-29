@@ -7,15 +7,17 @@
     <div id="section_navgrid">
         <div id="navgrid">
             {% for item in section.items %}
-                <a href="./simulations/{{ section.id }}/{{ item.id }}" 
+                <a href="./simulations/{{ section.section_id }}/{{ item.item_id }}" 
                   class="navgrid_cell"
                 > 
                     <img 
                         class="navgrid_thumbnail" 
                         src="{{ item.path_to_thumbnail }}" 
-                        alt="{{ item.id }}"
+                        alt="{{ item.item_id }}"
                     /> 
-                    <div class="navgrid_cell_title"> hello </div>
+                    <div class="navgrid_cell_title">
+                        {{ item.title }}
+                    </div>
                 </a>
             {% endfor %}
         </div>

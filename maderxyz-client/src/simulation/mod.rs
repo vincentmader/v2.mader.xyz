@@ -1,22 +1,12 @@
+
 use wasm_bindgen::prelude::*;
 
-// use crate::maderxyz-numerics;
-// use maderxyz_numerics::state::State;
-// use extern_crate::maderxyz_numerics;
-// use super::maderxyz_numerics;
-// use maderxyz_numerics::State;
-// use maderxyz_numerics::state;
-// use crate::maderxyz_numerics;
-
-
-mod engine;
 mod renderer;
-use engine::Engine;
 use renderer::Renderer;
+use maderxyz_numerics::engine::Engine;
 use crate::utils;
 
 
-// ===================================================
 
 #[wasm_bindgen]
 pub struct Simulation {
@@ -25,9 +15,9 @@ pub struct Simulation {
 }
 #[wasm_bindgen]
 impl Simulation {
-    pub fn new(category: &str, page_id: &str) -> Self {
-        let engine = Engine::new(category, page_id);
-        let renderer = Renderer::new(category, page_id);
+    pub fn new(page_id: &str) -> Self {
+        let engine = Engine::new(page_id);
+        let renderer = Renderer::new(page_id);
         Simulation { engine, renderer }
     }
     pub fn init(&mut self) {
@@ -35,8 +25,11 @@ impl Simulation {
         self.engine.init();
         self.renderer.init();
     }
-    pub fn step(&mut self) {
-        self.engine.step();
-        self.renderer.display(&self.engine.state);
+    pub fn step(&mut self) {  // TODO: multithread & async
+        self.renderer.display(&self.engine.states);
+        for _ in 0..1 { // TODO
+            self.engine.step();
+        }
     }
 }
+

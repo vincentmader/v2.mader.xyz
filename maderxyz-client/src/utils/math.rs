@@ -1,7 +1,7 @@
 use std::ops; // for operator overload
 
-use crate::utils;
-use crate::utils::dom::console_log;
+// use crate::utils;
+// use crate::utils::dom::console_log;
 
 
 #[derive(Debug, Copy, Clone, PartialEq)]
@@ -77,64 +77,64 @@ impl ops::Div<f64> for Vector2D {
     }
 }
 
-pub mod integrators {
+// pub mod integrators {
 
-    pub fn euler_exp(
-        body: &mut Vec<f64>, 
-        other: &Vec<f64>, 
-        force: &fn(&Vec<f64>, &Vec<f64>, f64) -> (f64, f64),
-        dt: f64,
-        eps: f64,
-    ) {
-        let force = force(&body, &other, eps);
-        let m = body[0];
-        if m == 0. {  // TODO: handle this (?)
-            body[3] += force.0 * dt;  // u
-            body[4] += force.1 * dt;  // v
-        } else {
-            body[3] += force.0 / m * dt;  // u
-            body[4] += force.1 / m * dt;  // v
-        }
-    }
+//     pub fn euler_exp(
+//         body: &mut Vec<f64>, 
+//         other: &Vec<f64>, 
+//         force: &fn(&Vec<f64>, &Vec<f64>, f64) -> (f64, f64),
+//         dt: f64,
+//         eps: f64,
+//     ) {
+//         let force = force(&body, &other, eps);
+//         let m = body[0];
+//         if m == 0. {  // TODO: handle this (?)
+//             body[3] += force.0 * dt;  // u
+//             body[4] += force.1 * dt;  // v
+//         } else {
+//             body[3] += force.0 / m * dt;  // u
+//             body[4] += force.1 / m * dt;  // v
+//         }
+//     }
 
-    pub fn euler_imp(
-        body: &mut Vec<f64>, 
-        other: &Vec<f64>, 
-        force: fn(&Vec<f64>, &Vec<f64>, f64) -> (f64, f64),
-        dt: f64,
-        eps: f64,
-    ) {}
+//     pub fn euler_imp(
+//         body: &mut Vec<f64>, 
+//         other: &Vec<f64>, 
+//         force: fn(&Vec<f64>, &Vec<f64>, f64) -> (f64, f64),
+//         dt: f64,
+//         eps: f64,
+//     ) {}
 
-    pub fn verlet(
-        body: &mut Vec<f64>, 
-        other: &Vec<f64>, 
-        force: fn(&Vec<f64>, &Vec<f64>, f64) -> (f64, f64),
-        dt: f64,
-        eps: f64,
-    ) {}
+//     pub fn verlet(
+//         body: &mut Vec<f64>, 
+//         other: &Vec<f64>, 
+//         force: fn(&Vec<f64>, &Vec<f64>, f64) -> (f64, f64),
+//         dt: f64,
+//         eps: f64,
+//     ) {}
 
-    pub fn leap_frog(
-        body: &mut Vec<f64>, 
-        other: &Vec<f64>, 
-        force: fn(&Vec<f64>, &Vec<f64>, f64) -> (f64, f64),
-        dt: f64,
-        eps: f64,
-    ) {}
-    pub fn runge_kutta_2(
+//     pub fn leap_frog(
+//         body: &mut Vec<f64>, 
+//         other: &Vec<f64>, 
+//         force: fn(&Vec<f64>, &Vec<f64>, f64) -> (f64, f64),
+//         dt: f64,
+//         eps: f64,
+//     ) {}
+//     pub fn runge_kutta_2(
 
-        body: &mut Vec<f64>, 
-        other: &Vec<f64>, 
-        force: fn(&Vec<f64>, &Vec<f64>, f64) -> (f64, f64),
-        dt: f64,
-        eps: f64,
-    ) {}
+//         body: &mut Vec<f64>, 
+//         other: &Vec<f64>, 
+//         force: fn(&Vec<f64>, &Vec<f64>, f64) -> (f64, f64),
+//         dt: f64,
+//         eps: f64,
+//     ) {}
 
-    pub fn runge_kutta_4(
-        body: &mut Vec<f64>, 
-        other: &Vec<f64>, 
-        force: fn(&Vec<f64>, &Vec<f64>, f64) -> (f64, f64),
-        dt: f64,
-        eps: f64,
-    ) {}
+//     pub fn runge_kutta_4(
+//         body: &mut Vec<f64>, 
+//         other: &Vec<f64>, 
+//         force: fn(&Vec<f64>, &Vec<f64>, f64) -> (f64, f64),
+//         dt: f64,
+//         eps: f64,
+//     ) {}
 
-}
+// }

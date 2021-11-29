@@ -7,14 +7,12 @@ use crate::utils::physics::v_kepler;
 pub struct Engine {
     pub state: Vec<f64>,
     page_id: String,
-    category: String,
     // TODO: define for smaller set of bodies?
     interaction_variant: Interaction,
     integrator_variant: Integrator, 
 }
 impl Engine {
     pub fn new(
-        category: &str, 
         page_id: &str
     ) -> Self {
         // choose relevant interaction
@@ -31,7 +29,6 @@ impl Engine {
         Engine {
             state,
             page_id: String::from(page_id), 
-            category: String::from(category), 
             interaction_variant,
             integrator_variant,
         }
@@ -47,18 +44,19 @@ impl Engine {
         }
     }
     pub fn step(&mut self) {
-        self.state = match self.page_id.as_str() {
-            "ising" 
-                => step_cellauto(&self.page_id, &self.state),
-            _ => self.update_bodies()
-            // "3body-fig8" | "3body-moon" | "nbody-flowers" |
-            // "nbody-asteroids"
-                // => step_nbody(&self.page_id, &self.state),
-                // => self.update_bodies(),
-            // "charge-interaction" 
-                // => step_charge_interaction(&self.page_id, &self.state),
-                // => self.update_bodies(),
-        };
+        self.update_bodies();
+        // self.state = match self.page_id.as_str() {
+        //     "ising" 
+        //         => step_cellauto(&self.page_id, &self.state),
+        //     _ => self.update_bodies()
+        //     // "3body-fig8" | "3body-moon" | "nbody-flowers" |
+        //     // "nbody-asteroids"
+        //         // => step_nbody(&self.page_id, &self.state),
+        //         // => self.update_bodies(),
+        //     // "charge-interaction" 
+        //         // => step_charge_interaction(&self.page_id, &self.state),
+        //         // => self.update_bodies(),
+        // };
     }
     pub fn update_bodies(&mut self) -> Vec<f64> {
 

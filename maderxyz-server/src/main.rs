@@ -3,6 +3,7 @@ use rocket::fs::{ FileServer, relative };
 use rocket_dyn_templates::Template;
 
 mod views;
+mod utils;
 
 
 #[launch]
@@ -22,8 +23,6 @@ pub fn rocket() -> _ {  // TODO: async
         .attach(Template::fairing()
     )
 }
-
-
 
 
 

@@ -63,58 +63,62 @@ impl NavGrid {
 }
 #[derive(Serialize, Deserialize)]
 pub struct NavGridSection {
-    id: String,
+    section_id: String,
     title: String,
     items: Vec<NavGridItem>,
 }
 impl NavGridSection {
-    pub fn new(id: &str, title: &str) -> Self { 
+    pub fn new(section_id: &str, title: &str) -> Self { 
 
-        let items: Vec<NavGridItem> = match id {
+        let items: Vec<NavGridItem> = match section_id {
             // "oscillators" => Vec::from([
             //     NavGridItem::new("single-pendulum"),
             //     NavGridItem::new("double-pendulum"),
             // ]),
             "gravity" => Vec::from([
-                NavGridItem::new("3body-moon"),
-                NavGridItem::new("nbody-flowers"),
-                NavGridItem::new("nbody"),
-                NavGridItem::new("3body-fig8"),
-                NavGridItem::new("nbody-asteroids"),
-                // NavGridItem::new("nbody"),
-                // NavGridItem::new("nbody-binary"),
-                // NavGridItem::new("nbody-cluster"),
+                NavGridItem::new("3body-moon", "Moon"),
+                NavGridItem::new("nbody-flowers", "sym. constellations"),
+                NavGridItem::new("nbody-solar", "solar system"),
+                NavGridItem::new("3body-fig8", "figure-8"),
+                NavGridItem::new("nbody-asteroids", "asteroids"),
+                NavGridItem::new("nbody-binary", "binary"),
+                NavGridItem::new("3body-broucke", "broucke"),
+                // NavGridItem::new("3body-liao", "liao"),
+                // NavGridItem::new("3body-freefall", "free-fall"),
+                // NavGridItem::new("3body-moth", "moth"),
             ]),
             "electro-magnetism" => Vec::from([
-                NavGridItem::new("charge-interaction"),
+                NavGridItem::new("charge-interaction", "charge interaction"),
             ]),
             "thermodynamics" => Vec::from([
-                NavGridItem::new("ising"),
+                NavGridItem::new("ising-model", "Ising model"),
             ]),
             _ => Vec::new()
         };
 
         NavGridSection {
-            id: String::from(id),
-            title: String::from(title),
+            section_id: String::from(section_id),
+            title: String::from(section_id), // TODO -> title
             items,
         }
     }
 }
 #[derive(Serialize, Deserialize)]
 pub struct NavGridItem {
-    id: String,
+    item_id: String,
+    title: String,
     path_to_thumbnail: String,
 }
 impl NavGridItem {
-    pub fn new(id: &str) -> Self {
+    pub fn new(item_id: &str, title: &str) -> Self {
 
         let path_to_thumbnail = format!(
-            "/static/img/thumbnails/{}.png", id
+            "/static/img/thumbnails/{}.png", item_id
         );
 
         NavGridItem {
-            id: String::from(id),
+            item_id: String::from(item_id),
+            title: String::from(title),
             path_to_thumbnail,
         }
     }
@@ -123,43 +127,11 @@ impl NavGridItem {
 
 #[get("/")]
 pub fn route() -> Template {
-
-    // let subsections: HashMap<&str, Vec<Section>> = [
-    //     ("emergent behavior", [
-    //         // Section::new("ant war"),
-    //         Section::new("boids", "boids"),
-    //         Section::new("ants", "ants"),
-    //         Section::new("game_of_life", "game of life"),
-    //         // Section::new("", "light thingies"),
-    //     ].iter().cloned().collect()), 
-    //     ("gravitational dynamics", [
-    //         // Section::new("", "2-body interaction"),
-    //         Section::new("3body_moon", "3-body interaction: moon"),
-    //         Section::new("nbody/3body_fig8", "3-body interaction: figure-8"),
-    //         Section::new("nbody_flowers", "symmetric satellite constellation"),
-    //         Section::new("nbody", "?"),
-    //         Section::new("nbody_asteroids", "n-body interaction: asteroids around binary"),
-    //         Section::new("nbody_cloud", "3-body interaction: stellar cluster"),
-    //     ].iter().cloned().collect()), 
-    //     ("oscillators", [
-    //         Section::new("single_pendulum", "single pendulum"),
-    //         Section::new("double_pendulum", "double pendulum"),
-    //         Section::new("lissajous", "Lissajous figures"),
-    //     ].iter().cloned().collect()), 
-    //     // ("fluid dynamics", [
-    //         // Section::new("diffusion", "diffusion"),
-    //         // Section::new("incompressible fluid"),
-    //         // Section::new("flow through pipe"),
-    //     // ].iter().cloned().collect()), 
-    //     ("electro-magnetism", [
-    //         Section::new("charge_interaction", "charged-particle interaction"),
-    //         Section::new("lorentz", "Wien filter"),
-    //     ].iter().cloned().collect()), 
-    //     ("thermodynamics", [
-    //         Section::new("thermal_motion", "thermal motion"),
-    //         Section::new("brownian_motion", "Brownian motion"),
-    //         Section::new("ising", "Ising model"),
-    //     ].iter().cloned().collect()), 
+    let navgrid = NavGrid::new();
+    let context: HashMap<&str, &NavGrid> = [
+        ("navgrid", &navgrid),
+    ].iter().cloned().collect();
+    Template::render("index/index", &context)
     //     ("various", [
     //         // Section::new("forest_fire", "forest fire"),
     //         Section::new("rock_paper_scissors", "rock-paper-scissors"),
@@ -172,32 +144,4 @@ pub fn route() -> Template {
     //         // Section::new("incompressible_fluid", "incompressible fluid"),
     //         // Section::new("game_of_life_wasm", "game of life"),
     //         // Section::new("wasm", "wasm"),
-    //     ].iter().cloned().collect()), 
-    // ].iter().cloned().collect();
-
-    // let mut sections: Vec<&str> = Vec::new();
-    // for (k, _) in &subsections {
-    //     sections.push(k);
-    // }
-    // sections.sort();
-    // let sections = vec![
-    //     "oscillators",
-    //     "gravitational dynamics",
-    //     "electro-magnetism",
-    //     "thermodynamics",
-    //     "emergent behavior",
-    //     "various",
-    // ];
-
-    let a = NavGrid::new();
-
-    // let fp: FancyPants = FancyPants {
-    //     sections,
-    //     subsections,
-    // };
-
-    let context: HashMap<&str, &NavGrid> = [
-        ("navgrid", &a),
-    ].iter().cloned().collect();
-    Template::render("index/index", &context)
 }
