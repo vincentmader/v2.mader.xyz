@@ -19,7 +19,7 @@ pub fn routes( category: &str, page_id: &str ) -> Template {
         "nbody-flowers" => "symmetrical satellite constellation",
         "nbody-asteroids" => "asteroids around binary",
         "nbody-binary" => "binary star system",
-        "3body-broucke" => "Broucke orbit (stable 3-body)",
+        "3body-broucke" => "Broucke orbit",
         "charge-interaction" => "interaction of charged particles",
         "ising-model" => "Ising model",
         "diffusion" => "fluid diffusion",

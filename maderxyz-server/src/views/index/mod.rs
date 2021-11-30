@@ -44,12 +44,12 @@ impl NavGrid {
 
         let grid_section_titles: Vec<(&str, &str)> = Vec::from([
             ("gravity", "classical gravity"),
-            // ("oscillators", "oscillators"),
+            ("oscillators", "oscillators"),
             ("electro-magnetism", "electro-magnetism"),
-            ("thermodynamics", "thermodynamics"),
+            ("thermo-dynamics", "thermodynamics"),
             ("fluid-dynamics", "fluid dynamics"),
-            // ("emergent-behavior", "emergent behavior"),
-            // ("various", "various"),
+            ("emergent-behavior", "emergent behavior"),
+            ("various", "various)"),
         ]);
 
         let mut sections: Vec<NavGridSection> = Vec::new();
@@ -88,21 +88,38 @@ impl NavGridSection {
                 // NavGridItem::new("3body-freefall", "free-fall"),
                 // NavGridItem::new("3body-moth", "moth"),
             ]),
+            "oscillators" => Vec::from([
+                NavGridItem::new("single-pendulum", "single pendulum"),
+                NavGridItem::new("double-pendulum", "double pendulum"),
+                NavGridItem::new("lissajous", "Lissajous figures"),
+            ]),
             "electro-magnetism" => Vec::from([
                 NavGridItem::new("charge-interaction", "charge interaction"),
+                NavGridItem::new("wien-filter", "Wien filter"),
             ]),
-            "thermodynamics" => Vec::from([
+            "thermo-dynamics" => Vec::from([
                 NavGridItem::new("ising-model", "Ising model"),
+                NavGridItem::new("thermal-motion", "thermal motion"),
+                NavGridItem::new("brownian-motion", "Brownian motion"),
             ]),
             "fluid-dynamics" => Vec::from([
                 NavGridItem::new("diffusion", "Diffusion"),
+            ]),
+            "emergent-behavior" => Vec::from([
+                NavGridItem::new("boids", "boids"),
+                NavGridItem::new("ants", "ants"),
+                NavGridItem::new("game-of-life", "game of life"),
+            ]),
+            "various" => Vec::from([
+                NavGridItem::new("rock-paper-scissors", "rock-paper-scissors"),
+                NavGridItem::new("mc-pi", "Monte Carlo pi"),
             ]),
             _ => Vec::new()
         };
 
         NavGridSection {
             section_id: String::from(section_id),
-            title: String::from(section_id), // TODO -> title
+            title: String::from(title), // TODO -> title
             items,
         }
     }

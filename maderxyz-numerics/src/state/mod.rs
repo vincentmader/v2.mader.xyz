@@ -193,15 +193,13 @@ fn initialize_object_families(page_id: &str) -> Vec<ObjectFamily> {
             for body_idx in 0..3 {
 
                 // bodies
-                let object_type = ObjectType::Body;
-                let epsilon: f64 = 0.;
                 let (x0, y0, u0, v0) = (xs[body_idx], ys[body_idx], us[body_idx], vs[body_idx]);
                 bodies.push(Vec::from([M, x0, y0, u0, v0]));
 
                 // particles
                 let m = 1; // has to be non-zero, 1/0 inf, TODO remove M from particle vec
                 let r = 0.05;
-                let nr_of_particles = 40;
+                let nr_of_particles = 0;
                 for particle_idx in 0..nr_of_particles {
     
                     let phi = TAU * particle_idx as f64 / nr_of_particles as f64;
@@ -209,8 +207,7 @@ fn initialize_object_families(page_id: &str) -> Vec<ObjectFamily> {
                     let y = y0 + r * phi.sin();
                     let u = u0 - v_kepler(M, r) * phi.sin();
                     let v = v0 + v_kepler(M, r) * phi.cos();
-    
-                    // particles.push(Vec::from([0.1, x, y, u, v])); // TODO why does m have to be non-zero? -> 1/0 inf
+                    particles.push(Vec::from([0.1, x, y, u, v])); // TODO why does m have to be non-zero? -> 1/0 inf
                 }
             }
             let integrator = Integrator::EulerExplicit;
@@ -218,10 +215,11 @@ fn initialize_object_families(page_id: &str) -> Vec<ObjectFamily> {
             let body_family = ObjectFamily::new(
                 0, ObjectType::Body, bodies, interactions, integrator, dt, epsilon, 201
             );
+            let epsilon = 0.05;
             let integrator = Integrator::EulerExplicit;
             let interactions = Vec::from([ObjectInteraction::NewtonianGravity]);
             let particle_family = ObjectFamily::new(
-                0, ObjectType::Particle, particles, interactions, integrator, dt, 0.05, 0
+                0, ObjectType::Particle, particles, interactions, integrator, dt, epsilon, 0
             );
             object_families.push(body_family);
             object_families.push(particle_family);
@@ -413,7 +411,7 @@ fn initialize_object_families(page_id: &str) -> Vec<ObjectFamily> {
             const M1: f64 = 1.;
             const M2: f64 = 1.;
             let x = 0.7;
-            let dt: f64 = 0.01;
+            let dt: f64 = 0.1;
             let tail_length = 1000;
             let interactions = Vec::from([ObjectInteraction::NewtonianGravity]);
             let integrator = Integrator::EulerExplicit;
@@ -431,24 +429,20 @@ fn initialize_object_families(page_id: &str) -> Vec<ObjectFamily> {
             );
             object_families.push(object_family);
 
-
-
         }, "nbody-asteroids" => {  
             let interactions = Vec::from([ObjectInteraction::NewtonianGravity]);
             let integrator = Integrator::EulerExplicit;
             let dt: f64 = 0.0035;
-            // let epsilon: f64 = 0.01;
 
             // add Suns
-            let mut objects: Vec<Vec<f64>> = Vec::new();
-
             const M1: f64 = 1.;
             const M2: f64 = 1.;
+            const M: f64 = M1 + M2;
             let x = 0.1;
 
+            let mut objects: Vec<Vec<f64>> = Vec::new();
             let v1 = 0.4*v_kepler(M2, x);
             objects.push(Vec::from([M1, -x, 0., 0., v1]));
-
             let v2 = 0.4*v_kepler(M1, x);
             objects.push(Vec::from([M2, x, 0., 0., -v2]));
 
@@ -459,39 +453,19 @@ fn initialize_object_families(page_id: &str) -> Vec<ObjectFamily> {
             );
             object_families.push(object_family);
 
-            const M: f64 = M1 + M2;
-
             // add satellites
             let mut objects: Vec<Vec<f64>> = Vec::new();
             let interactions = Vec::from([ObjectInteraction::NewtonianGravity]);
             let integrator = Integrator::EulerExplicit;
             let m = 0.001;  // TODO: unphysical of course, but stable!
-            let N = 200; // TODO: make changeable
+            let N = 300; // TODO: make changeable
             for id in 0..N {
-
-                // let mut rand: f64 = rng.gen();
-                // let phi = rand * TAU;
-                // let r = rand * 0.3 + 0.6;
-                // let v0 = rand * v_kepler(M, r);
-
-                // let mut rand: f64 = rng.gen();
-                // let mut rand2: f64 = rng.gen();
-                // let phi = rand * TAU;
-                // let r = rand2 * 0.3 + 0.6;
-                // let v0 = rand2 * v_kepler(M, r);
-
-                let mut phi: f64 = rng.gen();
-                phi *= TAU;
-                let mut r: f64 = rng.gen();
-                r *= 0.2;
-                r += 0.5;
-                // let mut v0: f64 = rng.gen();
-                // v0 *= 0.4;
-                let v0: f64 = v_kepler(M, r);
-
-                // let phi = id as f64 / N as f64 * TAU;
+                let mut rand: f64 = rng.gen();
+                let mut r = 0.1 * rand + 0.5;
+                let phi = id as f64 / N as f64 * TAU;
                 let x = r * phi.cos();
                 let y = r * phi.sin();
+                let v0: f64 = v_kepler(M, r);
                 let u = -v0 * phi.sin();
                 let v = v0 * phi.cos();
                 objects.push(Vec::from([m, x, y, u, v]));
@@ -514,26 +488,12 @@ fn initialize_object_families(page_id: &str) -> Vec<ObjectFamily> {
                 // let mut rand: f64 = rng.gen();
                 // let phi = rand * TAU;
                 // let r = rand * 0.3 + 0.6;
-                // let v0 = rand * v_kepler(M, r);
-
-                // let mut rand: f64 = rng.gen();
-                // let mut rand2: f64 = rng.gen();
-                // let phi = rand * TAU;
-                // let r = rand2 * 0.3 + 0.6;
-                // let v0 = rand2 * v_kepler(M, r);
-
-                // let mut phi: f64 = rng.gen();
-                // phi *= TAU;
-                let mut r: f64 = rng.gen();
-                r *= 0.;
-                r += 0.3;
-                // let mut v0: f64 = rng.gen();
-                // v0 *= 0.4;
-                let v0: f64 = v_kepler(M, r);
 
                 let phi = id as f64 / N as f64 * TAU;
+                let r = 0.3;
                 let x = r * phi.cos();
                 let y = r * phi.sin();
+                let v0: f64 = v_kepler(M, r);
                 let u = -v0 * phi.sin();
                 let v = v0 * phi.cos();
                 objects.push(Vec::from([m, x, y, u, v]));

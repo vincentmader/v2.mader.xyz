@@ -130,17 +130,17 @@ impl Renderer {
                 let color = get_object_color(&object);
 
                 self.canvas.set_stroke_style(&color);
-                // self.canvas.draw_line(
-                //     (previous[1], previous[2]), 
-                //     (object[1], object[2]),
-                // );  
-
-                self.canvas.set_fill_style(&color);
-                self.canvas.draw_triangle(
-                    (0., 0.),
+                self.canvas.draw_line(
                     (previous[1], previous[2]), 
                     (object[1], object[2]),
-                )
+                );  
+
+                // self.canvas.set_fill_style(&color);
+                // self.canvas.draw_triangle(
+                //     (0., 0.),
+                //     (previous[1], previous[2]), 
+                //     (object[1], object[2]),
+                // )
             }
         }
 
