@@ -1,5 +1,8 @@
 #!/usr/bin/sh
 
+# follow 
+# https://steadylearner.medium.com/how-to-deploy-rust-web-application-8c0e81394bd5
+
 apt update
 apt upgrade
 

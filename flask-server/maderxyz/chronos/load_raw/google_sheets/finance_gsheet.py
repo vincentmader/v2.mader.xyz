@@ -3,7 +3,7 @@ from datetime import datetime as dt
 import gspread
 import httplib2
 
-import FlaskApp.config
+import maderxyz.config
 from .generic_gsheet import main as load_gsheet
 
 

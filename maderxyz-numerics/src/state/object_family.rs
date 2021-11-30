@@ -1,6 +1,6 @@
 
 use crate::integrators::Integrator;
-use crate::state::ObjectInteraction;
+use crate::interactions::ObjectInteraction;
 
 
 #[derive(Clone)]

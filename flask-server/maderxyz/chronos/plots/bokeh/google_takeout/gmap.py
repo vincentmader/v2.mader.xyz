@@ -12,7 +12,7 @@ from bokeh.io import curdoc
 from matplotlib import pyplot as plt
 import numpy as np
 
-import FlaskApp.config as config
+import maderxyz.config as config
 
 
 def main():

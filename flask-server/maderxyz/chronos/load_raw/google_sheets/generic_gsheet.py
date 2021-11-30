@@ -3,7 +3,7 @@ import os
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
-from FlaskApp.config import PATH_TO_CHRONOS
+from maderxyz.config import PATH_TO_CHRONOS
 
 
 def main(gsheet_name):

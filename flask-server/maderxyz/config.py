@@ -4,15 +4,15 @@ import os
 import sys
 
 
-running_on_server = True
+running_on_server = False
 
 if running_on_server:
-    PATH_TO_PROJECT = '/var/www/maderxyz/FlaskApp/'
+    PATH_TO_PROJECT = '/var/www/maderxyz/flask-server/maderxyz/'
 else:
     import pymongo
     MDB = pymongo.MongoClient('localhost', 27017)['maderxyz']
 
-    PATH_TO_PROJECT = './FlaskApp'
+    PATH_TO_PROJECT = './maderxyz'
     if sys.platform == 'darwin':
         PATH_TO_RAW_DATA = '/Users/vinc/Documents/chronos_data/'
         PATH_TO_DAILY_LOGS = '/Users/vinc/Library/Mobile Documents/com~apple~CloudDocs/org'

@@ -1,6 +1,6 @@
 import pandas as pd
 
-from FlaskApp.chronos import load_raw
+from maderxyz.chronos import load_raw
 
 
 def main():

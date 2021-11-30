@@ -17,3 +17,11 @@ pub enum Integrator {
     // Verlet,
 }
 
+
+#[derive(Clone)]
+pub enum FieldIntegrator {
+    // TODO 
+    Ising,
+    Diffusion,
+}
+

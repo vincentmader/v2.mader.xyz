@@ -11,3 +11,10 @@ pub enum ObjectInteraction {
     // Boid,
     // WallCollision,
 }
+
+#[derive(Clone, PartialEq)]
+pub enum FieldInteraction {
+    // SpinFlip,
+    Diffusion,
+    // GameOfLife,
+}

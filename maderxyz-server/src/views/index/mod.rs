@@ -47,6 +47,7 @@ impl NavGrid {
             // ("oscillators", "oscillators"),
             ("electro-magnetism", "electro-magnetism"),
             ("thermodynamics", "thermodynamics"),
+            ("fluid-dynamics", "fluid dynamics"),
             // ("emergent-behavior", "emergent behavior"),
             // ("various", "various"),
         ]);
@@ -92,6 +93,9 @@ impl NavGridSection {
             ]),
             "thermodynamics" => Vec::from([
                 NavGridItem::new("ising-model", "Ising model"),
+            ]),
+            "fluid-dynamics" => Vec::from([
+                NavGridItem::new("diffusion", "Diffusion"),
             ]),
             _ => Vec::new()
         };

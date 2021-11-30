@@ -12,8 +12,8 @@ from bokeh.plotting import figure
 from colour import Color
 import numpy as np
 
-from FlaskApp.chronos import load_raw
-from FlaskApp.config import PLOT_WIDTH, PLOT_HEIGHT
+from maderxyz.chronos import load_raw
+from maderxyz.config import PLOT_WIDTH, PLOT_HEIGHT
 
 
 def convert_time_str_to_float(time_str):

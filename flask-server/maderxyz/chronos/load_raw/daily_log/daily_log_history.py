@@ -6,9 +6,9 @@ import os
 
 from tqdm import tqdm
 
-from FlaskApp import config
-from FlaskApp.config import PATH_TO_DAILY_LOGS
-from FlaskApp.chronos.io import save_to_database
+from maderxyz import config
+from maderxyz.config import PATH_TO_DAILY_LOGS
+from maderxyz.chronos.io import save_to_database
 
 
 def main():

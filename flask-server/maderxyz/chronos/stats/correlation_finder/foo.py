@@ -11,9 +11,9 @@ import scipy
 from scipy import stats
 from tqdm import tqdm
 
-from FlaskApp.chronos import load_raw, stats
-from FlaskApp.chronos.io import save_to_database
-from FlaskApp import config, db_config
+from maderxyz.chronos import load_raw, stats
+from maderxyz.chronos.io import save_to_database
+from maderxyz import config, db_config
 
 
 def prepare_datasets(rules):

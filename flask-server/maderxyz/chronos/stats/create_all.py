@@ -1,4 +1,4 @@
-from FlaskApp import config
+from maderxyz import config
 
 from .time_series import health
 

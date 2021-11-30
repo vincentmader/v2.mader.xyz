@@ -5,11 +5,11 @@ from datetime import timedelta as td
 
 import pymongo
 
-from FlaskApp import config, chronos, db_config
-from FlaskApp.config import MDB, START_DATE, END_DATE
-from FlaskApp.config import SLEEP_CYCLE_NOTE_TRANSLATION as translate_notes
-from FlaskApp.chronos.io import save_to_database
-from FlaskApp.chronos.stats.time_series.various.empty import main as prepare_dict
+from maderxyz import config, chronos, db_config
+from maderxyz.config import MDB, START_DATE, END_DATE
+from maderxyz.config import SLEEP_CYCLE_NOTE_TRANSLATION as translate_notes
+from maderxyz.chronos.io import save_to_database
+from maderxyz.chronos.stats.time_series.various.empty import main as prepare_dict
 
 
 def main():

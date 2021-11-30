@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-from FlaskApp.chronos.tests.load_stocks import main as load_stocks
+from maderxyz.chronos.tests.load_stocks import main as load_stocks
 
 
 def main():

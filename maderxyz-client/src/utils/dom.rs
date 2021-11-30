@@ -112,6 +112,23 @@ impl Canvas {
         self.context.line_to(to.0, to.1);
         self.context.stroke();
     }
+    pub fn draw_triangle(
+        &mut self, 
+        mut first:  (f64, f64), 
+        mut second: (f64, f64),
+        mut third:  (f64, f64),
+    ) {
+        first = self.rescale_vec(first);
+        second = self.rescale_vec(second);
+        third = self.rescale_vec(third);
+        // draw
+        self.context.begin_path();
+        self.context.move_to( first.0, first.1);
+        self.context.line_to(second.0, second.1);
+        self.context.line_to( third.0, third.1);
+        self.context.stroke();
+        self.context.fill()
+    }
     pub fn draw_circle(
         &mut self, 
         center: (f64, f64), 
@@ -131,32 +148,21 @@ impl Canvas {
             self.context.fill();
         }
     }
-    // pub fn fill_rect(
-    //     &mut self, 
-    //     mut center: (f64, f64), 
-    //     width: f64,
-    //     height: f64,
-    // ) {
-    //     // center
-    //     if self.centered {
-    //         center = (
-    //             center.0 + 0.5,
-    //             center.1 + 0.5,
-    //         );
-    //     }
-    //     // re-scale
-    //     center = (
-    //         center.0 * self.dimensions.0,
-    //         center.1 * self.dimensions.1,
-    //     );
-    //     let width = width * self.dimensions.0;
-    //     let height = height * self.dimensions.1;
-    //     // draw
-    //     self.context.begin_path();
-    //     self.context.fill_rect(
-    //         center.0, center.1, width, height
-    //     )
-    // }
+    pub fn fill_rect(
+        &mut self, 
+        mut center: (f64, f64), 
+        width: f64,
+        height: f64,
+    ) {
+        let center = self.rescale_vec(center);
+        let width = self.rescale_dist(width);
+        let height = self.rescale_dist(height);
+        // draw
+        self.context.begin_path();
+        self.context.fill_rect(
+            center.0, center.1, width, height
+        )
+    }
 }
 
 pub fn console_log(x: &str) {

@@ -1,5 +1,5 @@
 import os
-from FlaskApp.chronos import load_raw, stats
+from maderxyz.chronos import load_raw, stats
 
 
 # TODO: remove functions?

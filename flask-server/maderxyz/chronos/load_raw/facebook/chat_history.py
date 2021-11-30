@@ -4,9 +4,9 @@ import os
 
 from tqdm import tqdm
 
-from FlaskApp.config import PATH_TO_RAW_DATA as PRD
-from FlaskApp.config import FACEBOOK_USER_NAME as ME
-from FlaskApp.chronos.io import save_to_database
+from maderxyz.config import PATH_TO_RAW_DATA as PRD
+from maderxyz.config import FACEBOOK_USER_NAME as ME
+from maderxyz.chronos.io import save_to_database
 
 
 def main():

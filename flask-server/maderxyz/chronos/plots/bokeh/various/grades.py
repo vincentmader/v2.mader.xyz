@@ -4,8 +4,8 @@ from bokeh.embed import components
 from bokeh.plotting import figure
 from bokeh.models import Circle, ColumnDataSource
 
-from FlaskApp.chronos import stats
-from FlaskApp.config import PLOT_WIDTH, PLOT_HEIGHT
+from maderxyz.chronos import stats
+from maderxyz.config import PLOT_WIDTH, PLOT_HEIGHT
 
 
 def setup_source():

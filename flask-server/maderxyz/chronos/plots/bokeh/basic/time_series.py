@@ -14,7 +14,7 @@ from bokeh.themes import built_in_themes
 from bokeh.io import curdoc
 import numpy as np
 
-from FlaskApp.config import PLOT_WIDTH, PLOT_HEIGHT
+from maderxyz.config import PLOT_WIDTH, PLOT_HEIGHT
 
 
 def main(x, y):

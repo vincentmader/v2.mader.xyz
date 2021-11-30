@@ -1,7 +1,7 @@
 from datetime import datetime as dt
 from datetime import timedelta as td
 
-import FlaskApp.config as config
+import maderxyz.config as config
 from .generic_gsheet import main as generic_gsheet
 
 

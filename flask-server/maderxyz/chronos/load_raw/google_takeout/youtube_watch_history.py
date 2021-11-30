@@ -1,6 +1,6 @@
 import os
 
-import FlaskApp.config
+import maderxyz.config
 
 
 def main():

@@ -4,7 +4,7 @@ from bokeh.plotting import figure
 from bokeh.models import ColumnDataSource
 from bokeh.embed import components
 
-from FlaskApp.chronos import load_raw
+from maderxyz.chronos import load_raw
 
 
 ALIASES = {

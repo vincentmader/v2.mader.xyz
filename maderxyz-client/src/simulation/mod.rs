@@ -27,7 +27,7 @@ impl Simulation {
     }
     pub fn step(&mut self) {  // TODO: multithread & async
         self.renderer.display(&self.engine.states);
-        for _ in 0..1 { // TODO
+        for _ in 0..1{ // TODO
             self.engine.step();
         }
     }

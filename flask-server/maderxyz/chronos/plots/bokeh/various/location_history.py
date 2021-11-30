@@ -5,8 +5,8 @@ from bokeh.models import ColumnDataSource, GMapOptions, Circle
 from bokeh.plotting import gmap, figure
 from bokeh.tile_providers import get_provider
 
-from FlaskApp.chronos import load_raw
-from FlaskApp.config import PLOT_WIDTH, PLOT_HEIGHT
+from maderxyz.chronos import load_raw
+from maderxyz.config import PLOT_WIDTH, PLOT_HEIGHT
 
 
 GOOGLE_API_KEY = 'AIzaSyDs5S84EPeL7bk_FA4rdtnI35VgKXsbDyY'

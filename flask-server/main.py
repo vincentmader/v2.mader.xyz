@@ -1,11 +1,12 @@
+
 from datetime import datetime as dt
 from datetime import timedelta as td
 
 import matplotlib.pyplot as plt
 import numpy as np
 
-from FlaskApp import chronos
-from FlaskApp import config, db_config
+from maderxyz import chronos
+from maderxyz import config, db_config
 
 
 # def load_all_raw():
@@ -90,8 +91,10 @@ if __name__ == '__main__':
     chronos.stats.time_series.various.seasons_etc()
 
     # - correlations
-    chronos.stats.correlation_finder.main()
+    # chronos.stats.correlation_finder.main()
 
+
+    chronos.plots.pyplot.sleep_analysis.sleep_snake()
 
 # =========================================================
 
@@ -155,8 +158,6 @@ if __name__ == '__main__':
     # chronos.plots.bokeh.basic.line_chart(data)
     # chronos.plots.bokeh.basic.pie_chart(data)
     # chronos.plots.bokeh.sleep_analysis.sleep_snake()
-
-    # chronos.plots.pyplot.sleep_analysis.sleep_snake()
 
     # chronos.tests.ayyyyy.test()
 

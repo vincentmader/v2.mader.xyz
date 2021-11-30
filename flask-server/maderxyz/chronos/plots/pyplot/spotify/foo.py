@@ -6,10 +6,10 @@ from datetime import timedelta as td
 import matplotlib.pyplot as plt
 import numpy as np
 
-import FlaskApp.chronos
-from FlaskApp.chronos.stats.time_series import reshape
-from FlaskApp.config import PATH_TO_STATIC
-from FlaskApp.chronos.utils import apply_pyplot_darkmode
+import maderxyz.chronos
+from maderxyz.chronos.stats.time_series import reshape
+from maderxyz.config import PATH_TO_STATIC
+from maderxyz.chronos.utils import apply_pyplot_darkmode
 
 
 def main():

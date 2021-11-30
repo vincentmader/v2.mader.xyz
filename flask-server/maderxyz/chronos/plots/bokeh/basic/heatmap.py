@@ -12,7 +12,7 @@ from bokeh.plotting import figure
 # from bokeh.themes import built_in_themes
 import numpy as np
 
-from FlaskApp.config import PLOT_WIDTH, PLOT_HEIGHT
+from maderxyz.config import PLOT_WIDTH, PLOT_HEIGHT
 
 
 def main(data, itvl):

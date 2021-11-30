@@ -18,8 +18,11 @@ pub fn routes( category: &str, page_id: &str ) -> Template {
         "3body-moon" => "3-body orbits: Moon",
         "nbody-flowers" => "symmetrical satellite constellation",
         "nbody-asteroids" => "asteroids around binary",
+        "nbody-binary" => "binary star system",
+        "3body-broucke" => "Broucke orbit (stable 3-body)",
         "charge-interaction" => "interaction of charged particles",
-        "ising" => "Ising model",
+        "ising-model" => "Ising model",
+        "diffusion" => "fluid diffusion",
         _ => "TODO: title"
     };
 

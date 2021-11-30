@@ -4,7 +4,7 @@ import os
 
 import pandas as pd
 
-from FlaskApp import config
+from maderxyz import config
 
 
 USER_NAME = 'Vincent'

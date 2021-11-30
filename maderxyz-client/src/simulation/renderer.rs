@@ -46,6 +46,7 @@ impl Renderer {
     pub fn display(&mut self, states: &Vec<State>) {
         if self.is_paused { return (); }
         self.canvas.clear();
+        self.canvas.set_fill_style("white");  // for dev
 
         self.display_fields(states);
         self.display_objects(states);
@@ -69,7 +70,31 @@ impl Renderer {
         } 
     }
     fn display_field(&mut self, states: &Vec<State>, field: &Field) {
+        let GRID_WIDTH: usize = field.dimensions.0;
+        let GRID_HEIGHT: usize = field.dimensions.1; // x first!
 
+        match self.page_id.as_str() {
+            "diffusion" => {},
+            _ => {}
+        }
+
+        for row_idx in 0..GRID_HEIGHT {
+            for col_idx in 0..GRID_WIDTH {
+                let density = &field.cells[row_idx*GRID_HEIGHT+col_idx][0];
+                let z = 0.97;
+                let (w, h) = (2.*z / GRID_WIDTH as f64, 2.*z / GRID_HEIGHT as f64);
+                let (x, y) = (
+                    2. * col_idx as f64 / GRID_HEIGHT as f64 - 1.,
+                    2. * row_idx as f64 / GRID_WIDTH as f64 - 1.
+                );
+                let (r, g, b) = (255, 255, 255);
+                let alpha = density;
+                let color = format!("rgba({}, {}, {}, {})", r, g, b, alpha);
+                self.canvas.set_fill_style(&color);
+                self.canvas.fill_rect((x, y), w, h);
+                // self.canvas.draw_circle((x, y), w/2., true);
+            }
+        }
     }
     fn display_object_family(&mut self, states: &Vec<State>, object_family: &ObjectFamily) {
 
@@ -80,7 +105,7 @@ impl Renderer {
         let iteration_step = states.len() - 1;
         let particles_carry_charge = object_family.attributes.contains(&ObjectAttribute::Charge);
 
-        let object_color_mode = ObjectColorMode::Speed;
+        let object_color_mode = ObjectColorMode::HSLVelocity;
         let get_object_color = match object_color_mode {
             ObjectColorMode::HSLVelocity => get_object_color_from_velocity_angle, 
             ObjectColorMode::HSLPosition => get_object_color_from_position_angle, 
@@ -103,12 +128,19 @@ impl Renderer {
                 let previous = &states[previous_idx].object_families[family_idx].objects[object_idx];
                 // draw
                 let color = get_object_color(&object);
+
                 self.canvas.set_stroke_style(&color);
-                self.canvas.draw_line(
-                    // (0., 0.),   // this is cool
+                // self.canvas.draw_line(
+                //     (previous[1], previous[2]), 
+                //     (object[1], object[2]),
+                // );  
+
+                self.canvas.set_fill_style(&color);
+                self.canvas.draw_triangle(
+                    (0., 0.),
                     (previous[1], previous[2]), 
                     (object[1], object[2]),
-                );  
+                )
             }
         }
 

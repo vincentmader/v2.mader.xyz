@@ -4,8 +4,8 @@ from bokeh.embed import components
 from bokeh.models import ColumnDataSource
 from bokeh.plotting import figure
 
-from FlaskApp.chronos import load_raw
-from FlaskApp.config import PLOT_HEIGHT, PLOT_WIDTH
+from maderxyz.chronos import load_raw
+from maderxyz.config import PLOT_HEIGHT, PLOT_WIDTH
 
 
 def setup_source():

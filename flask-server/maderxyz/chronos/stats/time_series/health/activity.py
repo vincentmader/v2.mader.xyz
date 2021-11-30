@@ -4,8 +4,8 @@ from datetime import timedelta as td
 import matplotlib.pyplot as plt  # TODO: remove
 import pandas as pd
 
-from FlaskApp import config
-from FlaskApp.chronos.io import save_to_database
+from maderxyz import config
+from maderxyz.chronos.io import save_to_database
 
 
 def prepare_dict(start_date, end_date):  # TODO: move elsewhere (empty time series)

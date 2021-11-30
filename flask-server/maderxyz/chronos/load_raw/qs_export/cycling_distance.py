@@ -6,9 +6,9 @@ import os
 import pandas as pd
 from tqdm import tqdm
 
-from FlaskApp import config
-from FlaskApp import chronos
-from FlaskApp.chronos.io import save_to_database
+from maderxyz import config
+from maderxyz import chronos
+from maderxyz.chronos.io import save_to_database
 
 
 PATH_TO_QS_EXPORT_FILE = os.path.join(

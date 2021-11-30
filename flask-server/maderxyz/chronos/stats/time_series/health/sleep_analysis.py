@@ -1,10 +1,10 @@
 from datetime import datetime as dt
 from datetime import timedelta as td
 
-from FlaskApp import config, chronos
-from FlaskApp.config import MDB, START_DATE, END_DATE
-from FlaskApp.chronos.io import save_to_database
-from FlaskApp.chronos.stats.time_series.various.empty import main as prepare_dict
+from maderxyz import config, chronos
+from maderxyz.config import MDB, START_DATE, END_DATE
+from maderxyz.chronos.io import save_to_database
+from maderxyz.chronos.stats.time_series.various.empty import main as prepare_dict
 
 
 db_keys = [

@@ -1,7 +1,7 @@
 import re
 
-import FlaskApp.config
-from FlaskApp.chronos import load_raw
+import maderxyz.config
+from maderxyz.chronos import load_raw
 
 
 def main(word, chat_name='all', msg_type='all'):

@@ -1,5 +1,5 @@
-from FlaskApp import config
-from FlaskApp.config import MDB
+from maderxyz import config
+from maderxyz.config import MDB
 
 
 def main(document, path=['uncategorized']):

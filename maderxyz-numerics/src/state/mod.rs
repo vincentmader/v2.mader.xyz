@@ -4,11 +4,14 @@ use rand::{Rng};
 mod field;
 mod object_family;
 pub use field::Field;
+pub use field::FieldType;
 pub use object_family::ObjectFamily;
 pub use object_family::ObjectType;
 pub use object_family::ObjectAttribute;
 use crate::interactions::ObjectInteraction;
+use crate::interactions::FieldInteraction;
 use crate::integrators::Integrator;
+use crate::integrators::FieldIntegrator;
 
 
 #[derive(Clone)]
@@ -34,7 +37,88 @@ impl State {
 }
 
 fn initialize_fields(page_id: &str) -> Vec<Field> {
-    Vec::new()
+    let mut rng = rand::thread_rng();
+
+    let mut fields: Vec<Field> = Vec::new();
+    match page_id {
+        "diffusion" => {
+            let field_type = FieldType::Fluid; // TODO rename, fluid density?
+            let interactions = Vec::from([FieldInteraction::Diffusion]);
+            let integrator = FieldIntegrator::Diffusion; // TODO
+
+            let mut cells: Vec<Vec<f64>> = Vec::new() ;
+            const GRID_SIZE: usize = 42;
+            for row_idx in 0..GRID_SIZE {
+                for col_idx in 0..GRID_SIZE {
+
+                    let mut density: f64 = 0.;
+                    
+                    let r = (
+                        (row_idx as f64-GRID_SIZE as f64/2.).powf(2.) + 
+                        (col_idx as f64-GRID_SIZE as f64/2.).powf(2.)
+                    ).sqrt();
+                    // if r < GRID_SIZE as f64 / 10. {
+                    //     density = 0.;
+                    // } else {
+                        density = rng.gen();
+                    // }
+                    cells.push(Vec::from([density]))
+                }
+            }
+            let dimensions = (GRID_SIZE, GRID_SIZE);
+            let density_field = Field::new(
+                0,
+                field_type, 
+                interactions, 
+                dimensions,
+                cells,
+                integrator,
+            );
+            fields.push(density_field);
+        }, "ising-model" => {
+            let field_type = FieldType::Spin; // TODO rename, fluid density?
+            let interactions = Vec::from([
+                // FieldInteraction::Ising
+            ]);
+            let integrator = FieldIntegrator::Ising; // TODO
+
+            let mut cells: Vec<Vec<f64>> = Vec::new() ;
+            const GRID_SIZE: usize = 100;
+            for row_idx in 0..GRID_SIZE {
+                for col_idx in 0..GRID_SIZE {
+                    let spin_up: bool = rng.gen();
+                    let spin = match spin_up {
+                        true => 1.,
+                        false => -1.
+                    };
+                    
+                    // let r = (
+                    //     (row_idx as f64-GRID_SIZE as f64/2.).powf(2.) + 
+                    //     (col_idx as f64-GRID_SIZE as f64/2.).powf(2.)
+                    // ).sqrt();
+                    // if r < GRID_SIZE as f64 / 10. {
+                    //     density = 0.;
+                    // } else {
+                        // density = rng.gen();
+                    // }
+                    cells.push(Vec::from([spin]))
+                }
+            }
+            let dimensions = (GRID_SIZE, GRID_SIZE);
+            let density_field = Field::new(
+                0,
+                field_type, 
+                interactions, 
+                dimensions,
+                cells,
+                integrator,
+            );
+            fields.push(density_field);
+        },
+        _ => {}
+    }
+
+    fields
 }
 
 fn initialize_object_families(page_id: &str) -> Vec<ObjectFamily> {

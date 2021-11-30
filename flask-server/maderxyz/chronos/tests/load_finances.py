@@ -6,8 +6,8 @@ import PyPDF2
 import pdfreader
 from pdfreader import PDFDocument, SimplePDFViewer
 
-import FlaskApp.config as config
-from FlaskApp.config import PATH_TO_RAW_DATA as P2RD
+import maderxyz.config as config
+from maderxyz.config import PATH_TO_RAW_DATA as P2RD
 
 
 path_to_sparkasse_docs = os.path.join(

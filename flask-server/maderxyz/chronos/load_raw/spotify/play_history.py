@@ -2,9 +2,9 @@ from datetime import datetime as dt
 import json
 import os
 
-from FlaskApp.config import PATH_TO_RAW_DATA as PRD
-from FlaskApp import chronos
-from FlaskApp.chronos.io import save_to_database
+from maderxyz.config import PATH_TO_RAW_DATA as PRD
+from maderxyz import chronos
+from maderxyz.chronos.io import save_to_database
 
 
 def main():

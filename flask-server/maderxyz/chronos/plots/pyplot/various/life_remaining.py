@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 from matplotlib.collections import PatchCollection
 from matplotlib.patches import Rectangle
 
-from FlaskApp.chronos.utils import apply_pyplot_darkmode
+from maderxyz.chronos.utils import apply_pyplot_darkmode
 
 
 def main(life_expectancy_in_years=80):

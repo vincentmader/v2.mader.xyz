@@ -2,7 +2,7 @@ import json
 
 import matplotlib.pyplot as plt
 
-# from FlaskApp.chronos.utils import apply_pyplot_darkmode
+# from maderxyz.chronos.utils import apply_pyplot_darkmode
 
 
 def main():
