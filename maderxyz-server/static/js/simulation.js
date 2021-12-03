@@ -6,6 +6,7 @@ let page_id = document.getElementById("simulation.js").getAttribute("page_id");
 // TODO: async
 (async () => {
   await init();
+
   // initialize simulation with page id
   let simulation = Simulation.new(page_id);
   simulation.init();

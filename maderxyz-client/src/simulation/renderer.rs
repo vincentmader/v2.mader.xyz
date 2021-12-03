@@ -38,6 +38,10 @@ impl Renderer {
         }
     }
     pub fn init(&mut self) {
+
+        // let a = dom::document().get_element_by_id("main_title").unwrap();
+        // a.set_inner_html(&self.title);
+
         // TODO add button handlers (-> to engine?)
         // fn pause_handler(&mut self) {self.pause()}
         // let pause_handler = || self.pause();

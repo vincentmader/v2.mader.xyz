@@ -1,21 +1,26 @@
 <html>
 <head>
     {% block head %}            
+
         <meta charset="utf-8">
         <title> mader.xyz </title>
-        <link rel="icon" type="image/png" href="/static/img/favicon.ico"/>
-        <link rel="stylesheet" type="text/css" href="/static/css/base.css">
+        <link rel="icon" href="/static/img/favicon.ico" type="image/png"/>
+        <link rel="stylesheet" href="/static/css/base.css" type="text/css">
+
     {% endblock head %}            
 </head>
 <body>
+
     <div id="header">
         {% block header %}            
             <a href="/" id="header_home"> mader.xyz </a>
         {% endblock header %}            
     </div>
+
     <div id="content">
         {% block content%}
         {% endblock content%}
     </div>
+
 </body>
 </html>

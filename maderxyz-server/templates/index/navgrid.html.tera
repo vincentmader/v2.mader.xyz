@@ -11,9 +11,13 @@
                   class="navgrid_cell"
                 > 
                     <img 
-                        class="navgrid_thumbnail" 
-                        src="{{ item.path_to_thumbnail }}" 
-                        alt="{{ item.item_id }}"
+                        {% if item.item_id == "3body-fig8" %}
+                            class="navgrid_thumbnail" 
+                        {% else %}
+                            class="navgrid_thumbnail-inactive" 
+                        {% endif %}
+                         src="{{ item.path_to_thumbnail }}" 
+                         alt="{{ item.item_id }}"
                     /> 
                     <div class="navgrid_cell_title">
                         {{ item.title }}

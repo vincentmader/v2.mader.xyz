@@ -132,6 +132,36 @@ fn initialize_object_families(page_id: &str) -> Vec<ObjectFamily> {
 
     let mut object_families: Vec<ObjectFamily> = Vec::new();
     match page_id {
+        "2body-kepler" => {
+            let mut objects: Vec<Vec<f64>> = Vec::new();
+            let epsilon = 0.01;
+            let r = 0.9;
+            let m_sun = 1.;
+            let (x, y, u, v) = (0., 0., 0., 0.);
+            objects.push(Vec::from([m_sun, x, y, u, v]));
+            let tail_length = 0;
+            let object_family = ObjectFamily::new(
+                0, ObjectType::Static, objects, 
+                Vec::from([ObjectInteraction::NewtonianGravity]),
+                Integrator::EulerExplicit, dt, epsilon, tail_length
+            );
+            object_families.push(object_family);
+
+            let mut objects: Vec<Vec<f64>> = Vec::new();
+            // add Earth
+            let m_earth = 1e-3;
+            let v = 0.707*v_kepler(m_sun, r);  // TODO: add G*M vars?
+            let (x, y, u, v) = (r, 0., 0., v);
+            objects.push(Vec::from([m_earth, x, y, u, v]));
+            let tail_length = 100;
+            let object_family = ObjectFamily::new(
+                1, ObjectType::Body, objects, 
+                Vec::from([ObjectInteraction::NewtonianGravity]),
+                Integrator::EulerExplicit, dt, epsilon, tail_length
+            );
+            object_families.push(object_family);
+
+        },
         "3body-moon" => {
             let mut objects: Vec<Vec<f64>> = Vec::new();
 
