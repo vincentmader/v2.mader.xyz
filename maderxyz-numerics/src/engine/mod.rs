@@ -16,7 +16,8 @@ pub struct Engine {
 
     pub states: Vec<State>,
     page_id: String,
-    iteration_step: usize,
+    pub iteration_step: usize,
+    pub is_paused: bool,
 
 }
 impl Engine {
@@ -24,25 +25,28 @@ impl Engine {
     pub fn new(page_id: &str) -> Self {
         let states: Vec<State> = Vec::new();
         let page_id = String::from(page_id);
+        let is_paused = false;
 
-        Engine { states, page_id, iteration_step: 0 }
+        Engine { states, page_id, iteration_step: 0, is_paused }
     }
 
     pub fn init(&mut self) {
         let initial_state = State::new(&self.page_id);
-        self.states.push(initial_state);
+        self.states = Vec::from([initial_state]);
+        // self.states.push(initial_state);  // NOTE auch cool
     }
 
     pub fn step(&mut self) {
+        if self.is_paused { return (); }
+
         let current_state = &self.states[self.iteration_step];
         let mut next_state = current_state.clone();
         next_state.iteration_idx += 1;
-        // step objects, fields, cells & spins 
+
         Self::step_objects(&mut next_state, &current_state);
-        Self::step_fields(&mut next_state, &current_state);
-        // TODO cells
-        // TODO spins
+        Self::step_fields(&mut next_state, &current_state);  // TODO 1D, 2D, 3D, bool, spinor...
         self.states.push(next_state);
+
         self.iteration_step += 1;
     }
 
@@ -76,8 +80,7 @@ impl Engine {
                 }
                 // use integrator to apply interaction -> step object family
                 integrator(
-                    object_family, other_family, 
-                    &interactions, family_indices
+                    object_family, other_family, &interactions, family_indices
                 );
             }
         }

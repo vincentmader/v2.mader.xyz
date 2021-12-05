@@ -1,3 +1,9 @@
+#content {
+  width: 100%;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
 .button_menu {
   --main-bg-color: #111111;
   --main-section-color: #222222;
@@ -7,7 +13,8 @@
   --main-border: 2px solid var(--main-border-color);
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  /* width: 95%; */
+  width: 100%;
+  /* margin: 0px; */
   /* margin-top: 2.5%; */
   /* margin-bottom: 2.5%; */
   /* margin-left: 2.5%; */
@@ -24,13 +31,31 @@ button {
   font-size: 16px;
   color: white;
 
-  width: 90%;
+  /* width: 90%; */
   height: 2em; /* center text vertically */
 
-  margin-top: 5px;
-  margin-bottom: 5px;
+  /* margin-top: 5px; */
+  /* margin-bottom: 5px; */
   /* margin-right: auto; */
   /* margin-left: auto; */
   padding: 0px;
   outline: none;
+}
+
+@media only screen and (min-width: 1201px) {
+  .ay {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+  }
+  .ay-left {
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+  .ay-right {
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+  }
 }

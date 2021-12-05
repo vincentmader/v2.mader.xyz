@@ -16,8 +16,9 @@ use crate::utils::dom::console_log;
 pub struct Renderer {
     page_id: String,
     canvas: Canvas,  // TODO multiple?
-    frame_idx: usize,
-    is_paused: bool,
+    pub frame_idx: usize,
+    pub is_paused: bool,
+    pub object_color_mode: ObjectColorMode,
 }
 impl Renderer {
     pub fn new(page_id: &str) -> Self {
@@ -35,20 +36,15 @@ impl Renderer {
             canvas,
             frame_idx,
             is_paused,
+            object_color_mode: ObjectColorMode::HSLVelocity,
         }
     }
     pub fn init(&mut self) {
 
-        // let a = dom::document().get_element_by_id("main_title").unwrap();
-        // a.set_inner_html(&self.title);
-
-        // TODO add button handlers (-> to engine?)
-        // fn pause_handler(&mut self) {self.pause()}
-        // let pause_handler = || self.pause();
-        // dom::add_button_to_menu("pause", pause_handler); 
     }
     pub fn display(&mut self, states: &Vec<State>) {
         if self.is_paused { return (); }
+        if self.frame_idx >= states.len() { return (); }
         self.canvas.clear();
         self.canvas.set_fill_style("white");  // for dev
 
@@ -100,7 +96,12 @@ impl Renderer {
             }
         }
     }
-    fn display_object_family(&mut self, states: &Vec<State>, object_family: &ObjectFamily) {
+    fn display_object_family(
+        &mut self, 
+        states: &Vec<State>, 
+        object_family: &ObjectFamily,
+        // object_color_mode: &ObjectColorMode,
+    ) {
 
         let family_idx = object_family.id;
         let objects = &object_family.objects;
@@ -109,7 +110,8 @@ impl Renderer {
         let iteration_step = states.len() - 1;
         let particles_carry_charge = object_family.attributes.contains(&ObjectAttribute::Charge);
 
-        let object_color_mode = ObjectColorMode::HSLVelocity;
+        let object_color_mode = &self.object_color_mode;
+        // let object_color_mode = ObjectColorMode::Distance;
         let get_object_color = match object_color_mode {
             ObjectColorMode::HSLVelocity => get_object_color_from_velocity_angle, 
             ObjectColorMode::HSLPosition => get_object_color_from_position_angle, 
@@ -134,17 +136,17 @@ impl Renderer {
                 let color = get_object_color(&object);
 
                 self.canvas.set_stroke_style(&color);
-                self.canvas.draw_line(
-                    (previous[1], previous[2]), 
-                    (object[1], object[2]),
-                );  
-
-                // self.canvas.set_fill_style(&color);
-                // self.canvas.draw_triangle(
-                //     (0., 0.),
+                // self.canvas.draw_line(
                 //     (previous[1], previous[2]), 
                 //     (object[1], object[2]),
-                // )
+                // );  
+
+                self.canvas.set_fill_style(&color);
+                self.canvas.draw_triangle(
+                    (0., 0.),
+                    (previous[1], previous[2]), 
+                    (object[1], object[2]),
+                )
             }
         }
 
@@ -189,9 +191,6 @@ impl Renderer {
         let elm_iter = dom::document().get_element_by_id("display_iteration_idx").unwrap();
         elm_iter.set_inner_html(&format!("iteration idx: {}", iter_idx));
     }
-    fn pause(&mut self) {
-        self.is_paused = !self.is_paused;
-    }
 }
 
 
@@ -212,7 +211,7 @@ pub fn is_canvas_centered(page_id: &str) -> bool {
    }
 }
 
-enum ObjectColorMode {
+pub enum ObjectColorMode {
     // Preset,
     HSLPosition,
     HSLVelocity,

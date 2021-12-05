@@ -71,7 +71,7 @@ body {
   text-align: center;
   font-weight: 690;
   margin-bottom: 8px;
-  /* height: 1em; /* needed for smooth reload  (semi, text "blinks")*/*/
+  /* height: 1em; /* needed for smooth reload  (semi, text "blinks")*/
 }
 
 /* CANVAS ====================================== */

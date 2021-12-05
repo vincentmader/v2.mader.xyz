@@ -23,24 +23,29 @@
         page_id="{{ page_id }}"
     ></script>
 
-    <!-- CANVAS ============================= -->
-    <div class="canvas_holder">
-        <canvas id="canvas_main"
-            width="900px" 
-        > </canvas>
-        <script> 
-            let cnv = document.getElementById("canvas_main");
-            cnv.height = cnv.width;  // TODO make changeable: width=900px & height=width
-        </script>
-    </div>
+    <div class="ay">
+        <div class="ay-left">
 
-    <!-- BUTTON MENU ======================== -->
-    <div class="section">
-        <p id="display_frame_idx"></p>
-        <p id="display_iteration_idx"></p>
-    </div>
-    <div class="button_menu" id="button_menu-0">
+            <!-- CANVAS ============================= -->
+            <div class="canvas_holder">
+                <canvas id="canvas_main" width="900px"> </canvas>
+                <script> 
+                    let cnv = document.getElementById("canvas_main");
+                    cnv.height = cnv.width;  // TODO make changeable: width=900px & height=width
+                </script>
+            </div>
+            <div class="section">
+                <p id="display_frame_idx"></p>
+                <p id="display_iteration_idx"></p>
+            </div>
 
+        </div>
+        <div class="ay-right">
+    
+            <!-- BUTTON MENU ======================== -->
+            <div class="button_menu" id="button_menu-0"> </div>
+
+        </div>
     </div>
 
 {% endblock content %}

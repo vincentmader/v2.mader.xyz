@@ -194,16 +194,17 @@ extern {
     pub fn alert(s: &str);
 }
 
-pub fn add_button_to_menu
-// <F>
-(
-    // simulation: &'static mut Simulation,
+pub fn add_button_to_menu <F> (
     text: &str,
-    // callback: &'static F,
+    // callback: &mut Box<F() -> ()>,
+    // callback: Fn() -> (),
+    // simulation: &'static mut Simulation,
+    // callback: &'static mut F,
+    callback: &'static mut Box<F>,
+    // callback: FnMut (),
     // callback: fn(&mut Simulation),
-    callback: fn(),
 ) 
-// where F: FnMut (Simulation) 
+where F: FnMut () 
 {
     let document = document();
     let section = document.get_element_by_id("button_menu-0").unwrap();
@@ -232,7 +233,8 @@ pub fn add_button_to_menu
 				// &"WebAssemblyMan".into()
             // );
 		    // paragraph.set_text_content(Some("Gloo: Hello World"));
-            callback()
+            // let a = (*callback);
+            callback();
 	    }
     );
 	on_click.forget();     

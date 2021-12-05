@@ -419,7 +419,7 @@ fn initialize_object_families(page_id: &str) -> Vec<ObjectFamily> {
             let m = 0.001;  // TODO: unphysical of course, but stable!
             let r = 0.9;
             let v0 = 0.65;
-            let nr_of_satellites = 6; // TODO: make changeable
+            let nr_of_satellites = 16; // TODO: make changeable
             // let mut object_colors: Vec<String> = Vec::new();
             for object_idx in 0..nr_of_satellites {
                 let phi = object_idx as f64 / nr_of_satellites as f64 * TAU;
