@@ -1,19 +1,11 @@
 
 use std::collections::HashMap;
-use rand::{Rng};
-// use std::cmp;
 
 use crate::integrators;
 use crate::integrators::object::Integrator as ObjectIntegrator;
 use crate::integrators::field::Integrator as FieldIntegrator;
-use crate::interactions;
-use crate::interactions::object::Interaction as ObjectInteraction;
-use crate::interactions::field::Interaction as FieldInteraction;
-use crate::state;
 use crate::state::State;
 use crate::state::ObjectType;
-use crate::state::Field;
-use crate::state::field::NeighborhoodVariant;
 
 
 pub struct Engine {
@@ -60,6 +52,7 @@ impl Engine {
 
     fn step_objects(next_state: &mut State, current_state: &State) {
 
+        // loop over object families
         for object_family in next_state.object_families.iter_mut() {
             // don't apply forces to statics  // TODO statics on "rails"?
             if matches!(object_family.object_type, ObjectType::Static) { continue }
@@ -74,6 +67,7 @@ impl Engine {
                     ObjectIntegrator::LeapFrog => integrators::object::leap_frog::step,
                     ObjectIntegrator::Verlet => integrators::object::verlet::step,
                 };
+                // loop over object families (including this one)
                 for other_family in current_state.object_families.iter() {
                     // don't apply influence of low-mass particles
                     if matches!(other_family.object_type, ObjectType::Particle) { continue };
@@ -89,20 +83,23 @@ impl Engine {
 
     fn step_fields(next_state: &mut State, current_state: &State) {
 
-        // let interactions: Vec<FieldInteraction> = Vec::from([FieldInteractionVariant::Diffusion]);
-
         // loop over fields
         for (field_idx, field) in next_state.fields.iter_mut().enumerate() {
             // loop over interactions
             for interaction in current_state.fields[field_idx].interactions.iter() {
-
+                // setup integrator
                 let integrator = match interaction.integrator {
                     FieldIntegrator::BatchWise => integrators::field::batch_wise::step,
                     FieldIntegrator::Entire => integrators::field::entire::step,
                 };
-
-                integrator(field, &interaction);
-
+                // loop over fields (including this one)
+                for other_field in current_state.fields.iter() {
+                    // only apply interactions when both fields "feel" them
+                    for other_interaction in other_field.interactions.iter() {
+                        if interaction.interaction_variant != other_interaction.interaction_variant { continue }
+                    }
+                    integrator(field, &other_field, &interaction);
+                }
             }            
         }
     }

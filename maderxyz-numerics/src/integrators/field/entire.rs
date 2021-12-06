@@ -8,6 +8,7 @@ use crate::interactions::field::Interaction;
 pub fn step(
 
     field: &mut Field,
+    other_field: &Field,
     interaction: &Interaction,
 
 ) {

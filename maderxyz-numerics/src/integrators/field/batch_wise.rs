@@ -11,6 +11,7 @@ use crate::interactions::field::InteractionVariant;
 pub fn step(
 
     field: &mut Field,
+    other_field: &Field,
     interaction: &Interaction,
 
 ) {
