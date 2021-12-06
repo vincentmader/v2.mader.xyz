@@ -4,18 +4,20 @@ use std::collections::HashMap;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 
+use maderxyz_numerics::engine::Engine;
+use crate::utils;
 mod renderer;
 use renderer::Renderer;
 use renderer::ObjectColorMode;
-use crate::utils;
-use maderxyz_numerics::engine::Engine;
 
 
 #[wasm_bindgen]
 pub struct Simulation {
+
     engine: Engine,
     renderer: Renderer,
     parameters: HashMap<String, String>,
+
 }
 #[wasm_bindgen]
 impl Simulation {
@@ -37,12 +39,16 @@ impl Simulation {
 
     }
     pub fn step(&mut self) {  // TODO: multithread & async
+
         // for _ in 0..10 {
             self.engine.step(&self.parameters);
         // }
+
     }
     pub fn render(&mut self) {
+
         self.renderer.display(&self.engine.states);
+
     }
     pub fn init_buttons(&mut self) {
 

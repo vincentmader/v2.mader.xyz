@@ -142,11 +142,12 @@ impl Renderer {
                     let color = get_object_color(&object, alpha);
                     self.canvas.set_stroke_style(&color);
 
+                    self.canvas.draw_line(
+                        (previous[1], previous[2]), 
+                        (object[1], object[2]),
+                    );  
                     if matches!(object_family.tail_variant, TailVariant::Default) {
-                        self.canvas.draw_line(
-                            (previous[1], previous[2]), 
-                            (object[1], object[2]),
-                        );  
+
                     } else if matches!(object_family.tail_variant, TailVariant::Area) {
                         self.canvas.set_fill_style(&color);
                         self.canvas.draw_triangle(
@@ -158,6 +159,23 @@ impl Renderer {
                 }
             }
         }
+
+        // for object_idx in 0..nr_of_objects {
+        //     let object = &states[self.frame_idx].object_families[family_idx].objects[object_idx];
+        //     let previous = &states[cmp::max(1, self.frame_idx)-1].object_families[family_idx].objects[object_idx]; // TODO why not max?
+        //     // draw
+        //     let color = get_object_color(&object, 1.);
+        //     self.canvas.set_stroke_style(&color);
+
+        //     let dx = object[1] - previous[1];
+        //     let dy = object[2] - previous[2];
+        //     let k = 20.;
+ 
+        //     self.canvas.draw_line(
+        //         (previous[1], previous[2]), 
+        //         (previous[1] + k*dx, previous[2] + k*dy),
+        //     );
+        // }
 
         // draw objects
         // ==========

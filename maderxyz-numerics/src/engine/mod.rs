@@ -4,19 +4,22 @@ use rand::{Rng};
 // use std::cmp;
 
 use crate::integrators;
-use crate::integrators::Integrator;
-use crate::integrators::FieldIntegrator;
-use crate::state::Field;
+use crate::integrators::object::Integrator as ObjectIntegrator;
+use crate::integrators::field::Integrator as FieldIntegrator;
+use crate::interactions;
+use crate::interactions::object::Interaction as ObjectInteraction;
+use crate::interactions::field::Interaction as FieldInteraction;
+use crate::state;
 use crate::state::State;
 use crate::state::ObjectType;
-use crate::interactions::ObjectInteraction;
-use crate::interactions::FieldInteraction;
+use crate::state::Field;
+use crate::state::field::NeighborhoodVariant;
 
 
 pub struct Engine {
 
-    pub states: Vec<State>,
     page_id: String,
+    pub states: Vec<State>,
     pub iteration_step: usize,
     pub is_paused: bool,
 
@@ -24,6 +27,7 @@ pub struct Engine {
 impl Engine {
 
     pub fn new(page_id: &str) -> Self {
+
         let states: Vec<State> = Vec::new();
         let page_id = String::from(page_id);
         let is_paused = false;
@@ -32,11 +36,14 @@ impl Engine {
     }
 
     pub fn init(&mut self) {
+
         let initial_state = State::new(&self.page_id);
         self.states = Vec::from([initial_state]);
+
     }
 
     pub fn step(&mut self, parameters: &HashMap<String, String>) {
+
         if self.is_paused { return (); }
 
         let current_state = &self.states[self.iteration_step];
@@ -45,12 +52,14 @@ impl Engine {
 
         Self::step_objects(&mut next_state, &current_state);
         Self::step_fields(&mut next_state, &current_state);  // TODO 1D, 2D, 3D, bool, spinor...
-        self.states.push(next_state);
 
+        self.states.push(next_state);
         self.iteration_step += 1;
+
     }
 
     fn step_objects(next_state: &mut State, current_state: &State) {
+
         for object_family in next_state.object_families.iter_mut() {
             // don't apply forces to statics  // TODO statics on "rails"?
             if matches!(object_family.object_type, ObjectType::Static) { continue }
@@ -58,12 +67,12 @@ impl Engine {
             for interaction in object_family.interactions.clone().iter() {  // TODO get rid of clone
                 // setup integrator
                 let integrator = match interaction.integrator {
-                    Integrator::EulerExplicit => integrators::euler_explicit::step,
-                    // Integrator::EulerImplicit => integrators::euler_implicit::step,
-                    // Integrator::RungeKutta2 => integrators::runge_kutta_2::step,
-                    // Integrator::RungeKutta4 => integrators::runge_kutta_4::step,
-                    // Integrator::LeapFrog => integrators::leap_frog::step,
-                    // Integrator::Verlet => integrators::verlet::step,
+                    ObjectIntegrator::EulerExplicit => integrators::object::euler_explicit::step,
+                    ObjectIntegrator::EulerImplicit => integrators::object::euler_implicit::step,
+                    ObjectIntegrator::RungeKutta2 => integrators::object::runge_kutta_2::step,
+                    ObjectIntegrator::RungeKutta4 => integrators::object::runge_kutta_4::step,
+                    ObjectIntegrator::LeapFrog => integrators::object::leap_frog::step,
+                    ObjectIntegrator::Verlet => integrators::object::verlet::step,
                 };
                 for other_family in current_state.object_families.iter() {
                     // don't apply influence of low-mass particles
@@ -77,145 +86,25 @@ impl Engine {
             }
         }
     }
+
     fn step_fields(next_state: &mut State, current_state: &State) {
 
-        let neighborhood_type = NeighborhoodType::Moore; // TODO
+        // let interactions: Vec<FieldInteraction> = Vec::from([FieldInteractionVariant::Diffusion]);
 
-        let get_neighborhood = match neighborhood_type {
-            NeighborhoodType::Neumann => get_neumann_neighborhood,
-            NeighborhoodType::Moore => get_moore_neighborhood
-        };
-        let interactions: Vec<FieldInteraction> = Vec::from([FieldInteraction::Diffusion]);
-
+        // loop over fields
         for (field_idx, field) in next_state.fields.iter_mut().enumerate() {
+            // loop over interactions
+            for interaction in current_state.fields[field_idx].interactions.iter() {
 
-            let integrator = match field.integrator {
-                FieldIntegrator::Diffusion => integrator_diff,
-                FieldIntegrator::Ising => integrator_ising,
-                FieldIntegrator::GameOfLife => integrator_game_of_life,
-            };
+                let integrator = match interaction.integrator {
+                    FieldIntegrator::BatchWise => integrators::field::batch_wise::step,
+                    FieldIntegrator::Entire => integrators::field::entire::step,
+                };
 
-            let mut rng = rand::thread_rng();
-            let batch_size = 5000;
-            for _ in 0..batch_size {
-                let x: f64 = rng.gen();
-                let y: f64 = rng.gen();
-                let x = x * (*field).dimensions.0 as f64;
-                let y = y * (*field).dimensions.1 as f64;
-                let x = x as usize;
-                let y = y as usize;
+                integrator(field, &interaction);
 
-                let neighborhood = get_neighborhood(&field, (x, y));
-                let mut neighbors: Vec<&Vec<f64>> = Vec::new();
-                let mut cell = &mut field.cells[y*field.dimensions.1+x];
-                for neighbor_pos in neighborhood.iter() {
-                    let col_jdx = neighbor_pos.0;
-                    let row_jdx = neighbor_pos.1;
-                    let neighbor = &current_state.fields[field_idx].cells[row_jdx*field.dimensions.1+col_jdx];
-                    neighbors.push(neighbor);
-                }
-                integrator(&mut cell, &neighbors, &interactions)
-            }
-            
-            // for row_idx in 0..field.dimensions.1 {
-            //     for col_idx in 0..field.dimensions.0 {
-            //         let position = (col_idx, row_idx);
-            //         let neighborhood = get_neighborhood(&field, position);
-            //         let mut cell = &mut field.cells[row_idx*field.dimensions.1+col_idx];
-            //         let mut neighbors: Vec<&Vec<f64>> = Vec::new();
-            //         for neighbor_pos in neighborhood.iter() {
-            //             let col_jdx = neighbor_pos.0;
-            //             let row_jdx = neighbor_pos.1;
-            //             let neighbor = &current_state.fields[field_idx].cells[row_jdx*field.dimensions.1+col_jdx];
-            //             neighbors.push(neighbor);
-            //         }
-            //         integrator(&mut cell, &neighbors, &interactions)
-            //     }
-            // }
+            }            
         }
     }
 }
 
-pub fn integrator_game_of_life(
-    cell: &mut Vec<f64>, 
-    neighbors: &Vec<&Vec<f64>>, 
-    interactions: &Vec<FieldInteraction>
-) {
-    let mut nr_of_living_neighbors = 0;
-    for neighbor in neighbors.iter() {
-        if neighbor[0] == 1. {
-            nr_of_living_neighbors += 1; 
-        }
-    }
-    if cell[0] == 1. {
-        if ![2, 3].contains(&nr_of_living_neighbors) {
-            cell[0] = -1.;
-        }
-    } else if cell[0] == -1. {
-        if nr_of_living_neighbors == 3 {
-            cell[0] = 1.;
-        }
-    }
-}
-
-pub fn integrator_ising(
-    cell: &mut Vec<f64>, 
-    neighbors: &Vec<&Vec<f64>>, 
-    interactions: &Vec<FieldInteraction>
-) {
-    let (k, J, mu) = (1., 1., 1.); // boltzmann, spin int., magn. moment
-    let (B, T) = (0., 1.);
-
-    let spin = cell[0];
-    let mut H: f64 = mu * B;
-
-    for neighbor in neighbors.iter() {
-        let spjn = neighbor[0];
-        H += J * spin * spjn;
-    }
-
-    let mut rng = rand::thread_rng();
-    let rand: f64 = rng.gen();
-    let prob = (-H / (k*T)).exp();
-    if rand < prob { (*cell)[0] *= -1. }
-}
-
-pub fn integrator_diff(
-    cell: &mut Vec<f64>, 
-    neighbors: &Vec<&Vec<f64>>, 
-    interactions: &Vec<FieldInteraction>
-) {
-    // interaction
-    let mut average_density = 0.;
-    for neighbor in neighbors.iter() {
-        average_density += neighbor[0];
-    }
-    average_density /= neighbors.len() as f64;
-    // integrator
-    let density = &mut cell[0];
-    let delta_density = average_density - *density;
-    let k = 0.07;
-    *density += k * delta_density;  // NOTE: also try with - !
-}
-
-pub fn get_moore_neighborhood(field: &Field, position: (usize, usize)) -> Vec<(usize, usize)> {
-    let mut neighborhood: Vec<(usize, usize)> = Vec::new();
-    let x = position.0 as i32;
-    let y = position.1 as i32;
-    for dx in [-1, 0, 1].iter() {
-        if (x + dx) < 0 || (x + dx) >= field.dimensions.0 as i32 { continue; }
-        for dy in [-1, 0, 1].iter() {
-            if *dx == 0 && *dy == 0 { continue }
-            if (y + dy) < 0 || (y + dy) >= field.dimensions.1 as i32 { continue; }
-            neighborhood.push(((x+dx) as usize, (y+dy) as usize));
-        }
-    }
-    neighborhood
-}
-pub fn get_neumann_neighborhood(field: &Field, position: (usize, usize)) -> Vec<(usize, usize)> {
-    let neighborhood: Vec<(usize, usize)> = Vec::new();
-    // TODO
-    neighborhood
-}
-
-pub enum NeighborhoodType { Neumann, Moore }

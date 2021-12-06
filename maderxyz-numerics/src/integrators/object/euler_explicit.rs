@@ -1,16 +1,17 @@
 
 use crate::state::ObjectFamily;
-use crate::interactions::ObjectInteraction;
-use crate::interactions::ObjectInteractionVariant;
+use crate::interactions::object::Interaction as ObjectInteraction;
+use crate::interactions::object::InteractionVariant as ObjectInteractionVariant;
 use crate::interactions::newtonian_gravity;
 use crate::interactions::coulomb_interaction;
-// use crate::state::ObjectType;
 
 
 pub fn step(
+
     object_family: &mut ObjectFamily, 
     other_family: &ObjectFamily, 
     interaction: &ObjectInteraction,
+
 ) {
 
     let epsilon = object_family.epsilon;

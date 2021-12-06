@@ -11,10 +11,6 @@
 {% block content %}
     {{ super() }}
 
-    <div class="section_title"> 
-        {{ title }}
-    </div>
-
     <!-- SIMULATION SCRIPT ================== -->
     <script 
         id="simulation.js"
@@ -26,6 +22,8 @@
     <div class="ay">
         <div class="ay-left">
 
+            <div class="section_title"> {{ title }} </div>
+
             <!-- CANVAS ============================= -->
             <div class="canvas_holder">
                 <canvas id="canvas_main" width="900px"> </canvas>
@@ -34,13 +32,17 @@
                     cnv.height = cnv.width;  // TODO make changeable: width=900px & height=width
                 </script>
             </div>
-            <div class="section">
+
+            <div id="oyyy-shit" class="section">
                 <p id="display_frame_idx"></p>
                 <p id="display_iteration_idx"></p>
             </div>
 
         </div>
         <div class="ay-right">
+
+            <div id="ay-right-thingy" class="section">
+            </div>
     
             <!-- BUTTON MENU ======================== -->
             <div id="button-menus">

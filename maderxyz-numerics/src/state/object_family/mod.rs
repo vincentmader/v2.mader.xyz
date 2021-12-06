@@ -1,5 +1,5 @@
 
-use crate::interactions::ObjectInteraction;
+use crate::interactions::object::Interaction as ObjectInteraction;
 
 
 #[derive(Clone)]
@@ -36,7 +36,7 @@ impl ObjectFamily {
         let attributes: Vec<ObjectAttribute> = Vec::new();
         let epsilon = 0.;
         let tail_length = 0;
-        let tail_variant = TailVariant::Default;
+        let tail_variant = TailVariant::Area;
 
         ObjectFamily { 
             id, object_type, objects, interactions, 

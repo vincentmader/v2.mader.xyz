@@ -83,7 +83,7 @@ impl NavGridSection {
                 NavGridItem::new("3body-lagrange", "Lagrange points"),
                 NavGridItem::new("nbody-flowers", "sym. constellations"),
                 // more complex systems
-                NavGridItem::new("nbody-binary", "binary"),
+                NavGridItem::new("nbody-binary", "stellar binary"),
                 NavGridItem::new("nbody-asteroids", "asteroids"),
                     // NavGridItem::new("nbody-galaxy", "galaxy"),
                 NavGridItem::new("nbody-cluster", "stellar cluster (3D)"),
@@ -123,7 +123,7 @@ impl NavGridSection {
             ]),
             "quantum-physics" => Vec::from([
                 NavGridItem::new("double-slit", "double slit experiment"),
-                NavGridItem::new("feynman-graphs", "feynman-graphs"),
+                NavGridItem::new("feynman-graphs", "Feynman graphs"),
             ]),
             "emergent-behavior" => Vec::from([
                 NavGridItem::new("boids", "boids"),
