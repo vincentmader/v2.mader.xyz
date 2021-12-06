@@ -1,6 +1,12 @@
 
-use crate::integrators::Integrator;
 use crate::interactions::ObjectInteraction;
+
+
+#[derive(Clone)]
+pub enum TailVariant {
+    Default,
+    Area,
+}
 
 
 #[derive(Clone)]
@@ -10,12 +16,11 @@ pub struct ObjectFamily {
     pub object_type: ObjectType,
     pub objects: Vec<Vec<f64>>,
     pub interactions: Vec<ObjectInteraction>,
-    pub integrator: Integrator,
     pub dt: f64,
     pub epsilon: f64,
     pub tail_length: usize,
-    pub attributes: Vec<ObjectAttribute>
-    // pub object_colors: Vec<String>,
+    pub attributes: Vec<ObjectAttribute>,  // TODO obj colors, radii, ...
+    pub tail_variant: TailVariant,
 
 }
 impl ObjectFamily {
@@ -25,21 +30,17 @@ impl ObjectFamily {
         object_type: ObjectType,
         objects: Vec<Vec<f64>>,
         interactions: Vec<ObjectInteraction>,
-        integrator: Integrator,
         dt: f64,
-        epsilon: f64,
-        tail_length: usize,
     ) -> Self {
 
         let attributes: Vec<ObjectAttribute> = Vec::new();
-        // let object_colors = Vec::from([String::from("white")]);
+        let epsilon = 0.;
+        let tail_length = 0;
+        let tail_variant = TailVariant::Default;
 
         ObjectFamily { 
-            id, object_type, objects, 
-            interactions, integrator, dt, epsilon, 
-            tail_length, 
-            attributes,
-            // object_colors,
+            id, object_type, objects, interactions, 
+            dt, epsilon, tail_length, attributes, tail_variant,
         }
     }
 

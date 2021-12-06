@@ -51,37 +51,29 @@ impl Engine {
     }
 
     fn step_objects(next_state: &mut State, current_state: &State) {
-        for (family_idx, object_family) in next_state.object_families.iter_mut().enumerate() {
+        for object_family in next_state.object_families.iter_mut() {
             // don't apply forces to statics  // TODO statics on "rails"?
             if matches!(object_family.object_type, ObjectType::Static) { continue }
-            // setup integrator
-            let integrator = match object_family.integrator {
-                Integrator::EulerExplicit => integrators::euler_explicit::step,
-                // Integrator::EulerImplicit => integrators::euler_implicit::step,
-                // Integrator::RungeKutta2 => integrators::runge_kutta_2::step,
-                // Integrator::RungeKutta4 => integrators::runge_kutta_4::step,
-                // Integrator::LeapFrog => integrators::leap_frog::step,
-                // Integrator::Verlet => integrators::verlet::step,
-            };
-            // loop over other object families
-            for (other_idx, other_family) in current_state.object_families.iter().enumerate() {
-                let family_indices = (family_idx, other_idx);
-                // don't apply influence of low-mass particles
-                if matches!(other_family.object_type, ObjectType::Particle) { continue };
-                // choose relevant interactions (both families must "feel" them)  
-                let mut interactions: Vec<ObjectInteraction> = Vec::new();
-                for object_interaction in object_family.interactions.iter() {
+            // loop over interactions
+            for interaction in object_family.interactions.clone().iter() {  // TODO get rid of clone
+                // setup integrator
+                let integrator = match interaction.integrator {
+                    Integrator::EulerExplicit => integrators::euler_explicit::step,
+                    // Integrator::EulerImplicit => integrators::euler_implicit::step,
+                    // Integrator::RungeKutta2 => integrators::runge_kutta_2::step,
+                    // Integrator::RungeKutta4 => integrators::runge_kutta_4::step,
+                    // Integrator::LeapFrog => integrators::leap_frog::step,
+                    // Integrator::Verlet => integrators::verlet::step,
+                };
+                for other_family in current_state.object_families.iter() {
+                    // don't apply influence of low-mass particles
+                    if matches!(other_family.object_type, ObjectType::Particle) { continue };
+                    // only apply interactions when both families "feel" them
                     for other_interaction in other_family.interactions.iter() {
-                        if !matches!(object_interaction, other_interaction) {continue}  // TODO does this work?
-                        if !interactions.contains(object_interaction) {
-                            interactions.push(object_interaction.clone());
-                        }
+                        if interaction.interaction_variant != other_interaction.interaction_variant { continue }
                     }
+                    integrator(object_family, other_family, &interaction);
                 }
-                // use integrator to apply interaction -> step object family
-                integrator(
-                    object_family, other_family, &interactions, family_indices
-                );
             }
         }
     }

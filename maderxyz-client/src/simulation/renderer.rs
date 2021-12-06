@@ -4,6 +4,7 @@ use std::f64::consts::TAU;
 
 use maderxyz_numerics::state::State;
 use maderxyz_numerics::state::ObjectFamily;
+use maderxyz_numerics::state::object_family::TailVariant;
 use maderxyz_numerics::state::ObjectType;
 use maderxyz_numerics::state::ObjectAttribute;
 use maderxyz_numerics::state::Field;
@@ -138,20 +139,22 @@ impl Renderer {
                     let object = &states[idx].object_families[family_idx].objects[object_idx];
                     let previous = &states[previous_idx].object_families[family_idx].objects[object_idx];
                     // draw
-                    let color = get_object_color(&object);
+                    let color = get_object_color(&object, alpha);
                     self.canvas.set_stroke_style(&color);
 
-                    self.canvas.draw_line(
-                        (previous[1], previous[2]), 
-                        (object[1], object[2]),
-                    );  
-
-                    // self.canvas.set_fill_style(&color);
-                    // self.canvas.draw_triangle(
-                    //     (0., 0.),
-                    //     (previous[1], previous[2]), 
-                    //     (object[1], object[2]),
-                    // )
+                    if matches!(object_family.tail_variant, TailVariant::Default) {
+                        self.canvas.draw_line(
+                            (previous[1], previous[2]), 
+                            (object[1], object[2]),
+                        );  
+                    } else if matches!(object_family.tail_variant, TailVariant::Area) {
+                        self.canvas.set_fill_style(&color);
+                        self.canvas.draw_triangle(
+                            (0., 0.),
+                            (previous[1], previous[2]), 
+                            (object[1], object[2]),
+                        )
+                    }
                 }
             }
         }
@@ -174,7 +177,7 @@ impl Renderer {
             let mut q = 0.;
             if particles_carry_charge { q = object[5]; }
             // set color
-            let mut color = get_object_color(&object);
+            let mut color = get_object_color(&object, 1.);
             match object_family.object_type {
                 ObjectType::Static => {color = String::from("white");},
                 _ => {}
@@ -200,10 +203,10 @@ impl Renderer {
 }
 
 
-pub fn get_hsl_from_vec(vec: [f64; 2]) -> String {
+pub fn get_hsl_from_vec(vec: [f64; 2], alpha: f64) -> String {
     let phi = vec[1].atan2(vec[0]) / TAU * 360.;
     let (h, s, l) = (phi, 100, 50);
-    format!("hsl({}, {}%, {}%)", h, s, l)
+    format!("hsla({}, {}%, {}%, {})", h, s, l, alpha)
 }
 
 pub fn get_unit_vec_from_angle(phi: f64) -> [f64; 2] {
@@ -230,13 +233,13 @@ pub enum ObjectColorMode {
 
 // TODO only return rgb values, apply alpha later! (from tail_idx)
 
-fn get_object_color_from_velocity_angle(obj: &Vec<f64>) -> String {
-    get_hsl_from_vec([obj[3], obj[4]])
+fn get_object_color_from_velocity_angle(obj: &Vec<f64>, alpha: f64) -> String {
+    get_hsl_from_vec([obj[3], obj[4]], alpha)
 }
-fn get_object_color_from_position_angle(obj: &Vec<f64>) -> String {
-    get_hsl_from_vec([obj[1], obj[2]])
+fn get_object_color_from_position_angle(obj: &Vec<f64>, alpha: f64) -> String {
+    get_hsl_from_vec([obj[1], obj[2]], alpha)
 }
-fn get_object_color_from_speed(obj: &Vec<f64>) -> String {
+fn get_object_color_from_speed(obj: &Vec<f64>, alpha: f64) -> String {
     const MAX_SPEED: f64 = 1.5;
     let u = obj[3];
     let v = obj[4];
@@ -247,9 +250,9 @@ fn get_object_color_from_speed(obj: &Vec<f64>) -> String {
     let r = foo;
     let g = 255. - (255. * (foo-127.).abs()/128.);  
     let b = 255. - foo;
-    format!("rgb({}, {}, {})", r, g, b)
+    format!("rgba({}, {}, {}, {})", r, g, b, alpha)
 }
-fn get_object_color_from_distance(obj: &Vec<f64>) -> String {
+fn get_object_color_from_distance(obj: &Vec<f64>, alpha: f64) -> String {
     const MAX_DIST: f64 = 1.;
     let x = obj[1];
     let y = obj[2];
@@ -260,9 +263,9 @@ fn get_object_color_from_distance(obj: &Vec<f64>) -> String {
     let r = 255. - r; // flip blue & red
     let g = 255. - (255. * (r-127.).abs()/128.);
     let b = 255. - r;
-    format!("rgb({}, {}, {})", r, g, b)
+    format!("rgba({}, {}, {}, {})", r, g, b, alpha)
 }
-fn get_object_color_default(obj: &Vec<f64>) -> String {
-    "white".to_string()
+fn get_object_color_default(obj: &Vec<f64>, alpha: f64) -> String {
+    format!("rgba(255, 255, 255, {})", alpha)
 }
 

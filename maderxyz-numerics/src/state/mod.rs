@@ -2,13 +2,14 @@
 use rand::{Rng};
 
 use crate::interactions::ObjectInteraction;
+use crate::interactions::ObjectInteractionVariant;
 use crate::interactions::FieldInteraction;
 use crate::integrators::Integrator;
 use crate::integrators::FieldIntegrator;
 mod field;
 pub use field::Field;
 pub use field::FieldVariant;
-mod object_family;
+pub mod object_family;
 pub use object_family::ObjectFamily;
 pub use object_family::ObjectType;
 pub use object_family::ObjectAttribute;
@@ -35,9 +36,10 @@ impl State {
 }
 
 fn initialize_fields(page_id: &str) -> Vec<Field> {
-    let mut rng = rand::thread_rng();
 
+    let mut rng = rand::thread_rng();
     let mut fields: Vec<Field> = Vec::new();
+
     match page_id {
         "diffusion" => {
             let field_variant = FieldVariant::Fluid; // TODO rename, fluid density?
@@ -176,101 +178,124 @@ fn initialize_fields(page_id: &str) -> Vec<Field> {
 }
 
 fn initialize_object_families(page_id: &str) -> Vec<ObjectFamily> {
-    const TAU: f64 = 2.*3.14159;
-    let mut rng = rand::thread_rng();
 
-    let dt = 0.01;
-    let epsilon = 0.0;
+    let mut rng = rand::thread_rng();
+    const TAU: f64 = 2.*3.14159;
+    const DT: f64 = 0.01;
 
     let v_kepler = | m: f64, r: f64 | (m / r).sqrt();
 
     let mut object_families: Vec<ObjectFamily> = Vec::new();
     match page_id {
         "2body-kepler" => {
-            let mut objects: Vec<Vec<f64>> = Vec::new();
-            let epsilon = 0.01;
-            let r = 0.9;
-            let m_sun = 1.;
-            let (x, y, u, v) = (0., 0., 0., 0.);
-            objects.push(Vec::from([m_sun, x, y, u, v]));
-            let tail_length = 0;
-            let object_family = ObjectFamily::new(
-                0, ObjectType::Static, objects, 
-                Vec::from([ObjectInteraction::NewtonianGravity]),
-                Integrator::EulerExplicit, dt, epsilon, tail_length
-            );
-            object_families.push(object_family);
+        //     let mut objects: Vec<Vec<f64>> = Vec::new();
+        //     let epsilon = 0.01;
+        //     let r = 0.9;
+        //     let m_sun = 1.;
+        //     let (x, y, u, v) = (0., 0., 0., 0.);
+        //     objects.push(Vec::from([m_sun, x, y, u, v]));
+        //     let tail_length = 0;
+            
+        //     let interactions = Vec::from([
+        //         ObjectInteraction::new(
+        //             ObjectInteractionVariant::NewtonianGravity,
+        //             Integrator::EulerExplicit,
+        //         ),
+        //     ]);
+        //     let object_family = ObjectFamily::new(
+        //         0, ObjectType::Static, objects, interactions,
+        //         Integrator::EulerExplicit, dt, epsilon, tail_length
+        //     );
+        //     object_families.push(object_family);
 
-            let mut objects: Vec<Vec<f64>> = Vec::new();
-            // add Earth
-            let m_earth = 1e-3;
-            let v = 0.707*v_kepler(m_sun, r);  // TODO: add G*M vars?
-            let (x, y, u, v) = (r, 0., 0., v);
-            objects.push(Vec::from([m_earth, x, y, u, v]));
-            let tail_length = 100;
-            let object_family = ObjectFamily::new(
-                1, ObjectType::Body, objects, 
-                Vec::from([ObjectInteraction::NewtonianGravity]),
-                Integrator::EulerExplicit, dt, epsilon, tail_length
-            );
-            object_families.push(object_family);
+        //     let mut objects: Vec<Vec<f64>> = Vec::new();
+        //     // add Earth
+        //     let m_earth = 1e-3;
+        //     let v = 0.707*v_kepler(m_sun, r);  // TODO: add G*M vars?
+        //     let (x, y, u, v) = (r, 0., 0., v);
+        //     objects.push(Vec::from([m_earth, x, y, u, v]));
+        //     let tail_length = 100;
+        //     let interactions = Vec::from([
+        //         ObjectInteraction::new(
+        //             ObjectInteractionVariant::NewtonianGravity,
+        //             Integrator::EulerExplicit,
+        //         ),
+        //     ]);
+        //     let object_family = ObjectFamily::new(
+        //         1, ObjectType::Body, objects, 
+        //         Vec::from([ObjectInteractionVariant::NewtonianGravity]),
+        //         Integrator::EulerExplicit, dt, epsilon, tail_length
+        //     );
+        //     object_families.push(object_family);
 
-        },
-        "3body-moon" => {
-            let mut objects: Vec<Vec<f64>> = Vec::new();
+        }, "3body-moon" => {
 
             let epsilon = 0.01;
             let (r, dr) = (0.9, 0.02);
+            let m_sun = 1.;
+            let m_earth = 1e-3;
+            let earth_tail_length = 100;
+            let moon_tail_length = 10;
+
+            let interactions = Vec::from([
+                ObjectInteraction::new(
+                    ObjectInteractionVariant::NewtonianGravity,
+                    Integrator::EulerExplicit,
+                ),
+            ]);
 
             // add Sun
-            let m_sun = 1.;
+            let mut objects: Vec<Vec<f64>> = Vec::new();
             let (x, y, u, v) = (0., 0., 0., 0.);
             objects.push(Vec::from([m_sun, x, y, u, v]));
-            let tail_length = 0;
             let object_family = ObjectFamily::new(
-                0, ObjectType::Static, objects, 
-                Vec::from([ObjectInteraction::NewtonianGravity]),
-                Integrator::EulerExplicit, dt, epsilon, tail_length
+                0, ObjectType::Static, objects, interactions.clone(), DT
             );
             object_families.push(object_family);
 
-            let mut objects: Vec<Vec<f64>> = Vec::new();
             // add Earth
-            let m_earth = 1e-3;
+            let mut objects: Vec<Vec<f64>> = Vec::new();
             let v = 0.707*v_kepler(m_sun, r);  // TODO: add G*M vars?
             let (x, y, u, v) = (r, 0., 0., v);
             objects.push(Vec::from([m_earth, x, y, u, v]));
-            let tail_length = 100;
-            let object_family = ObjectFamily::new(
-                1, ObjectType::Body, objects, 
-                Vec::from([ObjectInteraction::NewtonianGravity]),
-                Integrator::EulerExplicit, dt, epsilon, tail_length
+            let mut object_family = ObjectFamily::new(
+                1, ObjectType::Body, objects, interactions.clone(), DT
             );
+            object_family.tail_length = earth_tail_length;
             object_families.push(object_family);
 
-            let mut objects: Vec<Vec<f64>> = Vec::new();
             // add Moon
+            let mut objects: Vec<Vec<f64>> = Vec::new();
             let m = 1e-6;
             let v = 0.707*v_kepler(m_sun, r+dr) + 0.707*v_kepler(m_earth, dr);
             let (x, y, u, v) = (r+dr, 0., 0., v);
             objects.push(Vec::from([m, x, y, u, v]));
-            let tail_length = 10;
-            let object_family = ObjectFamily::new(
-                2, ObjectType::Particle, objects, 
-                Vec::from([ObjectInteraction::NewtonianGravity]),
-                Integrator::EulerExplicit, dt, epsilon, tail_length
+            let mut object_family = ObjectFamily::new(
+                2, ObjectType::Particle, objects, interactions, DT
             );
+            object_family.tail_length = moon_tail_length;
             object_families.push(object_family);
             // TODO: fix Moon orbit
             //  - what happened?
             //  - move to mass-less particles for moons/rings?
 
         }, "3body-fig8" => {
+
+            let particle_epsilon = 0.05;
+            let body_tail_length = 201;
+
             const M: f64 = 1.;
             let xs = [0.7775727187509279270, 0., -0.7775727187509279270];
             let ys = [0.6287930240184685937, 0., -0.6287930240184685937];
             let us = [-0.06507160612095737318, 0.1301432122419148851, -0.06507160612095737318];
             let vs = [0.6324957346748190101, -1.264991469349638020, 0.6324957346748190101];
+
+            let interactions = Vec::from([
+                ObjectInteraction::new(
+                    ObjectInteractionVariant::NewtonianGravity,
+                    Integrator::EulerExplicit,
+                ),
+            ]);
 
             let mut bodies: Vec<Vec<f64>> = Vec::new();
             let mut particles: Vec<Vec<f64>> = Vec::new();
@@ -281,31 +306,28 @@ fn initialize_object_families(page_id: &str) -> Vec<ObjectFamily> {
                 bodies.push(Vec::from([M, x0, y0, u0, v0]));
 
                 // particles
-                let m = 1; // has to be non-zero, 1/0 inf, TODO remove M from particle vec
+                let m = 0.1; // has to be non-zero, 1/0 inf, TODO remove M from particle vec
                 let r = 0.05;
-                let nr_of_particles = 0;
+                let nr_of_particles = 10;
                 for particle_idx in 0..nr_of_particles {
-    
                     let phi = TAU * particle_idx as f64 / nr_of_particles as f64;
                     let x = x0 + r * phi.cos();
                     let y = y0 + r * phi.sin();
                     let u = u0 - v_kepler(M, r) * phi.sin();
                     let v = v0 + v_kepler(M, r) * phi.cos();
-                    particles.push(Vec::from([0.1, x, y, u, v])); // TODO why does m have to be non-zero? -> 1/0 inf
+                    particles.push(Vec::from([m, x, y, u, v])); // TODO why does m have to be non-zero? -> 1/0 inf
                 }
             }
-            let integrator = Integrator::EulerExplicit;
-            let interactions = Vec::from([ObjectInteraction::NewtonianGravity]);
-            let body_family = ObjectFamily::new(
-                0, ObjectType::Body, bodies, interactions, integrator, dt, epsilon, 201
+
+            let mut body_family = ObjectFamily::new(
+                0, ObjectType::Body, bodies, interactions.clone(), DT
             );
-            let epsilon = 0.05;
-            let integrator = Integrator::EulerExplicit;
-            let interactions = Vec::from([ObjectInteraction::NewtonianGravity]);
-            let particle_family = ObjectFamily::new(
-                0, ObjectType::Particle, particles, interactions, integrator, dt, epsilon, 0
-            );
+            body_family.tail_length = body_tail_length;
             object_families.push(body_family);
+            let mut particle_family = ObjectFamily::new(
+                1, ObjectType::Particle, particles, interactions, DT
+            );
+            particle_family.epsilon = particle_epsilon;
             object_families.push(particle_family);
 
             // let object_type = ObjectType::Body;
@@ -365,13 +387,18 @@ fn initialize_object_families(page_id: &str) -> Vec<ObjectFamily> {
 
         }, "3body-broucke" => {
 
-            let object_type = ObjectType::Body;
-            let interactions = Vec::from([ObjectInteraction::NewtonianGravity]);
-            let integrator = Integrator::EulerExplicit;
             const M: f64 = 1.;
-            let tail_length = 30;
-            let dt = 0.006;
+            const DT: f64 = 0.006;
+            const TAIL_LENGTH: usize = 30;
 
+            let interactions = Vec::from([
+                ObjectInteraction::new(
+                    ObjectInteractionVariant::NewtonianGravity,
+                    Integrator::EulerExplicit,
+                ),
+            ]);
+
+            let object_type = ObjectType::Body;
             let mut objects: Vec<Vec<f64>> = Vec::new();
             let (x, y, u, v) = (-0.9892620043, 0., 0.,  1.9169244185);
             objects.push(Vec::from([M, x, y, u, v]));
@@ -380,9 +407,11 @@ fn initialize_object_families(page_id: &str) -> Vec<ObjectFamily> {
             let (x, y, u, v) = ( 2.2096177241, 0., 0.,  0.1910268738);
             objects.push(Vec::from([M, x, y, u, v]));
 
-            let object_family = ObjectFamily::new(
-                0, object_type, objects, interactions, integrator, dt, epsilon, tail_length
+            let mut object_family = ObjectFamily::new(
+                0, object_type, objects, interactions, DT
             );
+            object_family.dt = DT;
+            object_family.tail_length = TAIL_LENGTH;
             object_families.push(object_family);
 
         }, "3body-freefall" => {
@@ -450,26 +479,29 @@ fn initialize_object_families(page_id: &str) -> Vec<ObjectFamily> {
             // object_families.push(object_family);
 
         }, "nbody-flowers" => {
-            let interactions = Vec::from([ObjectInteraction::NewtonianGravity]);
-            let integrator = Integrator::EulerExplicit;
-            // let dt: f64 = 0.025;
+
+            let particle_tail_length = 60;
             let epsilon: f64 = 0.01;
+
+            let interactions = Vec::from([
+                ObjectInteraction::new(
+                    ObjectInteractionVariant::NewtonianGravity,
+                    Integrator::EulerExplicit,
+                ),
+            ]);
 
             // add Sun
             let mut objects: Vec<Vec<f64>> = Vec::new();
             let (m, x, y, u, v) = (1., 0., 0., 0., 0.);
             objects.push(Vec::from([m, x, y, u, v]));
             let tail_length = 0;
-            let object_family = ObjectFamily::new(
-                0, ObjectType::Static, objects, 
-                interactions, integrator, dt, epsilon, tail_length
+            let mut object_family = ObjectFamily::new(
+                0, ObjectType::Static, objects, interactions.clone(), DT
             );
             object_families.push(object_family);
 
             // add satellites
             let mut objects: Vec<Vec<f64>> = Vec::new();
-            let interactions = Vec::from([ObjectInteraction::NewtonianGravity]);
-            let integrator = Integrator::EulerExplicit;
             let m = 0.001;  // TODO: unphysical of course, but stable!
             let r = 0.9;
             let v0 = 0.65;
@@ -483,40 +515,53 @@ fn initialize_object_families(page_id: &str) -> Vec<ObjectFamily> {
                 let v = v0 * phi.cos();
                 objects.push(Vec::from([m, x, y, u, v]));
             }
-            let tail_length = 240;
             let mut object_family = ObjectFamily::new(
-                1, ObjectType::Particle, objects,
-                interactions, integrator, dt, epsilon, tail_length
+                1, ObjectType::Particle, objects, interactions, DT
             );
-            // object_family.object_colors = object_colors;
+            object_family.tail_length = particle_tail_length;
+            object_family.epsilon = epsilon;
             object_families.push(object_family);
 
         }, "nbody-binary" => { 
+
+            let x = 0.7;
+            let z = 0.4;
+            const DT: f64 = 0.1;
+            const TAIL_LENGTH: usize = 1000;
             const M1: f64 = 1.;
             const M2: f64 = 1.;
-            let x = 0.7;
-            let dt: f64 = 0.1;
-            let tail_length = 1000;
-            let interactions = Vec::from([ObjectInteraction::NewtonianGravity]);
-            let integrator = Integrator::EulerExplicit;
+
+            let interactions = Vec::from([
+                ObjectInteraction::new(
+                    ObjectInteractionVariant::NewtonianGravity,
+                    Integrator::EulerExplicit,
+                ),
+            ]);
 
             // add Suns
             let mut objects: Vec<Vec<f64>> = Vec::new();
-            let v1 = 0.4*v_kepler(M2, x);
+            let v1 = z*v_kepler(M2, x);
             objects.push(Vec::from([M1, -x, 0., 0., v1]));
-            let v2 = 0.4*v_kepler(M1, x);
+            let v2 = z*v_kepler(M1, x);
             objects.push(Vec::from([M2, x, 0., 0., -v2]));
 
-            let object_family = ObjectFamily::new(
-                0, ObjectType::Body, objects, 
-                interactions, integrator, dt, epsilon, tail_length
+            let mut object_family = ObjectFamily::new(
+                0, ObjectType::Body, objects, interactions, DT
             );
+            object_family.tail_length = TAIL_LENGTH;
             object_families.push(object_family);
 
         }, "nbody-asteroids" => {  
-            let interactions = Vec::from([ObjectInteraction::NewtonianGravity]);
-            let integrator = Integrator::EulerExplicit;
+
             let dt: f64 = 0.0035;
+            let tail_length = 230;
+
+            let interactions = Vec::from([
+                ObjectInteraction::new(
+                    ObjectInteractionVariant::NewtonianGravity,
+                    Integrator::EulerExplicit,
+                ),
+            ]);
 
             // add Suns
             const M1: f64 = 1.;
@@ -530,17 +575,15 @@ fn initialize_object_families(page_id: &str) -> Vec<ObjectFamily> {
             let v2 = 0.4*v_kepler(M1, x);
             objects.push(Vec::from([M2, x, 0., 0., -v2]));
 
-            let tail_length = 230;
-            let object_family = ObjectFamily::new(
-                0, ObjectType::Body, objects, 
-                interactions, integrator, dt, epsilon, tail_length
+            let mut object_family = ObjectFamily::new(
+                0, ObjectType::Body, objects, interactions.clone(), dt
             );
+            object_family.tail_length = tail_length;
+            object_family.tail_length = tail_length;
             object_families.push(object_family);
 
             // add satellites
             let mut objects: Vec<Vec<f64>> = Vec::new();
-            let interactions = Vec::from([ObjectInteraction::NewtonianGravity]);
-            let integrator = Integrator::EulerExplicit;
             let m = 0.001;  // TODO: unphysical of course, but stable!
             let N = 300; // TODO: make changeable
             for id in 0..N {
@@ -554,17 +597,13 @@ fn initialize_object_families(page_id: &str) -> Vec<ObjectFamily> {
                 let v = v0 * phi.cos();
                 objects.push(Vec::from([m, x, y, u, v]));
             }
-            let tail_length = 0;
             let object_family = ObjectFamily::new(
-                0, ObjectType::Particle, objects,
-                interactions, integrator, dt, epsilon, tail_length
+                0, ObjectType::Particle, objects, interactions.clone(), dt, 
             );
             object_families.push(object_family);
 
             // add satellites (2)
             let mut objects: Vec<Vec<f64>> = Vec::new();
-            let interactions = Vec::from([ObjectInteraction::NewtonianGravity]);
-            let integrator = Integrator::EulerExplicit;
             let m = 0.001;  // TODO: unphysical of course, but stable!
             let N = 300; // TODO: make changeable
             for id in 0..N {
@@ -582,53 +621,65 @@ fn initialize_object_families(page_id: &str) -> Vec<ObjectFamily> {
                 let v = v0 * phi.cos();
                 objects.push(Vec::from([m, x, y, u, v]));
             }
-            let tail_length = 0;
             let object_family = ObjectFamily::new(
-                0, ObjectType::Particle, objects,
-                interactions, integrator, dt, epsilon, tail_length
+                0, ObjectType::Particle, objects, interactions, dt
             );
             object_families.push(object_family);
 
         }, "nbody-solar" => {
 
-            // Sun
-            let mut objects: Vec<Vec<f64>> = Vec::new();
-            let interactions = Vec::from([ObjectInteraction::NewtonianGravity]);
-            let integrator = Integrator::EulerExplicit;
-            const M: f64 = 1.;
-            let (x, y, u, v) = (0., 0., 0., 0.);
-            objects.push(Vec::from([M, x, y, u, v]));
-            let tail_length = 0;
-            let object_family = ObjectFamily::new(
-                0, ObjectType::Static, objects,
-                interactions, integrator, dt, epsilon, tail_length
-            );
-            object_families.push(object_family);
+            // const M: f64 = 1.;
+            // let m = 1.;
+            // let r = 0.9;
+            // let tail_length = 100;  // TODO why not working?
 
-            // Earth
-            let mut objects: Vec<Vec<f64>> = Vec::new();
-            let interactions = Vec::from([ObjectInteraction::NewtonianGravity]);
-            let integrator = Integrator::EulerExplicit;
-            let m = 1.;
-            let r = 0.9;
-            let v = v_kepler(M, r) / f64::from(2).sqrt();  // TODO why sqrt(2) ?
-            let (x, y, u, v) = (r, 0., 0., v);
-            objects.push(Vec::from([M, x, y, u, v]));
-            let tail_length = 100;  // TODO why not working?
-            let object_family = ObjectFamily::new(
-                0, ObjectType::Body, objects,
-                interactions, integrator, dt, epsilon, tail_length
-            );
-            object_families.push(object_family);
+            // let interactions = Vec::from([
+            //     ObjectInteraction::new(
+            //         ObjectInteractionVariant::NewtonianGravity,
+            //         Integrator::EulerExplicit,
+            //     ),
+            // ]);
+
+            // // Sun
+            // let mut objects: Vec<Vec<f64>> = Vec::new();
+            // let (x, y, u, v) = (0., 0., 0., 0.);
+            // objects.push(Vec::from([M, x, y, u, v]));
+            // let tail_length = 0;
+            // let object_family = ObjectFamily::new(
+            //     0, ObjectType::Static, objects, interactions.clone(), 
+            //     dt, epsilon, tail_length
+            // );
+            // object_families.push(object_family);
+
+            // // Earth
+            // let mut objects: Vec<Vec<f64>> = Vec::new();
+            // let v = v_kepler(M, r) / f64::from(2).sqrt();  // TODO why sqrt(2) ?
+            // let (x, y, u, v) = (r, 0., 0., v);
+            // objects.push(Vec::from([M, x, y, u, v]));
+            // let object_family = ObjectFamily::new(
+            //     0, ObjectType::Body, objects,
+            //     interactions, dt, epsilon, tail_length
+            // );
+            // object_families.push(object_family);
 
         }, "charge-interaction" => {
-            let nr_of_protons = 4;
-            let nr_of_electrons = 40;
 
             let epsilon = 0.2;
             let dt = 0.001;
+            let nr_of_protons = 4;
+            let nr_of_electrons = 40;
+            let tail_length = 50;
+
+            let interactions = Vec::from([
+                ObjectInteraction::new(
+                    ObjectInteractionVariant::CoulombInteraction,
+                    Integrator::EulerExplicit,
+                ),
+                // TODO ObjectInteraction::WallCollision,
+            ]);
 
             let mut objects: Vec<Vec<f64>> = Vec::new();
+
             // add protons
             let m_p: f64 = 1.;
             for _ in 0..nr_of_protons {
@@ -645,15 +696,11 @@ fn initialize_object_families(page_id: &str) -> Vec<ObjectFamily> {
                 let (u, v, q) = (0., 0., -1.);
                 objects.push(Vec::from([m_e, x, y, u, v, q]));
             }
-            let interactions = Vec::from([
-                ObjectInteraction::CoulombInteraction, 
-                // ObjectInteraction::WallCollision,
-            ]);
-            let tail_length = 50;
             let mut object_family = ObjectFamily::new(
-                0, ObjectType::Body, objects, interactions,
-                Integrator::EulerExplicit, dt, epsilon, tail_length
+                0, ObjectType::Body, objects, interactions, dt, 
             );
+            object_family.tail_length = tail_length;
+            object_family.epsilon = epsilon;
             object_family.attributes.push(ObjectAttribute::Charge);
             object_families.push(object_family);
 
