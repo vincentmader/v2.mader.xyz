@@ -32,7 +32,7 @@ pub fn step(
                 object[3] += force.0 / object[0] * dt;
                 object[4] += force.1 / object[0] * dt;
             }
-            // update positions
+            // update positions  | TODO do this after interaction calc
             object[1] += object[3] * dt;
             object[2] += object[4] * dt;
         }

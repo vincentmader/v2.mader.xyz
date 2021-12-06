@@ -12,21 +12,19 @@ let page_id = document.getElementById("simulation.js").getAttribute("page_id");
 
   // setup event listeners for buttons
   var buttons = document.getElementsByTagName("button");
-  for (let i = 0; i < buttons.length; i++) {
-    let button = buttons[i];
+  for (let idx = 0; idx < buttons.length; idx++) {
+    let button = buttons[idx];
     let button_id = button.id;
-    button.innerHTML = button_id;
     button.addEventListener("click", () => {
       simulation.handle_button_event(button_id);
     });
   }
   // setup event listeners for sliders
   var inputs = document.getElementsByTagName("input");
-  for (let i = 0; i < inputs.length; i++) {
-    let slider = inputs[i];
+  for (let idx = 0; idx < inputs.length; idx++) {
+    let slider = inputs[idx];
     if (slider.getAttribute("type") != "range") continue;
     let slider_id = slider.id;
-    slider.innerHTML = slider_id;
     slider.addEventListener("change", () => {
       simulation.handle_slider_event(slider_id);
     });
@@ -35,9 +33,10 @@ let page_id = document.getElementById("simulation.js").getAttribute("page_id");
   // step loop
   let N = 1;
   const loop = () => {
-    for (let i = 0; i < N; i++) {
+    for (let _ = 0; _ < N; _++) {
       simulation.step();
     }
+    simulation.render();
     requestAnimationFrame(loop);
   };
   loop();

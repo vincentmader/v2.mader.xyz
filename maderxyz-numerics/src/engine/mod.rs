@@ -1,4 +1,5 @@
 
+use std::collections::HashMap;
 use rand::{Rng};
 // use std::cmp;
 
@@ -33,10 +34,9 @@ impl Engine {
     pub fn init(&mut self) {
         let initial_state = State::new(&self.page_id);
         self.states = Vec::from([initial_state]);
-        // self.states.push(initial_state);  // NOTE auch cool
     }
 
-    pub fn step(&mut self) {
+    pub fn step(&mut self, parameters: &HashMap<String, String>) {
         if self.is_paused { return (); }
 
         let current_state = &self.states[self.iteration_step];
@@ -100,10 +100,11 @@ impl Engine {
             let integrator = match field.integrator {
                 FieldIntegrator::Diffusion => integrator_diff,
                 FieldIntegrator::Ising => integrator_ising,
+                FieldIntegrator::GameOfLife => integrator_game_of_life,
             };
 
             let mut rng = rand::thread_rng();
-            let batch_size = 1000;
+            let batch_size = 5000;
             for _ in 0..batch_size {
                 let x: f64 = rng.gen();
                 let y: f64 = rng.gen();
@@ -143,9 +144,30 @@ impl Engine {
     }
 }
 
+pub fn integrator_game_of_life(
+    cell: &mut Vec<f64>, 
+    neighbors: &Vec<&Vec<f64>>, 
+    interactions: &Vec<FieldInteraction>
+) {
+    let mut nr_of_living_neighbors = 0;
+    for neighbor in neighbors.iter() {
+        if neighbor[0] == 1. {
+            nr_of_living_neighbors += 1; 
+        }
+    }
+    if cell[0] == 1. {
+        if ![2, 3].contains(&nr_of_living_neighbors) {
+            cell[0] = -1.;
+        }
+    } else if cell[0] == -1. {
+        if nr_of_living_neighbors == 3 {
+            cell[0] = 1.;
+        }
+    }
+}
+
 pub fn integrator_ising(
     cell: &mut Vec<f64>, 
-    // neighbor: &Vec<f64>, 
     neighbors: &Vec<&Vec<f64>>, 
     interactions: &Vec<FieldInteraction>
 ) {
@@ -168,7 +190,6 @@ pub fn integrator_ising(
 
 pub fn integrator_diff(
     cell: &mut Vec<f64>, 
-    // neighbor: &Vec<f64>, 
     neighbors: &Vec<&Vec<f64>>, 
     interactions: &Vec<FieldInteraction>
 ) {

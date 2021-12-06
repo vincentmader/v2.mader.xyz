@@ -1,17 +1,17 @@
 
 use rand::{Rng};
 
-mod field;
-mod object_family;
-pub use field::Field;
-pub use field::FieldType;
-pub use object_family::ObjectFamily;
-pub use object_family::ObjectType;
-pub use object_family::ObjectAttribute;
 use crate::interactions::ObjectInteraction;
 use crate::interactions::FieldInteraction;
 use crate::integrators::Integrator;
 use crate::integrators::FieldIntegrator;
+mod field;
+pub use field::Field;
+pub use field::FieldVariant;
+mod object_family;
+pub use object_family::ObjectFamily;
+pub use object_family::ObjectType;
+pub use object_family::ObjectAttribute;
 
 
 #[derive(Clone)]
@@ -19,9 +19,7 @@ pub struct State {
 
     pub iteration_idx: usize,
     pub object_families: Vec<ObjectFamily>,
-    // pub cellular_automata: Vec<CellularAutomaton>,
-    pub fields: Vec<Field>,
-    // pub spins: Vec<bool>,
+    pub fields: Vec<Field>, // TODO cell-aut + spins, field-type?
 
 }
 impl State {
@@ -42,7 +40,7 @@ fn initialize_fields(page_id: &str) -> Vec<Field> {
     let mut fields: Vec<Field> = Vec::new();
     match page_id {
         "diffusion" => {
-            let field_type = FieldType::Fluid; // TODO rename, fluid density?
+            let field_variant = FieldVariant::Fluid; // TODO rename, fluid density?
             let interactions = Vec::from([FieldInteraction::Diffusion]);
             let integrator = FieldIntegrator::Diffusion; // TODO
 
@@ -68,52 +66,108 @@ fn initialize_fields(page_id: &str) -> Vec<Field> {
             let dimensions = (GRID_SIZE, GRID_SIZE);
             let density_field = Field::new(
                 0,
-                field_type, 
+                field_variant, 
+                integrator,
                 interactions, 
                 dimensions,
                 cells,
-                integrator,
             );
             fields.push(density_field);
-        }, "ising-model" => {
-            let field_type = FieldType::Spin; // TODO rename, fluid density?
-            let interactions = Vec::from([
-                // FieldInteraction::Ising
-            ]);
-            let integrator = FieldIntegrator::Ising; // TODO
+        // }, "ising-model" => {
+        //     let field_variant = FieldVariant::Spin; // TODO rename, fluid density?
+        //     let interactions = Vec::from([
+        //         // FieldInteraction::Ising
+        //     ]);
+        //     let integrator = FieldIntegrator::Ising; // TODO
 
-            let mut cells: Vec<Vec<f64>> = Vec::new() ;
-            const GRID_SIZE: usize = 100;
-            for row_idx in 0..GRID_SIZE {
-                for col_idx in 0..GRID_SIZE {
-                    let spin_up: bool = rng.gen();
-                    let spin = match spin_up {
-                        true => 1.,
-                        false => -1.
-                    };
-                    
-                    // let r = (
-                    //     (row_idx as f64-GRID_SIZE as f64/2.).powf(2.) + 
-                    //     (col_idx as f64-GRID_SIZE as f64/2.).powf(2.)
-                    // ).sqrt();
-                    // if r < GRID_SIZE as f64 / 10. {
-                    //     density = 0.;
-                    // } else {
-                        // density = rng.gen();
-                    // }
-                    cells.push(Vec::from([spin]))
-                }
-            }
-            let dimensions = (GRID_SIZE, GRID_SIZE);
-            let density_field = Field::new(
-                0,
-                field_type, 
-                interactions, 
-                dimensions,
-                cells,
-                integrator,
-            );
-            fields.push(density_field);
+        //     let mut cells: Vec<Vec<f64>> = Vec::new() ;
+        //     const GRID_SIZE: usize = 150;
+        //     for row_idx in 0..GRID_SIZE {
+        //         for col_idx in 0..GRID_SIZE {
+        //             let spin_up: bool = rng.gen();
+        //             let spin = match spin_up {
+        //                 true => 1.,
+        //                 false => -1.
+        //             };
+        //             // let r = (
+        //             //     (row_idx as f64-GRID_SIZE as f64/2.).powf(2.) + 
+        //             //     (col_idx as f64-GRID_SIZE as f64/2.).powf(2.)
+        //             // ).sqrt();
+        //             // if r < GRID_SIZE as f64 / 10. {
+        //             //     density = 0.;
+        //             // } else {
+        //                 // density = rng.gen();
+        //             // }
+        //             cells.push(Vec::from([spin]))
+        //         }
+        //     }
+        //     let dimensions = (GRID_SIZE, GRID_SIZE);
+        //     let density_field = Field::new(
+        //         0,
+        //         field_variant, 
+        //         integrator,
+        //         interactions, 
+        //         dimensions,
+        //         cells,
+        //     );
+        //     fields.push(density_field);
+        // }, "game-of-life" => {
+        //     let field_variant = FieldVariant::Spin; // TODO rename, fluid density?
+        //     let interactions = Vec::from([
+        //         // FieldInteraction::Ising
+        //     ]);
+        //     let integrator = FieldIntegrator::GameOfLife; // TODO
+        //     const GRID_SIZE: usize = 30;
+
+        //     let (x, y) = (6, 2);
+        //     let living_cells = Vec::from([
+        //         (GRID_SIZE - 4, GRID_SIZE - 4),
+        //         (GRID_SIZE - 4, GRID_SIZE - 5),
+        //         (GRID_SIZE - 5, GRID_SIZE - 4),
+        //         (GRID_SIZE - 5, GRID_SIZE - 5),
+        //         (x+1, y),
+        //         (x+1, y-1),
+        //         (x,y),
+        //         (x,y+1),
+        //         (x-1,y-1),
+        //     ]);
+
+        //     let mut cells: Vec<Vec<f64>> = Vec::new() ;
+        //     for row_idx in 0..GRID_SIZE {
+        //         for col_idx in 0..GRID_SIZE {
+        //             // let spin_up: bool = rng.gen();
+        //             // let spin = match spin_up {
+        //             //     true => 1.,
+        //             //     false => -1.
+        //             // };
+
+        //             // let r = (
+        //             //     (row_idx as f64-GRID_SIZE as f64/2.).powf(2.) + 
+        //             //     (col_idx as f64-GRID_SIZE as f64/2.).powf(2.)
+        //             // ).sqrt();
+        //             // if r < GRID_SIZE as f64 / 10. {
+        //             //     density = 0.;
+        //             // } else {
+        //                 // density = rng.gen();
+        //             // }
+
+        //             let mut spin = -1.;
+        //             if living_cells.contains(&(col_idx, row_idx)) {
+        //                 spin = 1.;
+        //             } 
+        //             cells.push(Vec::from([spin]));
+        //         }
+        //     }
+        //     let dimensions = (GRID_SIZE, GRID_SIZE);
+        //     let density_field = Field::new(
+        //         0,
+        //         field_variant, 
+        //         integrator,
+        //         interactions, 
+        //         dimensions,
+        //         cells,
+        //     );
+        //     fields.push(density_field);
         },
         _ => {}
     }

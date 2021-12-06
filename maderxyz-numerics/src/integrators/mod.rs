@@ -23,5 +23,6 @@ pub enum FieldIntegrator {
     // TODO 
     Ising,
     Diffusion,
+    GameOfLife,
 }
 

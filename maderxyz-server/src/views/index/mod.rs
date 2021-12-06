@@ -43,14 +43,14 @@ impl NavGrid {
     pub fn new() -> Self {
 
         let grid_section_titles: Vec<(&str, &str)> = Vec::from([
-            ("gravity", "classical gravity"),
+            ("gravity", "gravitational n-body dynamics"),
             ("oscillators", "oscillators"),
-            ("electro-magnetism", "electro-magnetism"),
             ("thermo-dynamics", "thermodynamics"),
             ("fluid-dynamics", "fluid dynamics"),
+            ("electro-magnetism", "electro-magnetism"),
             ("emergent-behavior", "emergent behavior"),
             ("quantum-physics", "quantum-physics)"),
-            ("various", "various)"),
+            ("various", "various"),
             // ("optics", "optics"), // ?
         ]);
 
@@ -89,7 +89,7 @@ impl NavGridSection {
                 NavGridItem::new("nbody-cluster", "stellar cluster (3D)"),
                 // stable 3-body
                 NavGridItem::new("3body-fig8", "figure-8"),
-                NavGridItem::new("3body-broucke", "broucke"),
+                    NavGridItem::new("3body-broucke", "broucke"),
                     // NavGridItem::new("3body-liao", "liao"),
                     // NavGridItem::new("3body-freefall", "free-fall"),
                     // NavGridItem::new("3body-moth", "moth"),
@@ -107,7 +107,7 @@ impl NavGridSection {
                     // NavGridItem::new("magnet", "magnet"),  // TODO rename? (multiple entries)
                 NavGridItem::new("wien-filter", "Wien filter"),
                     // NavGridItem::new("field-field-interaction", "waves"),
-                NavGridItem::new("electric-motor", "electric-motor"),
+                    // NavGridItem::new("electric-motor", "electric-motor"),
             ]),
             "thermo-dynamics" => Vec::from([
                 NavGridItem::new("ising-model", "Ising model"),
@@ -134,6 +134,7 @@ impl NavGridSection {
                 NavGridItem::new("rock-paper-scissors", "rock-paper-scissors"),
                     // NavGridItem::new("ca-rulemaker", "cell.aut. rule-maker"),
                 NavGridItem::new("mc-pi", "Monte Carlo pi"),
+                NavGridItem::new("hsl-colors", "HSL colors"),
             ]),
             _ => Vec::new()
         };

@@ -19,8 +19,9 @@
 
 #navgrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   margin-bottom: 45px;
+  margin-top: 15px;
 }
 @media only screen and (max-width: 1201px) {
   #navgrid {

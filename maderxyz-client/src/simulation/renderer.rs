@@ -18,7 +18,9 @@ pub struct Renderer {
     canvas: Canvas,  // TODO multiple?
     pub frame_idx: usize,
     pub is_paused: bool,
+    // TODO move elsewhere (for each obj family + total)
     pub object_color_mode: ObjectColorMode,
+    pub display_tails: bool,
 }
 impl Renderer {
     pub fn new(page_id: &str) -> Self {
@@ -36,13 +38,15 @@ impl Renderer {
             canvas,
             frame_idx,
             is_paused,
-            object_color_mode: ObjectColorMode::HSLVelocity,
+            object_color_mode: ObjectColorMode::Default,
+            display_tails: false,
         }
     }
     pub fn init(&mut self) {
 
     }
     pub fn display(&mut self, states: &Vec<State>) {
+        self.display_menu(states);
         if self.is_paused { return (); }
         if self.frame_idx >= states.len() { return (); }
         self.canvas.clear();
@@ -50,7 +54,6 @@ impl Renderer {
 
         self.display_fields(states);
         self.display_objects(states);
-        self.display_menu(states);
 
         self.frame_idx += 1;
     }
@@ -70,22 +73,22 @@ impl Renderer {
         } 
     }
     fn display_field(&mut self, states: &Vec<State>, field: &Field) {
-        let GRID_WIDTH: usize = field.dimensions.0;
-        let GRID_HEIGHT: usize = field.dimensions.1; // x first!
+        let grid_width: usize = field.dimensions.0;
+        let grid_height: usize = field.dimensions.1; // x first!
 
         match self.page_id.as_str() {
             "diffusion" => {},
             _ => {}
         }
 
-        for row_idx in 0..GRID_HEIGHT {
-            for col_idx in 0..GRID_WIDTH {
-                let density = &field.cells[row_idx*GRID_HEIGHT+col_idx][0];
+        for row_idx in 0..grid_height {
+            for col_idx in 0..grid_width {
+                let density = &field.cells[row_idx*grid_height+col_idx][0];
                 let z = 0.97;
-                let (w, h) = (2.*z / GRID_WIDTH as f64, 2.*z / GRID_HEIGHT as f64);
+                let (w, h) = (2.*z / grid_width as f64, 2.*z / grid_height as f64);
                 let (x, y) = (
-                    2. * col_idx as f64 / GRID_HEIGHT as f64 - 1.,
-                    2. * row_idx as f64 / GRID_WIDTH as f64 - 1.
+                    2. * col_idx as f64 / grid_height as f64 - 1.,
+                    2. * row_idx as f64 / grid_width as f64 - 1.
                 );
                 let (r, g, b) = (255, 255, 255);
                 let alpha = density;
@@ -117,36 +120,39 @@ impl Renderer {
             ObjectColorMode::HSLPosition => get_object_color_from_position_angle, 
             ObjectColorMode::Speed => get_object_color_from_speed,
             ObjectColorMode::Distance => get_object_color_from_distance, // NOTE from origin
+            ObjectColorMode::Default => get_object_color_default,
         };
 
         // draw tails
         // ==========
-        let tail_length = cmp::min(object_family.tail_length, self.frame_idx);
+        if self.display_tails {
+            let tail_length = cmp::min(object_family.tail_length, self.frame_idx);
 
-        self.canvas.context.set_line_width(1.);
-        for tail_idx in 0..tail_length {
-            let idx = self.frame_idx - tail_length + tail_idx;
-            let previous_idx = cmp::max(0, idx as i32 - 1) as usize;
-            let alpha = (tail_idx as f64) / (tail_length as f64);
-            // loop over objects
-            for object_idx in 0..nr_of_objects {
-                let object = &states[idx].object_families[family_idx].objects[object_idx];
-                let previous = &states[previous_idx].object_families[family_idx].objects[object_idx];
-                // draw
-                let color = get_object_color(&object);
+            self.canvas.context.set_line_width(1.);
+            for tail_idx in 0..tail_length {
+                let idx = self.frame_idx - tail_length + tail_idx;
+                let previous_idx = cmp::max(0, idx as i32 - 1) as usize;
+                let alpha = (tail_idx as f64) / (tail_length as f64);
+                // loop over objects
+                for object_idx in 0..nr_of_objects {
+                    let object = &states[idx].object_families[family_idx].objects[object_idx];
+                    let previous = &states[previous_idx].object_families[family_idx].objects[object_idx];
+                    // draw
+                    let color = get_object_color(&object);
+                    self.canvas.set_stroke_style(&color);
 
-                self.canvas.set_stroke_style(&color);
-                // self.canvas.draw_line(
-                //     (previous[1], previous[2]), 
-                //     (object[1], object[2]),
-                // );  
+                    self.canvas.draw_line(
+                        (previous[1], previous[2]), 
+                        (object[1], object[2]),
+                    );  
 
-                self.canvas.set_fill_style(&color);
-                self.canvas.draw_triangle(
-                    (0., 0.),
-                    (previous[1], previous[2]), 
-                    (object[1], object[2]),
-                )
+                    // self.canvas.set_fill_style(&color);
+                    // self.canvas.draw_triangle(
+                    //     (0., 0.),
+                    //     (previous[1], previous[2]), 
+                    //     (object[1], object[2]),
+                    // )
+                }
             }
         }
 
@@ -219,6 +225,7 @@ pub enum ObjectColorMode {
     Speed,
     Distance,
     // Charge,
+    Default, // NOTE white
 }
 
 // TODO only return rgb values, apply alpha later! (from tail_idx)
@@ -254,5 +261,8 @@ fn get_object_color_from_distance(obj: &Vec<f64>) -> String {
     let g = 255. - (255. * (r-127.).abs()/128.);
     let b = 255. - r;
     format!("rgb({}, {}, {})", r, g, b)
+}
+fn get_object_color_default(obj: &Vec<f64>) -> String {
+    "white".to_string()
 }
 
