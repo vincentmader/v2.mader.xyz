@@ -1,23 +1,24 @@
 
-use crate::state::ObjectFamily;
-use crate::interactions::object::Interaction as ObjectInteraction;
-use crate::interactions::object::InteractionVariant as ObjectInteractionVariant;
-use crate::interactions::newtonian_gravity;
-use crate::interactions::coulomb_interaction;
+// use crate::state::ObjectFamily;
+// use crate::interactions::object::Interaction as ObjectInteraction;
+// use crate::interactions::object::InteractionVariant as ObjectInteractionVariant;
+// use crate::interactions::object::newtonian_gravity;
+// use crate::interactions::object::coulomb;
+// use crate::interactions::object::lennard_jones;
 
 
 pub fn step(
-    object_family: &mut ObjectFamily, 
-    other_family: &ObjectFamily, 
-    interaction: &ObjectInteraction,
+    // object_family: &mut ObjectFamily, 
+    // other_family: &ObjectFamily, 
+    // interaction: &ObjectInteraction,
 ) {
 
-    let epsilon = object_family.epsilon;
-    let dt = object_family.dt;
+    // let epsilon = object_family.epsilon;
+    // let dt = object_family.dt;
     // // choose interaction applier-method
     // let get_force = match interaction.interaction_variant {
     //     ObjectInteractionVariant::NewtonianGravity => newtonian_gravity::force, // TODO rename
-    //     ObjectInteractionVariant::CoulombInteraction => coulomb_interaction::force,
+    //     ObjectInteractionVariant::Coulomb => coulomb_interaction::force,
     //     // ObjectInteraction::WallCollision => coulomb_interaction::force,
     // };
     // // loop over body-pairs, apply interaction (only to one!)

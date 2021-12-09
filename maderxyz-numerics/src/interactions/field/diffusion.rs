@@ -1,12 +1,11 @@
 
-use crate::interactions::field::Interaction as FieldInteraction;
+// use crate::interactions::field::Interaction as FieldInteraction;
 
 
 pub fn interact(
 
     cell: &mut Vec<f64>, 
     neighbors: &Vec<&Vec<f64>>, 
-    interactions: &Vec<FieldInteraction>
 
 ) {
 

@@ -1,5 +1,5 @@
 
-use crate::interactions::field::Interaction as FieldInteraction;
+use crate::integrators::field::Integrator;
 mod field_variant;
 pub use field_variant::FieldVariant;
 mod neighborhood_variant;
@@ -11,7 +11,7 @@ pub mod neighborhood_getter;
 pub struct Field {
     pub id: usize,
     pub field_variant: FieldVariant,
-    pub interactions: Vec<FieldInteraction>,
+    pub integrators: Vec<Integrator>,
     pub dimensions: (usize, usize),   // TODO 3D ?
     pub cells: Vec<Vec<f64>>,         // TODO make Vec<bool> ?
     pub neighborhood_variant: NeighborhoodVariant,
@@ -20,7 +20,7 @@ impl Field {
     pub fn new(
         id: usize, 
         field_variant: FieldVariant,
-        interactions: Vec<FieldInteraction>,
+        integrators: Vec<Integrator>,
         dimensions: (usize, usize),
         cells: Vec<Vec<f64>>,
     ) -> Self {
@@ -28,7 +28,7 @@ impl Field {
         Field {
             id,
             field_variant,
-            interactions,
+            integrators,
             dimensions,
             cells,
             neighborhood_variant,

@@ -4,15 +4,18 @@ use rand::{Rng};
 use crate::state::field;
 use crate::state::field::Field;
 use crate::state::field::NeighborhoodVariant;
-use crate::interactions::field::Interaction;
+// use crate::interactions::field::Interaction;
 use crate::interactions::field::InteractionVariant;
+use crate::interactions::field::diffusion;
+use crate::interactions::field::game_of_life;
+use crate::interactions::field::spin_spin_interaction;
 
 
 pub fn step(
 
     field: &mut Field,
     other_field: &Field,
-    interaction: &Interaction,
+    interactions: &Vec<InteractionVariant>,
 
 ) {
 
@@ -25,29 +28,32 @@ pub fn step(
         NeighborhoodVariant::Moore => field::neighborhood_getter::get_moore_neighborhood
     };
 
-    let interact = match interaction.interaction_variant {
-        InteractionVariant::SpinSpin => {},
-        InteractionVariant::Diffusion => {},
-        InteractionVariant::GameOfLife => {},
-    };
+    for interaction in interactions.iter() {
 
-    for _ in 0..batch_size {
-        let x: f64 = rng.gen();
-        let y: f64 = rng.gen();
-        let x = x * (*field).dimensions.0 as f64;
-        let y = y * (*field).dimensions.1 as f64;
-        let x = x as usize;
-        let y = y as usize;
+        let interact = match interaction {
+            InteractionVariant::SpinSpin => spin_spin_interaction::interact,
+            InteractionVariant::Diffusion => diffusion::interact,
+            InteractionVariant::GameOfLife => game_of_life::interact,
+        };
 
-        let neighborhood = neighborhood_getter(&field, (x, y));
-        let mut neighbors: Vec<&Vec<f64>> = Vec::new();
-        let mut cell = &mut field.cells[y*field.dimensions.1+x];
-        for neighbor_pos in neighborhood.iter() {
-            let col_jdx = neighbor_pos.0;
-            let row_jdx = neighbor_pos.1;
-            let neighbor = &field.cells[row_jdx*field.dimensions.1+col_jdx];
-            neighbors.push(neighbor);
+        for _ in 0..batch_size {
+            let x: f64 = rng.gen();
+            let y: f64 = rng.gen();
+            let x = x * (*field).dimensions.0 as f64;
+            let y = y * (*field).dimensions.1 as f64;
+            let x = x as usize;
+            let y = y as usize;
+
+            let neighborhood = neighborhood_getter(&field, (x, y));
+            let mut neighbors: Vec<&Vec<f64>> = Vec::new();
+            let mut cell = &mut field.cells[y*field.dimensions.1+x];
+            for neighbor_pos in neighborhood.iter() {
+                let col_jdx = neighbor_pos.0;
+                let row_jdx = neighbor_pos.1;
+                let neighbor = &other_field.cells[row_jdx*field.dimensions.1+col_jdx];
+                neighbors.push(neighbor);
+            }
+            interact(cell, &neighbors);
         }
-        // TODO apply interaction(s?)
     }
 }

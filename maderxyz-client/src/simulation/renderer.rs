@@ -48,15 +48,14 @@ impl Renderer {
     }
     pub fn display(&mut self, states: &Vec<State>) {
         self.display_menu(states);
-        if self.is_paused { return (); }
-        if self.frame_idx >= states.len() { return (); }
         self.canvas.clear();
         self.canvas.set_fill_style("white");  // for dev
 
         self.display_fields(states);
         self.display_objects(states);
 
-        self.frame_idx += 1;
+        if !self.is_paused && self.frame_idx+1 < states.len() { self.frame_idx += 1; } 
+        // if self.frame_idx >= states.len() { return (); }
     }
     fn display_fields(&mut self, states: &Vec<State>) {
         let current_state   = &states[self.frame_idx];
@@ -106,6 +105,11 @@ impl Renderer {
         object_family: &ObjectFamily,
         // object_color_mode: &ObjectColorMode,
     ) {
+        let drawing_radius: f64 = match object_family.object_type {
+            ObjectType::Static => 0.05,    // 0.025
+            ObjectType::Body => 0.03,      // 0.015
+            ObjectType::Particle => 0.02,  // 0.0025
+        };
 
         let family_idx = object_family.id;
         let objects = &object_family.objects;
@@ -115,7 +119,6 @@ impl Renderer {
         let particles_carry_charge = object_family.attributes.contains(&ObjectAttribute::Charge);
 
         let object_color_mode = &self.object_color_mode;
-        // let object_color_mode = ObjectColorMode::Distance;
         let get_object_color = match object_color_mode {
             ObjectColorMode::HSLVelocity => get_object_color_from_velocity_angle, 
             ObjectColorMode::HSLPosition => get_object_color_from_position_angle, 
@@ -160,6 +163,7 @@ impl Renderer {
             }
         }
 
+        // draw velocity vectors
         // for object_idx in 0..nr_of_objects {
         //     let object = &states[self.frame_idx].object_families[family_idx].objects[object_idx];
         //     let previous = &states[cmp::max(1, self.frame_idx)-1].object_families[family_idx].objects[object_idx]; // TODO why not max?
@@ -179,11 +183,6 @@ impl Renderer {
 
         // draw objects
         // ==========
-        let drawing_radius: f64 = match object_family.object_type {
-            ObjectType::Static => 0.025,
-            ObjectType::Body => 0.015,
-            ObjectType::Particle => 0.0025,
-        };
         for object in objects.iter() {
             // load object state
             let m = object[0];
@@ -233,7 +232,7 @@ pub fn get_unit_vec_from_angle(phi: f64) -> [f64; 2] {
 
 pub fn is_canvas_centered(page_id: &str) -> bool {
    match page_id {
-       "charge-interaction" => false,
+       "charge-interaction" | "lennard-jones" => false,
        _ => true,
    }
 }

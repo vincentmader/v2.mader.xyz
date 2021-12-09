@@ -124,6 +124,7 @@ impl NavGridSection {
             "quantum-physics" => Vec::from([
                 NavGridItem::new("double-slit", "double slit experiment"),
                 NavGridItem::new("feynman-graphs", "Feynman graphs"),
+                NavGridItem::new("lennard-jones", "Lennard-Jones potential"),
             ]),
             "emergent-behavior" => Vec::from([
                 NavGridItem::new("boids", "boids"),

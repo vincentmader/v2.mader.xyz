@@ -1,5 +1,7 @@
 
-use crate::interactions::object::Interaction as ObjectInteraction;
+// use crate::interactions::object::Interaction as ObjectInteraction;
+
+use crate::integrators::object::Integrator as Integrator;
 
 
 #[derive(Clone)]
@@ -15,7 +17,8 @@ pub struct ObjectFamily {
     pub id: usize,
     pub object_type: ObjectType,
     pub objects: Vec<Vec<f64>>,
-    pub interactions: Vec<ObjectInteraction>,
+    pub integrators: Vec<Integrator>,
+    // pub interactions: Vec<ObjectInteraction>,
     pub dt: f64,
     pub epsilon: f64,
     pub tail_length: usize,
@@ -29,17 +32,19 @@ impl ObjectFamily {
         id: usize,
         object_type: ObjectType,
         objects: Vec<Vec<f64>>,
-        interactions: Vec<ObjectInteraction>,
+        integrators: Vec<Integrator>,
+        // interactions: Vec<ObjectInteraction>,
         dt: f64,
     ) -> Self {
 
         let attributes: Vec<ObjectAttribute> = Vec::new();
         let epsilon = 0.;
         let tail_length = 0;
-        let tail_variant = TailVariant::Area;
+        let tail_variant = TailVariant::Default;
 
         ObjectFamily { 
-            id, object_type, objects, interactions, 
+            id, object_type, objects, integrators, 
+            // interactions, 
             dt, epsilon, tail_length, attributes, tail_variant,
         }
     }

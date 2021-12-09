@@ -18,17 +18,20 @@ pub fn routes( category: &str, page_id: &str ) -> Template {
     // let context = &pages[page_id];
 
     let title = match page_id {
-        "2body-kepler" => "Kepler's laws",
-        "3body-moon" => "3-body orbits: Moon",
-        "nbody-flowers" => "symmetric satellite constellations",
-        "nbody-binary" => "binary star system",
-        "nbody-asteroids" => "asteroids around binary",
-        "3body-fig8" => "3-body orbits: figure-8",
-        "3body-broucke" => "Broucke orbit",
-        "charge-interaction" => "interaction of charged particles",
-        "ising-model" => "Ising model",
-        "diffusion" => "fluid diffusion",
-        _ => "TODO: title"
+        "2body-kepler"       => "Kepler's laws",
+        "3body-moon"         => "3body orbits - Moon",
+        "3body-lagrange"     => "3body orbits - Lagrange points",
+        "nbody-flowers"      => "symmetric satellite constellations",
+        "nbody-binary"       => "binary star system",
+        "nbody-asteroids"    => "asteroids around binary",
+        "3body-fig8"         => "3body orbits - figure-8",
+        "3body-broucke"      => "3body orbits - Broucke orbit",
+        "charge-interaction" => "Coulomb interaction of charged particles",
+        "ising-model"        => "Ising model",
+        "diffusion"          => "fluid diffusion",
+        "lennard-jones"      => "Lennard-Jones interaction",
+        "game-of-life"       => "Conway's game of life",
+                           _ => "TODO: title"
     };
 
     let context: HashMap<&str, &str> = [

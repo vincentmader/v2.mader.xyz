@@ -41,7 +41,16 @@
         </div>
         <div class="ay-right">
 
-            <div id="ay-right-thingy" class="section">
+            <div id="ay-right-thingy" class="section"> 
+                <div class="dropdown">
+                    <span>Mouse over me</span>
+                    <div class="dropdown-content">
+                      <p class="dropdown-item">Hello World!</p>
+                      <p class="dropdown-item">Hello World!</p>
+                      <p class="dropdown-item">Hello World!</p>
+                      <p class="dropdown-item">Hello World!</p>
+                    </div>
+                </div>
             </div>
     
             <!-- BUTTON MENU ======================== -->
