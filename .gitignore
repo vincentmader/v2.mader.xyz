@@ -1,6 +1,6 @@
 Cargo.lock
 target
-pkg/**
+pkg
 
 __trash
 __old
