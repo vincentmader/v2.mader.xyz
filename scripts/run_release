@@ -1,9 +1,0 @@
-#!/bin/sh
-
-cd `dirname "$0"`
-./build_release
-
-cd ../maderxyz-server
-cargo run --release
-
-cd ../

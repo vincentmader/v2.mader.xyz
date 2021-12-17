@@ -1,8 +1,8 @@
 #!/bin/sh
 
 cd `dirname "$0"`
-cd ../maderxyz-client
 
-cargo build # --release
-# wasm-bindgen --debug --target web --out-dir ../maderxyz-server/static/pkg ../target/wasm32-unknown-unknown/debug/maderxyz_client.wasm
-wasm-bindgen --target web --out-dir ../maderxyz-server/static/pkg ../target/wasm32-unknown-unknown/debug/maderxyz_client.wasm
+cd ../mxyz-client
+cargo build
+
+wasm-bindgen --target web --out-dir ../mxyz-server/static/pkg ../target/wasm32-unknown-unknown/debug/mxyz_client.wasm

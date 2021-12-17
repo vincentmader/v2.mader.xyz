@@ -1,8 +1,1 @@
-#!/bin/sh
-
-cd `dirname "$0"`
-cd ../
-
-git clone https://https://github.com/vincentmader/chronos-data
-
-rustup target add wasm32-unknown-unknown
+rust update nightly

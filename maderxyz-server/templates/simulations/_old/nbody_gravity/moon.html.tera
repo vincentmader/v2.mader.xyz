@@ -1,7 +1,0 @@
-{% extends "simulations/base" %}
-
-{% block content %}
-
-    {{ super() }}
-
-{% endblock content %}
