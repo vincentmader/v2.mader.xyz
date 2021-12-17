@@ -1,0 +1,21 @@
+
+[package]
+    name = "mxyz-server"
+    version = "0.1.0"
+    authors = ["Vincent C. Mader <vincent@mader.xyz>"]
+    edition = "2018"
+
+[dependencies]
+    rocket = "0.5.0-rc.1"
+    js-sys = "0.3.51"
+    serde = { version = "1.0", features = ["derive"] }
+    serde_json = "1.0"
+
+[dependencies.rocket_dyn_templates]
+    version = "0.1.0-rc.1"
+    features = ["tera"]
+
+[dependencies.web-sys]
+    version = "0.3.55"
+    features = [ 'console' ]
+

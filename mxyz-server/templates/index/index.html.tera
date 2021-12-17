@@ -1,0 +1,27 @@
+
+{% extends "base" %}
+
+
+{% block head %}
+
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href="/static/css/index.css">
+
+{% endblock head %}
+
+{% block title %}
+    Index
+{% endblock title %}
+
+{% block content %}
+
+    {% include "index/navgrid" %}
+
+
+    <!-- react
+                <div id="react-root"></div>
+                <script src="static/js/react_frontend/dist/index.js"></script>
+    -->
+
+{% endblock content %}
+

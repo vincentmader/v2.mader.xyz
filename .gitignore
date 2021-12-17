@@ -1,9 +1,9 @@
-
-target/
 Cargo.lock
+target
+pkg/**
+
 __trash
 __old
-
 
 .DS_Store
 
@@ -15,16 +15,9 @@ venv
 node_modules
 dist
 target
-pkg
 wasm-pack.log
 
-
-
-
-
 creds
-
-
 debug.py
 
 *.aux
@@ -38,16 +31,9 @@ debug.py
 .vim
 .wiki
 
-**pyplots**
-media/wallpapers
 *_backup.*
 *_old.*
-*_test.*
 
-wallpapers
-stocks.pdf
-net_worth.pdf
-search_history.db
 *.pdf
 
 *0.png
@@ -57,7 +43,5 @@ search_history.db
 *4.png
 *5.png
 *6.png
-
-main_precompute_directions.js
 
 
