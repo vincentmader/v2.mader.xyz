@@ -8,63 +8,63 @@ use crate::interaction::object::object::forces;
 
 
 pub fn step(
-    object_family: &mut ObjectFamily,
-    states: &Vec<State>,
+    family_idx: usize,
+    state: &mut State,
     field_interactions: &Vec<FieldInteraction>,
     object_interactions: &Vec<ObjectInteraction>,
     dt: f64,
     // neighborhood
 ) {
 
-    const epsilon: f64 = 0.05; // todo: get from obj family? (& saved externally?)
+    // const epsilon: f64 = 0.05; // todo: get from obj family? (& saved externally?)
 
-    let previous_state = &states[ states.len()-1 ];
-    let object_length = object_family.object_length;
-    let objects = &mut object_family.objects;
+    // let previous_state = &states[ states.len()-1 ];
+    // let object_length = object_family.object_length;
+    // let objects = &mut object_family.objects;
 
-    for obj_idx in 0..object_family.nr_of_objects { 
-        let start_idx = obj_idx * object_length;   
+    // for obj_idx in 0..object_family.nr_of_objects { 
+    //     let start_idx = obj_idx * object_length;   
 
-        let obj_slice = &mut objects[ 
-            start_idx..start_idx+object_length
-        ];
+    //     let obj_slice = &mut objects[ 
+    //         start_idx..start_idx+object_length
+    //     ];
 
-        for other_family in &previous_state.object_families {
-            // get length of slice representing object in state vec
-            let other_length = other_family.object_length;
+    //     for other_family in &previous_state.object_families {
+    //         // get length of slice representing object in state vec
+    //         let other_length = other_family.object_length;
            
-            for other_idx in 0..other_family.nr_of_objects { // ? TODO 0->obj_idx, update both bodies!
-                // no self-interaction
-                if (object_family.id, obj_idx) == (other_family.id, other_idx) { continue }
+    //         for other_idx in 0..other_family.nr_of_objects { // ? TODO 0->obj_idx, update both bodies!
+    //             // no self-interaction
+    //             if (object_family.id, obj_idx) == (other_family.id, other_idx) { continue }
 
-                let other_slice = &other_family.objects[ 
-                    other_idx*object_length..other_idx*other_length+object_length
-                ];
+    //             let other_slice = &other_family.objects[ 
+    //                 other_idx*object_length..other_idx*other_length+object_length
+    //             ];
                 
-                for interaction in object_interactions.iter() {
+    //             for interaction in object_interactions.iter() {
 
-                    let force = match interaction {
-                        ObjectInteraction::ForceNewtonianGravity => forces::newtonian_gravity::force,
-                        // ObjectInteraction::ForceCoulomb => forces::coulomb::force,
-                    };
-                    let force = force( obj_slice, other_slice, dt, epsilon );
-                    // obj_slice[3] += force[0] / obj_slice[0] * dt;
-                    // obj_slice[4] += force[1] / obj_slice[0] * dt;
+    //                 let force = match interaction {
+    //                     ObjectInteraction::ForceNewtonianGravity => forces::newtonian_gravity::force,
+    //                     // ObjectInteraction::ForceCoulomb => forces::coulomb::force,
+    //                 };
+    //                 let force = force( obj_slice, other_slice, dt, epsilon );
+    //                 // obj_slice[3] += force[0] / obj_slice[0] * dt;
+    //                 // obj_slice[4] += force[1] / obj_slice[0] * dt;
 
-                }
+    //             }
 
-            }
+    //         }
 
-        }
-        let new_acc_x = 1.;
-        let new_acc_y = 1.;
+    //     }
+    //     let new_acc_x = 1.;
+    //     let new_acc_y = 1.;
 
-        // update positions from velocity
-        obj_slice[1] += obj_slice[3] * dt + 0.5 * new_acc_x * dt.powf(2.);
-        obj_slice[2] += obj_slice[4] * dt + 0.5 * new_acc_y * dt.powf(2.);
+    //     // update positions from velocity
+    //     obj_slice[1] += obj_slice[3] * dt + 0.5 * new_acc_x * dt.powf(2.);
+    //     obj_slice[2] += obj_slice[4] * dt + 0.5 * new_acc_y * dt.powf(2.);
 
 
-    }
+    // }
 
 }
 

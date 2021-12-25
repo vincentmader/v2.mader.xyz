@@ -2,7 +2,7 @@
 use crate::state::object::ObjectFamily;
 
 pub mod variant;
-use variant::ObjectBoundaryVariant;
+use variant::BoundaryVariant;
 
 mod periodic;
 mod collision;
@@ -10,13 +10,13 @@ mod collision;
 
 pub struct ObjectBoundary {
 
-    variant: ObjectBoundaryVariant,
+    pub variant: BoundaryVariant,
 
 }
 impl ObjectBoundary {
 
     pub fn new(
-        variant: ObjectBoundaryVariant,
+        variant: BoundaryVariant,
     ) -> Self {
 
         ObjectBoundary {
@@ -31,9 +31,9 @@ impl ObjectBoundary {
     ) {
 
         let applier = match self.variant {
-            ObjectBoundaryVariant::Periodic => periodic::apply,
-            ObjectBoundaryVariant::WallCollisionElastic => collision::wall::elastic::apply,
-            ObjectBoundaryVariant::WallCollisionInelastic => collision::wall::inelastic::apply,
+            BoundaryVariant::Periodic => periodic::apply,
+            BoundaryVariant::WallCollisionElastic => collision::wall::elastic::apply,
+            BoundaryVariant::WallCollisionInelastic => collision::wall::inelastic::apply,
         };
 
         applier(object_family);

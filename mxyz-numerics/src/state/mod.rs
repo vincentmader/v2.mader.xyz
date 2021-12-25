@@ -18,7 +18,7 @@ use crate::integrator::field::IntegratorVariant as FieldIntegratorVariant;
 use crate::interaction::object as object_interactions;
 use crate::interaction::field as field_interactions;
 use crate::boundary::object::ObjectBoundary;
-use crate::boundary::object::variant::ObjectBoundaryVariant;
+use crate::boundary::object::variant::BoundaryVariant as ObjectBoundaryVariant;
 
 
 #[derive(Clone)]
@@ -104,14 +104,13 @@ impl State {
                     object_object_interactions,
                 ); 
                 // boundaries
-                let integrators = Vec::from([integrator]);
-                let boundaries = Vec::from([
+                let boundary =
+                    // ObjectBoundaryVariant::WallCollisionInelastic;
                     ObjectBoundary::new(
                         // ObjectBoundaryVariant::Periodic
                         // ObjectBoundaryVariant::WallCollisionElastic
                         ObjectBoundaryVariant::WallCollisionInelastic
-                    ),
-                ]);
+                    );
 
                 let r = 0.7;
                 let speed = 2.;
@@ -130,8 +129,8 @@ impl State {
                     family.add_object(&object);
                 }
         
-                integrator_setup.object.push(integrators);
-                integrator_setup.object_boundaries.push(boundaries);
+                integrator_setup.object.push(integrator);
+                integrator_setup.object_boundaries.push(boundary);
                 object_families.push(family);
 
             },

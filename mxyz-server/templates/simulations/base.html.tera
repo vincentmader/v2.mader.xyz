@@ -5,27 +5,31 @@
 {% block head %}
     {{ super() }}
 
-    <link rel="stylesheet" href="/static/css/simulation.css" type="text/css">
+    <link rel="stylesheet" href="/static/css/simulation/base.css" type="text/css">
+    <link rel="stylesheet" href="/static/css/simulation/button_menu.css" type="text/css">
 
 {% endblock head %}
 
 {% block content %}
     {{ super() }}
 
-    <!-- SIMULATION SCRIPT ================== -->
+    <!-- ====== SIMULATION SCRIPT ========================= -->
     <script 
-        id="simulation.js"
         type="module" 
+        id="simulation.js"
         src="../../static/js/simulation.js"
         page_id="{{ page_id }}"
     ></script>
 
-    <div class="ay">
-        <div class="ay-left">
+    <!-- ====== COLUMN VIEW (big screen only) ============= -->
 
+    <div id="page-columns">
+        <div id="page-column-left">
+
+            <!-- ====== PAGE TITLE ======================== -->
             <div class="section_title"> {{ title }} </div>
 
-            <!-- CANVAS ============================= -->
+            <!-- ====== CANVAS ============================ -->
             <div class="canvas_holder">
                 <canvas id="canvas_main" width="900px"> </canvas>
                 <script> 
@@ -34,20 +38,15 @@
                 </script>
             </div>
 
-            <div id="oyyy-shit" class="section">
-                <p id="display_frame_idx"></p>
-                <p id="display_iteration_idx"></p>
-            </div>
+            <!-- ====== MAIN BUTTON MENU ================== -->
+            <div id="button-menu_main" class="section"> </div>
 
         </div>
-        <div class="ay-right">
+        <div id="page-column-right">
 
-            <div id="ay-right-thingy" class="section"> 
+            <!-- ====== BUTTON MENUs ====================== -->
+            <div id="button-menus"> </div>
 
-                <!-- BUTTON MENU ======================== -->
-                <div id="button-menus"> </div>
-
-            </div>
         </div>
     </div>
 

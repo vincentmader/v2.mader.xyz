@@ -6,6 +6,8 @@ pub fn apply(
     object_family: &mut ObjectFamily
 ) {
 
+    // let iteration_idx = object_family.states.len();
+
     const X_MIN: f64 = -1.;  // TODO make bounds configurable
     const X_MAX: f64 = 1.;
     const Y_MIN: f64 = -1.;

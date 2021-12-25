@@ -3,15 +3,12 @@ use crate::state::State;
 use crate::state::object::ObjectVariant;
 use crate::integrator::setup::IntegratorSetup;
 
-use crate::integrator::object as object_integrators;
-use crate::integrator::field as field_integrators;
-
 
 pub struct Engine {
 
     page_id: String,
-    iteration_idx: usize,
-    integrator_setup: IntegratorSetup,
+    pub iteration_idx: usize,
+    pub integrator_setup: IntegratorSetup,
     pub states: Vec<State>,
 
 }
@@ -21,66 +18,61 @@ impl Engine {
 
         let page_id = String::from(page_id);
         let iteration_idx = 0;
-        let states = Vec::new();
         let integrator_setup = IntegratorSetup::new();
-
+        let states = Vec::new();
         Engine { page_id, iteration_idx, integrator_setup, states }
     }
 
-    pub fn init(&mut self) {
+    pub fn init(&mut self) { 
 
-        self.states = Vec::from([ 
+        self.states = Vec::from([
             State::new(&self.page_id, &mut self.integrator_setup)
         ]);
 
     }
 
-    pub fn reset(&mut self) {
+    pub fn reset(&mut self) { 
 
         self.iteration_idx = 0;
-        self.init();
+        self.init();  // initializes state vector
 
     }
 
     pub fn step(&mut self) {
 
-        let current_state = &self.states[self.iteration_idx];
-        let mut next_state = current_state.clone();
+        let mut state_new = self.states[self.iteration_idx].clone();
+        let fields = &mut state_new.fields;
+        for mut field in fields.iter_mut() {
+            let field_id = field.id;
 
-        // utils::dom::console::log(&format!("iteration {}", self.iteration_idx));
+            // setup
+            let integrator = &mut self.integrator_setup.field[field_id];
+            // integrator.step(self.iteration_idx, field, &self.states);
 
-        for (idx, field) in next_state.fields.iter_mut().enumerate() {
-            let integrators = &mut self.integrator_setup.field[idx];
-            for integrator in integrators.iter_mut() {
-                integrator.step(field, &self.states);
-            }
         }
 
-        for (idx, object_family) in next_state.object_families.iter_mut().enumerate() {
-            if matches!(object_family.variant, ObjectVariant::Static) { continue }
+        let families = &mut state_new.object_families;
+        for mut family in families.iter_mut() {
+            let family_id = family.id;
 
             // setup  (TODO generalize)
-            let integrators = &mut self.integrator_setup.object[idx];
-
-            // TODO get_neighbors()
-            // todo: get relevant pairs: (other_fam_id, other_id) 
-
-            for integrator in integrators.iter_mut() {
-                integrator.step(object_family, &self.states); // + neighborhood
-            }
-
-            // TODO handle boundaries
+            let integrator = &mut self.integrator_setup.object[family_id];
             let boundaries = &mut self.integrator_setup.object_boundaries;
-            for boundary in boundaries[idx].iter_mut() {
-                boundary.apply(object_family);
-            }
+
+            // TODO get relevant neighbor: (other_fam_id, other_id) 
+
+            integrator.step(  // multiple integrators?
+                self.iteration_idx, &mut family, &self.states,
+            ); // + neighborhood
+
+            boundaries[family.id].apply(  // multiple boundaries?
+                &mut family
+            );
 
         }
 
-        self.states.push(next_state);
+        self.states.push(state_new);
         self.iteration_idx += 1;
-
     }
-
 }
 

@@ -1,0 +1,91 @@
+#content {
+  width: 100%;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.multi-button {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border: 1px solid var(--main-border-color);
+  border-radius: 30px;
+  width: 100%;
+  overflow: hidden;
+}
+.sub-button {
+  border: 0px;
+  border-radius: 0px;
+  height: 100%; /* works, but why? */
+  border-right: 1px solid var(--main-border-color);
+  background-color: black;
+}
+/* .sub-button_active { */
+/*   background-color: var(--main-bg-color); */
+/* } */
+.sub-button:active {
+  background-color: green;
+}
+
+button {
+  /*   /1* border: 0px; *1/ */
+  /*   border: var(--main-border); */
+  /*   border-radius: 10000px; */
+  /*   background-color: var(--main-section-color); */
+
+  /*   font-family: var(--main-font-family); /1* ? *1/ */
+  /*   font-size: 16px; */
+  /*   color: white; */
+
+  /*   /1* width: 90%; *1/ */
+  /*   height: 2em; /1* center text vertically *1/ */
+
+  /*   /1* margin-top: 5px; *1/ */
+  /*   margin-bottom: 5px; */
+  /*   /1* margin-right: auto; *1/ */
+  /*   /1* margin-left: auto; *1/ */
+  /*   padding: 0px; */
+  /*   outline: none; */
+}
+
+/* TODO remove ay  */
+#page-columns {
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+#page-column-left {
+  width: 100%;
+  margin: 0;
+}
+#page-column-right {
+  width: 100%;
+  margin: 0;
+  padding-top: 24px; /* TODO */
+}
+@media only screen and (min-width: 1201px) {
+  #page-columns {
+    /* display: flex; */
+    /* column-count: 2; */
+    /* column-width: 20%; */
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  #page-column-left {
+    width: 92.5%;
+    margin-left: 5%;
+    margin-right: 2.5%;
+  }
+  #page-column-right {
+    width: 92.5%;
+    margin-left: 2.5%;
+    margin-right: 5%;
+  }
+  #ay-right-thingy {
+    margin-top: 24px; /* must be same as .navgrid_section.height */
+    padding: 15px;
+    /* height: 200px; */
+  }
+}

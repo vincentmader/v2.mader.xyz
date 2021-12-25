@@ -4,7 +4,7 @@ pub mod runge_kutta;
 pub mod verlet;
 pub mod leapfrog;
 
-mod variant;
+pub mod variant;
 pub use variant::IntegratorVariant;
 
 use crate::state::State;
@@ -43,21 +43,28 @@ impl ObjectIntegrator {
 
     pub fn step(
         &mut self, 
-        object_family: &mut ObjectFamily,
-        states: &Vec<State>
+        iteration_idx: usize,
+        family: &mut ObjectFamily,
+        // family_idx: usize,
+        // family_state: &mut Vec<f64>,
+        states: &Vec<State>,
     ) {
 
         let stepper = match self.variant {
             IntegratorVariant::EulerExplicit => euler::explicit::step,
-            IntegratorVariant::EulerImplicit => euler::implicit::step,
-            IntegratorVariant::RungeKutta2 => runge_kutta::order_2::step,
-            IntegratorVariant::RungeKutta4 => runge_kutta::order_4::step,
-            IntegratorVariant::Verlet => verlet::step,
-            IntegratorVariant::LeapFrog => leapfrog::step,
+            // IntegratorVariant::EulerImplicit => euler::implicit::step,
+            // IntegratorVariant::RungeKutta2 => runge_kutta::order_2::step,
+            // IntegratorVariant::RungeKutta4 => runge_kutta::order_4::step,
+            // IntegratorVariant::Verlet => verlet::step,
+            // IntegratorVariant::LeapFrog => leapfrog::step,
         };
         stepper(
-            object_family, 
-            states, 
+            iteration_idx,
+            family,
+            states,
+            // family_idx,
+            // family_state,
+            // state, 
             &self.field_interactions,
             &self.object_interactions, 
             self.dt,

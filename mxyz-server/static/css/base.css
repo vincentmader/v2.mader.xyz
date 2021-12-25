@@ -64,6 +64,7 @@ body {
   border: var(--main-border);
   margin-bottom: 25px;
   text-align: center;
+  padding: 10px;
 }
 
 .section_title {

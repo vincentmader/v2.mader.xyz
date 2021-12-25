@@ -10,7 +10,7 @@ use crate::interaction::field::object::Interaction as ObjectInteraction;
 pub mod entire;
 pub mod random_batch;
 
-mod variant;
+pub mod variant;
 pub use variant::IntegratorVariant;
 
 
@@ -42,14 +42,14 @@ impl FieldIntegrator {
     pub fn step(
         &mut self,
         field: &mut Field,
-        states: &Vec<State>,
+        state: &State,
     ) {
 
         let stepper = match self.variant {
             IntegratorVariant::Entire => random_batch::step,
             IntegratorVariant::RandomBatch => random_batch::step,
         };
-        stepper(field, states);
+        stepper(field, state);
 
     }
 

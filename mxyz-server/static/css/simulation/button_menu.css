@@ -1,0 +1,167 @@
+button {
+  outline: none;
+}
+button:active {
+  background-color: blue;
+}
+#button-menu_main {
+  padding: 10px;
+  /* height: 100px; /1* TODO *1/ */
+}
+/* ====================================================== */
+/* BUTTON MENU */
+/* ====================================================== */
+.button_menu {
+  /* width: 100%; */
+
+  /* --main-bg-color: #111111; */
+  /* --main-section-color: #222222; */
+  /* --main-border-color: #555555; */
+  /* --main-text-color: #dddddd; */
+  /* --main-font-family: Arial, Helvetica, sans-serif; */
+  /* --main-border: 2px solid var(--main-border-color); */
+
+  /* display: grid; */
+  /* grid-template-columns: repeat(5, 1fr); */
+
+  /* border: 1px solid green; */
+  /* text-align: center; */
+
+  /* margin: 0px; */
+  /* margin-top: 2.5%; */
+  /* margin-bottom: 2.5%; */
+  /* margin-left: 2.5%; */
+  /* margin-right: 2.5%; */
+}
+.bm {
+}
+.bm_options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+/* ====================================================== */
+/* BUTTON */
+/* ====================================================== */
+.bm_button {
+  background-color: black;
+  border: 1px solid var(--main-border-color);
+  border-radius: 15px;
+  margin: 3px;
+  padding: 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+/* ====================================================== */
+/* MULTIBUTTON */
+/* ====================================================== */
+.bm_multibutton {
+  /* width: 100%; */
+  background-color: black;
+
+  overflow: hidden; /* bc. of round edges */
+  border: 1px solid var(--main-border-color);
+  border-radius: 15px;
+
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  display: grid;
+  /* grid-template-columns: repeat(3, 1fr); */
+}
+.bm_multibutton_title {
+  /* margin-top: 25px; */
+  /* margin-bottom: 10px; */
+  text-align: center;
+  padding-left: 10px;
+}
+.bm_multibutton_button {
+  background-color: black;
+  border: none;
+  /* border: 1px solid var(--main-border-color); */
+  /* border-radius: 15px; */
+  /* text-align: center; */
+  box-sizing: none;
+  border-left: 1px solid var(--main-border-color);
+  padding: 5px;
+}
+/* ====================================================== */
+/* OPTION */
+/* ====================================================== */
+.bm_option_title {
+  /* margin-top: 25px; */
+  /* margin-bottom: 10px; */
+  text-align: center;
+  padding-left: 10px;
+}
+.bm_option {
+  /* background-color: black; */
+  /* border: 1px solid var(--main-border-color); */
+  /* border-radius: 15px; */
+  /* /1* margin: 10px; *1/ */
+  /* display: grid; */
+  /* /1* width: 100%; *1/ */
+  /* grid-template-columns: repeat(3, 1fr); */
+  /* padding: auto; */
+  /* margin: auto; */
+  margin-top: 10px;
+  margin-bottom: 10px;
+  /* display: grid; */
+  /* grid-template-columns: repeat(2, 2fr); */
+  /* overflow: hidden; */
+}
+.bm_option_button {
+  background-color: black;
+  border: none;
+  /* border: 1px solid var(--main-border-color); */
+  /* border-radius: 15px; */
+  /* text-align: center; */
+  box-sizing: none;
+  border-left: 1px solid var(--main-border-color);
+  padding: 5px;
+  /* margin: auto; */
+}
+/* DROPDOWN */
+.dropdown-container {
+}
+.dropdown {
+  position: relative;
+  display: inline-block;
+
+  padding: 10px;
+  background-color: black;
+  border: 1px solid var(--main-border-color);
+  border-radius: 30px;
+}
+.dropdown-content {
+  display: none;
+
+  position: absolute;
+  /* z-index: 1; */
+
+  /* border: 1px solid var(--main-border-color); */
+  margin-top: 0px;
+  /* min-width: 160px; */
+  /* box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2); */
+  /* height: 3em; */
+  /* padding: 0px 0px; */
+  text-align: center;
+  width: 100%;
+}
+.dropdown:hover .dropdown-content {
+  /* display: block; */
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  z-index: 2;
+  /* position: relative; */
+}
+.dropdown-item {
+  background-color: black;
+  border: 1px solid var(--main-border-color);
+  border-radius: 0px;
+  margin: 0;
+  padding: 5px 7px;
+  width: 100%;
+}
+.dropdown-item:active {
+  background-color: green;
+}

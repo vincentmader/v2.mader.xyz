@@ -5,11 +5,31 @@ use crate::integrator::object::ObjectIntegrator;
 use crate::boundary::object::ObjectBoundary;
 
 
+// pub struct ObjectInteractionSetup {
+     
+// }
+// impl ObjectInteractionSetup {
+//     pub fn new() -> Self {
+//         ObjectInteractionSetup {
+
+//         }
+//     }
+// }
+
+
+
+
 pub struct IntegratorSetup {
-    pub field: Vec<Vec<FieldIntegrator>>,
-    pub object: Vec<Vec<ObjectIntegrator>>,
+
+    pub field: Vec<FieldIntegrator>,   // one for each field
+    pub object: Vec<ObjectIntegrator>, // one for each object family
+
     // pub field_boundaries: Vec<Vec<FieldBoundary>>,
-    pub object_boundaries: Vec<Vec<ObjectBoundary>>,
+    pub object_boundaries: Vec<ObjectBoundary>,
+
+    // pub object_interactions: Vec<ObjectInteractionSetup>;
+    // pub field_interactions: Vec<FieldInteractionSetup>;
+
 }
 impl IntegratorSetup {
     pub fn new() -> Self {
