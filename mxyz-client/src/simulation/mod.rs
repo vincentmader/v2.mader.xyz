@@ -430,9 +430,9 @@ impl Simulation {
 
             // BOUNDARY VARIANT
 
-            // "button_set-obj-bound-none" => {  // TODO
-            //     self.engine.integrator_setup.object_boundaries[thing_id].variant = ObjectBoundaryVariant::None;
-            // },
+            "button_set-obj-bound-none" => {  // TODO
+                self.engine.integrator_setup.object_boundaries[thing_id].variant = ObjectBoundaryVariant::None;
+            },
             "button_set-obj-bound-periodic" => {
                 engine.integrator_setup.object_boundaries[thing_id].variant = ObjectBoundaryVariant::Periodic;
             },

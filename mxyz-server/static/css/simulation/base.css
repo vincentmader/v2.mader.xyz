@@ -27,6 +27,7 @@
 }
 
 button {
+  color: white;
   /*   /1* border: 0px; *1/ */
   /*   border: var(--main-border); */
   /*   border-radius: 10000px; */

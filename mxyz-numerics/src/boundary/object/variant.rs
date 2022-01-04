@@ -1,6 +1,6 @@
 
 pub enum BoundaryVariant {
-    // None,
+    None,
     Periodic,
     WallCollisionElastic,
     WallCollisionInelastic,

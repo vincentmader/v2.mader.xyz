@@ -110,6 +110,7 @@ impl State {
                         // ObjectBoundaryVariant::Periodic
                         // ObjectBoundaryVariant::WallCollisionElastic
                         ObjectBoundaryVariant::WallCollisionInelastic
+                        // ObjectBoundaryVariant::None
                     );
 
                 let r = 0.7;
