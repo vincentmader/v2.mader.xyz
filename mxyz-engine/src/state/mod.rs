@@ -118,10 +118,38 @@ impl State {
                     let u = -speed * phi.sin();
                     let v = speed * phi.cos();
 
-                    let object = Vec::from([0.1, x, y, u, v]);
+                    let object = Vec::from([0.05, x, y, u, v]);
                     family.add_object(&object);
                 }
                 object_families.push(family);
+
+                // OBJECT FAMILIES
+                // -------------------------------------------------------------------------------
+
+                // let object_variant = ObjectVariant::Body;
+                // let mut family = ObjectFamily::new(1, object_variant, Vec::from(OBJECT_ATTRIBUTES));
+                // // interactions
+                // let object_field_interactions = Vec::from([]);
+                // let object_object_interactions = Vec::from([
+                //     object_interactions::object::Interaction::ForceNewtonianGravity,
+                // ]);
+                // // integrator
+                // let integrator = ObjectIntegrator::new(
+                //     OBJECT_INTEGRATOR_VARIANT, DT, object_field_interactions, object_object_interactions,
+                // ); 
+                // integrator_setup.object.push(integrator);
+                // // boundaries
+                // let boundary = ObjectBoundary::new(
+                //     // ObjectBoundaryVariant::Periodic
+                //     // ObjectBoundaryVariant::WallCollisionElastic
+                //     ObjectBoundaryVariant::WallCollisionInelastic
+                //     // ObjectBoundaryVariant::None
+                // );
+                // integrator_setup.object_boundaries.push(boundary);
+                // // objects
+                // let object = Vec::from([3., 0., 0., 0., 0.]);
+                // family.add_object(&object);
+                // object_families.push(family);
 
                 // FIELDS
                 // -------------------------------------------------------------------------------

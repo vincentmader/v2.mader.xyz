@@ -601,7 +601,7 @@ impl Renderer {
         canvas_id: usize,
     ) {
         let canvas = &mut self.canvases[canvas_id];
-        let tail_length = 100; // TODO make configurable
+        let tail_length = 200; // TODO make configurable
 
         // setup color
         let object_color_mode = &self.obj_color_mode[family.id];
