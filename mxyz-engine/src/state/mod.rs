@@ -83,14 +83,11 @@ impl State {
         match page_id {
             "2body-kepler" => {
 
-                // object family
+                // OBJECT FAMILIES
+                // -------------------------------------------------------------------------------
+
                 let object_variant = ObjectVariant::Body;
-                let mut family = ObjectFamily::new(
-                    0, 
-                    object_variant,
-                    Vec::from(OBJECT_ATTRIBUTES),
-                    Vec::new(),
-                );
+                let mut family = ObjectFamily::new(0, object_variant, Vec::from(OBJECT_ATTRIBUTES));
                 // interactions
                 let object_field_interactions = Vec::from([]);
                 let object_object_interactions = Vec::from([
@@ -98,24 +95,19 @@ impl State {
                 ]);
                 // integrator
                 let integrator = ObjectIntegrator::new(
-                    OBJECT_INTEGRATOR_VARIANT,
-                    DT,
-                    object_field_interactions, 
-                    object_object_interactions,
+                    OBJECT_INTEGRATOR_VARIANT, DT, object_field_interactions, object_object_interactions,
                 ); 
+                integrator_setup.object.push(integrator);
                 // boundaries
-                let boundary =
-                    // ObjectBoundaryVariant::WallCollisionInelastic;
-                    ObjectBoundary::new(
-                        // ObjectBoundaryVariant::Periodic
-                        // ObjectBoundaryVariant::WallCollisionElastic
-                        ObjectBoundaryVariant::WallCollisionInelastic
-                        // ObjectBoundaryVariant::None
-                    );
-
-                let r = 0.7;
-                let speed = 2.;
-
+                let boundary = ObjectBoundary::new(
+                    // ObjectBoundaryVariant::Periodic
+                    // ObjectBoundaryVariant::WallCollisionElastic
+                    ObjectBoundaryVariant::WallCollisionInelastic
+                    // ObjectBoundaryVariant::None
+                );
+                integrator_setup.object_boundaries.push(boundary);
+                // objects
+                let (r, speed) = (0.7, 2.);
                 let nr_of_objects = 16;
                 for obj_idx in 0..nr_of_objects {
                     let phi = obj_idx as f64 / nr_of_objects as f64 * TAU;
@@ -129,10 +121,10 @@ impl State {
                     let object = Vec::from([0.1, x, y, u, v]);
                     family.add_object(&object);
                 }
-        
-                integrator_setup.object.push(integrator);
-                integrator_setup.object_boundaries.push(boundary);
                 object_families.push(family);
+
+                // FIELDS
+                // -------------------------------------------------------------------------------
 
             },
             _ => {}

@@ -1,12 +1,13 @@
 
 [workspace]
     members = [
-        "mxyz-server",
+        "mxyz-chronos",
         "mxyz-client",
         "mxyz-database",
-        "mxyz-numerics",
-        "mxyz-chronos",
-        "utils",
+        "mxyz-engine",
+        "mxyz-physics",
+        "mxyz-utils",
+        "mxyz-server",
     ]
 
 [profile.dev]

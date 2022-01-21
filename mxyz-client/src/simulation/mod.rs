@@ -4,12 +4,12 @@ use std::collections::HashMap;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 
-use mxyz_numerics::engine::Engine;
-use mxyz_numerics::state::object::ObjectVariant;
-use mxyz_numerics::integrator::field::variant::IntegratorVariant as FieldIntegratorVariant;
-use mxyz_numerics::integrator::object::variant::IntegratorVariant as ObjectIntegratorVariant;
-use mxyz_numerics::boundary::object::variant::BoundaryVariant as ObjectBoundaryVariant;
-use mxyz_numerics::boundary::field::variant::BoundaryVariant as FieldBoundaryVariant;
+use mxyz_engine::engine::Engine;
+use mxyz_engine::state::object::ObjectVariant;
+use mxyz_engine::integrator::field::variant::IntegratorVariant as FieldIntegratorVariant;
+use mxyz_engine::integrator::object::variant::IntegratorVariant as ObjectIntegratorVariant;
+use mxyz_engine::boundary::object::variant::BoundaryVariant as ObjectBoundaryVariant;
+use mxyz_engine::boundary::field::variant::BoundaryVariant as FieldBoundaryVariant;
 // use crate::utils;
 mod renderer;
 use renderer::Renderer;
@@ -495,17 +495,17 @@ impl Simulation {
             //     }
             // }
             _ => {
-                utils::dom::console::log("ERROR: button not found")
+                mxyz_utils::dom::console::log("ERROR: button not found")
             }
         };
-        utils::dom::console::log(&format!("{}", button_id));
+        mxyz_utils::dom::console::log(&format!("{}", button_id));
     }
     pub fn handle_slider_event(&mut self, slider_id: &str) {
 
         match slider_id {
             _ => {}
         };
-        utils::dom::console::log(&format!("{}", slider_id));
+        mxyz_utils::dom::console::log(&format!("{}", slider_id));
     }
 }
 

@@ -22,10 +22,11 @@ impl ObjectFamily {
         id: usize,
         variant: ObjectVariant,
         attributes: Vec<ObjectAttribute>,
-        objects: Vec<f64>,
+        // objects: Vec<f64>,
     ) -> Self {
 
         let object_length = attributes.len();
+        let objects = Vec::new();
         let nr_of_objects = objects.len() / object_length;
         // let states = Vec::from([objects]);
 

@@ -6,3 +6,4 @@ cd ../mxyz-client
 cargo build
 
 wasm-bindgen --target web --out-dir ../mxyz-server/static/pkg ../target/wasm32-unknown-unknown/debug/mxyz_client.wasm
+

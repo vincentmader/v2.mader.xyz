@@ -7,11 +7,11 @@ use object::color_mode as object_color_mode;
 use std::collections::HashMap;
 use std::cmp;
 
-pub use mxyz_numerics::state::State;
-pub use mxyz_numerics::state::field::Field;
-pub use mxyz_numerics::state::object::ObjectFamily;
+pub use mxyz_engine::state::State;
+pub use mxyz_engine::state::field::Field;
+pub use mxyz_engine::state::object::ObjectFamily;
 
-pub use utils::dom::canvas::Canvas;
+pub use mxyz_utils::dom::canvas::Canvas;
 
 use object::tail_variant::ObjectTailVariant;
 use object::color_mode::ObjectColorMode;
@@ -43,7 +43,7 @@ impl Renderer {
 
         let page_id = String::from(page_id);
         let frame_idx = 0;
-        let canvases = Vec::new();
+        let canvases: Vec<Canvas> = Vec::new();
 
         let is_paused = false;
         let is_halted = false;
@@ -78,7 +78,7 @@ impl Renderer {
 
     pub fn init(&mut self, states: &Vec<State>) {
 
-        let doc = utils::dom::document();
+        let doc = mxyz_utils::dom::document();
 
         // TODO generalize canvas initialization
         let canvas = Canvas::new("canvas_main");
