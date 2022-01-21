@@ -92,7 +92,7 @@ impl Renderer {
             self.is_drawing_pos_vec.push(false);
             self.is_drawing_vel_vec.push(false);
             self.is_drawing_acc_vec.push(false);
-            self.obj_tail_variant.push(ObjectTailVariant::None);
+            self.obj_tail_variant.push(ObjectTailVariant::Line);
             self.obj_color_mode.push(ObjectColorMode::Default);
         }
         // TODO setup default field rendering options
