@@ -1,9 +1,32 @@
 #!/bin/sh
 
-cd `dirname "$0"`
-./build
 
-cd ../mxyz-server
-cargo run
+# get path to project root
+# -----------------------------------------------------------------------------
 
-cd ../
+    cd "$(dirname $0)"
+    PATH_TO_SCRIPTS=$(pwd)
+    PATH_TO_PROJECT="$(cd $PATH_TO_SCRIPTS/.. && echo $(pwd))"
+
+
+# build client
+# -----------------------------------------------------------------------------
+
+    cd "$PATH_TO_SCRIPTS"
+    if [ "$1" = "--release" ]; then
+        ./build --release
+    else
+        ./build
+    fi
+
+
+# build & run server
+# -----------------------------------------------------------------------------
+
+    cd "$PATH_TO_PROJECT/mxyz-server"
+    if [ "$1" = "--release" ]; then
+        cargo run --release
+    else
+        cargo run
+    fi
+
