@@ -19,7 +19,7 @@ use crate::boundary::object::ObjectBoundary;
 
 
 
-pub struct IntegratorSetup {
+pub struct EngineSetup {
 
     pub field: Vec<FieldIntegrator>,   // one for each field
     pub object: Vec<ObjectIntegrator>, // one for each object family
@@ -31,7 +31,7 @@ pub struct IntegratorSetup {
     // pub field_interactions: Vec<FieldInteractionSetup>;
 
 }
-impl IntegratorSetup {
+impl EngineSetup {
     pub fn new() -> Self {
         // let field: Vec<Vec<FieldIntegrator>> = Vec::new();
         // let object: Vec<Vec<ObjectIntegrator>> = Vec::new();
@@ -39,7 +39,7 @@ impl IntegratorSetup {
         let field = Vec::new();
         let object = Vec::new();
         let object_boundaries = Vec::new();
-        IntegratorSetup {
+        EngineSetup {
             field, object, object_boundaries,
         }
     }

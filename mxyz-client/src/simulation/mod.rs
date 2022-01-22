@@ -410,37 +410,37 @@ impl Simulation {
             // INTEGRATOR VARIANT
 
             "button_set-obj-integrator-euler-exp" => {
-                engine.integrator_setup.object[thing_id].variant = ObjectIntegratorVariant::EulerExplicit;
+                engine.engine_setup.object[thing_id].variant = ObjectIntegratorVariant::EulerExplicit;
             },
             // "button_set-obj-integrator-euler-imp" => {
-            //     engine.integrator_setup.object[thing_id].variant = ObjectIntegratorVariant::EulerImplicit;
+            //     engine.engine_setup.object[thing_id].variant = ObjectIntegratorVariant::EulerImplicit;
             // },
             // "button_set-obj-integrator-rk2" => {
-            //     engine.integrator_setup.object[thing_id].variant = ObjectIntegratorVariant::RungeKutta2;
+            //     engine.engine_setup.object[thing_id].variant = ObjectIntegratorVariant::RungeKutta2;
             // },
             // "button_set-obj-integrator-rk4" => {
-            //     engine.integrator_setup.object[thing_id].variant = ObjectIntegratorVariant::RungeKutta4;
+            //     engine.engine_setup.object[thing_id].variant = ObjectIntegratorVariant::RungeKutta4;
             // },
             // "button_set-obj-integrator-leapfrog" => {
-            //     engine.integrator_setup.object[thing_id].variant = ObjectIntegratorVariant::LeapFrog;
+            //     engine.engine_setup.object[thing_id].variant = ObjectIntegratorVariant::LeapFrog;
             // },
             // "button_set-obj-integrator-verlet" => {
-            //     engine.integrator_setup.object[thing_id].variant = ObjectIntegratorVariant::Verlet;
+            //     engine.engine_setup.object[thing_id].variant = ObjectIntegratorVariant::Verlet;
             // },
 
             // BOUNDARY VARIANT
 
             "button_set-obj-bound-none" => {  // TODO
-                self.engine.integrator_setup.object_boundaries[thing_id].variant = ObjectBoundaryVariant::None;
+                self.engine.engine_setup.object_boundaries[thing_id].variant = ObjectBoundaryVariant::None;
             },
             "button_set-obj-bound-periodic" => {
-                engine.integrator_setup.object_boundaries[thing_id].variant = ObjectBoundaryVariant::Periodic;
+                engine.engine_setup.object_boundaries[thing_id].variant = ObjectBoundaryVariant::Periodic;
             },
             "button_set-obj-bound-wall-elastic" => {
-                engine.integrator_setup.object_boundaries[thing_id].variant = ObjectBoundaryVariant::WallCollisionElastic;
+                engine.engine_setup.object_boundaries[thing_id].variant = ObjectBoundaryVariant::WallCollisionElastic;
             },
             "button_set-obj-bound-wall-inelastic" => {
-                engine.integrator_setup.object_boundaries[thing_id].variant = ObjectBoundaryVariant::WallCollisionInelastic;
+                engine.engine_setup.object_boundaries[thing_id].variant = ObjectBoundaryVariant::WallCollisionInelastic;
             },
 
             
@@ -451,11 +451,11 @@ impl Simulation {
 
                 // let nr_of_families = self.engine.states[self.engine.iteration_idx].object_families.len();
                 // for idx in 0..nr_of_families {
-                //     // self.engine.integrator_setup.object[0].object_interactions;
+                //     // self.engine.engine_setup.object[0].object_interactions;
                 // }
 
                 // for family_idx in 0..nr_of_families {
-                //     self.engine.integrator_setup.object[family_idx];
+                //     self.engine.engine_setup.object[family_idx];
                 // }
                  
                 // todo save interactions not in enum, but struct

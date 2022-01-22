@@ -1,14 +1,14 @@
 
 use crate::state::State;
 use crate::state::object::ObjectVariant;
-use crate::integrator::setup::IntegratorSetup;
+use crate::integrator::setup::EngineSetup;
 
 
 pub struct Engine {
 
     page_id: String,
     pub iteration_idx: usize,
-    pub integrator_setup: IntegratorSetup,
+    pub engine_setup: EngineSetup,
     pub states: Vec<State>,
 
 }
@@ -18,15 +18,15 @@ impl Engine {
 
         let page_id = String::from(page_id);
         let iteration_idx = 0;
-        let integrator_setup = IntegratorSetup::new();
+        let engine_setup = EngineSetup::new();
         let states = Vec::new();
-        Engine { page_id, iteration_idx, integrator_setup, states }
+        Engine { page_id, iteration_idx, engine_setup, states }
     }
 
     pub fn init(&mut self) { 
 
         self.states = Vec::from([
-            State::new(&self.page_id, &mut self.integrator_setup)
+            State::new(&self.page_id, &mut self.engine_setup)
         ]);
 
     }
@@ -46,7 +46,7 @@ impl Engine {
             let field_id = field.id;
 
             // setup
-            let integrator = &mut self.integrator_setup.field[field_id];
+            let integrator = &mut self.engine_setup.field[field_id];
             // integrator.step(self.iteration_idx, field, &self.states);
 
         }
@@ -56,8 +56,8 @@ impl Engine {
             let family_id = family.id;
 
             // setup  (TODO generalize)
-            let integrator = &mut self.integrator_setup.object[family_id];
-            let boundaries = &mut self.integrator_setup.object_boundaries;
+            let integrator = &mut self.engine_setup.object[family_id];
+            let boundaries = &mut self.engine_setup.object_boundaries;
 
             // TODO get relevant neighbor: (other_fam_id, other_id) 
 

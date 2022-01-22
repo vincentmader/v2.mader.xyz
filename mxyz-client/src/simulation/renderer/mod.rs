@@ -93,7 +93,12 @@ impl Renderer {
             self.is_drawing_vel_vec.push(false);
             self.is_drawing_acc_vec.push(false);
             self.obj_tail_variant.push(ObjectTailVariant::Line);
-            self.obj_color_mode.push(ObjectColorMode::Default);
+
+            let obj_color_mode = match self.page_id.as_str() {
+                "2body-kepler" => ObjectColorMode::Speed,
+                _ => ObjectColorMode::Default,
+            };
+            self.obj_color_mode.push(obj_color_mode);
         }
         // TODO setup default field rendering options
 
