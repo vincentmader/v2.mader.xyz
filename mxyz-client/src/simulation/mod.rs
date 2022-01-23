@@ -21,7 +21,7 @@ use renderer::object::color_mode::ObjectColorMode;
 #[wasm_bindgen]
 pub struct Simulation {
 
-    page_id: String,
+    sim_id: String,
     engine: Engine,
     renderer: Renderer,
 
@@ -35,12 +35,12 @@ pub struct Simulation {
 }
 #[wasm_bindgen]
 impl Simulation {
-    pub fn new(page_id: &str) -> Self {
+    pub fn new(sim_id: &str) -> Self {
         // utils::dom::set_panic_hook(); // TODO: helpful?
 
-        let page_id = String::from(page_id);
-        let engine = Engine::new(&page_id);
-        let renderer = Renderer::new(&page_id);
+        let sim_id = String::from(sim_id);
+        let engine = Engine::new(&sim_id);
+        let renderer = Renderer::new(&sim_id);
 
         // let params_str = HashMap::new();
         // let params_usz = HashMap::new();
@@ -50,7 +50,7 @@ impl Simulation {
         let is_paused = false;
 
         Simulation { 
-            page_id,
+            sim_id,
             engine, 
             renderer, 
             
@@ -65,7 +65,7 @@ impl Simulation {
     }
     pub fn init(&mut self) {
 
-        // let iterations_per_frame = match self.page_id.as_str() {
+        // let iterations_per_frame = match self.sim_id.as_str() {
         //     _ => 1  // TODO
         // };
         // self.params_usz.insert(

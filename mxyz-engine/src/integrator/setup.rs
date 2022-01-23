@@ -17,8 +17,6 @@ use crate::boundary::object::ObjectBoundary;
 // }
 
 
-
-
 pub struct EngineSetup {
 
     pub field: Vec<FieldIntegrator>,   // one for each field

@@ -19,7 +19,7 @@ use object::color_mode::ObjectColorMode;
 
 pub struct Renderer {
 
-    page_id: String,
+    sim_id: String,
     pub frame_idx: usize,
     canvases: Vec<Canvas>,
 
@@ -39,9 +39,9 @@ pub struct Renderer {
 }
 impl Renderer {
 
-    pub fn new(page_id: &str) -> Self {
+    pub fn new(sim_id: &str) -> Self {
 
-        let page_id = String::from(page_id);
+        let sim_id = String::from(sim_id);
         let frame_idx = 0;
         let canvases: Vec<Canvas> = Vec::new();
 
@@ -58,7 +58,7 @@ impl Renderer {
         let obj_color_mode = Vec::new();
                                        
         Renderer {
-            page_id,
+            sim_id,
             frame_idx,
             canvases,
 
@@ -94,7 +94,7 @@ impl Renderer {
             self.is_drawing_acc_vec.push(false);
             self.obj_tail_variant.push(ObjectTailVariant::Line);
 
-            let obj_color_mode = match self.page_id.as_str() {
+            let obj_color_mode = match self.sim_id.as_str() {
                 "2body-kepler" => ObjectColorMode::Speed,
                 _ => ObjectColorMode::Default,
             };

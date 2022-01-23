@@ -1,32 +1,33 @@
 
 use crate::state::State;
-use crate::state::object::ObjectVariant;
 use crate::integrator::setup::EngineSetup;
 
 
 pub struct Engine {
 
-    page_id: String,
-    pub iteration_idx: usize,
-    pub engine_setup: EngineSetup,
+    sim_id: String,  // simulation id
+    pub engine_setup: EngineSetup, // integrators & bounds for field/obj
     pub states: Vec<State>,
+    pub iteration_idx: usize,
 
 }
 impl Engine {
 
-    pub fn new(page_id: &str) -> Self {
+    pub fn new(sim_id: &str) -> Self {
 
-        let page_id = String::from(page_id);
-        let iteration_idx = 0;
+        let sim_id = String::from(sim_id);
         let engine_setup = EngineSetup::new();
         let states = Vec::new();
-        Engine { page_id, iteration_idx, engine_setup, states }
+        let iteration_idx = 0;
+
+        Engine { sim_id, iteration_idx, engine_setup, states }
+
     }
 
     pub fn init(&mut self) { 
 
         self.states = Vec::from([
-            State::new(&self.page_id, &mut self.engine_setup)
+            State::new(&self.sim_id, &mut self.engine_setup)
         ]);
 
     }
@@ -47,6 +48,7 @@ impl Engine {
 
             // setup
             let integrator = &mut self.engine_setup.field[field_id];
+
             // integrator.step(self.iteration_idx, field, &self.states);
 
         }
@@ -55,19 +57,11 @@ impl Engine {
         for mut family in families.iter_mut() {
             let family_id = family.id;
 
-            // setup  (TODO generalize)
             let integrator = &mut self.engine_setup.object[family_id];
-            let boundaries = &mut self.engine_setup.object_boundaries;
+            integrator.step(self.iteration_idx, &mut family, &self.states);
 
-            // TODO get relevant neighbor: (other_fam_id, other_id) 
-
-            integrator.step(  // multiple integrators?
-                self.iteration_idx, &mut family, &self.states,
-            ); // + neighborhood
-
-            boundaries[family.id].apply(  // multiple boundaries?
-                &mut family
-            );
+            let boundary = &mut self.engine_setup.object_boundaries[family_id];
+            boundary.apply(&mut family);
 
         }
 

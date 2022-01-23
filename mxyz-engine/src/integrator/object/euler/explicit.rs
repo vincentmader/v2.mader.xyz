@@ -9,46 +9,39 @@ use crate::interaction::object::object::forces;
 
 
 pub fn step(
-    // family_idx: usize,
-    // family_state: &mut Vec<f64>,
     iteration_idx: usize,
     family: &mut ObjectFamily,
     states: &Vec<State>,
     field_interactions: &Vec<FieldInteraction>,
     object_interactions: &Vec<ObjectInteraction>,
     dt: f64,
-    // neighborhood
 ) {
 
-    // let object_family = &mut family_state;
-
+    // TODO make changeable
     const epsilon: f64 = 0.05; // todo: get from obj family? (& saved externally?)
-
-    // let previous_state = &states[ states.len()-1 ];
-    // let previous_objects = 
-    let object_length = family.object_length;
-    let objects = &mut family.objects;
 
     if matches!(family.variant, ObjectVariant::Static) { return () }
 
-    for obj_idx in 0..family.nr_of_objects { 
-        let start_idx = obj_idx * object_length;   
+    // get length of slice representing object in state vec
+    let object_length = family.object_length;
 
-        let obj_slice = &mut objects[ 
-            start_idx..start_idx+object_length
-        ];
+    for obj_idx in 0..family.nr_of_objects { 
+        let obj_slice = &mut family.objects[obj_idx*object_length..(obj_idx+1)*object_length];
 
         for other_family in &states[iteration_idx].object_families {
             if matches!(other_family.variant, ObjectVariant::Particle) { continue }
-            // get length of slice representing object in state vec
+
+            // TODO get relevant neighbor: tree / sectors ?
+
+            // get length of slice representing other object in state vec
             let other_length = other_family.object_length;
            
             for other_idx in 0..other_family.nr_of_objects { // ? TODO 0->obj_idx, update both bodies!
                 // no self-interaction
                 if (family.id, obj_idx) == (other_family.id, other_idx) { continue }
-
-                let other_slice = &other_family.objects[ 
-                    other_idx*object_length..other_idx*other_length+object_length
+                // get slice represinting other object in state vec
+                let other_slice = &other_family.objects[
+                    other_idx*other_length..(other_idx+1)*other_length
                 ];
                 
                 for interaction in object_interactions.iter() {

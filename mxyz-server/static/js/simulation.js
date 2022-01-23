@@ -1,12 +1,12 @@
 import init, { Simulation } from "../../static/pkg/mxyz_client.js";
 
-let page_id = document.getElementById("simulation.js").getAttribute("page_id");
+let sim_id = document.getElementById("simulation.js").getAttribute("sim_id");
 
 (async () => {
   await init();
 
   // initialization
-  let simulation = Simulation.new(page_id);
+  let simulation = Simulation.new(sim_id);
   simulation.init();
 
   // event listeners for options

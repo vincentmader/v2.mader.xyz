@@ -11,14 +11,14 @@ extern crate rocket_dyn_templates;
 use rocket_dyn_templates::Template;
 
 
-#[get("/simulations/<category>/<page_id>")]
-pub fn routes( category: &str, page_id: &str ) -> Template {
+#[get("/simulations/<category>/<sim_id>")]
+pub fn routes( category: &str, sim_id: &str ) -> Template {
 
     // let config = load_config();
     // let pages = config.pages;
-    // let context = &pages[page_id];
+    // let context = &pages[sim_id];
 
-    let title = match page_id {
+    let title = match sim_id {
         "2body-kepler"       => "Kepler's laws",
         "3body-moon"         => "3body orbits - Moon",
         "3body-lagrange"     => "3body orbits - Lagrange points",
@@ -37,7 +37,7 @@ pub fn routes( category: &str, page_id: &str ) -> Template {
 
     let context: HashMap<&str, &str> = [
         ("category", category),  
-        ("page_id", page_id), 
+        ("sim_id", sim_id), 
         ("title", title), 
     ].iter().cloned().collect();
 
