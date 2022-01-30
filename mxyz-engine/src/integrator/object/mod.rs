@@ -52,11 +52,11 @@ impl ObjectIntegrator {
 
         let stepper = match self.variant {
             IntegratorVariant::EulerExplicit => euler::explicit::step,
-            // IntegratorVariant::EulerImplicit => euler::implicit::step,
-            // IntegratorVariant::RungeKutta2 => runge_kutta::order_2::step,
-            // IntegratorVariant::RungeKutta4 => runge_kutta::order_4::step,
-            // IntegratorVariant::Verlet => verlet::step,
-            // IntegratorVariant::LeapFrog => leapfrog::step,
+            IntegratorVariant::EulerImplicit => euler::implicit::step,
+            IntegratorVariant::RungeKutta2 => runge_kutta::order_2::step,
+            IntegratorVariant::RungeKutta4 => runge_kutta::order_4::step,
+            IntegratorVariant::Verlet => verlet::step,
+            IntegratorVariant::LeapFrog => leapfrog::step,
         };
         stepper(
             iteration_idx,

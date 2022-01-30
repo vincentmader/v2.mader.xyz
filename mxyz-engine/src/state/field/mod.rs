@@ -1,6 +1,6 @@
 
 pub mod variant;
-use variant::FieldVariant;
+pub use variant::FieldVariant;
 
 
 #[derive(Clone)]

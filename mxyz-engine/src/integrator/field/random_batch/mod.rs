@@ -4,8 +4,9 @@ use crate::state::field::Field;
 
 
 pub fn step(
+    iteration_idx: usize,
     field: &mut Field,
-    state: &State,
+    states: &Vec<State>,
 ) {
 
     // TODO where to get batch-size from?

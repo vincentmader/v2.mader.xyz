@@ -14,9 +14,9 @@
 {% endblock title %}
 
 {% block content %}
+    {{ super() }}
 
     {% include "index/navgrid" %}
-
 
     <!-- react
                 <div id="react-root"></div>

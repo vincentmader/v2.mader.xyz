@@ -19,8 +19,9 @@
         </div>
     
         <div id="content">
-            {% block content%}
-            {% endblock content%}
+            {% block content %}
+
+            {% endblock content %}
         </div>
     
     </body>

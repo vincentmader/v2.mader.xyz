@@ -37,9 +37,17 @@ let sim_id = document.getElementById("simulation.js").getAttribute("sim_id");
     });
   }
 
+  let NR_OF_COMPUTES_PER_RENDER = 1;
+  // let slider = document.getElementByID("slider_set-")
+  // slider.addEventListener("click", () => {
+  //   simulation.handle_slider_event(slider.id);
+  // });
+
   // step loop
   const loop = () => {
-    simulation.step();
+      for (let idx = 0; idx < NR_OF_COMPUTES_PER_RENDER; idx++) {
+        simulation.step();  // TODO move render into sim.step() ?
+      }
     simulation.render();
     requestAnimationFrame(loop);
   };

@@ -6,8 +6,9 @@ use crate::interaction::object::field::Interaction as FieldInteraction;
 
 
 pub fn step(
-    family_idx: usize,
-    state: &mut State,
+    iteration_idx: usize,
+    family: &mut ObjectFamily,
+    states: &Vec<State>,
     field_interactions: &Vec<FieldInteraction>,
     object_interactions: &Vec<ObjectInteraction>,
     dt: f64,

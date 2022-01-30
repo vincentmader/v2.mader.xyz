@@ -14,6 +14,10 @@
                     <img 
                         {% if item.item_id == "3body-fig8" %}
                             class="navgrid_thumbnail" 
+                        {% elif item.item_id == "nbody-flowers" %}
+                            class="navgrid_thumbnail" 
+                        {% elif item.item_id == "2body-kepler" %}
+                            class="navgrid_thumbnail" 
                         {% else %}
                             class="navgrid_thumbnail-inactive" 
                         {% endif %}
