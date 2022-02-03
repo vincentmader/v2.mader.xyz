@@ -48,7 +48,8 @@ pub fn step(
 
                     let force = match interaction {
                         ObjectInteraction::ForceNewtonianGravity => forces::newtonian_gravity::force,
-                        // ObjectInteraction::ForceCoulomb => forces::coulomb::force,
+                        ObjectInteraction::ForceCoulomb => forces::coulomb::force,
+                        ObjectInteraction::ForceLennardJones => forces::lennard_jones::force,
                     };
                     let force = force( obj_slice, other_slice, dt, epsilon );
                     obj_slice[3] += force[0] / obj_slice[0] * dt;
@@ -61,12 +62,15 @@ pub fn step(
                 // }
 
             }
-
         }
 
         // update positions from velocity
         obj_slice[1] += obj_slice[3] * dt;
         obj_slice[2] += obj_slice[4] * dt;
+
+        // let foo = 0.3;
+        // obj_slice[3] *= foo;
+        // obj_slice[4] *= foo;
 
     }
 

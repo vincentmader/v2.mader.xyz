@@ -1,4 +1,6 @@
 
+use std::time;
+
 pub mod boundary;
 pub mod integrator;
 pub mod interaction;
@@ -13,13 +15,14 @@ pub mod config;
 
 
 pub struct Engine {
-
-    sim_id: String,  // simulation id
+    sim_id: String,
     pub engine_setup: EngineSetup, // integrators & bounds for field/obj
     pub states: Vec<State>,
     pub iteration_idx: usize,
-
+    pub config: config::EngineConfig,
+    // pub time_of_start: time::Instant,
 }
+
 impl Engine {
 
     pub fn new(sim_id: &str) -> Self {
@@ -28,17 +31,18 @@ impl Engine {
             engine_setup:    EngineSetup::new(),
             states:          Vec::new(),
             iteration_idx:   0,
+            config:          config::EngineConfig::new(),
+            // time_of_start:   time::Instant::now(),
         }
     }
 
     pub fn init(&mut self) { 
         // initialize states
-        self.states.push(
-        // self.states = 
-        //     Vec::from([
+        // self.states.push(
+        self.states = Vec::from([
             State::new(&self.sim_id, &mut self.engine_setup)
-        // ]);
-        )
+        ]);
+        // )
     }
 
     pub fn reset(&mut self) { 
@@ -49,23 +53,20 @@ impl Engine {
     }
 
     pub fn step(&mut self) {
-
         let mut state_new = self.states[self.iteration_idx].clone();
+
         let fields = &mut state_new.fields;
         for mut field in fields.iter_mut() {
-            let field_id = field.id;
-            let integrator = &mut self.engine_setup.field_integrators[field_id];
-            integrator.step(self.iteration_idx, field, &self.states);
+            let integrator = &mut self.engine_setup.field_integrators[field.id];
+            // integrator.step(self.iteration_idx, field, &self.states);
             // TODO bounds?
-
         }
 
         let families = &mut state_new.object_families;
         for mut family in families.iter_mut() {
-            let family_id = family.id;
-            let integrator = &mut self.engine_setup.object_integrators[family_id];
+            let integrator = &mut self.engine_setup.object_integrators[family.id];
             integrator.step(self.iteration_idx, &mut family, &self.states);
-            let boundary = &mut self.engine_setup.object_boundaries[family_id];
+            let boundary = &mut self.engine_setup.object_boundaries[family.id];
             boundary.apply(&mut family);
 
         }

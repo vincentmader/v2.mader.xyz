@@ -25,7 +25,7 @@ pub fn ctx(canvas: &web_sys::HtmlCanvasElement) -> web_sys::CanvasRenderingConte
 
 pub struct Canvas {
     pub context: web_sys::CanvasRenderingContext2d,
-    dimensions: (f64, f64),
+    pub dimensions: (f64, f64),
     scale: f64,
     pub zoom: f64,
 }
@@ -48,6 +48,12 @@ impl Canvas {
         let w = self.dimensions.0;
         let h = self.dimensions.1;
         self.context.clear_rect(0., 0., w, h);
+    }
+    pub fn set_font(&mut self, font: &str) {
+        self.context.set_font(&font);
+    }
+    pub fn fill_text(&mut self, text: &str, x: f64, y: f64) {
+        self.context.fill_text(&text, x, y);
     }
     pub fn set_stroke_style(&mut self, color: &str) {
         self.context.set_stroke_style(&JsValue::from_str(&color));

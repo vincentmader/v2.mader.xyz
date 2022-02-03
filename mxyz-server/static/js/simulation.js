@@ -9,6 +9,18 @@ let sim_id = document.getElementById("simulation.js").getAttribute("sim_id");
   let simulation = Simulation.new(sim_id);
   simulation.init();
 
+      // TODO move this definition to rust?
+      let NR_OF_ITERATIONS_PER_RENDER = 5;
+        let bm = document.getElementById("button-menu_main");
+        let slider = document.createElement("input");
+        slider.type = "range";
+        slider.id = "slider_set-iterations-per-render";
+        slider.min = 1;
+        slider.max = 20; // 2000
+        slider.value = 1; // if changed: also in sim/mod.rs AND/OR sim/config.rs
+        bm.appendChild(slider);
+        slider.style = "width: 100%";
+
   // event listeners for options
   var options = document.getElementsByTagName("select");
   for (let idx = 0; idx < options.length; idx++) {
@@ -23,7 +35,7 @@ let sim_id = document.getElementById("simulation.js").getAttribute("sim_id");
   for (let idx = 0; idx < buttons.length; idx++) {
     let button = buttons[idx];
     button.addEventListener("click", () => {
-      simulation.handle_button_event(button.id);
+      simulation.handle_button_event(button.id); // console.log(button.id);
     });
   }
 
@@ -37,17 +49,8 @@ let sim_id = document.getElementById("simulation.js").getAttribute("sim_id");
     });
   }
 
-  let NR_OF_COMPUTES_PER_RENDER = 1;
-  // let slider = document.getElementByID("slider_set-")
-  // slider.addEventListener("click", () => {
-  //   simulation.handle_slider_event(slider.id);
-  // });
-
-  // step loop
   const loop = () => {
-      for (let idx = 0; idx < NR_OF_COMPUTES_PER_RENDER; idx++) {
-        simulation.step();  // TODO move render into sim.step() ?
-      }
+    simulation.step();  // TODO move render into sim.step() ?
     simulation.render();
     requestAnimationFrame(loop);
   };

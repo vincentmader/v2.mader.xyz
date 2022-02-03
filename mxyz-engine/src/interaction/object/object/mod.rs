@@ -11,8 +11,8 @@ pub enum Interaction {
     // CollisionInelastic,
     // CollisionElastic,
     // EpidemicSIR,
-    // ForceCoulomb,
+    ForceCoulomb,
     ForceNewtonianGravity,
-    // ForceLennardJones,
+    ForceLennardJones,
 }
 

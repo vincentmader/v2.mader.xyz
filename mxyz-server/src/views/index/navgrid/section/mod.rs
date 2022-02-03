@@ -63,11 +63,11 @@ impl NavGridSection {
                 // NavGridItem::new("incompressible-fluid", "incompressible fluid"),
                     // NavGridItem::new("raptor-flow", "raptor engine"),
             // ]),
-            // "quantum-physics" => Vec::from([
+            "quantum-mechanics" => Vec::from([
             //     NavGridItem::new("double-slit", "double slit experiment"),
             //     NavGridItem::new("feynman-graphs", "Feynman graphs"),
-            //     NavGridItem::new("lennard-jones", "Lennard-Jones potential"),
-            // ]),
+                NavGridItem::new("lennard-jones", "Lennard-Jones potential"),
+            ]),
             // "emergent-behavior" => Vec::from([
             //     NavGridItem::new("boids", "boids"),
             //     NavGridItem::new("ants", "ants"),

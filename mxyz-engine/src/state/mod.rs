@@ -4,8 +4,10 @@ use rand::Rng;
 pub mod field;
 pub mod object;
 
+// use field;
 use field::Field;
 use field::FieldVariant;
+// use object;  // TODO use more name-spacing
 use object::ObjectFamily;
 use object::ObjectVariant;
 use object::ObjectAttribute;
@@ -21,6 +23,10 @@ use crate::interaction::field as field_interactions;
 use crate::boundary::object::ObjectBoundary;
 use crate::boundary::object::variant::BoundaryVariant as ObjectBoundaryVariant;
 
+// use interaction;
+// use integrator;
+// use boundary
+
 
 #[derive(Clone)]
 pub struct State {
@@ -30,12 +36,9 @@ pub struct State {
 impl State {
 
     pub fn new(sim_id: &str, integrators: &mut EngineSetup) -> Self {
-
-        let object_families = Self::setup_objects(sim_id, integrators);
-        let fields          = Self::setup_fields(sim_id, integrators);
-
         State {
-            object_families, fields,
+            object_families: Self::setup_objects(sim_id, integrators),
+            fields: Self::setup_fields(sim_id, integrators),
         }
     }
 
@@ -47,6 +50,7 @@ impl State {
         const TAU: f64 = 2. * 3.14159265358979;
 
         const OBJECT_INTEGRATOR_VARIANT: ObjectIntegratorVariant = ObjectIntegratorVariant::EulerExplicit;
+        // TODO find better way to do stuff below
         const OBJECT_ATTRIBUTES: [ObjectAttribute; 5] = [
             ObjectAttribute::Mass,
             ObjectAttribute::PositionX,
@@ -63,14 +67,14 @@ impl State {
         //     ObjectAttribute::AccelerationX,
         //     ObjectAttribute::AccelerationY,
         // ];
-        // const CHARGED_OBJECT_ATTRIBUTES: [ObjectAttribute; 6] = [
-        //     ObjectAttribute::Mass,
-        //     ObjectAttribute::Charge,
-        //     ObjectAttribute::PositionX,
-        //     ObjectAttribute::PositionY,
-        //     ObjectAttribute::VelocityX,
-        //     ObjectAttribute::VelocityY,
-        // ];
+        const CHARGED_OBJECT_ATTRIBUTES: [ObjectAttribute; 6] = [
+            ObjectAttribute::Mass,
+            ObjectAttribute::Charge,
+            ObjectAttribute::PositionX,
+            ObjectAttribute::PositionY,
+            ObjectAttribute::VelocityX,
+            ObjectAttribute::VelocityY,
+        ];
         const M: f64 = 1.;
         let DT = 0.01;  // TODO get from config (update config on slider change)
         let mut rng = rand::thread_rng();
@@ -91,8 +95,11 @@ impl State {
                 // OBJECT FAMILIES
                 // -------------------------------------------------------------------------------
 
-                let object_variant = ObjectVariant::Body;
-                let mut family = ObjectFamily::new(0, object_variant, Vec::from(OBJECT_ATTRIBUTES));
+                let mut family = ObjectFamily::new(
+                    0, 
+                    ObjectVariant::Body, 
+                    Vec::from(OBJECT_ATTRIBUTES)
+                );
                 // integrator
                 let integrator = ObjectIntegrator::new(
                     OBJECT_INTEGRATOR_VARIANT, 
@@ -131,6 +138,117 @@ impl State {
 
                 object_families.push(family);
                 // config.obj_families.push(family_config);
+
+            }, "charge-interaction" => {
+
+                let DT = 0.0005;
+
+                let mut family = ObjectFamily::new(
+                    0, ObjectVariant::Body, Vec::from(CHARGED_OBJECT_ATTRIBUTES)
+                );
+                // integrator
+                let integrator = ObjectIntegrator::new(
+                    OBJECT_INTEGRATOR_VARIANT, 
+                    DT, 
+                    Vec::from([]),  // object-field interactions
+                    Vec::from([
+                        object_interactions::object::Interaction::ForceCoulomb,
+                    ])  // object-object interactions
+                ); 
+                engine_setup.object_integrators.push(integrator);
+                // boundaries
+                let boundary = ObjectBoundary::new(ObjectBoundaryVariant::WallCollisionElastic);
+                engine_setup.object_boundaries.push(boundary);
+
+                // objects
+                let nr_of_bodies = 16;
+                for body_idx in 0..nr_of_bodies {
+                    let rand1: f64 = rng.gen(); 
+                    let rand2: f64 = rng.gen(); 
+                    let x0 = rand1 * 2. - 1.;
+                    let y0 = rand2 * 2. - 1.;
+                    let object = Vec::from([1., x0, y0, 0., 0., 1.]);
+                    family.add_object(&object);
+                }
+                object_families.push(family);
+
+                let mut family = ObjectFamily::new(
+                    1, ObjectVariant::Body, Vec::from(CHARGED_OBJECT_ATTRIBUTES)
+                );
+                // integrator
+                let integrator = ObjectIntegrator::new(
+                    OBJECT_INTEGRATOR_VARIANT, 
+                    DT, 
+                    Vec::from([]),  // object-field interactions
+                    Vec::from([
+                        object_interactions::object::Interaction::ForceCoulomb,
+                    ])  // object-object interactions
+                ); 
+                engine_setup.object_integrators.push(integrator);
+                // boundaries
+                let boundary = ObjectBoundary::new(ObjectBoundaryVariant::WallCollisionElastic);
+                engine_setup.object_boundaries.push(boundary);
+
+                // objects
+                let nr_of_bodies = 25;
+                for body_idx in 0..nr_of_bodies {
+                    let rand1: f64 = rng.gen(); 
+                    let rand2: f64 = rng.gen(); 
+                    let x0 = rand1 * 2. - 1.;
+                    let y0 = rand2 * 2. - 1.;
+                    let object = Vec::from([0.01, x0, y0, 0., 0., -1.]);
+                    family.add_object(&object);
+                }
+                object_families.push(family);
+
+            }, "lennard-jones" => {
+
+                let mut family = ObjectFamily::new(
+                    0, ObjectVariant::Body, Vec::from(OBJECT_ATTRIBUTES)
+                );
+                // integrator
+                let DT = 0.01;
+                let integrator = ObjectIntegrator::new(
+                    OBJECT_INTEGRATOR_VARIANT, 
+                    DT, 
+                    Vec::from([]),  // object-field interactions
+                    Vec::from([
+                        object_interactions::object::Interaction::ForceLennardJones,
+                    ])  // object-object interactions
+                ); 
+                engine_setup.object_integrators.push(integrator);
+                // boundaries
+                let boundary = ObjectBoundary::new(ObjectBoundaryVariant::WallCollisionInelastic);
+                engine_setup.object_boundaries.push(boundary);
+
+                // objects
+                let foo: usize = 10;
+                let nr_of_bodies = foo.pow(2);
+                let speed = 0.01;
+                for jdx in 0..foo {
+                    for idx in 0..foo {
+                        let x0 = (idx as f64 + 0.5) / foo as f64 * 2. - 1.;
+                        let y0 = (jdx as f64 + 0.5) / foo as f64 * 2. - 1.;
+                        let rand1: f64 = rng.gen(); 
+                        let rand2: f64 = rng.gen(); 
+                        // let u0 = (rand1 * 2. - 1.) * speed;
+                        // let v0 = (rand2 * 2. - 1.) * speed;
+                        let (u0, v0) = (0., 0.);
+                        let x0 = x0 + rand1 / foo as f64;
+                        let y0 = y0 + rand2 / foo as f64;
+                        let object = Vec::from([1., x0, y0, u0, v0]);
+                        family.add_object(&object);
+                    }
+                }
+                // for body_idx in 0..nr_of_bodies {
+                //     let x0 = rand1 * 2. - 1.;
+                //     let y0 = rand2 * 2. - 1.;
+                //     // let x0 = f64::from(body_idx % nr_of_bodies) * 2. - 1.;
+                //     // let y0 = f64::from((body_idx - (body_idx % nr_of_bodies)) / nr_of_bodies) * 2. - 1.;
+                //     let object = Vec::from([1., x0, y0, 0., 0.]);
+                //     family.add_object(&object);
+                // }
+                object_families.push(family);
 
             }, "3body-fig8" => {
 
@@ -328,13 +446,13 @@ impl State {
                 let GRID_SIZE = 100;
             
                 let mut entries = Vec::new();
-                for row_idx in 0..GRID_SIZE {
-                    for col_idx in 0..GRID_SIZE {
-                        let rand: f64 = rng.gen();
-                        let val = if rand > 0.5 { 0. } else { 1. };
-                        entries.push(val);
-                    }
-                }
+                // for row_idx in 0..GRID_SIZE {
+                //     for col_idx in 0..GRID_SIZE {
+                //         let rand: f64 = rng.gen();
+                //         let val = if rand > 0.5 { 0. } else { 1. };
+                //         entries.push(val);
+                //     }
+                // }
                 let field = Field::new(
                     1, FieldVariant::Ising, entries
                 );
@@ -356,6 +474,7 @@ impl State {
                 //     ])  // object-object interactions
                 // ); 
                 engine_setup.field_integrators.push(integrator);
+                // mxyz_utils::dom::console::log("aba");
                 // // boundaries
                 // let boundary = ObjectBoundary::new(ObjectBoundaryVariant::None);
                 // engine_setup.object_boundaries.push(boundary);

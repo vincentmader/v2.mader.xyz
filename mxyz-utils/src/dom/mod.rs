@@ -21,6 +21,12 @@ pub fn document() -> web_sys::Document {
         .expect("should have a document on window")
 }
 
+pub fn body() -> web_sys::HtmlElement {
+    document()
+        .body()
+        .expect("document expect to have have a body")
+}
+
 
 
 

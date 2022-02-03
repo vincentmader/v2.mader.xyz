@@ -16,18 +16,18 @@ pub struct ObjFamilyRendererConfig {
 }
 
 pub struct FieldRendererConfig {
-    id: usize,
-    display: bool,
-    is_paused: bool,
+    pub id: usize,
+    pub display: bool,
+    pub is_paused: bool,
 }
 
 pub struct RendererConfig {
-    fields: Vec<FieldRendererConfig>,
-    obj_families: Vec<ObjFamilyRendererConfig>,
-    zoom: f64,
-    is_paused: bool,
-    clear_canvas: bool,
-    display_hud: bool,
+    pub fields: Vec<FieldRendererConfig>,
+    pub obj_families: Vec<ObjFamilyRendererConfig>,
+    pub zoom: f64,
+    pub is_paused: bool,
+    pub clear_canvas: bool,
+    pub display_hud: bool,
 }
 impl RendererConfig {
     pub fn new() -> Self {

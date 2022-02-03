@@ -75,7 +75,7 @@ pub fn get_object_color_from_charge(obj: &Vec<f64>, alpha: f64) -> String {
         charge = obj[5]; // TODO max charge 
     }
     let x = (charge / Q_MAX + 1.) * 255. / 2.;
-    let r = 255. - x; // flip blue & red
+    let r = x; // flip blue & red
     let g = 255. - (255. * (r-127.).abs()/128.);
     let b = 255. - r;
     format!("rgba({}, {}, {}, {})", r, g, b, alpha)

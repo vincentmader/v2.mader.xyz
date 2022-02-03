@@ -10,6 +10,7 @@ pub fn step(
 ) {
 
     // TODO where to get batch-size from?
+                mxyz_utils::dom::console::log("aabbbbbbba");
 
 }
 

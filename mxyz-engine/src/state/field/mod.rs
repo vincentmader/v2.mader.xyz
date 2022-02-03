@@ -11,6 +11,7 @@ pub struct Field {
     pub entries: Vec<f64>,
 
 }
+
 impl Field {
     pub fn new(
 
@@ -19,13 +20,7 @@ impl Field {
         entries: Vec<f64>,
 
     ) -> Self {
-
-        Field {
-            id,
-            variant,
-            entries
-        }
-
+        Field { id, variant, entries }
     }
 }
 
