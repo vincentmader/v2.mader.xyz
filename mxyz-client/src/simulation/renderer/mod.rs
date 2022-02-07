@@ -28,11 +28,12 @@ pub struct Renderer {
     sim_id: String,
     pub frame_idx: usize,
     canvases: Vec<Canvas>,
+    pub config: config::RendererConfig,
 
     // pub is_paused: bool,
     // pub is_halted: bool,
-    pub is_displaying_hud: bool,
-    pub is_clearing_canvas: bool,
+    // pub is_displaying_hud: bool,
+    // pub is_clearing_canvas: bool,
 
     pub is_drawing_families: Vec<bool>,
     pub is_drawing_pos_vec: Vec<bool>,
@@ -49,11 +50,12 @@ impl Renderer {
             sim_id: String::from(sim_id),
             frame_idx: 0,
             canvases: Vec::new(),
+            config: config::RendererConfig::new(),
             //
             // is_paused: false,
             // is_halted: false,
-            is_displaying_hud: false,
-            is_clearing_canvas: true,
+            // is_displaying_hud: false,
+            // is_clearing_canvas: true,
             is_drawing_families: Vec::new(),
             is_drawing_pos_vec: Vec::new(),
             is_drawing_vel_vec: Vec::new(),
@@ -64,7 +66,10 @@ impl Renderer {
         }
     }
 
-    pub fn init(&mut self, engine: &Engine) {
+    pub fn init(
+        &mut self, engine: &Engine
+        // config: &mut config::EngineConfig
+    ) {
         let states = &engine.states;
 
         let doc = mxyz_utils::dom::document();
@@ -87,13 +92,17 @@ impl Renderer {
                 // "2body-kepler" => ObjectColorMode::Speed,
                 // "nbody-flowers" => ObjectColorMode::Distance,
                 "nbody-asteroids" => ObjectTailVariant::None,
+                "lennard-jones" => ObjectTailVariant::None,
                 _ => ObjectTailVariant::Line,
             };
             let obj_color_mode = match self.sim_id.as_str() {
                 "nbody-misc" => ObjectColorMode::Speed,
                 "nbody-asteroids" => ObjectColorMode::Distance,
                 // "nbody-flowers" => ObjectColorMode::Distance,
-                _ => ObjectColorMode::Default,
+                "charge-interaction" => match idx {
+                    0 => ObjectColorMode::Charge,
+                    _ => ObjectColorMode::Default,
+                }, _ => ObjectColorMode::Default,
             };
             self.obj_tail_variant.push(obj_tail_variant);
             self.obj_color_mode.push(obj_color_mode);
@@ -120,7 +129,74 @@ impl Renderer {
         // CANVAS SETUP
         let canvas_id = 0;  // todo: get id 
         let canvas = &mut self.canvases[canvas_id];
-        if self.is_clearing_canvas { canvas.clear(); }
+        if self.config.is_clearing_canvas { canvas.clear(); }
+
+
+        // TODO put somewhere else
+        let canvas = &mut self.canvases[canvas_id];
+        // DISPLAY FIELD
+        const FIELD_RESOLUTION: (usize, usize) = (30, 30);
+        for row_idx in 0..FIELD_RESOLUTION.0 {
+            for col_idx in 0..FIELD_RESOLUTION.1 {
+
+                let x = (2.*(col_idx as f64 + 0.5) / FIELD_RESOLUTION.0 as f64) - 1.;  // TODO zoom
+                let y = (2.*(row_idx as f64 + 0.5) / FIELD_RESOLUTION.1 as f64) - 1.;
+                let (m, u, v, q) = (1., 0., 0., 1.);
+                let mut force = Vec::from([0., 0.]);
+
+                for family in families.iter() {
+                    use mxyz_engine::state::object::variant::ObjectVariant;
+                    match family.variant {
+                        ObjectVariant::Particle => { continue; },
+                        _ => {}
+                    }
+
+                    let nr_of_objects = family.nr_of_objects;
+                    let object_length = family.object_length;
+                    let objects = &family.objects;
+                    for obj_id in 0..nr_of_objects {
+                        let start_idx = obj_id * object_length;
+                        let obj = Vec::from(&objects[start_idx..start_idx+object_length]);
+
+                        use mxyz_engine::interaction::object::object::forces as obj_obj_forces;
+                        let dt = 1.;
+                        let eps = 0.;
+
+                        let get_force = match self.sim_id.as_str() {
+                            "lennard-jones" => obj_obj_forces::lennard_jones::force,
+                            "charge-interaction" => obj_obj_forces::coulomb::force,
+                            _ => obj_obj_forces::newtonian_gravity::force,
+                        };
+
+                        let f = get_force(
+                            &[m, x, y, u, v, q], &obj, dt, eps,
+                        );
+                        force[0] += f[0];
+                        force[1] += f[1];
+                    }
+                }
+
+                let norm = (force[0].powf(2.) + force[1].powf(2.)).sqrt();
+                let from = (x, y);
+                let to = (x + force[0] / norm/FIELD_RESOLUTION.0 as f64, y + force[1] / norm/FIELD_RESOLUTION.1 as f64);
+
+                let radius = 0.001;
+                let max_force = 10.;  // TODO make slider
+                let r = 255. * norm / max_force;
+                let (g, b) = (r, r);
+                let color = format!("rgb({}, {}, {})", r, g, b);
+                canvas.set_stroke_style(&color);
+                canvas.set_fill_style(&color);
+                canvas.draw_line(from, to);
+                canvas.draw_circle(to, radius, true);
+            }
+        }
+
+
+
+
+
+
 
         // DISPLAY FIELDS
         for field in fields.iter() {
@@ -133,9 +209,10 @@ impl Renderer {
         }
 
         // DISPLAY HUD
-        if self.is_displaying_hud { 
+        if self.config.is_displaying_hud { 
             self.display_hud( &engine )  // todo
         }
+
     }
 
     pub fn display_objects(
@@ -145,7 +222,7 @@ impl Renderer {
         canvas_id: usize,
     ) {
         // const r: f64 = 0.01;  // TODO setup slider
-        const r: f64 = 0.01;  // TODO setup slider
+        const r: f64 = 0.013;  // TODO setup slider
         const is_filled: bool = true;  // TODO setup toggle-button
 
         let objects = &family.objects;
@@ -156,7 +233,7 @@ impl Renderer {
         let canvas = &mut self.canvases[canvas_id];
 
         // SETUP OBJECT COLOR
-        let object_color_mode = &self.obj_color_mode[family.id];
+        let object_color_mode = &self.config.obj_families[family.id].color_mode;
         let get_object_color = match object_color_mode {
             ObjectColorMode::Default     => object::color_mode::get_object_color_default,
             ObjectColorMode::Mass        => object::color_mode::get_object_color_from_mass,
@@ -176,31 +253,41 @@ impl Renderer {
             canvas.set_fill_style(&color);
 
             // DISPLAY OBJECTs
-            if self.is_drawing_families[family.id] {
+            if self.config.obj_families[family.id].is_displaying_objects {
                 let (x, y) = (obj[1], obj[2]);
                 canvas.draw_circle( (x, y), r, is_filled )
             }
             // DISPLAY POSITION VECTORs
-            if self.is_drawing_pos_vec[family.id] {
+            if self.config.obj_families[family.id].is_displaying_pos_vec {
                 let (x, y) = (obj[1], obj[2]);
                 canvas.draw_line((x, y), (0., 0.));
             }
             // DISPLAY VELOCITY VECTORs
-            if self.is_drawing_vel_vec[family.id] {
+            if self.config.obj_families[family.id].is_displaying_vel_vec {
                 let (x, y, u, v) = (obj[1], obj[2], obj[3], obj[4]);
                 let z = (u.powf(2.) + v.powf(2.)).powf(-0.5) / 5.; // TODO make configurable
                 canvas.draw_line((x, y), (x+u*z, y+v*z));
             }
 
             // DISPLAY ACCELERATION VECTOR
-            if self.is_drawing_acc_vec[family.id] {
-                // TODO
-            }
+            // if self.config.obj_families[family.id].is_displaying_acc_vec {
+            //     // TODO
+            // }
 
         }
 
+        // DISPLAY OBJECT CENTER-OF-MASS
+        if self.config.obj_families[family.id].is_displaying_center_of_mass {
+            self.display_center_of_mass(&family, canvas_id);
+        }
+
+        // DISPLAY OBJECT CENTER-OF-MOMENTUM
+        // if self.config.obj_families[family.id].is_displaying_center_of_momentum {
+        //     self.display_center_of_momentum(&family, canvas_id);
+        // }
+
         // DISPLAY OBJECT TAILS
-        let tail_variant = &self.obj_tail_variant[family.id];
+        let tail_variant = &self.config.obj_families[family.id].tail_variant;
         match tail_variant {
             ObjectTailVariant::Line => {     // LINE TAILS
                 self.display_line_tails(&family, states, canvas_id);
@@ -209,7 +296,44 @@ impl Renderer {
             }, _ => {
             }
         }
+    }
 
+    // pub fn display_center_of_momentum(&mut self, family: &ObjectFamily, canvas_id: usize) {
+
+    //     let canvas = &mut self.canvases[canvas_id];
+    //     let r = 10.;
+
+    //     let mut center_of_momentum = (0., 0.);
+    //     for obj_id in 0..family.nr_of_objects {
+    //         let start_idx = obj_id * family.object_length;
+    //         let obj = &family.objects[start_idx..start_idx+family.object_length];
+    //         center_of_momentum.0 += obj[0] * obj[3];
+    //         center_of_momentum.1 += obj[0] * obj[4];
+    //     };
+
+    //     canvas.draw_line(center_of_momentum, r, true);
+    // }
+
+    pub fn display_center_of_mass(&mut self, family: &ObjectFamily, canvas_id: usize) {
+
+        let canvas = &mut self.canvases[canvas_id];
+        let r = 0.01;
+        canvas.set_stroke_style("red");
+        canvas.set_fill_style("red");
+
+        let mut center_of_mass = (0., 0.);
+        let mut total_mass = 0.;
+        for obj_id in 0..family.nr_of_objects {
+            let start_idx = obj_id * family.object_length;
+            let obj = &family.objects[start_idx..start_idx+family.object_length];
+            center_of_mass.0 += obj[1];
+            center_of_mass.1 += obj[2];
+            total_mass += obj[0];
+        };
+        center_of_mass.0 /= total_mass;
+        center_of_mass.1 /= total_mass;
+
+        canvas.draw_circle(center_of_mass, r, true);
     }
 
     pub fn display_line_tails(
@@ -219,15 +343,17 @@ impl Renderer {
         canvas_id: usize,
     ) {
         const tail_length: usize = 100; // TODO make configurable
+        let tail_width = 2.; // TODO make configurable
 
         let nr_of_objects = family.nr_of_objects;
         let object_length = family.object_length;
 
         // SETUP CANVAS
         let canvas = &mut self.canvases[canvas_id];
+        canvas.set_line_width(tail_width);
 
         // SETUP COLOR
-        let object_color_mode = &self.obj_color_mode[family.id];
+        let object_color_mode = &self.config.obj_families[family.id].color_mode;
         let get_object_color = match object_color_mode {
             ObjectColorMode::Default     => object::color_mode::get_object_color_default,
             ObjectColorMode::Mass        => object::color_mode::get_object_color_from_mass,
@@ -262,6 +388,7 @@ impl Renderer {
 
             }  // TODO apply alpha   (from input?)
         }
+        canvas.reset_line_width();
     }
 
     pub fn display_area_tails(
@@ -274,10 +401,9 @@ impl Renderer {
         let tail_length = 200; // TODO make configurable
 
         // setup color
-        let object_color_mode = &self.obj_color_mode[family.id];
+        let object_color_mode = &self.config.obj_families[family.id].color_mode;
         let get_object_color = match object_color_mode {
             ObjectColorMode::Default     => object::color_mode::get_object_color_default,
-
             ObjectColorMode::Mass        => object::color_mode::get_object_color_from_mass,
             ObjectColorMode::HSLVelocity => object::color_mode::get_object_color_from_velocity_angle, 
             ObjectColorMode::HSLPosition => object::color_mode::get_object_color_from_position_angle, 
@@ -325,20 +451,34 @@ impl Renderer {
 
         let canvas = &mut self.canvases[canvas_id];
 
-        // let grid_size
+        let dimensions = &field.dimensions;
+        for idx in 0..dimensions.0 {
+            for jdx in 0..dimensions.1 {  // TODO handle z ?
+                let cell = &field.entries[jdx*dimensions.0+idx];
 
-        for entry in field.entries.iter() {
+                let color = match cell {
+                    -1. => "black",
+                    1. => "white",
+                    _ => ""
+                };
 
-            match field.variant {
-                FieldVariant::Ising => {
-
-                }, _ => {}
+                let x = (idx as f64 / dimensions.0 as f64)*2.-1.;
+                let y = (jdx as f64 / dimensions.1 as f64)*2.-1.;
+                let w = 1. / dimensions.0 as f64;
+                let h = 1. / dimensions.1 as f64;
+                canvas.set_fill_style(&color);
+                canvas.fill_rect((x, y), w, h);
             }
-
-            // match self.sim_id {
-            // }
-
         }
+
+        // for (cell_idx, cell) in field.entries.iter().enumerate() {
+        //     match field.variant {
+        //         FieldVariant::Ising => {
+        //         }, _ => {}
+        //     }
+        //     // match self.sim_id {
+        //     // }
+        // }
 
         // let canvas = &mut self.canvases[canvas_id];
         // console::log("aaa");

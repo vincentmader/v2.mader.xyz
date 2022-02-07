@@ -8,6 +8,7 @@ pub struct Field {
 
     pub id: usize,
     pub variant: FieldVariant,
+    pub dimensions: (usize, usize, usize),
     pub entries: Vec<f64>,
 
 }
@@ -17,10 +18,11 @@ impl Field {
 
         id: usize,
         variant: FieldVariant,
+        dimensions: (usize, usize, usize),
         entries: Vec<f64>,
 
     ) -> Self {
-        Field { id, variant, entries }
+        Field { id, variant, dimensions, entries }
     }
 }
 

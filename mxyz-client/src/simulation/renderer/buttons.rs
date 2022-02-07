@@ -15,10 +15,10 @@ impl Renderer {
             ("button_toggle-pause", "| |"),
             ("button_toggle-pause-engine", "|e|"),
             ("button_toggle-pause-renderer", "|r|"),
-            ("button_toggle-halt-renderer", "h_r"),
             ("button_reset", "reset"),
             ("button_toggle-display-hud", "hud"),
             ("button_toggle-clear-canvas", "clear canvas"),
+            ("button_toggle-time-inversion", "-t"),
         ]);
 
         let button_menus = doc.get_element_by_id("button-menu_main").unwrap();
@@ -50,9 +50,11 @@ impl Renderer {
         ]);
         let multibuttons = Vec::from([
             ("object motion vectors", Vec::from([
+                ("button_toggle-display-objects", "obj"),
                 ("button_toggle-display-obj-vec-pos", "pos"),
                 ("button_toggle-display-obj-vec-vel", "vel"),
-                ("button_toggle-display-obj-vec-acc", "acc"),
+                ("button_toggle-display-obj-center-of-mass", "com"),
+                // ("button_toggle-display-obj-vec-acc", "acc"),
             // ])), ("object interactions", Vec::from([
             //     ("button_set-obj-interaction-none", "none"),
             //     ("button_set-obj-interaction-newton", "Newton"),

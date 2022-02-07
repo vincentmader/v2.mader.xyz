@@ -17,9 +17,9 @@
                         {% elif item.item_id == "nbody-flowers" %}
                             class="navgrid_thumbnail" 
                         {% elif item.item_id == "2body-kepler" %}
-                            class="navgrid_thumbnail" 
-                        {% else %}
                             class="navgrid_thumbnail-inactive" 
+                        {% else %}
+                            class="navgrid_thumbnail" 
                         {% endif %}
                          src="{{ item.path_to_thumbnail }}" 
                          alt="{{ item.item_id }}"

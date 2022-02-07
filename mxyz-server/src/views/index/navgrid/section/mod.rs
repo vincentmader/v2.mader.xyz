@@ -21,6 +21,7 @@ impl NavGridSection {
                 // basics
                 // NavGridItem::new("2body-kepler", "Kepler's laws"),
                 NavGridItem::new("nbody-misc", "misc"),
+                NavGridItem::new("nbody-cloud", "stellar cloud"),
                     // NavGridItem::new("3body-moon", "Moon"),
                     // NavGridItem::new("3body-lagrange", "Lagrange points"),
                 NavGridItem::new("nbody-flowers", "sym. constellations"),
@@ -53,7 +54,7 @@ impl NavGridSection {
             ]),
             "thermo-dynamics" => Vec::from([
                 NavGridItem::new("ising-model", "Ising model"),
-                NavGridItem::new("thermal-motion", "thermal motion"),
+                // NavGridItem::new("thermal-motion", "thermal motion"),
                 // NavGridItem::new("brownian-motion", "Brownian motion"),
                 // NavGridItem::new("heat-conduction", "heat conduction"),
                     // NavGridItem::new("melting", "ice cubes"), // ?
@@ -77,7 +78,7 @@ impl NavGridSection {
                 // NavGridItem::new("rock-paper-scissors", "rock-paper-scissors"),
                     // NavGridItem::new("ca-rulemaker", "cell.aut. rule-maker"),
                 // NavGridItem::new("mc-pi", "Monte Carlo pi"),
-                NavGridItem::new("hsl-colors", "HSL colors"),
+                // NavGridItem::new("hsl-colors", "HSL colors"),
             ]),
             _ => Vec::new()
         };

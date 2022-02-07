@@ -20,7 +20,7 @@ pub fn force(
     let r = ( dx.powf(2.) + dy.powf(2.) ).sqrt();
         // define: sigma -> 1
 
-    let sigma = 0.08;
+    let sigma = 0.1;
     let eps = 1.;
     // V = 4 eps ( (s/r)^12 - (s/r)^6 )
     let force = 4. * eps * sigma * (

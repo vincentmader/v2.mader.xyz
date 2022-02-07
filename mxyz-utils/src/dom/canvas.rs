@@ -55,6 +55,12 @@ impl Canvas {
     pub fn fill_text(&mut self, text: &str, x: f64, y: f64) {
         self.context.fill_text(&text, x, y);
     }
+    pub fn reset_line_width(&mut self) {
+        self.context.set_line_width(1.);
+    }
+    pub fn set_line_width(&mut self, width: f64) {
+        self.context.set_line_width(width);
+    }
     pub fn set_stroke_style(&mut self, color: &str) {
         self.context.set_stroke_style(&JsValue::from_str(&color));
     }

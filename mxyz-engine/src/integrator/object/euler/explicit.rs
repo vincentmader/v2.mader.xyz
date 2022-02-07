@@ -57,12 +57,14 @@ pub fn step(
 
                 }
 
-                // for interaction in field_interactions.iter() {
-                //     // TODO even do this here? maybe other new integrator..?
-                // }
-
             }
         }
+
+        // for field in ...
+        //     for interaction in field_interactions.iter() {
+        //         // TODO even do this here? maybe other new integrator..?
+        //     }
+        // }
 
         // update positions from velocity
         obj_slice[1] += obj_slice[3] * dt;

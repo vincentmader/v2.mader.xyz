@@ -6,6 +6,7 @@ use mxyz_engine::boundary::object::variant::BoundaryVariant as ObjectBoundaryVar
 use mxyz_engine::integrator::field::variant::IntegratorVariant as FieldIntegratorVariant;
 use mxyz_engine::integrator::object::variant::IntegratorVariant as ObjectIntegratorVariant;
 use mxyz_engine::state::object::ObjectVariant;
+use mxyz_utils::dom::console;
 use crate::simulation::Simulation;
 use crate::simulation::renderer::object::color_mode::ObjectColorMode;
 use crate::simulation::renderer::object::tail_variant::ObjectTailVariant;
@@ -15,11 +16,7 @@ use crate::simulation::renderer::object::tail_variant::ObjectTailVariant;
 impl Simulation {
 
     pub fn handle_button_event(&mut self, button_id: &str) {
-
-        {
-            use mxyz_utils::dom;
-            dom::console::log(&format!("{}", button_id));
-        }
+        console::log(&format!("button-id: {}", button_id));
 
         // let document = utils::dom::document();
         // let button = document.get_element_by_id(button_id).unwrap();
@@ -29,8 +26,7 @@ impl Simulation {
         let mut thing_id: usize = 0;
         if button_id.starts_with("obj-fam_") || button_id.starts_with("field_") {
             // id
-            let mut foo = button_id.split("_");
-            thing_id = foo.nth(1).unwrap().parse::<usize>().unwrap();
+            thing_id = button_id.split("_").nth(1).unwrap().parse::<usize>().unwrap();
             // get button_id without object_family id
             let mut foo = button_id.split("_");
             let count = button_id.split("_").count();
@@ -48,25 +44,28 @@ impl Simulation {
             // GENERAL (directly under canvas)
 
             "button_reset" => {
-                engine.init();  // TODO instead: go back to first state, delete rest, use integrator setup
-                engine.iteration_idx = 0;
+                engine.reset();
                 renderer.reset();
             }, 
             "button_toggle-pause" => {
-                self.config.engine.is_paused = !self.config.engine.is_paused;
-                self.config.renderer.is_paused = !self.config.renderer.is_paused;
+                self.engine.config.is_paused = !self.engine.config.is_paused;
+                self.renderer.config.is_paused = !self.renderer.config.is_paused;
             },
             "button_toggle-pause-engine" => {
-                self.config.engine.is_paused = !self.config.engine.is_paused;
+                self.engine.config.is_paused = !self.engine.config.is_paused;
             },
             "button_toggle-pause-renderer" => {
-                self.config.renderer.is_paused = !self.config.renderer.is_paused;
+                self.renderer.config.is_paused = !self.renderer.config.is_paused;
             },
             "button_toggle-display-hud" => {
-                renderer.is_displaying_hud = !renderer.is_displaying_hud;
+                renderer.config.is_displaying_hud = !renderer.config.is_displaying_hud;
             },
             "button_toggle-clear-canvas" => {
-                renderer.is_clearing_canvas = !renderer.is_clearing_canvas;
+                renderer.config.is_clearing_canvas = !renderer.config.is_clearing_canvas;
+            },
+            "button_toggle-time-inversion" => {  // TODO
+                // engine.config.dt *= -1.;
+                renderer.config.is_iterating_forward = !renderer.config.is_iterating_forward;
             },
 
             // OBJECT VARIANT
@@ -87,57 +86,66 @@ impl Simulation {
 
             // OBJECT COLOR MODE
             "button_set-obj-col-default" => {
-                renderer.obj_color_mode[thing_id] = ObjectColorMode::Default;
+                renderer.config.obj_families[thing_id].color_mode = ObjectColorMode::Default;
             },
             "button_set-obj-col-dist" => {
-                renderer.obj_color_mode[thing_id] = ObjectColorMode::Distance;
+                renderer.config.obj_families[thing_id].color_mode = ObjectColorMode::Distance;
             },
             "button_set-obj-col-speed" => {
-                renderer.obj_color_mode[thing_id] = ObjectColorMode::Speed;
+                renderer.config.obj_families[thing_id].color_mode = ObjectColorMode::Speed;
             },
             "button_set-obj-col-mass" => {
-                renderer.obj_color_mode[thing_id] = ObjectColorMode::Mass;
+                renderer.config.obj_families[thing_id].color_mode = ObjectColorMode::Mass;
             },
             "button_set-obj-col-charge" => {
-                renderer.obj_color_mode[thing_id] = ObjectColorMode::Charge;
+                renderer.config.obj_families[thing_id].color_mode = ObjectColorMode::Charge;
             },
             "button_set-obj-col-hsv-pos" => {
-                renderer.obj_color_mode[thing_id] = ObjectColorMode::HSLPosition;
+                renderer.config.obj_families[thing_id].color_mode = ObjectColorMode::HSLPosition;
             },
             "button_set-obj-col-hsv-vel" => {
-                renderer.obj_color_mode[thing_id] = ObjectColorMode::HSLVelocity;
+                renderer.config.obj_families[thing_id].color_mode = ObjectColorMode::HSLVelocity;
             },
 
             // OBJECT TAIL VARIANT
 
             "button_set-obj-tail-variant-none" => {
-                renderer.obj_tail_variant[thing_id] = ObjectTailVariant::None;
+                renderer.config.obj_families[thing_id].tail_variant = ObjectTailVariant::None;
             },
             "button_set-obj-tail-variant-line" => {
-                renderer.obj_tail_variant[thing_id] = ObjectTailVariant::Line;
+                renderer.config.obj_families[thing_id].tail_variant = ObjectTailVariant::Line;
             },
             "button_set-obj-tail-variant-area" => {
-                renderer.obj_tail_variant[thing_id] = ObjectTailVariant::Area;
+                renderer.config.obj_families[thing_id].tail_variant = ObjectTailVariant::Area;
             },
 
             // OBJECT MOTION VECTORS
 
+            "button_toggle-display-objects" => {
+                renderer.config.obj_families[thing_id].is_displaying_objects = !renderer.config.obj_families[thing_id].is_displaying_objects 
+            },
             "button_toggle-display-obj-vec-pos" => {
-                renderer.is_drawing_pos_vec[thing_id] = !renderer.is_drawing_pos_vec[thing_id]
+                renderer.config.obj_families[thing_id].is_displaying_pos_vec = !renderer.config.obj_families[thing_id].is_displaying_pos_vec 
             },
             "button_toggle-display-obj-vec-vel" => {
-                renderer.is_drawing_vel_vec[thing_id] = !renderer.is_drawing_vel_vec[thing_id]
+                renderer.config.obj_families[thing_id].is_displaying_vel_vec = !renderer.config.obj_families[thing_id].is_displaying_vel_vec 
             },
             "button_toggle-display-obj-vec-acc" => {
-                renderer.is_drawing_acc_vec[thing_id] = !renderer.is_drawing_acc_vec[thing_id]
+                renderer.config.obj_families[thing_id].is_displaying_acc_vec = !renderer.config.obj_families[thing_id].is_displaying_acc_vec 
+            },
+            "button_toggle-display-obj-center-of-mass" => {
+                renderer.config.obj_families[thing_id].is_displaying_center_of_mass = !renderer.config.obj_families[thing_id].is_displaying_center_of_mass 
+            },
+            "button_toggle-display-obj-center-of-momentum" => {
+                renderer.config.obj_families[thing_id].is_displaying_center_of_momentum = !renderer.config.obj_families[thing_id].is_displaying_center_of_momentum 
             },
 
             // FIELD VARIANT
 
             // ...
 
-            // INTEGRATOR VARIANT
-
+            // INTEGRATOR VARIANT    TODO
+ 
             "button_set-obj-integrator-euler-exp" => {
                 engine.engine_setup.object_integrators[thing_id].variant = ObjectIntegratorVariant::EulerExplicit;
             },
@@ -182,11 +190,9 @@ impl Simulation {
                 // TODO save interactions not in enum, but struct
                     // e.g.     grav: true, coulomb: true, lj: false, ...
                     //     -> nope!  (?) },
-            }, _ => { mxyz_utils::dom::console::log("ERROR: button not found"); }
+            }, _ => { console::log("ERROR: button-handler not found"); }
         };
-        mxyz_utils::dom::console::log(&format!("{}", button_id));
     }
-
 }
 
 

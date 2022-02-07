@@ -14,13 +14,13 @@ impl NavGrid {
 
         let grid_section_titles: Vec<(&str, &str)> = Vec::from([
             ("gravity", "gravitational n-body dynamics"),
-            ("oscillators", "oscillators"),
+            // ("oscillators", "oscillators"),
             ("thermo-dynamics", "thermo-dynamics"),
-            ("fluid-dynamics", "fluid dynamics"),
+            // ("fluid-dynamics", "fluid dynamics"),
             ("electro-magnetism", "electro-magnetism"),
-            ("emergent-behavior", "emergent behavior"),
+            // ("emergent-behavior", "emergent behavior"),
             ("quantum-mechanics", "quantum mechanics"),
-            ("various", "various"),
+            // ("various", "various"),
             // ("optics", "optics"), // ?
         ]);
 

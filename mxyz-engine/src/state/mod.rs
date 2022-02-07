@@ -23,6 +23,10 @@ use crate::interaction::field as field_interactions;
 use crate::boundary::object::ObjectBoundary;
 use crate::boundary::object::variant::BoundaryVariant as ObjectBoundaryVariant;
 
+use crate::config::EngineConfig;
+use crate::config::field::FieldEngineConfig;
+use crate::config::obj_family::ObjFamilyEngineConfig;
+
 // use interaction;
 // use integrator;
 // use boundary
@@ -35,16 +39,21 @@ pub struct State {
 }
 impl State {
 
-    pub fn new(sim_id: &str, integrators: &mut EngineSetup) -> Self {
+    pub fn new(
+        sim_id: &str, 
+        integrators: &mut EngineSetup,
+        engine_config: &mut EngineConfig,
+    ) -> Self {
         State {
-            object_families: Self::setup_objects(sim_id, integrators),
-            fields: Self::setup_fields(sim_id, integrators),
+            object_families: Self::setup_objects(sim_id, integrators, engine_config),
+            fields: Self::setup_fields(sim_id, integrators, engine_config),
         }
     }
 
     pub fn setup_objects(
         sim_id: &str,
         engine_setup: &mut EngineSetup,
+        engine_config: &mut EngineConfig,
     ) -> Vec<ObjectFamily> {
 
         const TAU: f64 = 2. * 3.14159265358979;
@@ -58,15 +67,6 @@ impl State {
             ObjectAttribute::VelocityX,
             ObjectAttribute::VelocityY,
         ];
-        // const ACC_OBJECT_ATTRIBUTES: [ObjectAttribute; 7] = [
-        //     ObjectAttribute::Mass,
-        //     ObjectAttribute::PositionX,
-        //     ObjectAttribute::PositionY,
-        //     ObjectAttribute::VelocityX,
-        //     ObjectAttribute::VelocityY,
-        //     ObjectAttribute::AccelerationX,
-        //     ObjectAttribute::AccelerationY,
-        // ];
         const CHARGED_OBJECT_ATTRIBUTES: [ObjectAttribute; 6] = [
             ObjectAttribute::Mass,
             ObjectAttribute::Charge,
@@ -81,16 +81,63 @@ impl State {
 
         let mut object_families: Vec<ObjectFamily> = Vec::new();
 
-
-
-        use crate::config::EngineConfig;
-        use crate::config::FieldEngineConfig;
-        use crate::config::ObjFamilyEngineConfig;
-
         let mut config = EngineConfig::new();
 
         match sim_id {
             "nbody-misc" => {
+
+                let id = 0;
+                let mut family = ObjFamilyEngineConfig::new(id, config.dt);
+                family.obj_variant = ObjectVariant::Particle;
+                
+                config.obj_families.push(family);
+
+                // OBJECT FAMILIES
+                // -------------------------------------------------------------------------------
+
+                let mut family = ObjectFamily::new(
+                    0, 
+                    ObjectVariant::Body, 
+                    Vec::from(OBJECT_ATTRIBUTES)
+                );
+                // integrator
+                let integrator = ObjectIntegrator::new(
+                    OBJECT_INTEGRATOR_VARIANT, DT,  // TODO make default?
+                    Vec::from([]),  // object-field interactions
+                    Vec::from([
+                        object_interactions::object::Interaction::ForceNewtonianGravity,
+                    ])  // object-object interactions
+                ); 
+                engine_setup.object_integrators.push(integrator);
+                // boundaries
+                let boundary = ObjectBoundary::new(
+                    ObjectBoundaryVariant::WallCollisionInelastic
+                );
+                engine_setup.object_boundaries.push(boundary);
+
+                let R = 0.7;
+                let speed = 1.0;
+                let nr_of_objects = 12;
+
+                // objects
+                for obj_idx in 0..nr_of_objects {
+                    // let rand: f64 = rng.gen(); let phi = TAU * rand;
+                    let phi = obj_idx as f64 / nr_of_objects as f64 * TAU;
+                    let x = R * phi.cos();
+                    let y = R * phi.sin();
+                    let u = -speed * phi.sin();
+                    let v =  speed * phi.cos();
+
+                    let object = Vec::from([0.05, x, y, u, v]);
+                    family.add_object(&object);
+                }
+
+                object_families.push(family);
+
+                // let family_config = ObjFamilyRendererConfig::new();
+                // config.obj_families.push(family_config);
+
+            }, "nbody-cloud" => {
 
                 // OBJECT FAMILIES
                 // -------------------------------------------------------------------------------
@@ -112,27 +159,26 @@ impl State {
                 engine_setup.object_integrators.push(integrator);
                 // boundaries
                 let boundary = ObjectBoundary::new(
-                    // ObjectBoundaryVariant::Periodic
-                    // ObjectBoundaryVariant::WallCollisionElastic
-                    ObjectBoundaryVariant::WallCollisionInelastic
-                    // ObjectBoundaryVariant::None
+                    ObjectBoundaryVariant::None
                 );
                 engine_setup.object_boundaries.push(boundary);
 
-                let R = 0.7;
-                let speed = 1.0;
-                let nr_of_objects = 12;
+                let speed = 0.;
+                let nr_of_objects = 10;
 
                 // objects
                 for obj_idx in 0..nr_of_objects {
-                    // let rand: f64 = rng.gen(); let phi = TAU * rand;
-                    let phi = obj_idx as f64 / nr_of_objects as f64 * TAU;
-                    let x = R * phi.cos();
-                    let y = R * phi.sin();
-                    let u = -speed * phi.sin();
-                    let v =  speed * phi.cos();
+                    let rand: f64 = rng.gen(); 
+                    let rand2: f64 = rng.gen(); 
+                    let rand3: f64 = rng.gen(); 
+                    let rand4: f64 = rng.gen(); 
 
-                    let object = Vec::from([0.05, x, y, u, v]);
+                    let x = rand*2. - 1.;
+                    let y = rand2*2. - 1.;
+                    let u = -speed * (rand3*2.-1.);
+                    let v =  speed * (rand4*2.-1.);
+
+                    let object = Vec::from([0.1, x, y, u, v]);
                     family.add_object(&object);
                 }
 
@@ -221,19 +267,21 @@ impl State {
                 let boundary = ObjectBoundary::new(ObjectBoundaryVariant::WallCollisionInelastic);
                 engine_setup.object_boundaries.push(boundary);
 
+                // TODO add dampening somehow, on collision? over time?
+
                 // objects
-                let foo: usize = 10;
+                let foo: usize = 5;
                 let nr_of_bodies = foo.pow(2);
-                let speed = 0.01;
+                let speed = 0.1;
                 for jdx in 0..foo {
                     for idx in 0..foo {
                         let x0 = (idx as f64 + 0.5) / foo as f64 * 2. - 1.;
                         let y0 = (jdx as f64 + 0.5) / foo as f64 * 2. - 1.;
                         let rand1: f64 = rng.gen(); 
                         let rand2: f64 = rng.gen(); 
-                        // let u0 = (rand1 * 2. - 1.) * speed;
-                        // let v0 = (rand2 * 2. - 1.) * speed;
-                        let (u0, v0) = (0., 0.);
+                        let u0 = (rand1 * 2. - 1.) * speed;
+                        let v0 = (rand2 * 2. - 1.) * speed;
+                        // let (u0, v0) = (0., 0.);
                         let x0 = x0 + rand1 / foo as f64;
                         let y0 = y0 + rand2 / foo as f64;
                         let object = Vec::from([1., x0, y0, u0, v0]);
@@ -349,6 +397,10 @@ impl State {
 
                 let DT = 0.5 * DT;
 
+                let nr_of_stars = 4;
+                let nr_of_objects = 1000;
+                let m = 1.0;
+
                 // ASTEROID BELT  (particle)
                 // ===============================================================================
                 let mut family = ObjectFamily::new(
@@ -369,9 +421,8 @@ impl State {
                 engine_setup.object_boundaries.push(boundary);
                 // objects
                 let R = 0.85;
-                let W = 0.;
-                let speed = 1.4;
-                let nr_of_objects = 300;
+                let W = 0.0;
+                let speed = 0.9*(nr_of_stars as f64 * M / R).powf(0.5);
 
                 for obj_idx in 0..nr_of_objects {
                     let rand: f64 = rng.gen();
@@ -384,7 +435,7 @@ impl State {
                     let u = -speed * phi.sin();
                     let v = speed * phi.cos();
 
-                    let object = Vec::from([1., x, y, u, v]);
+                    let object = Vec::from([m, x, y, u, v]);
                     family.add_object(&object);
                 }
                 object_families.push(family);
@@ -408,12 +459,11 @@ impl State {
                 let boundary = ObjectBoundary::new(ObjectBoundaryVariant::None);
                 engine_setup.object_boundaries.push(boundary);
 
-                let nr_of_stars = 2;
-                let R: f64 = 0.1;
+                let R: f64 = 0.2;
                 let speed = match nr_of_stars {
                     1 => 0.,
                     2 => (2 as f64).sqrt(),
-                    _ => 1. / (2.*R).powf(0.5)
+                    _ => (M * (nr_of_stars-1) as f64 / (2.*R)).powf(0.5)
                 };
                 for star_idx in 0..nr_of_stars {
                     let phi = star_idx as f64 / nr_of_stars as f64 * TAU;
@@ -421,7 +471,7 @@ impl State {
                     let y =      R * phi.sin();
                     let u = -speed * phi.sin();
                     let v =  speed * phi.cos();
-                    let object = Vec::from([1., x, y, u, v]);
+                    let object = Vec::from([M, x, y, u, v]);
                     family.add_object(&object);
                 }
                 object_families.push(family);
@@ -434,6 +484,7 @@ impl State {
     pub fn setup_fields(
         sim_id: &str,
         engine_setup: &mut EngineSetup,
+        engine_config: &mut EngineConfig,
     ) -> Vec<Field> {
 
         let mut rng = rand::thread_rng();
@@ -443,18 +494,18 @@ impl State {
         match sim_id {
             "ising-model" => {
 
-                let GRID_SIZE = 100;
-            
+                let GRID_SIZE = 200;
+                let dimensions = (GRID_SIZE, GRID_SIZE, 1);
                 let mut entries = Vec::new();
-                // for row_idx in 0..GRID_SIZE {
-                //     for col_idx in 0..GRID_SIZE {
-                //         let rand: f64 = rng.gen();
-                //         let val = if rand > 0.5 { 0. } else { 1. };
-                //         entries.push(val);
-                //     }
-                // }
+                for row_idx in 0..dimensions.0 {
+                    for col_idx in 0..dimensions.1 {
+                        let rand: f64 = rng.gen();
+                        let val = if rand > 0.5 { -1. } else { 1. };
+                        entries.push(val);
+                    }
+                }
                 let field = Field::new(
-                    1, FieldVariant::Ising, entries
+                    0, FieldVariant::Ising, dimensions, entries
                 );
 
                 // integrator
@@ -473,7 +524,16 @@ impl State {
                 //         object_interactions::object::Interaction::ForceNewtonianGravity,
                 //     ])  // object-object interactions
                 // ); 
+
                 engine_setup.field_integrators.push(integrator);
+
+                // let field_config = FieldEngineConfig {
+                //     id: 0,
+                //     dimensions: Vec::from([100, 100]),
+                // };
+                // engine_config.fields.push(field_config);
+
+
                 // mxyz_utils::dom::console::log("aba");
                 // // boundaries
                 // let boundary = ObjectBoundary::new(ObjectBoundaryVariant::None);

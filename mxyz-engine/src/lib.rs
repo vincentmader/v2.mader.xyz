@@ -25,31 +25,41 @@ pub struct Engine {
 
 impl Engine {
 
-    pub fn new(sim_id: &str) -> Self {
+    pub fn new(
+        sim_id: &str, 
+        // config: &config::EngineConfig
+    ) -> Self {
         Engine { 
             sim_id:          String::from(sim_id),
-            engine_setup:    EngineSetup::new(),
             states:          Vec::new(),
-            iteration_idx:   0,
             config:          config::EngineConfig::new(),
+            iteration_idx:   0,
+            engine_setup:    EngineSetup::new(),
             // time_of_start:   time::Instant::now(),
         }
     }
 
-    pub fn init(&mut self) { 
+    pub fn init(
+        &mut self, 
+        // config: &config::EngineConfig
+    ) { 
+        // self.config = *config.clone();
         // initialize states
         // self.states.push(
         self.states = Vec::from([
-            State::new(&self.sim_id, &mut self.engine_setup)
+            State::new(
+                &self.sim_id, 
+                &mut self.engine_setup,
+                &mut self.config,
+                // config
+            )
         ]);
         // )
     }
 
     pub fn reset(&mut self) { 
-
+        self.init();
         self.iteration_idx = 0;
-        self.init();  // initializes state vector
-
     }
 
     pub fn step(&mut self) {
@@ -58,7 +68,9 @@ impl Engine {
         let fields = &mut state_new.fields;
         for mut field in fields.iter_mut() {
             let integrator = &mut self.engine_setup.field_integrators[field.id];
-            // integrator.step(self.iteration_idx, field, &self.states);
+            // mxyz_utils::dom::console::log(&format!("{}", field.id));
+            // let integrator = &mut self.config.fields[field.id];
+            integrator.step(self.iteration_idx, field, &self.states);
             // TODO bounds?
         }
 
