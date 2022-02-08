@@ -9,17 +9,17 @@ let sim_id = document.getElementById("simulation.js").getAttribute("sim_id");
   let simulation = Simulation.new(sim_id);
   simulation.init();
 
-      // TODO move this definition to rust?
-      let NR_OF_ITERATIONS_PER_RENDER = 5;
-        let bm = document.getElementById("button-menu_main");
-        let slider = document.createElement("input");
-        slider.type = "range";
-        slider.id = "slider_set-iterations-per-render";
-        slider.min = 1;
-        slider.max = 20; // 2000
-        slider.value = 1; // if changed: also in sim/mod.rs AND/OR sim/config.rs
-        bm.appendChild(slider);
-        slider.style = "width: 100%";
+  // TODO move this definition to rust?
+  let NR_OF_ITERATIONS_PER_RENDER = 5;
+  let bm = document.getElementById("button-menu_main");
+  let slider = document.createElement("input");
+  slider.type = "range";
+  slider.id = "slider_set-iterations-per-render";
+  slider.min = 1;
+  slider.max = 10; // 2000
+  slider.value = 1; // if changed: also in sim/mod.rs AND/OR sim/config.rs
+  bm.appendChild(slider);
+  slider.style = "width: 100%";
 
   // event listeners for options
   var options = document.getElementsByTagName("select");
@@ -52,9 +52,8 @@ let sim_id = document.getElementById("simulation.js").getAttribute("sim_id");
   // let last_date = Date.now();
 
   const loop = () => {
-
     let date_1 = Date.now();
-    simulation.step();  // TODO move render into sim.step() ?
+    simulation.step(); // TODO move render into sim.step() ?
     let date_2 = Date.now();
 
     // let date_1 = Date.now();

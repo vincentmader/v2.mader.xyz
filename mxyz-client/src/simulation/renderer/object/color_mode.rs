@@ -52,18 +52,16 @@ pub fn get_object_color_from_speed(obj: &Vec<f64>, alpha: f64) -> String {
 
 pub fn get_object_color_from_mass(obj: &Vec<f64>, alpha: f64) -> String {
 
-    // const MAX_SPEED: f64 = 1.5;
-    // let u = obj[3];
-    // let v = obj[4];
-    // let speed = (u.powf(2.) + v.powf(2.)).sqrt();
-    // let foo = f64::min(1., speed / MAX_SPEED) * 255.;
+    const MAX_MASS: f64 = 1.5;
+    let m = obj[0];
+    let foo = f64::min(1., m / MAX_MASS) * 255.;
 
-    // // TODO generalize gradients
-    // let r = foo;
-    // let g = 255. - (255. * (foo-127.).abs()/128.);  
-    // let b = 255. - foo;
-    // format!("rgba({}, {}, {}, {})", r, g, b, alpha)
-    String::from("rgba(255, 255, 255, 1)")
+    // TODO generalize gradients
+    let r = foo;
+    let g = 255. - (255. * (foo-127.).abs()/128.);  
+    let b = 255. - foo;
+    format!("rgba({}, {}, {}, {})", r, g, b, alpha)
+    // String::from("rgba(255, 255, 255, 1)")
 
 }
 
@@ -98,9 +96,7 @@ pub fn get_object_color_from_distance(obj: &Vec<f64>, alpha: f64) -> String {
 
 }
 
-pub fn get_object_color_default(obj: &Vec<f64>, alpha: f64) -> String {
-
+pub fn get_object_color_default(_obj: &Vec<f64>, alpha: f64) -> String {
     format!("rgba(255, 255, 255, {})", alpha)
-
 }
 

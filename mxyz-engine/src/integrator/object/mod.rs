@@ -11,6 +11,7 @@ use crate::state::State;
 use crate::state::object::ObjectFamily;
 
 use crate::interaction;
+use crate::config::EngineConfig;
 
 
 pub struct ObjectIntegrator {
@@ -42,12 +43,13 @@ impl ObjectIntegrator {
     }
 
     pub fn step(
-        &mut self, 
+        self, 
         iteration_idx: usize,
         family: &mut ObjectFamily,
         // family_idx: usize,
         // family_state: &mut Vec<f64>,
         states: &Vec<State>,
+        config: &EngineConfig,
     ) {
 
         let stepper = match self.variant {
@@ -68,6 +70,7 @@ impl ObjectIntegrator {
             &self.field_interactions,
             &self.object_interactions, 
             self.dt,
+            &config,
         );
 
     }

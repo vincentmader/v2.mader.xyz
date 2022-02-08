@@ -45,9 +45,9 @@ impl Renderer {
         state: &State
     ) {
 
-        let buttons = Vec::from([
-            ("button_toggle-display-tail", "display tails"),
-        ]);
+        // let buttons = Vec::from([
+        //     ("button_toggle-display-tail", "display tails"),
+        // ]);
         let multibuttons = Vec::from([
             ("object motion vectors", Vec::from([
                 ("button_toggle-display-objects", "obj"),
@@ -95,21 +95,21 @@ impl Renderer {
             ])),
         ]);
 
-        struct Button {
-            id: String,
-            class: String,
-        }
+        // struct Button {
+        //     id: String,
+        //     class: String,
+        // }
 
-        struct BMOption {
-            id: String,
-            class: String,
-        }
+        // struct BMOption {
+        //     id: String,
+        //     class: String,
+        // }
 
-        struct BMMultibutton {
-            id: String,
-            class: String,
-            buttons: Vec<Button>
-        }
+        // struct BMMultibutton {
+        //     id: String,
+        //     class: String,
+        //     buttons: Vec<Button>
+        // }
 
         let button_menus = doc.get_element_by_id("page-column-right").unwrap();
         for object_family in &state.object_families {
@@ -232,14 +232,12 @@ impl Renderer {
             // } 
         }
 
-        let object_families = &state.object_families;
-        for object_family in object_families {
-            self.create_button_menu_for_object_family(object_family);
-        }
-        let fields = &state.fields;
-        for field in fields {
-            self.create_button_menu_for_field(field);
-        }
+        // for object_family in &state.object_families {
+        //     self.create_button_menu_for_object_family(object_family);
+        // }
+        // for field in &state.fields {
+        //     self.create_button_menu_for_field(field);
+        // }
     }
 
 }

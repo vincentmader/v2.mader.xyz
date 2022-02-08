@@ -1,6 +1,6 @@
 
-use mxyz_engine::config::EngineConfig;
-use crate::simulation::renderer::config::RendererConfig;
+// use mxyz_engine::config::EngineConfig;
+// use crate::simulation::renderer::config::RendererConfig;
 
 
 pub struct Config {

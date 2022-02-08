@@ -9,6 +9,14 @@ mod periodic;
 mod collision;
 
 
+// pub enum ObjectBoundary {
+//     BoundaryVariant::None => none::apply,
+//     BoundaryVariant::Periodic => periodic::apply,
+//     BoundaryVariant::WallCollisionElastic => collision::wall::elastic::apply,
+//     BoundaryVariant::WallCollisionInelastic => collision::wall::inelastic::apply,
+// }
+
+
 pub struct ObjectBoundary {
 
     pub variant: BoundaryVariant,

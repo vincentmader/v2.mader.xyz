@@ -14,20 +14,19 @@ pub fn force(
 // ) {
 
     // atributes of object
-    let m = object[0];
-    let x = object[1];
-    let y = object[2];
+    let m_1 = object[0];
+    let x_1 = object[1];
+    let y_1 = object[2];
     // atributes of other object
-    let M = other[0];
-    let X = other[1];
-    let Y = other[2];
+    let m_2 = other[0];
+    let x_2 = other[1];
+    let y_2 = other[2];
     
     // distance & force
-    let dx = X-x;
-    let dy = Y-y;
+    let (dx, dy) = (x_2-x_1, y_2-y_1);
     let r = ( dx.powf(2.) + dy.powf(2.) ).sqrt();
         // define: G -> 1
-    let force = (m*M) * r/( r.powf(2.) + epsilon.powf(2.) ).powf(1.5);
+    let force = (m_1*m_2) * r/( r.powf(2.) + epsilon.powf(2.) ).powf(1.5);
     let force_x = force * dx/r;
     let force_y = force * dy/r;
 

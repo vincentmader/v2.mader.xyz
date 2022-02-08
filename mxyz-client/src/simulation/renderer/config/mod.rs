@@ -5,8 +5,6 @@ pub mod obj_family;
 use field::FieldRendererConfig;
 use obj_family::ObjFamilyRendererConfig;
 
-use crate::simulation::renderer::object::color_mode::ObjectColorMode;
-
 
 pub struct RendererConfig {
 

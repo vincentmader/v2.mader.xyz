@@ -1,9 +1,9 @@
 
 use wasm_bindgen::prelude::*;
 
-use mxyz_engine::boundary::field::variant::BoundaryVariant as FieldBoundaryVariant;
+// use mxyz_engine::boundary::field::variant::BoundaryVariant as FieldBoundaryVariant;
 use mxyz_engine::boundary::object::variant::BoundaryVariant as ObjectBoundaryVariant;
-use mxyz_engine::integrator::field::variant::IntegratorVariant as FieldIntegratorVariant;
+// use mxyz_engine::integrator::field::variant::IntegratorVariant as FieldIntegratorVariant;
 use mxyz_engine::integrator::object::variant::IntegratorVariant as ObjectIntegratorVariant;
 use mxyz_engine::state::object::ObjectVariant;
 use mxyz_utils::dom::console;

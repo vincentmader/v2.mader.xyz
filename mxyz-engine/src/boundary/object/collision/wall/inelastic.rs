@@ -31,10 +31,10 @@ pub fn apply(
             obj_slice[3] *= -tamper;
         }
 
-        if obj_slice[2] < X_MIN {  
+        if obj_slice[2] < Y_MIN {  
             obj_slice[2] = -1.;
             obj_slice[4] *= -tamper;
-        } else if obj_slice[2] > X_MAX {
+        } else if obj_slice[2] > Y_MAX {
             obj_slice[2] = 1.;
             obj_slice[4] *= -tamper;
         }

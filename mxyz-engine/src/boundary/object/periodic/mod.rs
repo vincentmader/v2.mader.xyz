@@ -28,9 +28,9 @@ pub fn apply(
             obj_slice[1] = -1.;
         }
 
-        if obj_slice[2] < X_MIN {  
+        if obj_slice[2] < Y_MIN {  
             obj_slice[2] = 1.;
-        } else if obj_slice[2] > X_MAX {
+        } else if obj_slice[2] > Y_MAX {
             obj_slice[2] = -1.;
         }
 

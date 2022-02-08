@@ -7,8 +7,8 @@ use crate::state::object::ObjectAttribute;
 pub struct ObjectFamily {
     pub id: usize,
 
-    pub variant: ObjectVariant,
-    pub attributes: Vec<ObjectAttribute>,
+    // pub variant: ObjectVariant,
+    // pub attributes: Vec<ObjectAttribute>,
 
     pub objects: Vec<f64>,
     // pub states: Vec<Vec<f64>>,
@@ -20,20 +20,20 @@ impl ObjectFamily {
 
     pub fn new(
         id: usize,
-        variant: ObjectVariant,
-        attributes: Vec<ObjectAttribute>,
+        // variant: ObjectVariant,
+        // attributes: Vec<ObjectAttribute>,
         // objects: Vec<f64>,
     ) -> Self {
 
-        let object_length = attributes.len();
+        let object_length = 5; // attributes.len();
         let objects = Vec::new();
         let nr_of_objects = objects.len() / object_length;
         // let states = Vec::from([objects]);
 
         ObjectFamily {
             id,
-            variant,
-            attributes,
+            // variant,
+            // attributes,
             objects,
             // states,
             nr_of_objects,

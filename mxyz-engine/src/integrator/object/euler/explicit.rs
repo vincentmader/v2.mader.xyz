@@ -7,6 +7,8 @@ use crate::interaction::object::field::Interaction as FieldInteraction;
 
 use crate::interaction::object::object::forces;
 
+use crate::config::EngineConfig;
+
 
 pub fn step(
     iteration_idx: usize,
@@ -15,12 +17,14 @@ pub fn step(
     field_interactions: &Vec<FieldInteraction>,
     object_interactions: &Vec<ObjectInteraction>,
     dt: f64,
+    config: &EngineConfig,
 ) {
 
     // TODO make changeable
-    const epsilon: f64 = 0.05; // todo: get from obj family? (& saved externally?)
+    let epsilon = 0.05; // todo: get from obj family? (& saved externally?)
 
-    if matches!(family.variant, ObjectVariant::Static) { return () }
+    let obj_variant = &config.obj_families[family.id].obj_variant;
+    if matches!(obj_variant, ObjectVariant::Static) { return () }
 
     // get length of slice representing object in state vec
     let object_length = family.object_length;
@@ -29,7 +33,8 @@ pub fn step(
         let obj_slice = &mut family.objects[obj_idx*object_length..(obj_idx+1)*object_length];
 
         for other_family in &states[iteration_idx].object_families {
-            if matches!(other_family.variant, ObjectVariant::Particle) { continue }
+            let other_variant = &config.obj_families[other_family.id].obj_variant;
+            if matches!(other_variant, ObjectVariant::Particle) { return () }
 
             // TODO get relevant neighbor: tree / sectors ?
 

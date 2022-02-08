@@ -1,0 +1,18 @@
+#!/bin/sh
+
+
+cd "$(dirname $0)"
+PWD="$(pwd)"
+PROJ_ROOT="$PWD/../.."
+
+# echo $PROJ_ROOT
+cd $PROJ_ROOT
+# ls
+for f in *; do
+  file=$f
+  path="$PROJ_ROOT/$f"
+  echo "File -> $path"
+
+done
+
+

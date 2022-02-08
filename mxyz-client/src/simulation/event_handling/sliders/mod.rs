@@ -13,11 +13,7 @@ use mxyz_utils::dom::console;
 impl Simulation {
 
     pub fn handle_slider_event(&mut self, slider_id: &str) {
-
-        {
-            use mxyz_utils::dom;
-            dom::console::log(&format!("{}", slider_id));
-        }
+        console::log(&format!("slider-id: {}", slider_id));
 
         let document = dom::document();
 

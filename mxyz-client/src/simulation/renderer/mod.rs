@@ -7,13 +7,13 @@ mod buttons;
 
 
 
-use std::collections::HashMap;
-use std::cmp;
+// use std::collections::HashMap;
+// use std::cmp;
 
 use mxyz_engine::Engine;
 use mxyz_engine::state::State;
 use mxyz_engine::state::field::Field;
-use mxyz_engine::state::field::FieldVariant;
+// use mxyz_engine::state::field::FieldVariant;
 use mxyz_engine::state::object::ObjectFamily;
 
 pub use mxyz_utils::dom::canvas::Canvas;
@@ -110,8 +110,8 @@ impl Renderer {
         // TODO setup default field rendering options
 
         // TODO initialize user inputs
-        self.init_buttons(&initial_state);
-        self.init_sliders(&initial_state);
+        // self.init_buttons(&initial_state);
+        // self.init_sliders(&initial_state);
 
         self.init_button_menu_1(&doc, );
         self.init_button_menu_2(&doc, &initial_state);
@@ -135,7 +135,7 @@ impl Renderer {
         // TODO put somewhere else
         let canvas = &mut self.canvases[canvas_id];
         // DISPLAY FIELD
-        const FIELD_RESOLUTION: (usize, usize) = (30, 30);
+        const FIELD_RESOLUTION: (usize, usize) = (40, 40);
         for row_idx in 0..FIELD_RESOLUTION.0 {
             for col_idx in 0..FIELD_RESOLUTION.1 {
 
@@ -210,7 +210,9 @@ impl Renderer {
 
         // DISPLAY HUD
         if self.config.is_displaying_hud { 
-            self.display_hud( &engine )  // todo
+            self.display_hud( 
+                // &engine   
+            )  
         }
 
     }
@@ -222,8 +224,8 @@ impl Renderer {
         canvas_id: usize,
     ) {
         // const r: f64 = 0.01;  // TODO setup slider
-        const r: f64 = 0.013;  // TODO setup slider
-        const is_filled: bool = true;  // TODO setup toggle-button
+        let r = 0.013;  // TODO setup slider
+        let is_filled = true;  // TODO setup toggle-button
 
         let objects = &family.objects;
         let object_length = family.object_length;
@@ -342,7 +344,7 @@ impl Renderer {
         states: &Vec<State>,
         canvas_id: usize,
     ) {
-        const tail_length: usize = 100; // TODO make configurable
+        let tail_length = 100; // TODO make configurable
         let tail_width = 2.; // TODO make configurable
 
         let nr_of_objects = family.nr_of_objects;
@@ -445,7 +447,7 @@ impl Renderer {
     pub fn display_field(
         &mut self, 
         field: &Field, 
-        states: &Vec<State>,
+        _states: &Vec<State>,
         canvas_id: usize,
     ) {
 
@@ -455,10 +457,11 @@ impl Renderer {
         for idx in 0..dimensions.0 {
             for jdx in 0..dimensions.1 {  // TODO handle z ?
                 let cell = &field.entries[jdx*dimensions.0+idx];
+                let cell = *cell as i32;
 
                 let color = match cell {
-                    -1. => "black",
-                    1. => "white",
+                    -1 => "black",
+                    1 => "white",
                     _ => ""
                 };
 
@@ -489,14 +492,15 @@ impl Renderer {
     }
 
     pub fn display_hud(
-        &mut self, engine: &Engine,
+        &mut self, 
+        // engine: &Engine,
     ) {
         let canvas = &mut self.canvases[0];
-        let ctx = &canvas.context;
+        // let ctx = &canvas.context;
         canvas.set_font("36px sans-serif");
 
-        let W = canvas.dimensions.0;
-        let H = canvas.dimensions.1;
+        // let W = canvas.dimensions.0;
+        // let H = canvas.dimensions.1;
 
         canvas.set_stroke_style("white");
         canvas.set_fill_style("white");
@@ -516,55 +520,55 @@ impl Renderer {
         }
     }
 
-    pub fn create_button_menu_for_object_family(
-        &mut self, 
-        object_family: &ObjectFamily,
-    ) {
+    // pub fn create_button_menu_for_object_family(
+    //     &mut self, 
+    //     object_family: &ObjectFamily,
+    // ) {
 
-    }
+    // }
 
-    pub fn create_button_menu_for_field(
-        &mut self, 
-        field: &Field
-    ) {
+    // pub fn create_button_menu_for_field(
+    //     &mut self, 
+    //     field: &Field
+    // ) {
 
-    }
+    // }
 
-    // todo: rename -> init_button_menus
-    pub fn init_buttons(&mut self, state: &State) {
+    // // todo: rename -> init_button_menus
+    // pub fn init_buttons(&mut self, state: &State) {
 
-        // ================
+    //     // ================
 
         
 
-        // ================
+    //     // ================
 
-        struct Input {
+    //     // struct Input {
 
-        }
+    //     // }
 
-        enum InputVariant {
-            button,
-            option,
-            slider,
-        }
+    //     // enum InputVariant {
+    //     //     button,
+    //     //     option,
+    //     //     slider,
+    //     // }
 
-        // ================
-
-
-        // ================
+    //     // ================
 
 
-        // ================
+    //     // ================
 
-        // let slider_ids = Vec::from([
-        //     "slider_dt"
-        // ]);
-    }
 
-    pub fn init_sliders(&mut self, state: &State) {
+    //     // ================
 
-    }
+    //     // let slider_ids = Vec::from([
+    //     //     "slider_dt"
+    //     // ]);
+    // }
+
+    // pub fn init_sliders(&mut self, state: &State) {
+
+    // }
 
 
 

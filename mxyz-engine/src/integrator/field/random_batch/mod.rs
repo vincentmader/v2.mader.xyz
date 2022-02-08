@@ -1,3 +1,4 @@
+#![allow(non_snake_case)]
 
 use rand::Rng;
 
@@ -5,6 +6,7 @@ use crate::state::State;
 use crate::state::field::Field;
 
 use crate::interaction::field as interactions;
+
 
 
 fn boltzmann_prob(dE: f64, T: f64) -> f64 {  // TODO -> physics
