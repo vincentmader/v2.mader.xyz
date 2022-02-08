@@ -7,7 +7,7 @@ use crate::state::object::ObjectAttribute;
 pub struct ObjectFamily {
     pub id: usize,
 
-    // pub variant: ObjectVariant,
+    pub variant: ObjectVariant,
     // pub attributes: Vec<ObjectAttribute>,
 
     pub objects: Vec<f64>,
@@ -20,7 +20,7 @@ impl ObjectFamily {
 
     pub fn new(
         id: usize,
-        // variant: ObjectVariant,
+        variant: ObjectVariant,
         // attributes: Vec<ObjectAttribute>,
         // objects: Vec<f64>,
     ) -> Self {
@@ -32,7 +32,7 @@ impl ObjectFamily {
 
         ObjectFamily {
             id,
-            // variant,
+            variant,
             // attributes,
             objects,
             // states,

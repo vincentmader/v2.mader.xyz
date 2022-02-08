@@ -110,7 +110,8 @@ impl State {
 
                 let mut family = ObjectFamily::new(
                     id, 
-                    // ObjectVariant::Body, Vec::from(OBJECT_ATTRIBUTES)
+                    ObjectVariant::Body, 
+                    // Vec::from(OBJECT_ATTRIBUTES)
                 );
 
                 let R = 0.7;

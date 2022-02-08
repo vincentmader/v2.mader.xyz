@@ -13,7 +13,7 @@ pub fn step(
     field_interactions: &Vec<FieldInteraction>,
     object_interactions: &Vec<ObjectInteraction>,
     dt: f64,
-    config: &EngineConfig,
+    // config: &EngineConfig,
 ) {
 
 }

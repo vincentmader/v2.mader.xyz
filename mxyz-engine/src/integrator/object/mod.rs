@@ -43,13 +43,13 @@ impl ObjectIntegrator {
     }
 
     pub fn step(
-        self, 
+        &mut self, 
         iteration_idx: usize,
         family: &mut ObjectFamily,
         // family_idx: usize,
         // family_state: &mut Vec<f64>,
         states: &Vec<State>,
-        config: &EngineConfig,
+        // config: &EngineConfig,
     ) {
 
         let stepper = match self.variant {
@@ -70,7 +70,7 @@ impl ObjectIntegrator {
             &self.field_interactions,
             &self.object_interactions, 
             self.dt,
-            &config,
+            // &config,
         );
 
     }

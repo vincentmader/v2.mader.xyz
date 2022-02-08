@@ -74,9 +74,9 @@ impl Engine {
         for mut family in families.iter_mut() {
 
             mxyz_utils::dom::console::log(&format!("{}", family.id));
-            let integrators = &self.config.obj_families[family.id].integrators;
-            for integrator in integrators.iter() {
-                integrator.step(self.iteration_idx, &mut family, &self.states, &self.config);
+            let integrators = &mut self.config.obj_families[family.id].integrators;
+            for integrator in integrators.iter_mut() {
+                integrator.step(self.iteration_idx, &mut family, &self.states);
             }
 
             let boundaries = &mut self.config.obj_families[family.id].boundaries;
