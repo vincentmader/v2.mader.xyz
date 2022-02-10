@@ -1,54 +1,47 @@
 
-use crate::state::object::ObjectFamily;
+// use crate::state::object::family::ObjFamily;
 
 pub mod variant;
-use variant::BoundaryVariant;
+// use variant::BoundaryVariant;
 
-mod none;
-mod periodic;
-mod collision;
+pub mod none;
+pub mod periodic;
+pub mod collision;
 
 
-// pub enum ObjectBoundary {
-//     BoundaryVariant::None => none::apply,
-//     BoundaryVariant::Periodic => periodic::apply,
-//     BoundaryVariant::WallCollisionElastic => collision::wall::elastic::apply,
-//     BoundaryVariant::WallCollisionInelastic => collision::wall::inelastic::apply,
+
+// pub struct ObjBoundary {
+
+//     pub variant: BoundaryVariant,
+
 // }
+// impl ObjBoundary {
 
+//     pub fn new(
+//         variant: BoundaryVariant,
+//     ) -> Self {
 
-pub struct ObjectBoundary {
+//         ObjBoundary {
+//             variant,
+//         }
 
-    pub variant: BoundaryVariant,
+//     }
 
-}
-impl ObjectBoundary {
+//     pub fn apply(
+//         &mut self, 
+//         obj_family: &mut ObjFamily
+//     ) {
 
-    pub fn new(
-        variant: BoundaryVariant,
-    ) -> Self {
+//         let applier = match self.variant {
+//             BoundaryVariant::None => none::apply,
+//             BoundaryVariant::Periodic => periodic::apply,
+//             BoundaryVariant::WallCollisionElastic => collision::wall::elastic::apply,
+//             BoundaryVariant::WallCollisionInelastic => collision::wall::inelastic::apply,
+//         };
 
-        ObjectBoundary {
-            variant,
-        }
+//         applier(obj_family);
 
-    }
+//     }
 
-    pub fn apply(
-        &mut self, 
-        object_family: &mut ObjectFamily
-    ) {
-
-        let applier = match self.variant {
-            BoundaryVariant::None => none::apply,
-            BoundaryVariant::Periodic => periodic::apply,
-            BoundaryVariant::WallCollisionElastic => collision::wall::elastic::apply,
-            BoundaryVariant::WallCollisionInelastic => collision::wall::inelastic::apply,
-        };
-
-        applier(object_family);
-
-    }
-
-}
+// }
 

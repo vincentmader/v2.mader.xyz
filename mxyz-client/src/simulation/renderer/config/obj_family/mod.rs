@@ -1,6 +1,6 @@
 
-use crate::simulation::renderer::object::color_mode::ObjectColorMode;
-use crate::simulation::renderer::object::tail_variant::ObjectTailVariant;
+use crate::simulation::renderer::object::color_mode::ObjColorMode;
+use crate::simulation::renderer::object::tail_variant::ObjTailVariant;
 
 
 pub struct ObjFamilyRendererConfig {
@@ -17,8 +17,8 @@ pub struct ObjFamilyRendererConfig {
     pub is_displaying_center_of_momentum: bool,
     // pub display_acc_vec: bool,
     // pub drawing_radius: f64,
-    pub color_mode: ObjectColorMode,
-    pub tail_variant: ObjectTailVariant,
+    pub color_mode: ObjColorMode,
+    pub tail_variant: ObjTailVariant,
 
 }
 impl ObjFamilyRendererConfig {
@@ -37,8 +37,8 @@ impl ObjFamilyRendererConfig {
             is_displaying_center_of_momentum: false,
             // display_acc_vec: bool,
             // drawing_radius: 0.02,
-            color_mode: ObjectColorMode::Default,
-            tail_variant: ObjectTailVariant::None,
+            color_mode: ObjColorMode::Default,
+            tail_variant: ObjTailVariant::None,
         }
     }
 }

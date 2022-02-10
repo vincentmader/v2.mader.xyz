@@ -1,15 +1,13 @@
 
 use wasm_bindgen::prelude::*;
 
-// use mxyz_engine::boundary::field::variant::BoundaryVariant as FieldBoundaryVariant;
-use mxyz_engine::boundary::object::variant::BoundaryVariant as ObjectBoundaryVariant;
-// use mxyz_engine::integrator::field::variant::IntegratorVariant as FieldIntegratorVariant;
-use mxyz_engine::integrator::object::variant::IntegratorVariant as ObjectIntegratorVariant;
-use mxyz_engine::state::object::ObjectVariant;
+use mxyz_engine::boundary::object::variant::ObjBoundaryVariant;
+use mxyz_engine::integrator::object::variant::ObjIntegratorVariant;
+use mxyz_engine::state::object::variant::ObjVariant;
 use mxyz_utils::dom::console;
 use crate::simulation::Simulation;
-use crate::simulation::renderer::object::color_mode::ObjectColorMode;
-use crate::simulation::renderer::object::tail_variant::ObjectTailVariant;
+use crate::simulation::renderer::object::color_mode::ObjColorMode;
+use crate::simulation::renderer::object::tail_variant::ObjTailVariant;
 
 
 #[wasm_bindgen]
@@ -22,12 +20,12 @@ impl Simulation {
         // let button = document.get_element_by_id(button_id).unwrap();
 
         let mut rel_button_id = String::from(button_id);
-        // get id of field/object_family that button belongs to
+        // get id of field/obj_family that button belongs to
         let mut thing_id: usize = 0;
         if button_id.starts_with("obj-fam_") || button_id.starts_with("field_") {
             // id
             thing_id = button_id.split("_").nth(1).unwrap().parse::<usize>().unwrap();
-            // get button_id without object_family id
+            // get button_id without obj_family id    TODO make this prettier
             let mut foo = button_id.split("_");
             let count = button_id.split("_").count();
             rel_button_id = String::from("button");
@@ -48,14 +46,14 @@ impl Simulation {
                 renderer.reset();
             }, 
             "button_toggle-pause" => {
-                self.engine.config.is_paused = !self.engine.config.is_paused;
-                self.renderer.config.is_paused = !self.renderer.config.is_paused;
+                engine.config.is_paused = !engine.config.is_paused;
+                renderer.config.is_paused = !renderer.config.is_paused;
             },
             "button_toggle-pause-engine" => {
-                self.engine.config.is_paused = !self.engine.config.is_paused;
+                engine.config.is_paused = !engine.config.is_paused;
             },
             "button_toggle-pause-renderer" => {
-                self.renderer.config.is_paused = !self.renderer.config.is_paused;
+                renderer.config.is_paused = !renderer.config.is_paused;
             },
             "button_toggle-display-hud" => {
                 renderer.config.is_displaying_hud = !renderer.config.is_displaying_hud;
@@ -72,51 +70,51 @@ impl Simulation {
 
             "button_set-obj-variant-particle" => {
                 let iteration_idx = engine.iteration_idx;
-                engine.states[iteration_idx].object_families[thing_id].variant = ObjectVariant::Particle;
-                // engine.config.obj_families[thing_id].obj_variant = ObjectVariant::Particle;
+                engine.states[iteration_idx].obj_families[thing_id].variant = ObjVariant::Particle;
+                // engine.config.obj_families[thing_id].obj_variant = ObjVariant::Particle;
             },
             "button_set-obj-variant-body" => {
                 let iteration_idx = engine.iteration_idx;
-                engine.states[iteration_idx].object_families[thing_id].variant = ObjectVariant::Body;
+                engine.states[iteration_idx].obj_families[thing_id].variant = ObjVariant::Body;
             },
             "button_set-obj-variant-static" => {
                 let iteration_idx = engine.iteration_idx;
-                engine.states[iteration_idx].object_families[thing_id].variant = ObjectVariant::Static;
+                engine.states[iteration_idx].obj_families[thing_id].variant = ObjVariant::Static;
             },
 
             // OBJECT COLOR MODE
             "button_set-obj-col-default" => {
-                renderer.config.obj_families[thing_id].color_mode = ObjectColorMode::Default;
+                renderer.config.obj_families[thing_id].color_mode = ObjColorMode::Default;
             },
             "button_set-obj-col-dist" => {
-                renderer.config.obj_families[thing_id].color_mode = ObjectColorMode::Distance;
+                renderer.config.obj_families[thing_id].color_mode = ObjColorMode::Distance;
             },
             "button_set-obj-col-speed" => {
-                renderer.config.obj_families[thing_id].color_mode = ObjectColorMode::Speed;
+                renderer.config.obj_families[thing_id].color_mode = ObjColorMode::Speed;
             },
             "button_set-obj-col-mass" => {
-                renderer.config.obj_families[thing_id].color_mode = ObjectColorMode::Mass;
+                renderer.config.obj_families[thing_id].color_mode = ObjColorMode::Mass;
             },
             "button_set-obj-col-charge" => {
-                renderer.config.obj_families[thing_id].color_mode = ObjectColorMode::Charge;
+                renderer.config.obj_families[thing_id].color_mode = ObjColorMode::Charge;
             },
             "button_set-obj-col-hsv-pos" => {
-                renderer.config.obj_families[thing_id].color_mode = ObjectColorMode::HSLPosition;
+                renderer.config.obj_families[thing_id].color_mode = ObjColorMode::HSLPosition;
             },
             "button_set-obj-col-hsv-vel" => {
-                renderer.config.obj_families[thing_id].color_mode = ObjectColorMode::HSLVelocity;
+                renderer.config.obj_families[thing_id].color_mode = ObjColorMode::HSLVelocity;
             },
 
             // OBJECT TAIL VARIANT
 
             "button_set-obj-tail-variant-none" => {
-                renderer.config.obj_families[thing_id].tail_variant = ObjectTailVariant::None;
+                renderer.config.obj_families[thing_id].tail_variant = ObjTailVariant::None;
             },
             "button_set-obj-tail-variant-line" => {
-                renderer.config.obj_families[thing_id].tail_variant = ObjectTailVariant::Line;
+                renderer.config.obj_families[thing_id].tail_variant = ObjTailVariant::Line;
             },
             "button_set-obj-tail-variant-area" => {
-                renderer.config.obj_families[thing_id].tail_variant = ObjectTailVariant::Area;
+                renderer.config.obj_families[thing_id].tail_variant = ObjTailVariant::Area;
             },
 
             // OBJECT MOTION VECTORS
@@ -147,45 +145,35 @@ impl Simulation {
             // INTEGRATOR VARIANT    TODO
  
             "button_set-obj-integrator-euler-exp" => {
-                engine.engine_setup.object_integrators[thing_id].variant = ObjectIntegratorVariant::EulerExplicit;
+                engine.config.obj_families[thing_id].integrator = ObjIntegratorVariant::EulerExplicit;
             },
-            "button_set-obj-integrator-euler-imp" => {
-                engine.engine_setup.object_integrators[thing_id].variant = ObjectIntegratorVariant::EulerImplicit;
-            },
-            "button_set-obj-integrator-rk2" => {
-                engine.engine_setup.object_integrators[thing_id].variant = ObjectIntegratorVariant::RungeKutta2;
-            },
-            "button_set-obj-integrator-rk4" => {
-                engine.engine_setup.object_integrators[thing_id].variant = ObjectIntegratorVariant::RungeKutta4;
-            },
-            "button_set-obj-integrator-leapfrog" => {
-                engine.engine_setup.object_integrators[thing_id].variant = ObjectIntegratorVariant::LeapFrog;
-            },
-            "button_set-obj-integrator-verlet" => {
-                engine.engine_setup.object_integrators[thing_id].variant = ObjectIntegratorVariant::Verlet;
-            },
+            "button_set-obj-integrator-euler-imp" => {},
+            "button_set-obj-integrator-rk2" => {},
+            "button_set-obj-integrator-rk4" => {},
+            "button_set-obj-integrator-leapfrog" => {},
+            "button_set-obj-integrator-verlet" => {},
 
             // BOUNDARY VARIANT
 
             "button_set-obj-bound-none" => {  // TODO
-                self.engine.engine_setup.object_boundaries[thing_id].variant = ObjectBoundaryVariant::None;
+                engine.config.obj_families[thing_id].boundary = ObjBoundaryVariant::None;
             },
             "button_set-obj-bound-periodic" => {
-                engine.engine_setup.object_boundaries[thing_id].variant = ObjectBoundaryVariant::Periodic;
+                engine.config.obj_families[thing_id].boundary = ObjBoundaryVariant::Periodic;
             },
             "button_set-obj-bound-wall-elastic" => {
-                engine.engine_setup.object_boundaries[thing_id].variant = ObjectBoundaryVariant::WallCollisionElastic;
+                engine.config.obj_families[thing_id].boundary = ObjBoundaryVariant::WallCollisionElastic;
             },
             "button_set-obj-bound-wall-inelastic" => {
-                engine.engine_setup.object_boundaries[thing_id].variant = ObjectBoundaryVariant::WallCollisionInelastic;
+                engine.config.obj_families[thing_id].boundary = ObjBoundaryVariant::WallCollisionInelastic;
             },
 
             // ...
 
             "button_set-obj-interaction-none" => {
-                // let nr_of_families = self.engine.states[self.engine.iteration_idx].object_families.len();
+                // let nr_of_families = self.engine.states[self.engine.iteration_idx].obj_families.len();
                 // for idx in 0..nr_of_families {
-                //     // self.engine.engine_setup.object[0].object_interactions;
+                //     // engine.engine_setup.object[0].obj_interactions;
                 // }
                 // TODO save interactions not in enum, but struct
                     // e.g.     grav: true, coulomb: true, lj: false, ...
@@ -293,7 +281,7 @@ impl Simulation {
     //     let menu = document.create_element("div").unwrap();
     //             menu.set_id(&format!("bm-{}", 0));
     //     menus.append_child(&menu).unwrap();
-    //     let object_color_modes = HashMap::from([
+    //     let obj_color_modes = HashMap::from([
     //         ("set-obj_color_mode-default", "def"),
     //         ("set-obj_color_mode-hsv_velocity", "hsv vel"),
     //         ("set-obj_color_mode-hsv_position", "hsv pos"),
@@ -302,15 +290,15 @@ impl Simulation {
     //         ("set-obj_color_mode-charge", "charge"),
     //     ]);
     //     init_multibutton(
-    //         document, "bm-0", "object color mode", &object_color_modes
+    //         document, "bm-0", "object color mode", &obj_color_modes
     //     );
     //     let document = utils::dom::document();
     //     init_multibutton2(
-    //         document, "bm-0", "object color mode", &object_color_modes
+    //         document, "bm-0", "object color mode", &obj_color_modes
     //     );
     //     // let document = utils::dom::document();
     //     // init_option(
-    //     //     document, "bm-0", "object color mode", &object_color_modes
+    //     //     document, "bm-0", "object color mode", &obj_color_modes
     //     // );
 
 
@@ -378,17 +366,17 @@ impl Simulation {
     // //     match option_id {
     // //         "button-set-obj_color_mode-default" => {
     // //             // button.set_attribute("class", "sub-button_active").unwrap();
-    // //             self.renderer.object_color_mode = ObjectColorMode::Default;
+    // //             self.renderer.obj_color_mode = ObjColorMode::Default;
     // //         }, "button-set-obj_color_mode-hsv_position" => {
-    // //             self.renderer.object_color_mode = ObjectColorMode::HSLPosition;
+    // //             self.renderer.obj_color_mode = ObjColorMode::HSLPosition;
     // //         }, "button-set-obj_color_mode-hsv_velocity" => {
-    // //             self.renderer.object_color_mode = ObjectColorMode::HSLVelocity;
+    // //             self.renderer.obj_color_mode = ObjColorMode::HSLVelocity;
     // //         }, "button-set-obj_color_mode-speed" => {
-    // //             self.renderer.object_color_mode = ObjectColorMode::Speed;
+    // //             self.renderer.obj_color_mode = ObjColorMode::Speed;
     // //         }, "button-set-obj_color_mode-distance_from_origin" => {
-    // //             self.renderer.object_color_mode = ObjectColorMode::Distance;
+    // //             self.renderer.obj_color_mode = ObjColorMode::Distance;
     // //         }, "button-set-obj_color_mode-charge" => {
-    // //             self.renderer.object_color_mode = ObjectColorMode::Charge;
+    // //             self.renderer.obj_color_mode = ObjColorMode::Charge;
     // //         }, _ => {}
     // //     }
     // }

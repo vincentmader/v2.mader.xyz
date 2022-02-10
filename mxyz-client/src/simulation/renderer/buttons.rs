@@ -112,7 +112,7 @@ impl Renderer {
         // }
 
         let button_menus = doc.get_element_by_id("page-column-right").unwrap();
-        for object_family in &state.object_families {
+        for obj_family in &state.obj_families {
 
             // create section for object family
             let section = doc.create_element("div").unwrap();
@@ -120,7 +120,7 @@ impl Renderer {
             button_menus.append_child(&section).unwrap();
             // add title
             let title = doc.create_element("div").unwrap();
-            title.set_inner_html(&format!("object family {}", &object_family.id));
+            title.set_inner_html(&format!("object family {}", &obj_family.id));
             title.set_attribute("style", "text-align: left; padding-left: 10px;").unwrap();
             section.append_child(&title).unwrap();
             // create button menu in section, holding options & multi-buttons
@@ -153,7 +153,7 @@ impl Renderer {
                     button.set_attribute("class", "bm_multibutton_button").unwrap();
                     let button_id = buttons[button_idx].0;
                     let button_title = buttons[button_idx].1;
-                    button.set_id(&format!("obj-fam_{}_{}", object_family.id, button_id));
+                    button.set_id(&format!("obj-fam_{}_{}", obj_family.id, button_id));
                     button.set_inner_html(button_title);
                     if button_idx == 0 {
                         button.set_attribute("style", "border-left: 0px;").unwrap();
@@ -211,7 +211,7 @@ impl Renderer {
 
                     let div_option_dropdown_item = doc.create_element("button").unwrap();
                     div_option_dropdown_item.set_attribute("class", "dropdown-item").unwrap();
-                    div_option_dropdown_item.set_id(&format!("obj-fam_{}_{}", object_family.id, button_id));
+                    div_option_dropdown_item.set_id(&format!("obj-fam_{}_{}", obj_family.id, button_id));
                     div_option_dropdown_item.set_inner_html(button_title);
                 //     // if button_idx == 0 {
                 //     //     div_button_dropdown_item.set_attribute("style", "border-left: 0px;").unwrap();
@@ -232,8 +232,8 @@ impl Renderer {
             // } 
         }
 
-        // for object_family in &state.object_families {
-        //     self.create_button_menu_for_object_family(object_family);
+        // for obj_family in &state.obj_families {
+        //     self.create_button_menu_for_obj_family(obj_family);
         // }
         // for field in &state.fields {
         //     self.create_button_menu_for_field(field);

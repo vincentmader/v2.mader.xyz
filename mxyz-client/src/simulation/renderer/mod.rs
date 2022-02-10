@@ -2,25 +2,19 @@
 pub mod config;
 pub mod field;
 pub mod object;
-
 mod buttons;
 
-
-
-// use std::collections::HashMap;
-// use std::cmp;
 
 use mxyz_engine::Engine;
 use mxyz_engine::state::State;
 use mxyz_engine::state::field::Field;
-// use mxyz_engine::state::field::FieldVariant;
-use mxyz_engine::state::object::ObjectFamily;
+use mxyz_engine::state::object::family::ObjFamily;
 
 pub use mxyz_utils::dom::canvas::Canvas;
 pub use mxyz_utils::dom::console;
 
-use object::tail_variant::ObjectTailVariant;
-use object::color_mode::ObjectColorMode;
+use object::tail_variant::ObjTailVariant;
+use object::color_mode::ObjColorMode;
 
 
 pub struct Renderer {
@@ -29,20 +23,16 @@ pub struct Renderer {
     pub frame_idx: usize,
     canvases: Vec<Canvas>,
     pub config: config::RendererConfig,
-
-    // pub is_paused: bool,
-    // pub is_halted: bool,
-    // pub is_displaying_hud: bool,
-    // pub is_clearing_canvas: bool,
-
+    //
     pub is_drawing_families: Vec<bool>,
     pub is_drawing_pos_vec: Vec<bool>,
     pub is_drawing_vel_vec: Vec<bool>,
     pub is_drawing_acc_vec: Vec<bool>,
-    pub obj_tail_variant: Vec<ObjectTailVariant>,
-    pub obj_color_mode: Vec<ObjectColorMode>,
+    pub obj_tail_variant: Vec<ObjTailVariant>,
+    pub obj_color_mode: Vec<ObjColorMode>,
 
 }
+
 impl Renderer {
 
     pub fn new(sim_id: &str) -> Self {
@@ -52,10 +42,6 @@ impl Renderer {
             canvases: Vec::new(),
             config: config::RendererConfig::new(),
             //
-            // is_paused: false,
-            // is_halted: false,
-            // is_displaying_hud: false,
-            // is_clearing_canvas: true,
             is_drawing_families: Vec::new(),
             is_drawing_pos_vec: Vec::new(),
             is_drawing_vel_vec: Vec::new(),
@@ -79,7 +65,7 @@ impl Renderer {
         self.canvases.push(canvas);
 
         let initial_state = &states[self.frame_idx];
-        let nr_of_families = initial_state.object_families.len();
+        let nr_of_families = initial_state.obj_families.len();
 
         // setup default object-family rendering options
         for idx in 0..nr_of_families {
@@ -89,20 +75,20 @@ impl Renderer {
             self.is_drawing_acc_vec.push(false);
 
             let obj_tail_variant = match self.sim_id.as_str() {
-                // "2body-kepler" => ObjectColorMode::Speed,
-                // "nbody-flowers" => ObjectColorMode::Distance,
-                "nbody-asteroids" => ObjectTailVariant::None,
-                "lennard-jones" => ObjectTailVariant::None,
-                _ => ObjectTailVariant::Line,
+                // "2body-kepler" => ObjColorMode::Speed,
+                // "nbody-flowers" => ObjColorMode::Distance,
+                "nbody-asteroids" => ObjTailVariant::None,
+                "lennard-jones" => ObjTailVariant::None,
+                _ => ObjTailVariant::Line,
             };
             let obj_color_mode = match self.sim_id.as_str() {
-                "nbody-misc" => ObjectColorMode::Speed,
-                "nbody-asteroids" => ObjectColorMode::Distance,
-                // "nbody-flowers" => ObjectColorMode::Distance,
+                "nbody-misc" => ObjColorMode::Speed,
+                "nbody-asteroids" => ObjColorMode::Distance,
+                // "nbody-flowers" => ObjColorMode::Distance,
                 "charge-interaction" => match idx {
-                    0 => ObjectColorMode::Charge,
-                    _ => ObjectColorMode::Default,
-                }, _ => ObjectColorMode::Default,
+                    0 => ObjColorMode::Charge,
+                    _ => ObjColorMode::Default,
+                }, _ => ObjColorMode::Default,
             };
             self.obj_tail_variant.push(obj_tail_variant);
             self.obj_color_mode.push(obj_color_mode);
@@ -124,7 +110,7 @@ impl Renderer {
         // STATE SETUP
         let current_state = &states[self.frame_idx];
         let fields = &current_state.fields;
-        let families = &current_state.object_families;
+        let families = &current_state.obj_families;
 
         // CANVAS SETUP
         let canvas_id = 0;  // todo: get id 
@@ -145,31 +131,30 @@ impl Renderer {
                 let mut force = Vec::from([0., 0.]);
 
                 for family in families.iter() {
-                    use mxyz_engine::state::object::variant::ObjectVariant;
+                    use mxyz_engine::state::object::variant::ObjVariant;
                     match family.variant {
-                        ObjectVariant::Particle => { continue; },
+                        ObjVariant::Particle => { continue; },
                         _ => {}
                     }
 
                     let nr_of_objects = family.nr_of_objects;
-                    let object_length = family.object_length;
+                    let obj_length = family.obj_length;
                     let objects = &family.objects;
                     for obj_id in 0..nr_of_objects {
-                        let start_idx = obj_id * object_length;
-                        let obj = Vec::from(&objects[start_idx..start_idx+object_length]);
+                        let start_idx = obj_id * obj_length;
+                        let obj = Vec::from(&objects[start_idx..start_idx+obj_length]);
 
                         use mxyz_engine::interaction::object::object::forces as obj_obj_forces;
-                        let dt = 1.;
                         let eps = 0.;
 
-                        let get_force = match self.sim_id.as_str() {
+                        let force_getter = match self.sim_id.as_str() {
                             "lennard-jones" => obj_obj_forces::lennard_jones::force,
                             "charge-interaction" => obj_obj_forces::coulomb::force,
                             _ => obj_obj_forces::newtonian_gravity::force,
                         };
 
-                        let f = get_force(
-                            &[m, x, y, u, v, q], &obj, dt, eps,
+                        let f = force_getter(
+                            &[m, x, y, u, v, q], &obj, eps,
                         );
                         force[0] += f[0];
                         force[1] += f[1];
@@ -219,7 +204,7 @@ impl Renderer {
 
     pub fn display_objects(
         &mut self, 
-        family: &ObjectFamily,
+        family: &ObjFamily,
         states: &Vec<State>,
         canvas_id: usize,
     ) {
@@ -228,29 +213,29 @@ impl Renderer {
         let is_filled = true;  // TODO setup toggle-button
 
         let objects = &family.objects;
-        let object_length = family.object_length;
+        let obj_length = family.obj_length;
         let nr_of_objects = family.nr_of_objects;
 
         // SETUP CANVAS
         let canvas = &mut self.canvases[canvas_id];
 
         // SETUP OBJECT COLOR
-        let object_color_mode = &self.config.obj_families[family.id].color_mode;
-        let get_object_color = match object_color_mode {
-            ObjectColorMode::Default     => object::color_mode::get_object_color_default,
-            ObjectColorMode::Mass        => object::color_mode::get_object_color_from_mass,
-            ObjectColorMode::HSLVelocity => object::color_mode::get_object_color_from_velocity_angle, 
-            ObjectColorMode::HSLPosition => object::color_mode::get_object_color_from_position_angle, 
-            ObjectColorMode::Speed       => object::color_mode::get_object_color_from_speed,
-            ObjectColorMode::Distance    => object::color_mode::get_object_color_from_distance, // NOTE from origin
-            ObjectColorMode::Charge      => object::color_mode::get_object_color_from_charge,
+        let obj_color_mode = &self.config.obj_families[family.id].color_mode;
+        let get_obj_color = match obj_color_mode {
+            ObjColorMode::Default     => object::color_mode::get_obj_color_default,
+            ObjColorMode::Mass        => object::color_mode::get_obj_color_from_mass,
+            ObjColorMode::HSLVelocity => object::color_mode::get_obj_color_from_velocity_angle, 
+            ObjColorMode::HSLPosition => object::color_mode::get_obj_color_from_position_angle, 
+            ObjColorMode::Speed       => object::color_mode::get_obj_color_from_speed,
+            ObjColorMode::Distance    => object::color_mode::get_obj_color_from_distance, // NOTE from origin
+            ObjColorMode::Charge      => object::color_mode::get_obj_color_from_charge,
         };
         // loop over objects
         for obj_id in 0..nr_of_objects {
-            let start_idx = obj_id * object_length;
-            let obj = Vec::from(&objects[start_idx..start_idx+object_length]);
+            let start_idx = obj_id * obj_length;
+            let obj = Vec::from(&objects[start_idx..start_idx+obj_length]);
             // get color from color-mode
-            let color = get_object_color(&obj, 1.);
+            let color = get_obj_color(&obj, 1.);
             canvas.set_stroke_style(&color);
             canvas.set_fill_style(&color);
 
@@ -291,24 +276,24 @@ impl Renderer {
         // DISPLAY OBJECT TAILS
         let tail_variant = &self.config.obj_families[family.id].tail_variant;
         match tail_variant {
-            ObjectTailVariant::Line => {     // LINE TAILS
+            ObjTailVariant::Line => {     // LINE TAILS
                 self.display_line_tails(&family, states, canvas_id);
-            }, ObjectTailVariant::Area => {  // AREA TAILS
+            }, ObjTailVariant::Area => {  // AREA TAILS
                 self.display_area_tails(&family, states, canvas_id);
             }, _ => {
             }
         }
     }
 
-    // pub fn display_center_of_momentum(&mut self, family: &ObjectFamily, canvas_id: usize) {
+    // pub fn display_center_of_momentum(&mut self, family: &ObjFamily, canvas_id: usize) {
 
     //     let canvas = &mut self.canvases[canvas_id];
     //     let r = 10.;
 
     //     let mut center_of_momentum = (0., 0.);
     //     for obj_id in 0..family.nr_of_objects {
-    //         let start_idx = obj_id * family.object_length;
-    //         let obj = &family.objects[start_idx..start_idx+family.object_length];
+    //         let start_idx = obj_id * family.obj_length;
+    //         let obj = &family.objects[start_idx..start_idx+family.obj_length];
     //         center_of_momentum.0 += obj[0] * obj[3];
     //         center_of_momentum.1 += obj[0] * obj[4];
     //     };
@@ -316,7 +301,7 @@ impl Renderer {
     //     canvas.draw_line(center_of_momentum, r, true);
     // }
 
-    pub fn display_center_of_mass(&mut self, family: &ObjectFamily, canvas_id: usize) {
+    pub fn display_center_of_mass(&mut self, family: &ObjFamily, canvas_id: usize) {
 
         let canvas = &mut self.canvases[canvas_id];
         let r = 0.01;
@@ -326,8 +311,8 @@ impl Renderer {
         let mut center_of_mass = (0., 0.);
         let mut total_mass = 0.;
         for obj_id in 0..family.nr_of_objects {
-            let start_idx = obj_id * family.object_length;
-            let obj = &family.objects[start_idx..start_idx+family.object_length];
+            let start_idx = obj_id * family.obj_length;
+            let obj = &family.objects[start_idx..start_idx+family.obj_length];
             center_of_mass.0 += obj[1];
             center_of_mass.1 += obj[2];
             total_mass += obj[0];
@@ -340,7 +325,7 @@ impl Renderer {
 
     pub fn display_line_tails(
         &mut self,
-        family: &ObjectFamily,
+        family: &ObjFamily,
         states: &Vec<State>,
         canvas_id: usize,
     ) {
@@ -348,41 +333,41 @@ impl Renderer {
         let tail_width = 2.; // TODO make configurable
 
         let nr_of_objects = family.nr_of_objects;
-        let object_length = family.object_length;
+        let obj_length = family.obj_length;
 
         // SETUP CANVAS
         let canvas = &mut self.canvases[canvas_id];
         canvas.set_line_width(tail_width);
 
         // SETUP COLOR
-        let object_color_mode = &self.config.obj_families[family.id].color_mode;
-        let get_object_color = match object_color_mode {
-            ObjectColorMode::Default     => object::color_mode::get_object_color_default,
-            ObjectColorMode::Mass        => object::color_mode::get_object_color_from_mass,
-            ObjectColorMode::HSLVelocity => object::color_mode::get_object_color_from_velocity_angle, 
-            ObjectColorMode::HSLPosition => object::color_mode::get_object_color_from_position_angle, 
-            ObjectColorMode::Speed       => object::color_mode::get_object_color_from_speed,
-            ObjectColorMode::Distance    => object::color_mode::get_object_color_from_distance, // NOTE from origin
-            ObjectColorMode::Charge      => object::color_mode::get_object_color_from_charge,
+        let obj_color_mode = &self.config.obj_families[family.id].color_mode;
+        let get_obj_color = match obj_color_mode {
+            ObjColorMode::Default     => object::color_mode::get_obj_color_default,
+            ObjColorMode::Mass        => object::color_mode::get_obj_color_from_mass,
+            ObjColorMode::HSLVelocity => object::color_mode::get_obj_color_from_velocity_angle, 
+            ObjColorMode::HSLPosition => object::color_mode::get_obj_color_from_position_angle, 
+            ObjColorMode::Speed       => object::color_mode::get_obj_color_from_speed,
+            ObjColorMode::Distance    => object::color_mode::get_obj_color_from_distance, // NOTE from origin
+            ObjColorMode::Charge      => object::color_mode::get_obj_color_from_charge,
         };
 
         let iterator = 0..usize::min(tail_length, self.frame_idx);
         for tail_step_id in iterator.rev() {
 
             for obj_id in 0..nr_of_objects {
-                let start_idx = obj_id*object_length;
+                let start_idx = obj_id*obj_length;
 
                 let state = &states[self.frame_idx - tail_step_id];
-                let obj = &state.object_families[family.id].objects[start_idx..start_idx+object_length];
+                let obj = &state.obj_families[family.id].objects[start_idx..start_idx+obj_length];
                 let previous_state = &states[self.frame_idx - tail_step_id - 1];
-                let previous_obj = &previous_state.object_families[family.id].objects[start_idx..start_idx+object_length];
+                let previous_obj = &previous_state.obj_families[family.id].objects[start_idx..start_idx+obj_length];
 
                 let (x1, y1) = (previous_obj[1], previous_obj[2]);
                 let (x2, y2) = (obj[1], obj[2]);
 
                 // setup color
                 let alpha = 1. - tail_step_id as f64 / tail_length as f64;
-                let color = get_object_color( &Vec::from(obj), alpha );
+                let color = get_obj_color( &Vec::from(obj), alpha );
                 canvas.set_stroke_style(&color);
                 canvas.set_fill_style(&color);
 
@@ -395,7 +380,7 @@ impl Renderer {
 
     pub fn display_area_tails(
         &mut self,
-        family: &ObjectFamily,
+        family: &ObjFamily,
         states: &Vec<State>,
         canvas_id: usize,
     ) {
@@ -403,30 +388,30 @@ impl Renderer {
         let tail_length = 200; // TODO make configurable
 
         // setup color
-        let object_color_mode = &self.config.obj_families[family.id].color_mode;
-        let get_object_color = match object_color_mode {
-            ObjectColorMode::Default     => object::color_mode::get_object_color_default,
-            ObjectColorMode::Mass        => object::color_mode::get_object_color_from_mass,
-            ObjectColorMode::HSLVelocity => object::color_mode::get_object_color_from_velocity_angle, 
-            ObjectColorMode::HSLPosition => object::color_mode::get_object_color_from_position_angle, 
-            ObjectColorMode::Speed       => object::color_mode::get_object_color_from_speed,
-            ObjectColorMode::Distance    => object::color_mode::get_object_color_from_distance, // NOTE from origin
-            ObjectColorMode::Charge      => object::color_mode::get_object_color_from_charge,
+        let obj_color_mode = &self.config.obj_families[family.id].color_mode;
+        let get_obj_color = match obj_color_mode {
+            ObjColorMode::Default     => object::color_mode::get_obj_color_default,
+            ObjColorMode::Mass        => object::color_mode::get_obj_color_from_mass,
+            ObjColorMode::HSLVelocity => object::color_mode::get_obj_color_from_velocity_angle, 
+            ObjColorMode::HSLPosition => object::color_mode::get_obj_color_from_position_angle, 
+            ObjColorMode::Speed       => object::color_mode::get_obj_color_from_speed,
+            ObjColorMode::Distance    => object::color_mode::get_obj_color_from_distance, // NOTE from origin
+            ObjColorMode::Charge      => object::color_mode::get_obj_color_from_charge,
         };
 
         let nr_of_objects = family.nr_of_objects;
-        let object_length = family.object_length;
+        let obj_length = family.obj_length;
 
         let iterator = 0..usize::min(tail_length, self.frame_idx);
         for tail_step_id in iterator.rev() {
 
             for obj_id in 0..nr_of_objects {
-                let start_idx = obj_id*object_length;
+                let start_idx = obj_id*obj_length;
 
                 let state = &states[self.frame_idx - tail_step_id];
-                let obj = &state.object_families[family.id].objects[start_idx..start_idx+object_length];
+                let obj = &state.obj_families[family.id].objects[start_idx..start_idx+obj_length];
                 let previous_state = &states[self.frame_idx - tail_step_id - 1];
-                let previous_obj = &previous_state.object_families[family.id].objects[start_idx..start_idx+object_length];
+                let previous_obj = &previous_state.obj_families[family.id].objects[start_idx..start_idx+obj_length];
 
                 let (x1, y1) = (previous_obj[1], previous_obj[2]);
                 let (x2, y2) = (obj[1], obj[2]);
@@ -434,7 +419,7 @@ impl Renderer {
 
                 // setup color
                 let alpha = 1. - tail_step_id as f64 / tail_length as f64;
-                let color = get_object_color( &Vec::from(obj), alpha );
+                let color = get_obj_color( &Vec::from(obj), alpha );
                 canvas.set_stroke_style(&color);
                 canvas.set_fill_style(&color);
 
@@ -520,9 +505,9 @@ impl Renderer {
         }
     }
 
-    // pub fn create_button_menu_for_object_family(
+    // pub fn create_button_menu_for_obj_family(
     //     &mut self, 
-    //     object_family: &ObjectFamily,
+    //     obj_family: &ObjFamily,
     // ) {
 
     // }

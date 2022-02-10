@@ -6,7 +6,7 @@
 use crate::state::State;
 use crate::state::field::Field;
 use crate::interaction::field::field::Interaction as FieldInteraction;
-use crate::interaction::field::object::Interaction as ObjectInteraction;
+use crate::interaction::field::object::Interaction as ObjInteraction;
 pub mod entire;
 pub mod random_batch;
 
@@ -18,7 +18,7 @@ pub struct FieldIntegrator {
 
     pub variant: IntegratorVariant,
     pub field_interactions: Vec<FieldInteraction>,
-    pub object_interactions: Vec<ObjectInteraction>,
+    pub obj_interactions: Vec<ObjInteraction>,
     
 }
 impl FieldIntegrator {
@@ -27,14 +27,14 @@ impl FieldIntegrator {
 
         variant: IntegratorVariant,
         field_interactions: Vec<FieldInteraction>,
-        object_interactions: Vec<ObjectInteraction>,
+        obj_interactions: Vec<ObjInteraction>,
 
     ) -> Self {
 
         FieldIntegrator {
             variant,
             field_interactions,
-            object_interactions,
+            obj_interactions,
         }
 
     }

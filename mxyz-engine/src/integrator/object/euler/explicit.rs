@@ -1,8 +1,8 @@
 
 use crate::state::State;
-use crate::state::object::ObjectVariant;
-use crate::state::object::ObjectFamily;
-use crate::interaction::object::object::Interaction as ObjectInteraction;
+use crate::state::object::variant::ObjVariant;
+use crate::state::object::family::ObjFamily;
+use crate::interaction::object::object::Interaction as ObjInteraction;
 use crate::interaction::object::field::Interaction as FieldInteraction;
 
 use crate::interaction::object::object::forces;
@@ -12,59 +12,64 @@ use crate::config::EngineConfig;
 
 pub fn step(
     iteration_idx: usize,
-    family: &mut ObjectFamily,
+    family: &mut ObjFamily,
     states: &Vec<State>,
-    field_interactions: &Vec<FieldInteraction>,
-    object_interactions: &Vec<ObjectInteraction>,
-    dt: f64,
-    // config: &EngineConfig,
+    // field_interactions: &Vec<FieldInteraction>,
+    // obj_interactions: &Vec<ObjInteraction>,
+    // dt: f64,
+    config: &EngineConfig,
 ) {
 
     // TODO make changeable
+    let dt = config.dt;
     let epsilon = 0.05; // todo: get from obj family? (& saved externally?)
 
+    let obj_variant = &family.variant;
     // let obj_variant = &config.obj_families[family.id].obj_variant;
-    // if matches!(obj_variant, ObjectVariant::Static) { return () }
-    if matches!(family.variant, ObjectVariant::Static) { return () }
+    // if matches!(obj_variant, ObjVariant::Static) { return () }
+    if matches!(obj_variant, ObjVariant::Static) { return () }
 
     // get length of slice representing object in state vec
-    let object_length = family.object_length;
+    let obj_length = family.obj_length;
 
     for obj_idx in 0..family.nr_of_objects { 
-        let obj_slice = &mut family.objects[obj_idx*object_length..(obj_idx+1)*object_length];
+        let obj_slice = &mut family.objects[obj_idx*obj_length..(obj_idx+1)*obj_length];
 
-        for other_family in &states[iteration_idx].object_families {
+        for other_family in &states[iteration_idx].obj_families {
 
-            if matches!(other_family.variant, ObjectVariant::Particle) { return () }
+            let other_variant = &other_family.variant;
+            if matches!(other_variant, ObjVariant::Particle) { continue }
             // let other_variant = &config.obj_families[other_family.id].obj_variant;
-            // if matches!(other_variant, ObjectVariant::Particle) { return () }
+            // if matches!(other_variant, ObjVariant::Particle) { return () }
 
             // TODO get relevant neighbor: tree / sectors ?
 
             // get length of slice representing other object in state vec
-            let other_length = other_family.object_length;
+            let other_length = other_family.obj_length;
            
             for other_idx in 0..other_family.nr_of_objects { // ? TODO 0->obj_idx, update both bodies!
                 // no self-interaction
-                if (family.id, obj_idx) == (other_family.id, other_idx) { continue }
-                // get slice represinting other object in state vec
+                if family.id == other_family.id {
+                    if obj_idx == other_idx { continue }
+                }
+                // get slice representing other object in state vec
                 let other_slice = &other_family.objects[
                     other_idx*other_length..(other_idx+1)*other_length
                 ];
                 
-                for interaction in object_interactions.iter() {
+                // TODO check if both fams have this interaction
+                let obj_interactions = &config.obj_families[family.id].obj_interactions;
+                for interaction in obj_interactions.iter() {
 
-                    let force = match interaction {
-                        ObjectInteraction::ForceNewtonianGravity => forces::newtonian_gravity::force,
-                        ObjectInteraction::ForceCoulomb => forces::coulomb::force,
-                        ObjectInteraction::ForceLennardJones => forces::lennard_jones::force,
+                    let force_getter = match interaction {
+                        ObjInteraction::ForceNewtonianGravity => forces::newtonian_gravity::force,
+                        ObjInteraction::ForceCoulomb => forces::coulomb::force,
+                        ObjInteraction::ForceLennardJones => forces::lennard_jones::force,
                     };
-                    let force = force( obj_slice, other_slice, dt, epsilon );
+                    let force = force_getter( obj_slice, other_slice, epsilon );
                     obj_slice[3] += force[0] / obj_slice[0] * dt;
                     obj_slice[4] += force[1] / obj_slice[0] * dt;
-
                 }
-
             }
         }
 

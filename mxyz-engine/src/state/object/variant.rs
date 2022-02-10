@@ -1,6 +1,6 @@
 
 #[derive(Clone)]
-pub enum ObjectVariant {
+pub enum ObjVariant {
     Static,
     Body,
     Particle,

@@ -1,27 +1,29 @@
 #![allow(non_snake_case)]
 
-use crate::integrator::object::ObjectIntegrator;
-use crate::integrator::object::IntegratorVariant as ObjectIntegratorVariant;
-use crate::state::object::variant::ObjectVariant;
-use crate::state::object::ObjectAttribute;
-use crate::boundary::object::ObjectBoundary;
-use crate::boundary::object::variant::BoundaryVariant as ObjectBoundaryVariant;
+// use crate::integrator::object::ObjIntegrator;
+// use crate::integrator::object::IntegratorVariant as ObjIntegratorVariant;
+use crate::state::object::variant::ObjVariant;
+use crate::state::object::attribute::ObjAttribute;
+// use crate::boundary::object::ObjBoundary;
+use crate::boundary::object::variant::ObjBoundaryVariant;
+use crate::integrator::object::variant::ObjIntegratorVariant;
 
-use crate::interaction::object as object_interactions;
+use crate::interaction::object as obj_interactions;
 use crate::interaction::field as field_interactions;
 
 
 pub struct ObjFamilyEngineConfig {
 
-    pub id:             usize,
+    pub id:                 usize,
     // matrix for interactions (?)
     // pub family_size: usize,
-    pub family_size:    usize,
-    pub obj_variant:    ObjectVariant,
-    pub obj_attributes: Vec<ObjectAttribute>,
-    pub integrators:    Vec<ObjectIntegrator>,
-    pub boundaries:     Vec<ObjectBoundary>,
-    // pub initial_state: Vec<f64>,
+    pub family_size:        usize,
+    pub obj_variant:        ObjVariant,
+    pub obj_attributes:     Vec<ObjAttribute>,
+    pub integrator:         ObjIntegratorVariant,
+    pub field_interactions: Vec<obj_interactions::field::Interaction>,
+    pub obj_interactions:   Vec<obj_interactions::object::Interaction>,
+    pub boundary:           ObjBoundaryVariant,
 
 }
 impl ObjFamilyEngineConfig {
@@ -29,36 +31,37 @@ impl ObjFamilyEngineConfig {
     pub fn new(id: usize, dt: f64) -> Self {
 
         let DEFAULT_ATTRIBUTES = Vec::from([
-            ObjectAttribute::Mass,
-            ObjectAttribute::PositionX,
-            ObjectAttribute::PositionY,
-            ObjectAttribute::VelocityX,
-            ObjectAttribute::VelocityY,
+            ObjAttribute::Mass,
+            ObjAttribute::PositionX,
+            ObjAttribute::PositionY,
+            ObjAttribute::VelocityX,
+            ObjAttribute::VelocityY,
+            // ObjAttribute::Charge,
         ]);
         let DEFAULT_OBJ_INTERACTIONS = Vec::from([
-            object_interactions::object::Interaction::ForceNewtonianGravity,
+            obj_interactions::object::Interaction::ForceNewtonianGravity,
         ]);
         let DEFAULT_FIELD_INTERACTIONS = Vec::from([]);
 
-        let DEFAULT_INTEGRATOR_VARIANT = ObjectIntegratorVariant::EulerExplicit;
-        let DEFAULT_INTEGRATOR = ObjectIntegrator::new(
-            DEFAULT_INTEGRATOR_VARIANT, dt, DEFAULT_FIELD_INTERACTIONS, DEFAULT_OBJ_INTERACTIONS,
-        );
+        let DEFAULT_INTEGRATOR_VARIANT = ObjIntegratorVariant::EulerExplicit;
+        // let DEFAULT_INTEGRATOR = ObjIntegrator::new(
+        //     DEFAULT_INTEGRATOR_VARIANT, dt, DEFAULT_FIELD_INTERACTIONS, DEFAULT_OBJ_INTERACTIONS,
+        // );
 
-        mxyz_utils::dom::console::log(&format!("{}", "hallooooooooooo"));
-
-        let DEFAULT_BOUNDARY_VARIANT = ObjectBoundaryVariant::None;
-        let DEFAULT_BOUNDARY = ObjectBoundary::new(
-            DEFAULT_BOUNDARY_VARIANT,
-        );
+        let DEFAULT_BOUNDARY_VARIANT = ObjBoundaryVariant::None;
+        // let DEFAULT_BOUNDARY = ObjBoundary::new(
+        //     DEFAULT_BOUNDARY_VARIANT,
+        // );
     
         ObjFamilyEngineConfig {
             id: id,
             family_size:        0,  // TODO increment on obj-add
-            obj_variant:        ObjectVariant::Body,
+            obj_variant:        ObjVariant::Body,
             obj_attributes:     DEFAULT_ATTRIBUTES,
-            integrators:        Vec::from([DEFAULT_INTEGRATOR]),
-            boundaries:         Vec::from([DEFAULT_BOUNDARY])
+            integrator:         DEFAULT_INTEGRATOR_VARIANT,
+            field_interactions: DEFAULT_FIELD_INTERACTIONS,
+            obj_interactions:   DEFAULT_OBJ_INTERACTIONS,
+            boundary:           DEFAULT_BOUNDARY_VARIANT,
         }
     }
 }

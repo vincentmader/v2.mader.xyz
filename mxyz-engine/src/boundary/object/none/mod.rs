@@ -1,9 +1,9 @@
 
-use crate::state::object::ObjectFamily;
+use crate::state::object::family::ObjFamily;
 
 
 pub fn apply(
-    object_family: &mut ObjectFamily
+    obj_family: &mut ObjFamily
 ) {
 
 }

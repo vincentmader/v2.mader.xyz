@@ -1,6 +1,6 @@
 
 #[derive(Clone)]
-pub enum ObjectAttribute {
+pub enum ObjAttribute {
     Mass,
     Charge,
     Radius,

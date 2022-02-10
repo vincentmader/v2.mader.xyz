@@ -37,7 +37,7 @@ impl FieldBoundary {
             // BoundaryVariant::WallCollisionInelastic => collision::wall::inelastic::apply,
         // };
 
-        // applier(object_family);
+        // applier(obj_family);
 
     }
 

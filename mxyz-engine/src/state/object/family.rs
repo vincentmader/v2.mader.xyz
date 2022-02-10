@@ -1,43 +1,45 @@
 
-use crate::state::object::ObjectVariant;
-use crate::state::object::ObjectAttribute;
+use crate::state::object::variant::ObjVariant;
+use crate::state::object::attribute::ObjAttribute;
 
 
 #[derive(Clone)]
-pub struct ObjectFamily {
+pub struct ObjFamily {
+
     pub id: usize,
 
-    pub variant: ObjectVariant,
-    // pub attributes: Vec<ObjectAttribute>,
+    pub variant: ObjVariant,
+    // pub attributes: Vec<ObjAttribute>,
 
     pub objects: Vec<f64>,
     // pub states: Vec<Vec<f64>>,
 
     pub nr_of_objects: usize,
-    pub object_length: usize,
+    pub obj_length: usize,
+
 }
-impl ObjectFamily {
+impl ObjFamily {
 
     pub fn new(
         id: usize,
-        variant: ObjectVariant,
-        // attributes: Vec<ObjectAttribute>,
+        variant: ObjVariant,
+        // attributes: Vec<ObjAttribute>,
         // objects: Vec<f64>,
     ) -> Self {
 
-        let object_length = 5; // attributes.len();
+        let obj_length = 5; // attributes.len();
         let objects = Vec::new();
-        let nr_of_objects = objects.len() / object_length;
+        let nr_of_objects = objects.len() / obj_length;
         // let states = Vec::from([objects]);
 
-        ObjectFamily {
+        ObjFamily {
             id,
             variant,
             // attributes,
             objects,
             // states,
             nr_of_objects,
-            object_length,
+            obj_length,
         }
 
     }
@@ -48,6 +50,5 @@ impl ObjectFamily {
         self.objects.extend_from_slice(obj);  // TODO will lead to problems at live-add (eg. tails)
         self.nr_of_objects += 1;
     }
-
 }
 

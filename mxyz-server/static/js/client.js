@@ -1,6 +1,6 @@
 import init, { Client } from "../../static/pkg/mxyz_client.js";
 
-console.log("TODO: move simulation stuff here?")
+console.log("TODO: move simulation stuff here?");
 
 // let sim_id = document.getElementById("simulation.js").getAttribute("sim_id");
 

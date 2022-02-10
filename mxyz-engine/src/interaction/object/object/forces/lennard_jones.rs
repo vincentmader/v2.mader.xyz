@@ -2,12 +2,11 @@
 pub fn force(
     object: &[f64], 
     other: &[f64], 
-    dt: f64, 
+    // dt: f64, 
     epsilon: f64
 ) -> Vec<f64> {
 
     // atributes of object
-    let m_1 = object[0];
     let x_1 = object[1];
     let y_1 = object[2];
     // atributes of other object
@@ -18,12 +17,11 @@ pub fn force(
     let dx = x_2 - x_1;
     let dy = y_2 - y_1;
     let r = ( dx.powf(2.) + dy.powf(2.) ).sqrt();
-        // define: sigma -> 1
 
-    let sigma = 0.1;
-    let eps = 1.;
+    let (sigma, epsilon) = (0.1, 1.);  // TODO make changeable
+
     // V = 4 eps ( (s/r)^12 - (s/r)^6 )
-    let force = 4. * eps * sigma * (
+    let force = 4. * epsilon * sigma * (
            6. * (r / sigma).powf(- 7.)
          -12. * (r / sigma).powf(-13.) 
     );

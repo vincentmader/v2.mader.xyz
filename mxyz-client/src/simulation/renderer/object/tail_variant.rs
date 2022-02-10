@@ -1,5 +1,5 @@
 
-pub enum ObjectTailVariant {
+pub enum ObjTailVariant {
     None,
     Line,
     Area,

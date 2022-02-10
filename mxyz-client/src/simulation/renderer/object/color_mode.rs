@@ -1,5 +1,5 @@
 
-pub enum ObjectColorMode {
+pub enum ObjColorMode {
     // None,
     Default,
     Mass,
@@ -22,19 +22,19 @@ pub fn get_hsl_from_vec(vec: [f64; 2], alpha: f64) -> String {
 
 }
 
-pub fn get_object_color_from_velocity_angle(obj: &Vec<f64>, alpha: f64) -> String {
+pub fn get_obj_color_from_velocity_angle(obj: &Vec<f64>, alpha: f64) -> String {
 
     get_hsl_from_vec([obj[3], obj[4]], alpha)
 
 }
 
-pub fn get_object_color_from_position_angle(obj: &Vec<f64>, alpha: f64) -> String {
+pub fn get_obj_color_from_position_angle(obj: &Vec<f64>, alpha: f64) -> String {
 
     get_hsl_from_vec([obj[1], obj[2]], alpha)
 
 }
 
-pub fn get_object_color_from_speed(obj: &Vec<f64>, alpha: f64) -> String {
+pub fn get_obj_color_from_speed(obj: &Vec<f64>, alpha: f64) -> String {
 
     const MAX_SPEED: f64 = 1.5;
     let u = obj[3];
@@ -50,7 +50,7 @@ pub fn get_object_color_from_speed(obj: &Vec<f64>, alpha: f64) -> String {
 
 }
 
-pub fn get_object_color_from_mass(obj: &Vec<f64>, alpha: f64) -> String {
+pub fn get_obj_color_from_mass(obj: &Vec<f64>, alpha: f64) -> String {
 
     const MAX_MASS: f64 = 1.5;
     let m = obj[0];
@@ -65,7 +65,7 @@ pub fn get_object_color_from_mass(obj: &Vec<f64>, alpha: f64) -> String {
 
 }
 
-pub fn get_object_color_from_charge(obj: &Vec<f64>, alpha: f64) -> String {
+pub fn get_obj_color_from_charge(obj: &Vec<f64>, alpha: f64) -> String {
 
     const Q_MAX: f64 = 1.; // TODO
     let mut charge = 0f64;
@@ -80,7 +80,7 @@ pub fn get_object_color_from_charge(obj: &Vec<f64>, alpha: f64) -> String {
 
 }
 
-pub fn get_object_color_from_distance(obj: &Vec<f64>, alpha: f64) -> String {
+pub fn get_obj_color_from_distance(obj: &Vec<f64>, alpha: f64) -> String {
 
     const MAX_DIST: f64 = 1.;
     let x = obj[1];
@@ -96,7 +96,7 @@ pub fn get_object_color_from_distance(obj: &Vec<f64>, alpha: f64) -> String {
 
 }
 
-pub fn get_object_color_default(_obj: &Vec<f64>, alpha: f64) -> String {
+pub fn get_obj_color_default(_obj: &Vec<f64>, alpha: f64) -> String {
     format!("rgba(255, 255, 255, {})", alpha)
 }
 

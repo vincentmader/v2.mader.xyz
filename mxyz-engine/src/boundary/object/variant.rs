@@ -1,10 +1,10 @@
 
-pub enum BoundaryVariant {
+pub enum ObjBoundaryVariant {
     None,
     Periodic,
     WallCollisionElastic,
     WallCollisionInelastic,
-    // ObjectCollisionElastic,
-    // ObjectCollisionInelastic,
+    // ObjCollisionElastic,
+    // ObjCollisionInelastic,
 }
 

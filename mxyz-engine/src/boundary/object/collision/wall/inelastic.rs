@@ -1,12 +1,12 @@
 
-use crate::state::object::ObjectFamily;
+use crate::state::object::family::ObjFamily;
 
 
 pub fn apply(
-    object_family: &mut ObjectFamily
+    obj_family: &mut ObjFamily
 ) {
 
-    // let iteration_idx = object_family.states.len();
+    // let iteration_idx = obj_family.states.len();
     let tamper = 0.5;  // TODO  make configurable
 
     const X_MIN: f64 = -1.;  // TODO make bounds configurable
@@ -14,10 +14,10 @@ pub fn apply(
     const Y_MIN: f64 = -1.;
     const Y_MAX: f64 = 1.;
 
-    let obj_length = object_family.object_length;
-    let objects = &mut object_family.objects;
+    let obj_length = obj_family.obj_length;
+    let objects = &mut obj_family.objects;
 
-    for obj_idx in 0..object_family.nr_of_objects {
+    for obj_idx in 0..obj_family.nr_of_objects {
 
         let start_idx = obj_idx * obj_length;
 

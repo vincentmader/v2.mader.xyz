@@ -3,7 +3,7 @@ pub mod family;
 pub mod attribute;
 pub mod variant;
 
-pub use family::ObjectFamily;
-pub use attribute::ObjectAttribute;
-pub use variant::ObjectVariant;
+use family::ObjFamily;
+use attribute::ObjAttribute;
+use variant::ObjVariant;
 

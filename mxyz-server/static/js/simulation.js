@@ -35,7 +35,7 @@ let sim_id = document.getElementById("simulation.js").getAttribute("sim_id");
   for (let idx = 0; idx < buttons.length; idx++) {
     let button = buttons[idx];
     button.addEventListener("click", () => {
-      simulation.handle_button_event(button.id); // console.log(button.id);
+      simulation.handle_button_event(button.id);
     });
   }
 
