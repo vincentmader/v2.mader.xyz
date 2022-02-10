@@ -20,8 +20,6 @@ impl EngineConfig {
 
         const DEFAULT_TIME_STEP_SIZE: f64 = 0.01;
 
-        // let fields = Self::init_fields(DEFAULT_TIME_STEP_SIZE);
-        // let obj_families = Self::init_obj_families(DEFAULT_TIME_STEP_SIZE);
         let fields = Vec::new();
         let obj_families = Vec::new();
         EngineConfig {

@@ -1,21 +1,19 @@
 
-
 pub fn force(
     object: &[f64], 
     other: &[f64], 
-    // dt: f64, 
     epsilon: f64
 ) -> Vec<f64> {
 
     // atributes of object
     let x_1 = object[1];
     let y_1 = object[2];
-    let q_1 = object[0];
+    let q_1 = object[5];
 
     // atributes of other object
     let x_2 = other[1];
     let y_2 = other[2];
-    let q_2 = other[0];
+    let q_2 = other[5];
     
     // distance & force
     let dx = x_2 - x_1;

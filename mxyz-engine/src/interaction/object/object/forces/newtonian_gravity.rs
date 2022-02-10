@@ -2,16 +2,8 @@
 pub fn force(
     object: &[f64], 
     other: &[f64], 
-    // dt: f64, 
     epsilon: f64
 ) -> Vec<f64> {
-// }
-// pub fn apply(
-//     object: &mut [f64], 
-//     other: &[f64], 
-//     dt: f64, 
-//     epsilon: f64
-// ) {
 
     // atributes of object
     let m_1 = object[0];
@@ -30,13 +22,6 @@ pub fn force(
     let force_x = force * dx/r;
     let force_y = force * dy/r;
 
-    // let acc_x = force / m * dx/r;
-    // let acc_y = force / m * dy/r;
-
-    // object[3] += acc_x * dt;
-    // object[4] += acc_y * dt;
-
     Vec::from([force_x, force_y])
-
 }
 

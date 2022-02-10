@@ -16,9 +16,6 @@ impl Simulation {
     pub fn handle_button_event(&mut self, button_id: &str) {
         console::log(&format!("button-id: {}", button_id));
 
-        // let document = utils::dom::document();
-        // let button = document.get_element_by_id(button_id).unwrap();
-
         let mut rel_button_id = String::from(button_id);
         // get id of field/obj_family that button belongs to
         let mut thing_id: usize = 0;
@@ -69,17 +66,13 @@ impl Simulation {
             // OBJECT VARIANT
 
             "button_set-obj-variant-particle" => {
-                let iteration_idx = engine.iteration_idx;
-                engine.states[iteration_idx].obj_families[thing_id].variant = ObjVariant::Particle;
-                // engine.config.obj_families[thing_id].obj_variant = ObjVariant::Particle;
+                engine.config.obj_families[thing_id].obj_variant = ObjVariant::Particle;
             },
             "button_set-obj-variant-body" => {
-                let iteration_idx = engine.iteration_idx;
-                engine.states[iteration_idx].obj_families[thing_id].variant = ObjVariant::Body;
+                engine.config.obj_families[thing_id].obj_variant = ObjVariant::Body;
             },
             "button_set-obj-variant-static" => {
-                let iteration_idx = engine.iteration_idx;
-                engine.states[iteration_idx].obj_families[thing_id].variant = ObjVariant::Static;
+                engine.config.obj_families[thing_id].obj_variant = ObjVariant::Static;
             },
 
             // OBJECT COLOR MODE

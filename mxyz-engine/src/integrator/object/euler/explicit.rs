@@ -14,44 +14,34 @@ pub fn step(
     iteration_idx: usize,
     family: &mut ObjFamily,
     states: &Vec<State>,
-    // field_interactions: &Vec<FieldInteraction>,
-    // obj_interactions: &Vec<ObjInteraction>,
-    // dt: f64,
     config: &EngineConfig,
 ) {
 
-    // TODO make changeable
     let dt = config.dt;
-    let epsilon = 0.05; // todo: get from obj family? (& saved externally?)
+    let epsilon = 0.05; // TODO: get from obj family? (& saved externally?)
 
-    let obj_variant = &family.variant;
-    // let obj_variant = &config.obj_families[family.id].obj_variant;
-    // if matches!(obj_variant, ObjVariant::Static) { return () }
+    let obj_variant = &config.obj_families[family.id].obj_variant;
     if matches!(obj_variant, ObjVariant::Static) { return () }
 
     // get length of slice representing object in state vec
-    let obj_length = family.obj_length;
+    let obj_length = &config.obj_families[family.id].obj_attributes.len();
 
     for obj_idx in 0..family.nr_of_objects { 
         let obj_slice = &mut family.objects[obj_idx*obj_length..(obj_idx+1)*obj_length];
 
         for other_family in &states[iteration_idx].obj_families {
 
-            let other_variant = &other_family.variant;
+            let other_variant = &config.obj_families[other_family.id].obj_variant;
             if matches!(other_variant, ObjVariant::Particle) { continue }
-            // let other_variant = &config.obj_families[other_family.id].obj_variant;
-            // if matches!(other_variant, ObjVariant::Particle) { return () }
 
             // TODO get relevant neighbor: tree / sectors ?
 
             // get length of slice representing other object in state vec
-            let other_length = other_family.obj_length;
+            let other_length = &config.obj_families[other_family.id].obj_attributes.len();
            
             for other_idx in 0..other_family.nr_of_objects { // ? TODO 0->obj_idx, update both bodies!
                 // no self-interaction
-                if family.id == other_family.id {
-                    if obj_idx == other_idx { continue }
-                }
+                if family.id == other_family.id { if obj_idx == other_idx { continue } }
                 // get slice representing other object in state vec
                 let other_slice = &other_family.objects[
                     other_idx*other_length..(other_idx+1)*other_length
@@ -60,7 +50,7 @@ pub fn step(
                 // TODO check if both fams have this interaction
                 let obj_interactions = &config.obj_families[family.id].obj_interactions;
                 for interaction in obj_interactions.iter() {
-
+                    // TODO handle forces different from other interactions
                     let force_getter = match interaction {
                         ObjInteraction::ForceNewtonianGravity => forces::newtonian_gravity::force,
                         ObjInteraction::ForceCoulomb => forces::coulomb::force,
@@ -82,12 +72,6 @@ pub fn step(
         // update positions from velocity
         obj_slice[1] += obj_slice[3] * dt;
         obj_slice[2] += obj_slice[4] * dt;
-
-        // let foo = 0.3;
-        // obj_slice[3] *= foo;
-        // obj_slice[4] *= foo;
-
     }
-
 }
 

@@ -117,7 +117,6 @@ impl Renderer {
         let canvas = &mut self.canvases[canvas_id];
         if self.config.is_clearing_canvas { canvas.clear(); }
 
-
         // TODO put somewhere else
         let canvas = &mut self.canvases[canvas_id];
         // DISPLAY FIELD
@@ -138,11 +137,10 @@ impl Renderer {
                     }
 
                     let nr_of_objects = family.nr_of_objects;
-                    let obj_length = family.obj_length;
+                    let obj_length = &engine.config.obj_families[family.id].obj_attributes.len();
                     let objects = &family.objects;
                     for obj_id in 0..nr_of_objects {
-                        let start_idx = obj_id * obj_length;
-                        let obj = Vec::from(&objects[start_idx..start_idx+obj_length]);
+                        let obj = Vec::from(&objects[obj_id*obj_length..(obj_id+1)*obj_length]);
 
                         use mxyz_engine::interaction::object::object::forces as obj_obj_forces;
                         let eps = 0.;
@@ -179,25 +177,17 @@ impl Renderer {
 
 
 
-
-
-
-
         // DISPLAY FIELDS
         for field in fields.iter() {
-            self.display_field( field, states, canvas_id );
+            self.display_field(field, states, canvas_id);
         }
-
         // DISPLAY OBJECT FAMILIES
         for family in families.iter() {
-            self.display_objects( family, states, canvas_id );
+            self.display_objects(family, states, canvas_id);
         }
-
         // DISPLAY HUD
         if self.config.is_displaying_hud { 
-            self.display_hud( 
-                // &engine   
-            )  
+            self.display_hud()  
         }
 
     }

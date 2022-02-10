@@ -28,7 +28,7 @@ pub struct ObjFamilyEngineConfig {
 }
 impl ObjFamilyEngineConfig {
 
-    pub fn new(id: usize, dt: f64) -> Self {
+    pub fn new(id: usize) -> Self {
 
         let DEFAULT_ATTRIBUTES = Vec::from([
             ObjAttribute::Mass,
