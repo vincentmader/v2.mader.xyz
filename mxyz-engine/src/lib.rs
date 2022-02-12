@@ -17,7 +17,7 @@ use crate::state::State;
 pub struct Engine {
     sim_id: String,
     pub states: Vec<State>,
-    pub iteration_idx: usize,
+    pub iter_idx: usize,
     pub config: config::EngineConfig,
 }
 
@@ -28,7 +28,7 @@ impl Engine {
             sim_id: String::from(sim_id),
             states: Vec::new(),
             config: config::EngineConfig::new(),
-            iteration_idx: 0,
+            iter_idx: 0,
         }
     }
 
@@ -40,17 +40,17 @@ impl Engine {
 
     pub fn reset( &mut self ) { 
         self.init();
-        self.iteration_idx = 0;
+        self.iter_idx = 0;
     }
 
     pub fn step( &mut self ) {
-        let mut next_state = self.states[self.iteration_idx].clone();
+        let mut next_state = self.states[self.iter_idx].clone();
 
         for field in next_state.fields.iter_mut() {
 
             // let integrator = &mut self.engine_setup.field_integrators[field.id];
             // let integrator = &mut self.config.fields[field.id];
-            // integrator.step(self.iteration_idx, field, &self.states);
+            // integrator.step(self.iter_idx, field, &self.states);
 
             // TODO bounds?
         }
@@ -65,7 +65,7 @@ impl Engine {
                 // ObjIntegratorVariant::Verlet => integrator::object::verlet::step,
                 // ObjIntegratorVariant::LeapFrog => integrator::object::leapfrog::step,
             };
-            stepper( self.iteration_idx, family, &self.states, &self.config );
+            stepper( self.iter_idx, family, &self.states, &self.config );
 
             let applier = match &self.config.obj_families[family.id].boundary {
                 ObjBoundaryVariant::None => boundary::object::none::apply,
@@ -77,7 +77,7 @@ impl Engine {
         }
 
         self.states.push(next_state);
-        self.iteration_idx += 1;
+        self.iter_idx += 1;
     }
 }
 

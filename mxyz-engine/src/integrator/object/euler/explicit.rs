@@ -11,7 +11,7 @@ use crate::config::EngineConfig;
 
 
 pub fn step(
-    iteration_idx: usize,
+    iter_idx: usize,
     family: &mut ObjFamily,
     states: &Vec<State>,
     config: &EngineConfig,
@@ -29,7 +29,7 @@ pub fn step(
     for obj_idx in 0..family.nr_of_objects { 
         let obj_slice = &mut family.objects[obj_idx*obj_length..(obj_idx+1)*obj_length];
 
-        for other_family in &states[iteration_idx].obj_families {
+        for other_family in &states[iter_idx].obj_families {
 
             let other_variant = &config.obj_families[other_family.id].obj_variant;
             if matches!(other_variant, ObjVariant::Particle) { continue }

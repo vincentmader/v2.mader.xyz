@@ -6,7 +6,7 @@ pub fn apply(
     obj_family: &mut ObjFamily
 ) {
 
-    // let iteration_idx = obj_family.states.len();
+    // let iter_idx = obj_family.states.len();
     let tamper = 0.5;  // TODO  make configurable
 
     const X_MIN: f64 = -1.;  // TODO make bounds configurable

@@ -483,8 +483,8 @@ impl Renderer {
         let frame_idx = format!("{}", self.frame_idx);
         canvas.fill_text(&frame_idx, 20., 50.);
 
-        // let iteration_idx = format!("{}", engine.iteration_idx); 
-        // canvas.fill_text(&iteration_idx, 20., 100.);
+        // let iter_idx = format!("{}", engine.iter_idx); 
+        // canvas.fill_text(&iter_idx, 20., 100.);
 
     }
 

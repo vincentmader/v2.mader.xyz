@@ -41,7 +41,7 @@ impl FieldIntegrator {
 
     pub fn step(
         &mut self,
-        iteration_idx: usize,
+        iter_idx: usize,
         field: &mut Field,
         states: &Vec<State>,
     ) {
@@ -50,7 +50,7 @@ impl FieldIntegrator {
             IntegratorVariant::Entire => entire::step,
             IntegratorVariant::RandomBatch => random_batch::step,
         };
-        stepper(iteration_idx, field, states);
+        stepper(iter_idx, field, states);
 
     }
 

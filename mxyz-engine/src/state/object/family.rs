@@ -45,8 +45,8 @@ impl ObjFamily {
     }
 
     pub fn add_object(&mut self, obj: &Vec<f64>) {
-        // let iteration_idx = self.states.len() - 1;
-        // self.states[iteration_idx].extend_from_slice(obj);  // TODO will lead to problems at live-add (eg. tails)
+        // let iter_idx = self.states.len() - 1;
+        // self.states[iter_idx].extend_from_slice(obj);  // TODO will lead to problems at live-add (eg. tails)
         self.objects.extend_from_slice(obj);  // TODO will lead to problems at live-add (eg. tails)
         self.nr_of_objects += 1;
     }
