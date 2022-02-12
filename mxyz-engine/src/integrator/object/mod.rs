@@ -44,7 +44,7 @@ pub mod variant;
 
 //     pub fn step(
 //         &mut self, 
-//         iter_idx: usize,
+//         iteration_idx: usize,
 //         family: &mut ObjFamily,
 //         states: &Vec<State>,
 //         config: &EngineConfig,
@@ -59,7 +59,7 @@ pub mod variant;
 //             // ObjIntegratorVariant::LeapFrog => leapfrog::step,
 //         };
 //         stepper(
-//             iter_idx,
+//             iteration_idx,
 //             family,
 //             states,
 //             &self.field_interactions,

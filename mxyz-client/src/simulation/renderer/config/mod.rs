@@ -19,9 +19,7 @@ pub struct RendererConfig {
 }
 impl RendererConfig {
 
-    pub fn new(
-        // sim_id: &str
-    ) -> Self {
+    pub fn new() -> Self {
         RendererConfig {
             fields: Self::init_fields(),
             obj_families: Self::init_obj_families(),

@@ -1,5 +1,5 @@
 
-pub enum FieldIntegratorVariant {
+pub enum IntegratorVariant {
     Entire,
     RandomBatch,
 }

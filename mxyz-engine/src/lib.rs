@@ -8,7 +8,6 @@ pub mod interaction;
 pub mod partitioner;
 pub mod state;
 use integrator::object::variant::ObjIntegratorVariant;
-use integrator::field::variant::FieldIntegratorVariant;
 use boundary::object::variant::ObjBoundaryVariant;
 
 use crate::state::State;
@@ -18,7 +17,7 @@ use crate::state::State;
 pub struct Engine {
     sim_id: String,
     pub states: Vec<State>,
-    pub iter_idx: usize,
+    pub iteration_idx: usize,
     pub config: config::EngineConfig,
 }
 
@@ -29,7 +28,7 @@ impl Engine {
             sim_id: String::from(sim_id),
             states: Vec::new(),
             config: config::EngineConfig::new(),
-            iter_idx: 0,
+            iteration_idx: 0,
         }
     }
 
@@ -41,26 +40,24 @@ impl Engine {
 
     pub fn reset( &mut self ) { 
         self.init();
-        self.iter_idx = 0;
+        self.iteration_idx = 0;
     }
 
     pub fn step( &mut self ) {
-        let mut next_state = self.states[self.iter_idx].clone();
+        let mut next_state = self.states[self.iteration_idx].clone();
 
         for field in next_state.fields.iter_mut() {
 
-            let integrate = match &self.config.fields[field.id].integrator {
-                FieldIntegratorVariant::Entire => integrator::field::entire::step,
-                FieldIntegratorVariant::RandomBatch => integrator::field::random_batch::step,
-            };
-            integrate( self.iter_idx, field, &self.states, &self.config );
+            // let integrator = &mut self.engine_setup.field_integrators[field.id];
+            // let integrator = &mut self.config.fields[field.id];
+            // integrator.step(self.iteration_idx, field, &self.states);
 
             // TODO bounds?
         }
 
         for family in next_state.obj_families.iter_mut() {
 
-            let integrate = match &self.config.obj_families[family.id].integrator {
+            let stepper = match &self.config.obj_families[family.id].integrator {
                 ObjIntegratorVariant::EulerExplicit => integrator::object::euler::explicit::step,
                 // ObjIntegratorVariant::EulerImplicit => integrator::object::euler::implicit::step,
                 // ObjIntegratorVariant::RungeKutta2 => integrator::object::runge_kutta::order_2::step,
@@ -68,19 +65,19 @@ impl Engine {
                 // ObjIntegratorVariant::Verlet => integrator::object::verlet::step,
                 // ObjIntegratorVariant::LeapFrog => integrator::object::leapfrog::step,
             };
-            integrate( self.iter_idx, family, &self.states, &self.config );
+            stepper( self.iteration_idx, family, &self.states, &self.config );
 
-            let apply_bounds = match &self.config.obj_families[family.id].boundary {
+            let applier = match &self.config.obj_families[family.id].boundary {
                 ObjBoundaryVariant::None => boundary::object::none::apply,
                 ObjBoundaryVariant::Periodic => boundary::object::periodic::apply,
                 ObjBoundaryVariant::WallCollisionElastic => boundary::object::collision::wall::elastic::apply,
                 ObjBoundaryVariant::WallCollisionInelastic => boundary::object::collision::wall::inelastic::apply,
             };
-            apply_bounds(family, &self.config);
+            applier(family);
         }
 
         self.states.push(next_state);
-        self.iter_idx += 1;
+        self.iteration_idx += 1;
     }
 }
 

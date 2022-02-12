@@ -1,5 +1,5 @@
 
-pub enum FieldBoundaryVariant {
+pub enum BoundaryVariant {
     None,
     Periodic,
 }

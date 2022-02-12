@@ -1,4 +1,5 @@
 
+#[derive(Clone)]
 pub enum ObjAttribute {
     Mass,
     Charge,
