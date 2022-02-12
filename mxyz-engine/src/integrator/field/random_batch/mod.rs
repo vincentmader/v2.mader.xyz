@@ -6,6 +6,7 @@ use crate::state::State;
 use crate::state::field::Field;
 
 use crate::interaction::field as interactions;
+use crate::config::EngineConfig;
 
 
 
@@ -17,18 +18,19 @@ fn boltzmann_prob(dE: f64, T: f64) -> f64 {  // TODO -> physics
 
 
 pub fn step(
-    iteration_idx: usize,
+    iter_idx: usize,
     field: &mut Field,
     states: &Vec<State>,
+    config: &EngineConfig,
 ) {
     const BATCH_SIZE: usize = 1000;
     // TODO where to get batch-size from?
 
     let mut rng = rand::thread_rng();
 
-    let dimensions = &field.dimensions;
-    let dim_x = dimensions.0;
-    let dim_y = dimensions.0;
+    let dimensions = &config.fields[field.id].dimensions;
+    let dim_x = dimensions[0];
+    let dim_y = dimensions[1];
     // let dim_z = dimensions.0;
 
     for _ in 0..BATCH_SIZE {
@@ -55,7 +57,7 @@ pub fn step(
                 if X >= dim_x as i32 { X -= dim_x as i32; }
                 if Y >= dim_y as i32 { Y -= dim_y as i32; }
 
-                let other = states[iteration_idx].fields[field.id].entries[Y as usize*dim_x+X as usize];
+                let other = states[iter_idx].fields[field.id].entries[Y as usize*dim_x+X as usize];
                 dE += J*cell*other;
             }
         }

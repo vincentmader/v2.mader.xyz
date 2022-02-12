@@ -43,8 +43,8 @@ impl Simulation {
     }
 
     pub fn render(&mut self) {
-        let iteration_idx = self.engine.states.len();
-        let out_of_bounds = self.renderer.frame_idx >= iteration_idx;
+        let iter_idx = self.engine.states.len();
+        let out_of_bounds = self.renderer.frame_idx >= iter_idx;
         let nr_of_steps_per_render = self.config.nr_of_steps_per_render;
         if !self.renderer.config.is_paused && !out_of_bounds {
 

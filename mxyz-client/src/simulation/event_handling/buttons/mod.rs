@@ -164,7 +164,7 @@ impl Simulation {
             // ...
 
             "button_set-obj-interaction-none" => {
-                // let nr_of_families = self.engine.states[self.engine.iteration_idx].obj_families.len();
+                // let nr_of_families = self.engine.states[self.engine.iter_idx].obj_families.len();
                 // for idx in 0..nr_of_families {
                 //     // engine.engine_setup.object[0].obj_interactions;
                 // }

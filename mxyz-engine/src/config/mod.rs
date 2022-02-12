@@ -20,8 +20,8 @@ impl EngineConfig {
 
         const DEFAULT_TIME_STEP_SIZE: f64 = 0.01;
 
-        let fields = Vec::new();
-        let obj_families = Vec::new();
+        let fields = Self::init_fields(DEFAULT_TIME_STEP_SIZE);
+        let obj_families = Self::init_obj_families(DEFAULT_TIME_STEP_SIZE);
         EngineConfig {
             fields: fields,
             obj_families: obj_families,
@@ -30,28 +30,28 @@ impl EngineConfig {
         }
     }
 
-    // pub fn init_fields(dt: f64) -> Vec<FieldEngineConfig> {
-    //     let mut fields = Vec::new();
+    pub fn init_fields(dt: f64) -> Vec<FieldEngineConfig> {
+        let mut fields = Vec::new();
 
-    //     // let id = 0;
-    //     // let field = FieldEngineConfig::new(id, dt);
-    //     // fields.push(field);
+        let id = 0;
+        let field = FieldEngineConfig::new(id);
+        fields.push(field);
 
-    //     fields
-    // }
+        fields
+    }
 
-    // pub fn init_obj_families(dt: f64) -> Vec<ObjFamilyEngineConfig> {
-    //     let mut obj_families = Vec::new();
+    pub fn init_obj_families(dt: f64) -> Vec<ObjFamilyEngineConfig> {
+        let mut obj_families = Vec::new();
 
-    //     // let id = 0;
-    //     // let obj_fam = ObjFamilyEngineConfig::new(id, dt);
-    //     // obj_families.push(obj_fam);
+        let id = 0;
+        let obj_fam = ObjFamilyEngineConfig::new(id);
+        obj_families.push(obj_fam);
 
-    //     // let id = 1;
-    //     // let obj_fam = ObjFamilyEngineConfig::new(id, dt);
-    //     // obj_families.push(obj_fam);
+        let id = 1;
+        let obj_fam = ObjFamilyEngineConfig::new(id);
+        obj_families.push(obj_fam);
 
-    //     obj_families
-    // }
+        obj_families
+    }
 }
 

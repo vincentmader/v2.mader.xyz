@@ -24,6 +24,10 @@ pub struct ObjFamilyRendererConfig {
 impl ObjFamilyRendererConfig {
 
     pub fn new(id: usize) -> Self {
+
+        // let tail_variant = match 
+
+
         ObjFamilyRendererConfig {
             id: id,
             // is_displayed: true,

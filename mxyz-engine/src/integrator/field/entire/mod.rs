@@ -1,12 +1,14 @@
 
 use crate::state::State;
 use crate::state::field::Field;
+use crate::config::EngineConfig;
 
 
 pub fn step(
-    iteration_idx: usize,
+    iter_idx: usize,
     field: &mut Field,
     states: &Vec<State>,
+    config: &EngineConfig,
 ) {
 
 }
