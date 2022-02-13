@@ -131,12 +131,12 @@ impl Renderer {
 
                 for family in families.iter() {
                     use mxyz_engine::state::object::variant::ObjVariant;
-                    match family.variant {
+                    match engine.config.obj_families[family.id].obj_variant {
                         ObjVariant::Particle => { continue; },
                         _ => {}
                     }
 
-                    let nr_of_objects = family.nr_of_objects;
+                    let nr_of_objects = engine.config.obj_families[family.id].family_size;
                     let obj_length = &engine.config.obj_families[family.id].obj_attributes.len();
                     let objects = &family.objects;
                     for obj_id in 0..nr_of_objects {
@@ -179,11 +179,11 @@ impl Renderer {
 
         // DISPLAY FIELDS
         for field in fields.iter() {
-            self.display_field(field, states, canvas_id);
+            self.display_field(field, states, canvas_id, &engine);
         }
         // DISPLAY OBJECT FAMILIES
         for family in families.iter() {
-            self.display_objects(family, states, canvas_id);
+            self.display_objects(family, states, canvas_id, &engine);
         }
         // DISPLAY HUD
         if self.config.is_displaying_hud { 
@@ -197,6 +197,7 @@ impl Renderer {
         family: &ObjFamily,
         states: &Vec<State>,
         canvas_id: usize,
+        engine: &Engine,
     ) {
         // const r: f64 = 0.01;  // TODO setup slider
         let r = 0.013;  // TODO setup slider
@@ -204,7 +205,7 @@ impl Renderer {
 
         let objects = &family.objects;
         let obj_length = family.obj_length;
-        let nr_of_objects = family.nr_of_objects;
+        let nr_of_objects = engine.config.obj_families[family.id].family_size;
 
         // SETUP CANVAS
         let canvas = &mut self.canvases[canvas_id];
@@ -255,7 +256,7 @@ impl Renderer {
 
         // DISPLAY OBJECT CENTER-OF-MASS
         if self.config.obj_families[family.id].is_displaying_center_of_mass {
-            self.display_center_of_mass(&family, canvas_id);
+            self.display_center_of_mass(&family, canvas_id, &engine);
         }
 
         // DISPLAY OBJECT CENTER-OF-MOMENTUM
@@ -267,9 +268,9 @@ impl Renderer {
         let tail_variant = &self.config.obj_families[family.id].tail_variant;
         match tail_variant {
             ObjTailVariant::Line => {     // LINE TAILS
-                self.display_line_tails(&family, states, canvas_id);
+                self.display_line_tails(&family, states, canvas_id, &engine);
             }, ObjTailVariant::Area => {  // AREA TAILS
-                self.display_area_tails(&family, states, canvas_id);
+                self.display_area_tails(&family, states, canvas_id, &engine);
             }, _ => {
             }
         }
@@ -291,7 +292,12 @@ impl Renderer {
     //     canvas.draw_line(center_of_momentum, r, true);
     // }
 
-    pub fn display_center_of_mass(&mut self, family: &ObjFamily, canvas_id: usize) {
+    pub fn display_center_of_mass(
+        &mut self, 
+        family: &ObjFamily, 
+        canvas_id: usize,
+        engine: &Engine,
+    ) {
 
         let canvas = &mut self.canvases[canvas_id];
         let r = 0.01;
@@ -300,7 +306,10 @@ impl Renderer {
 
         let mut center_of_mass = (0., 0.);
         let mut total_mass = 0.;
-        for obj_id in 0..family.nr_of_objects {
+
+        let nr_of_objects = engine.config.obj_families[family.id].family_size;
+
+        for obj_id in 0..nr_of_objects {
             let start_idx = obj_id * family.obj_length;
             let obj = &family.objects[start_idx..start_idx+family.obj_length];
             center_of_mass.0 += obj[1];
@@ -318,11 +327,12 @@ impl Renderer {
         family: &ObjFamily,
         states: &Vec<State>,
         canvas_id: usize,
+        engine: &Engine,
     ) {
         let tail_length = 100; // TODO make configurable
         let tail_width = 2.; // TODO make configurable
 
-        let nr_of_objects = family.nr_of_objects;
+        let nr_of_objects = engine.config.obj_families[family.id].family_size;
         let obj_length = family.obj_length;
 
         // SETUP CANVAS
@@ -373,6 +383,7 @@ impl Renderer {
         family: &ObjFamily,
         states: &Vec<State>,
         canvas_id: usize,
+        engine: &Engine,
     ) {
         let canvas = &mut self.canvases[canvas_id];
         let tail_length = 200; // TODO make configurable
@@ -389,7 +400,7 @@ impl Renderer {
             ObjColorMode::Charge      => object::color_mode::get_obj_color_from_charge,
         };
 
-        let nr_of_objects = family.nr_of_objects;
+        let nr_of_objects = engine.config.obj_families[family.id].family_size;
         let obj_length = family.obj_length;
 
         let iterator = 0..usize::min(tail_length, self.frame_idx);
@@ -424,6 +435,7 @@ impl Renderer {
         field: &Field, 
         _states: &Vec<State>,
         canvas_id: usize,
+        engine: &Engine,
     ) {
 
         let canvas = &mut self.canvases[canvas_id];

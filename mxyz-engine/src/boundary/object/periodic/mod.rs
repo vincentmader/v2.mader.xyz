@@ -1,9 +1,11 @@
 
 use crate::state::object::family::ObjFamily;
+use crate::config::obj_family::ObjFamilyEngineConfig;
 
 
 pub fn apply(
-    obj_family: &mut ObjFamily
+    obj_family: &mut ObjFamily,
+    config: &ObjFamilyEngineConfig
 ) {
 
     // let iter_idx = obj_family.states.len();
@@ -16,7 +18,7 @@ pub fn apply(
     let obj_length = obj_family.obj_length;
     let objects = &mut obj_family.objects;
 
-    for obj_idx in 0..obj_family.nr_of_objects {
+    for obj_idx in 0..config.family_size {
 
         let start_idx = obj_idx * obj_length;
 

@@ -26,7 +26,7 @@ pub fn step(
     // get length of slice representing object in state vec
     let obj_length = &config.obj_families[family.id].obj_attributes.len();
 
-    for obj_idx in 0..family.nr_of_objects { 
+    for obj_idx in 0..config.obj_families[family.id].family_size { 
         let obj_slice = &mut family.objects[obj_idx*obj_length..(obj_idx+1)*obj_length];
 
         for other_family in &states[iter_idx].obj_families {
@@ -39,7 +39,7 @@ pub fn step(
             // get length of slice representing other object in state vec
             let other_length = &config.obj_families[other_family.id].obj_attributes.len();
            
-            for other_idx in 0..other_family.nr_of_objects { // ? TODO 0->obj_idx, update both bodies!
+            for other_idx in 0..config.obj_families[other_family.id].family_size { // ? TODO 0->obj_idx, update both bodies!
                 // no self-interaction
                 if family.id == other_family.id { if obj_idx == other_idx { continue } }
                 // get slice representing other object in state vec

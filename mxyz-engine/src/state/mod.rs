@@ -61,11 +61,8 @@ impl State {
                 let id = 0;
                 let mut fam_conf = ObjFamilyEngineConfig::new(id);
                 fam_conf.boundary = ObjBoundaryVariant::WallCollisionInelastic;
-                engine_conf.obj_families.push(fam_conf);
 
-                let mut family = ObjFamily::new(
-                    id, ObjVariant::Body, 
-                );
+                let mut family = ObjFamily::new(id);
 
                 let (mass, distance, speed, nr_of_objects) = (0.05, 0.7, 1.0, 12);
 
@@ -78,20 +75,17 @@ impl State {
                     let v =  speed * phi.cos();
 
                     let object = Vec::from([mass, x, y, u, v]);
-                    family.add_object(&object);
+                    family.add_object(&object, &mut fam_conf);
                 }
-
+                engine_conf.obj_families.push(fam_conf);
                 obj_families.push(family);
 
             }, "nbody-cloud" => {
 
                 let id = 0;
-                let fam_conf = ObjFamilyEngineConfig::new(id);
-                engine_conf.obj_families.push(fam_conf);
+                let mut fam_conf = ObjFamilyEngineConfig::new(id);
 
-                let mut family = ObjFamily::new(
-                    id, ObjVariant::Body, 
-                );
+                let mut family = ObjFamily::new(id);
 
                 let (speed, nr_of_objects) = (0., 10);
                 for obj_idx in 0..nr_of_objects {
@@ -106,8 +100,9 @@ impl State {
                     let v =  speed * (rand4*2.-1.);
 
                     let object = Vec::from([0.1, x, y, u, v]);
-                    family.add_object(&object);
+                    family.add_object(&object, &mut fam_conf);
                 }
+                engine_conf.obj_families.push(fam_conf);
                 obj_families.push(family);
 
             }, "nbody-flowers" => {
@@ -118,11 +113,8 @@ impl State {
                 let id = 0;
                 let mut fam_conf = ObjFamilyEngineConfig::new(id);
                 fam_conf.obj_variant = ObjVariant::Particle;
-                engine_conf.obj_families.push(fam_conf);
 
-                let mut family = ObjFamily::new(
-                    id, ObjVariant::Particle, 
-                );
+                let mut family = ObjFamily::new(id);
 
                 let (R, speed, nr_of_objects) = (0.85, 0.7, 32);
                 for obj_idx in 0..nr_of_objects {
@@ -134,8 +126,9 @@ impl State {
                     let v =  speed * phi.cos();
 
                     let object = Vec::from([0.01, x, y, u, v]);
-                    family.add_object(&object);
+                    family.add_object(&object, &mut fam_conf);
                 }
+                engine_conf.obj_families.push(fam_conf);
                 obj_families.push(family);
 
                 // STAR  (static)
@@ -144,14 +137,13 @@ impl State {
                 let id = 1;
                 let mut fam_conf = ObjFamilyEngineConfig::new(id);
                 fam_conf.obj_variant = ObjVariant::Static;
-                engine_conf.obj_families.push(fam_conf);
 
-                let mut family = ObjFamily::new(
-                    1, ObjVariant::Static, 
-                );
+                let mut family = ObjFamily::new(1);
 
                 let object = Vec::from([1., 0., 0., 0., 0.]);
-                family.add_object(&object);
+                family.add_object(&object, &mut fam_conf);
+
+                engine_conf.obj_families.push(fam_conf);
                 obj_families.push(family);
 
             }, "nbody-asteroids" => {
@@ -164,12 +156,9 @@ impl State {
                 // ===============================================================================
 
                 let id = 0;
-                let fam_conf = ObjFamilyEngineConfig::new(id);
-                engine_conf.obj_families.push(fam_conf);
+                let mut fam_conf = ObjFamilyEngineConfig::new(id);
 
-                let mut family = ObjFamily::new(
-                    0, ObjVariant::Particle, 
-                );
+                let mut family = ObjFamily::new(0);
 
                 let R = 0.85;
                 let W = 0.0;
@@ -187,20 +176,18 @@ impl State {
                     let v = speed * phi.cos();
 
                     let object = Vec::from([m, x, y, u, v]);
-                    family.add_object(&object);
+                    family.add_object(&object, &mut fam_conf);
                 }
+                engine_conf.obj_families.push(fam_conf);
                 obj_families.push(family);
 
                 // STELLAR BINARY
                 // ===============================================================================
 
                 let id = 1;
-                let fam_conf = ObjFamilyEngineConfig::new(id);
-                engine_conf.obj_families.push(fam_conf);
+                let mut fam_conf = ObjFamilyEngineConfig::new(id);
 
-                let mut family = ObjFamily::new(
-                    1, ObjVariant::Body, // TODO static on rail
-                );
+                let mut family = ObjFamily::new(1);
 
                 let R: f64 = 0.15;
                 let speed = match nr_of_stars {
@@ -215,19 +202,17 @@ impl State {
                     let u = -speed * phi.sin();
                     let v =  speed * phi.cos();
                     let object = Vec::from([M, x, y, u, v]);
-                    family.add_object(&object);
+                    family.add_object(&object, &mut fam_conf);
                 }
+                engine_conf.obj_families.push(fam_conf);
                 obj_families.push(family);
 
             }, "3body-fig8" => {
 
                 let id = 0;
-                let fam_conf = ObjFamilyEngineConfig::new(id);
-                engine_conf.obj_families.push(fam_conf);
+                let mut fam_conf = ObjFamilyEngineConfig::new(id);
 
-                let mut family = ObjFamily::new(
-                    0, ObjVariant::Body, 
-                );
+                let mut family = ObjFamily::new(0);
 
                 let xs = [ 0.7775727187509279270,  0.,                    -0.7775727187509279270];
                 let ys = [ 0.6287930240184685937,  0.,                    -0.6287930240184685937];
@@ -238,9 +223,10 @@ impl State {
                     let (x0, y0) = (xs[body_idx], ys[body_idx]);
                     let (u0, v0) = (us[body_idx], vs[body_idx]);
                     let object = Vec::from([M, x0, y0, u0, v0]);
-                    family.add_object(&object);
+                    family.add_object(&object, &mut fam_conf);
                 }
 
+                engine_conf.obj_families.push(fam_conf);
                 obj_families.push(family);
 
             // ising
@@ -252,11 +238,8 @@ impl State {
                 fam_conf.obj_interactions = Vec::from([obj_interactions::object::Interaction::ForceCoulomb]);
                 fam_conf.boundary = ObjBoundaryVariant::WallCollisionInelastic;
                 fam_conf.obj_attributes.push(ObjAttribute::Charge);
-                engine_conf.obj_families.push(fam_conf);
 
-                let mut family = ObjFamily::new(
-                    id, ObjVariant::Body, 
-                );
+                let mut family = ObjFamily::new(id);
                 let nr_of_bodies = 1;
                 for _ in 0..nr_of_bodies {
                     let rand1: f64 = rng.gen(); 
@@ -264,8 +247,9 @@ impl State {
                     let x0 = rand1 * 2. - 1.;
                     let y0 = rand2 * 2. - 1.;
                     let object = Vec::from([M, x0, y0, 0., 0., 1.]);
-                    family.add_object(&object);
+                    family.add_object(&object, &mut fam_conf);
                 }
+                engine_conf.obj_families.push(fam_conf);
                 obj_families.push(family);
 
                 let id = 1;
@@ -273,11 +257,8 @@ impl State {
                 fam_conf.obj_interactions = Vec::from([obj_interactions::object::Interaction::ForceCoulomb]);
                 fam_conf.boundary = ObjBoundaryVariant::WallCollisionElastic;
                 fam_conf.obj_attributes.push(ObjAttribute::Charge);
-                engine_conf.obj_families.push(fam_conf);
 
-                let mut family = ObjFamily::new(
-                    id, ObjVariant::Body, 
-                );
+                let mut family = ObjFamily::new(id);
                 let nr_of_bodies = 1;
                 for body_idx in 0..nr_of_bodies {
                     let rand1: f64 = rng.gen(); 
@@ -285,8 +266,9 @@ impl State {
                     let x0 = rand1 * 2. - 1.;
                     let y0 = rand2 * 2. - 1.;
                     let object = Vec::from([0.01, x0, y0, 0., 0., -1.]);
-                    family.add_object(&object);
+                    family.add_object(&object, &mut fam_conf);
                 }
+                engine_conf.obj_families.push(fam_conf);
                 obj_families.push(family);
 
             }, "lennard-jones" => {
@@ -295,11 +277,8 @@ impl State {
                 let mut fam_conf = ObjFamilyEngineConfig::new(id);
                 fam_conf.obj_interactions = Vec::from([obj_interactions::object::Interaction::ForceLennardJones]);
                 fam_conf.boundary = ObjBoundaryVariant::WallCollisionElastic;
-                engine_conf.obj_families.push(fam_conf);
 
-                let mut family = ObjFamily::new(
-                    id, ObjVariant::Body, 
-                );
+                let mut family = ObjFamily::new(id);
 
                 // TODO add dampening somehow, on collision? over time?
                 let foo: usize = 5;
@@ -317,9 +296,10 @@ impl State {
                         let x0 = x0 + rand1 / foo as f64;
                         let y0 = y0 + rand2 / foo as f64;
                         let object = Vec::from([1., x0, y0, u0, v0]);
-                        family.add_object(&object);
+                        family.add_object(&object, &mut fam_conf);
                     }
                 }
+                engine_conf.obj_families.push(fam_conf);
                 obj_families.push(family);
 
             }, _ => {}

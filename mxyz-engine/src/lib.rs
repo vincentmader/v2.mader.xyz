@@ -73,7 +73,7 @@ impl Engine {
                 ObjBoundaryVariant::WallCollisionElastic => boundary::object::collision::wall::elastic::apply,
                 ObjBoundaryVariant::WallCollisionInelastic => boundary::object::collision::wall::inelastic::apply,
             };
-            applier(family);
+            applier(family, &mut self.config.obj_families[family.id]);
         }
 
         self.states.push(next_state);
