@@ -10,8 +10,6 @@ pub struct ObjFamily {
     pub id: usize,
     pub objects: Vec<f64>,
 
-    pub obj_length: usize,
-
 }
 impl ObjFamily {
 
@@ -19,14 +17,11 @@ impl ObjFamily {
         id: usize,
     ) -> Self {
 
-        let obj_length = 5; // attributes.len();
         let objects = Vec::new();
-        // let nr_of_objects = objects.len() / obj_length;
 
         ObjFamily {
             id,
             objects,
-            obj_length,
         }
 
     }

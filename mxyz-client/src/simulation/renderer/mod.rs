@@ -204,7 +204,7 @@ impl Renderer {
         let is_filled = true;  // TODO setup toggle-button
 
         let objects = &family.objects;
-        let obj_length = family.obj_length;
+        let obj_length = engine.config.obj_families[family.id].obj_length;
         let nr_of_objects = engine.config.obj_families[family.id].family_size;
 
         // SETUP CANVAS
@@ -308,10 +308,11 @@ impl Renderer {
         let mut total_mass = 0.;
 
         let nr_of_objects = engine.config.obj_families[family.id].family_size;
+        let obj_length = engine.config.obj_families[family.id].obj_length;
 
         for obj_id in 0..nr_of_objects {
-            let start_idx = obj_id * family.obj_length;
-            let obj = &family.objects[start_idx..start_idx+family.obj_length];
+            let start_idx = obj_id * obj_length;
+            let obj = &family.objects[start_idx..start_idx+obj_length];
             center_of_mass.0 += obj[1];
             center_of_mass.1 += obj[2];
             total_mass += obj[0];
@@ -333,7 +334,7 @@ impl Renderer {
         let tail_width = 2.; // TODO make configurable
 
         let nr_of_objects = engine.config.obj_families[family.id].family_size;
-        let obj_length = family.obj_length;
+        let obj_length = engine.config.obj_families[family.id].obj_length;
 
         // SETUP CANVAS
         let canvas = &mut self.canvases[canvas_id];
@@ -401,7 +402,7 @@ impl Renderer {
         };
 
         let nr_of_objects = engine.config.obj_families[family.id].family_size;
-        let obj_length = family.obj_length;
+        let obj_length = engine.config.obj_families[family.id].obj_length;
 
         let iterator = 0..usize::min(tail_length, self.frame_idx);
         for tail_step_id in iterator.rev() {

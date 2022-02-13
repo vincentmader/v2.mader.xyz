@@ -24,6 +24,7 @@ pub struct ObjFamilyEngineConfig {
     pub field_interactions: Vec<obj_interactions::field::Interaction>,
     pub obj_interactions:   Vec<obj_interactions::object::Interaction>,
     pub boundary:           ObjBoundaryVariant,
+    pub obj_length:         usize,
 
 }
 impl ObjFamilyEngineConfig {
@@ -38,6 +39,8 @@ impl ObjFamilyEngineConfig {
             ObjAttribute::VelocityY,
             // ObjAttribute::Charge,
         ]);
+        let DEFAULT_OBJ_LENGTH = DEFAULT_ATTRIBUTES.len();
+
         let DEFAULT_OBJ_INTERACTIONS = Vec::from([
             obj_interactions::object::Interaction::ForceNewtonianGravity,
         ]);
@@ -62,6 +65,7 @@ impl ObjFamilyEngineConfig {
             field_interactions: DEFAULT_FIELD_INTERACTIONS,
             obj_interactions:   DEFAULT_OBJ_INTERACTIONS,
             boundary:           DEFAULT_BOUNDARY_VARIANT,
+            obj_length:         DEFAULT_OBJ_LENGTH,
         }
     }
 }
