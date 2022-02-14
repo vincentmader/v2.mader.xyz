@@ -1,7 +1,7 @@
 
 pub mod forces;
 
-pub enum Interaction {
+pub enum ObjFieldInteraction {
     // Electric,
     // ElectroMagnetic,
     // Gravitational,

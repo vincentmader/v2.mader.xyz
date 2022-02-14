@@ -2,8 +2,9 @@
 
 use crate::integrator::field::variant::FieldIntegratorVariant;
 use crate::state::field::variant::FieldVariant;
-use crate::interaction::field::field::FieldInteraction;
-use crate::interaction::field::object::ObjInteraction;
+use crate::interaction::field::field::FieldFieldInteraction;
+use crate::interaction::field::object::FieldObjInteraction;
+use crate::boundary::field::variant::FieldBoundaryVariant;
 
 
 pub struct FieldEngineConfig {
@@ -11,12 +12,10 @@ pub struct FieldEngineConfig {
     pub id: usize,
     pub field_variant: FieldVariant,
     pub dimensions: Vec<usize>,
-    // matrix for interactions (?)
-    // pub initial_state: Vec<f64>,   // TODO: bool / int ?
     pub integrator: FieldIntegratorVariant,
-    pub field_interactions: Vec<FieldInteraction>,
-    pub obj_interactions: Vec<ObjInteraction>,
-    // pub boundary: FieldBoundary,
+    pub field_interactions: Vec<FieldFieldInteraction>,
+    pub obj_interactions: Vec<FieldObjInteraction>,
+    pub boundary: FieldBoundaryVariant,
 
 }
 impl FieldEngineConfig {
@@ -29,8 +28,9 @@ impl FieldEngineConfig {
         let DEFAULT_FIELD_VARIANT = FieldVariant::Ising;
         let DEFAULT_DIMENSIONS = Vec::from([10, 10, 1]);
         let DEFAULT_INTEGRATOR = FieldIntegratorVariant::RandomBatch;
-        let DEFAULT_FIELD_INTERACTIONS = Vec::from([FieldInteraction::Ising]);
+        let DEFAULT_FIELD_INTERACTIONS = Vec::from([FieldFieldInteraction::Ising]);
         let DEFAULT_OBJ_INTERACTIONS = Vec::new();
+        let DEFAULT_BOUNDARY_VARIANT = FieldBoundaryVariant::None;
 
         FieldEngineConfig {
             id,
@@ -39,7 +39,7 @@ impl FieldEngineConfig {
             field_interactions: DEFAULT_FIELD_INTERACTIONS,
             obj_interactions: DEFAULT_OBJ_INTERACTIONS,
             integrator: DEFAULT_INTEGRATOR,
-            // integrator
+            boundary: DEFAULT_BOUNDARY_VARIANT,
         }
     }
 }

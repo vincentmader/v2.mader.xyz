@@ -5,19 +5,22 @@ use rand::Rng;
 
 pub mod field;
 pub mod object;
-use field::Field;
-use field::FieldVariant;
-use object::family::ObjFamily;
-use object::variant::ObjVariant;
-use object::attribute::ObjAttribute;
+use crate::boundary::field::variant::FieldBoundaryVariant;
+use crate::boundary::object::variant::ObjBoundaryVariant;
 use crate::config::EngineConfig;
 use crate::config::field::FieldEngineConfig;
 use crate::config::obj_family::ObjFamilyEngineConfig;
 use crate::integrator::field::FieldIntegrator;
 use crate::integrator::field::FieldIntegratorVariant;
-use crate::boundary::object::variant::ObjBoundaryVariant;
-use crate::interaction::field as field_interactions;
-use crate::interaction::object as obj_interactions;
+use crate::interaction::field::field::FieldFieldInteraction;
+use crate::interaction::field::object::FieldObjInteraction;
+use crate::interaction::object::field::ObjFieldInteraction;
+use crate::interaction::object::object::ObjObjInteraction;
+use field::Field;
+use field::FieldVariant;
+use object::ObjFamily;
+use object::attribute::ObjAttribute;
+use object::variant::ObjVariant;
 
 
 #[derive(Clone)]
@@ -235,7 +238,7 @@ impl State {
 
                 let id = 0;
                 let mut fam_conf = ObjFamilyEngineConfig::new(id);
-                fam_conf.obj_interactions = Vec::from([obj_interactions::object::Interaction::ForceCoulomb]);
+                fam_conf.obj_interactions = Vec::from([ObjObjInteraction::ForceCoulomb]);
                 fam_conf.boundary = ObjBoundaryVariant::WallCollisionInelastic;
                 fam_conf.obj_attributes.push(ObjAttribute::Charge);
 
@@ -254,7 +257,7 @@ impl State {
 
                 let id = 1;
                 let mut fam_conf = ObjFamilyEngineConfig::new(id);
-                fam_conf.obj_interactions = Vec::from([obj_interactions::object::Interaction::ForceCoulomb]);
+                fam_conf.obj_interactions = Vec::from([ObjObjInteraction::ForceCoulomb]);
                 fam_conf.boundary = ObjBoundaryVariant::WallCollisionElastic;
                 fam_conf.obj_attributes.push(ObjAttribute::Charge);
 
@@ -275,7 +278,7 @@ impl State {
 
                 let id = 0;
                 let mut fam_conf = ObjFamilyEngineConfig::new(id);
-                fam_conf.obj_interactions = Vec::from([obj_interactions::object::Interaction::ForceLennardJones]);
+                fam_conf.obj_interactions = Vec::from([ObjObjInteraction::ForceLennardJones]);
                 fam_conf.boundary = ObjBoundaryVariant::WallCollisionElastic;
 
                 let mut family = ObjFamily::new(id);
@@ -326,8 +329,9 @@ impl State {
                 let mut field_conf = FieldEngineConfig::new(id);
                 field_conf.field_variant = FieldVariant::Ising;
                 field_conf.dimensions = Vec::from([GRID_SIZE, GRID_SIZE, 1]);
-                // field_conf.integrator = FieldIntegratorVariant::RandomBatch;
-                // field_conf.field_interactions = Vec::from([crate::interaction::field::field::Interaction::Ising]);
+                field_conf.integrator = FieldIntegratorVariant::RandomBatch;
+                field_conf.field_interactions = Vec::from([FieldFieldInteraction::Ising]);
+                field_conf.boundary = FieldBoundaryVariant::Periodic;
 
                 let mut field = Field::new(id);
                 for row_idx in 0..field_conf.dimensions[0] {

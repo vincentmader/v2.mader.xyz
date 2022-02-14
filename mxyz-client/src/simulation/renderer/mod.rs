@@ -8,7 +8,7 @@ mod buttons;
 use mxyz_engine::Engine;
 use mxyz_engine::state::State;
 use mxyz_engine::state::field::Field;
-use mxyz_engine::state::object::family::ObjFamily;
+use mxyz_engine::state::object::ObjFamily;
 
 pub use mxyz_utils::dom::canvas::Canvas;
 pub use mxyz_utils::dom::console;

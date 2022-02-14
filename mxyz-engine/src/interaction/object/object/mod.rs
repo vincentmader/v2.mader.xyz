@@ -4,7 +4,7 @@ pub mod collision;
 pub mod forces;
 
 
-pub enum Interaction {
+pub enum ObjObjInteraction {
     // BoidAlignment,
     // BoidCohesion,
     // BoidSeparation,

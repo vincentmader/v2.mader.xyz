@@ -1,5 +1,5 @@
 
-use crate::state::object::family::ObjFamily;
+use crate::state::object::ObjFamily;
 use crate::config::obj_family::ObjFamilyEngineConfig;
 
 

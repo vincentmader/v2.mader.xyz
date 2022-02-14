@@ -2,44 +2,44 @@
 use crate::state::field::Field;
 
 pub mod variant;
-use variant::BoundaryVariant;
+// use variant::FieldBoundaryVariant;
 
 mod none;
 mod periodic;
 
 
-pub struct FieldBoundary {
+// pub struct FieldBoundary {
 
-    pub variant: BoundaryVariant,
+//     pub variant: BoundaryVariant,
 
-}
-impl FieldBoundary {
+// }
+// impl FieldBoundary {
 
-    pub fn new(
-        variant: BoundaryVariant,
-    ) -> Self {
+//     pub fn new(
+//         variant: BoundaryVariant,
+//     ) -> Self {
 
-        FieldBoundary {
-            variant,
-        }
+//         FieldBoundary {
+//             variant,
+//         }
 
-    }
+//     }
 
-    pub fn apply(
-        &mut self, 
-        field: &mut Field
-    ) {
+//     pub fn apply(
+//         &mut self, 
+//         field: &mut Field
+//     ) {
 
-        // let applier = match self.variant {
-            // BoundaryVariant::None => none::apply,
-            // BoundaryVariant::Periodic => periodic::apply,
-            // BoundaryVariant::WallCollisionElastic => collision::wall::elastic::apply,
-            // BoundaryVariant::WallCollisionInelastic => collision::wall::inelastic::apply,
-        // };
+//         // let applier = match self.variant {
+//             // BoundaryVariant::None => none::apply,
+//             // BoundaryVariant::Periodic => periodic::apply,
+//             // BoundaryVariant::WallCollisionElastic => collision::wall::elastic::apply,
+//             // BoundaryVariant::WallCollisionInelastic => collision::wall::inelastic::apply,
+//         // };
 
-        // applier(obj_family);
+//         // applier(obj_family);
 
-    }
+//     }
 
-}
+// }
 

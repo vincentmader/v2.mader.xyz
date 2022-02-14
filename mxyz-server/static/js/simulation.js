@@ -15,8 +15,8 @@ let sim_id = document.getElementById("simulation.js").getAttribute("sim_id");
   let slider = document.createElement("input");
   slider.type = "range";
   slider.id = "slider_set-iterations-per-render";
-  slider.min = 1;
-  slider.max = 10; // 2000
+  slider.min = 0;
+  slider.max = 100;
   slider.value = 1; // if changed: also in sim/mod.rs AND/OR sim/config.rs
   bm.appendChild(slider);
   slider.style = "width: 100%";

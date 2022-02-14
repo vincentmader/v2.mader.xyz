@@ -8,8 +8,8 @@ use crate::state::object::attribute::ObjAttribute;
 use crate::boundary::object::variant::ObjBoundaryVariant;
 use crate::integrator::object::variant::ObjIntegratorVariant;
 
-use crate::interaction::object as obj_interactions;
-use crate::interaction::field as field_interactions;
+use crate::interaction::object::field::ObjFieldInteraction;
+use crate::interaction::object::object::ObjObjInteraction;
 
 
 pub struct ObjFamilyEngineConfig {
@@ -21,8 +21,8 @@ pub struct ObjFamilyEngineConfig {
     pub obj_variant:        ObjVariant,
     pub obj_attributes:     Vec<ObjAttribute>,
     pub integrator:         ObjIntegratorVariant,
-    pub field_interactions: Vec<obj_interactions::field::Interaction>,
-    pub obj_interactions:   Vec<obj_interactions::object::Interaction>,
+    pub field_interactions: Vec<ObjFieldInteraction>,
+    pub obj_interactions:   Vec<ObjObjInteraction>,
     pub boundary:           ObjBoundaryVariant,
     pub obj_length:         usize,
 
@@ -42,7 +42,7 @@ impl ObjFamilyEngineConfig {
         let DEFAULT_OBJ_LENGTH = DEFAULT_ATTRIBUTES.len();
 
         let DEFAULT_OBJ_INTERACTIONS = Vec::from([
-            obj_interactions::object::Interaction::ForceNewtonianGravity,
+            ObjObjInteraction::ForceNewtonianGravity,
         ]);
         let DEFAULT_FIELD_INTERACTIONS = Vec::from([]);
 

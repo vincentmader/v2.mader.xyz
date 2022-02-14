@@ -1,11 +1,11 @@
 
 use crate::state::State;
 use crate::state::object::variant::ObjVariant;
-use crate::state::object::family::ObjFamily;
-use crate::interaction::object::object::Interaction as ObjInteraction;
-use crate::interaction::object::field::Interaction as FieldInteraction;
+use crate::state::object::ObjFamily;
 
 use crate::interaction::object::object::forces;
+use crate::interaction::object::field::ObjFieldInteraction;
+use crate::interaction::object::object::ObjObjInteraction;
 
 use crate::config::EngineConfig;
 
@@ -59,9 +59,9 @@ pub fn step(
 
                     // calculate force
                     let force_getter = match interaction {
-                        ObjInteraction::ForceNewtonianGravity => forces::newtonian_gravity::force,
-                        ObjInteraction::ForceCoulomb          => forces::coulomb::force,
-                        ObjInteraction::ForceLennardJones     => forces::lennard_jones::force,
+                        ObjObjInteraction::ForceNewtonianGravity => forces::newtonian_gravity::force,
+                        ObjObjInteraction::ForceCoulomb          => forces::coulomb::force,
+                        ObjObjInteraction::ForceLennardJones     => forces::lennard_jones::force,
                     };
                     let force = force_getter( obj_slice, other_slice, epsilon );
                     // update velocities
