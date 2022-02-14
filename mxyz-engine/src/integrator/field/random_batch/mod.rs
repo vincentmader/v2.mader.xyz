@@ -21,15 +21,10 @@ pub fn step(
     let mut rng = rand::thread_rng();
     // numerical parameters
     const BATCH_SIZE: usize = 1000; // TODO where to get batch-size from?
-    let B = 0.;
-    let T = 0.01;
-    let J = 1.;
-    let mu = 1.;
+    let (B, T, J, mu) = (0., 0.01, 1., 1.);
     // get field dimensions
     let dimensions = &config.fields[field.id].dimensions;
-    let dim_x = dimensions[0];
-    let dim_y = dimensions[1];
-    let dim_z = dimensions[2];  // TODO handle
+    let (dim_x, dim_y, dim_z) = (dimensions[0], dimensions[1], dimensions[2]); // TODO handle 3D
 
     for _ in 0..BATCH_SIZE {
         // choose random cell
@@ -59,11 +54,15 @@ pub fn step(
         }
         // add spin-field interaction to flip energy
         dE += mu*cell*B;
-
-        let rand: f64 = rng.gen();
-        if dE < 0.  {
-            field.entries[y as usize*dim_x+x as usize] *= -1.;
-        } else if rand < boltzmann_prob(dE, T) {
+        // flip spin
+        let mut flip = false;
+        if dE < 0. { flip = true; } else {
+            let rand: f64 = rng.gen();
+            if rand < boltzmann_prob(dE, T) {
+                flip = true;
+            }
+        }
+        if flip {
             field.entries[y as usize*dim_x+x as usize] *= -1.;
         }
     }
