@@ -15,9 +15,11 @@ pub fn force(
     // distance & force
     let dx = x_2 - x_1;
     let dy = y_2 - y_1;
-    let r = ( dx.powf(2.) + dy.powf(2.) ).sqrt();
+    let r2 = dx.powf(2.) + dy.powf(2.);
+    let r = ( r2 + epsilon.powf(2.) ).sqrt();
 
-    let (sigma, epsilon) = (0.1, 1.);  // TODO make changeable
+
+    let (sigma, epsilon) = (0.1, 1.);  // TODO make changeable, TODO rename epsilon (duplicate name)
 
     // V = 4 eps ( (s/r)^12 - (s/r)^6 )
     let force = 4. * epsilon * sigma * (

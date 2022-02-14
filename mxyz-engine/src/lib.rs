@@ -9,6 +9,7 @@ pub mod partitioner;
 pub mod state;
 use integrator::object::variant::ObjIntegratorVariant;
 use boundary::object::variant::ObjBoundaryVariant;
+use integrator::field::variant::FieldIntegratorVariant;
 
 use crate::state::State;
 
@@ -48,9 +49,11 @@ impl Engine {
 
         for field in next_state.fields.iter_mut() {
 
-            // let integrator = &mut self.engine_setup.field_integrators[field.id];
-            // let integrator = &mut self.config.fields[field.id];
-            // integrator.step(self.iter_idx, field, &self.states);
+            let stepper = match self.config.fields[field.id].integrator {
+                FieldIntegratorVariant::Entire => crate::integrator::field::entire::step,
+                FieldIntegratorVariant::RandomBatch => crate::integrator::field::random_batch::step,
+            };
+            stepper(self.iter_idx, field, &self.states, &self.config);
 
             // TODO bounds?
         }

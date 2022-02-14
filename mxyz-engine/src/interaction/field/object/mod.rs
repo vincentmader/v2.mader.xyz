@@ -1,5 +1,5 @@
 
-pub enum Interaction {
+pub enum ObjInteraction {
 
 }
 

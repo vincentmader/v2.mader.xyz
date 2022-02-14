@@ -441,10 +441,10 @@ impl Renderer {
 
         let canvas = &mut self.canvases[canvas_id];
 
-        let dimensions = &field.dimensions;
-        for idx in 0..dimensions.0 {
-            for jdx in 0..dimensions.1 {  // TODO handle z ?
-                let cell = &field.entries[jdx*dimensions.0+idx];
+        let dimensions = &engine.config.fields[field.id].dimensions;
+        for idx in 0..dimensions[0] {
+            for jdx in 0..dimensions[1] {  // TODO handle z ?
+                let cell = &field.entries[jdx*dimensions[0]+idx];
                 let cell = *cell as i32;
 
                 let color = match cell {
@@ -453,10 +453,10 @@ impl Renderer {
                     _ => ""
                 };
 
-                let x = (idx as f64 / dimensions.0 as f64)*2.-1.;
-                let y = (jdx as f64 / dimensions.1 as f64)*2.-1.;
-                let w = 1. / dimensions.0 as f64;
-                let h = 1. / dimensions.1 as f64;
+                let x = (idx as f64 / dimensions[0] as f64)*2.-1.;
+                let y = (jdx as f64 / dimensions[1] as f64)*2.-1.;
+                let w = 1. / dimensions[0] as f64;
+                let h = 1. / dimensions[1] as f64;
                 canvas.set_fill_style(&color);
                 canvas.fill_rect((x, y), w, h);
             }

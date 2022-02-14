@@ -1,5 +1,6 @@
 #![allow(non_snake_case)]
 
+
 use rand::Rng;
 
 pub mod field;
@@ -13,7 +14,7 @@ use crate::config::EngineConfig;
 use crate::config::field::FieldEngineConfig;
 use crate::config::obj_family::ObjFamilyEngineConfig;
 use crate::integrator::field::FieldIntegrator;
-use crate::integrator::field::IntegratorVariant as FieldIntegratorVariant;
+use crate::integrator::field::FieldIntegratorVariant;
 use crate::boundary::object::variant::ObjBoundaryVariant;
 use crate::interaction::field as field_interactions;
 use crate::interaction::object as obj_interactions;
@@ -23,24 +24,20 @@ use crate::interaction::object as obj_interactions;
 pub struct State {
 
     pub obj_families: Vec<ObjFamily>,
-    pub fields: Vec<Field>,
+    pub fields:       Vec<Field>,
 
 }
 impl State {
 
-    pub fn new(
+    pub fn new( 
         sim_id: &str, 
-        engine_conf: &mut EngineConfig,
+        engine_conf: &mut EngineConfig 
     ) -> Self {
         State {
             obj_families: Self::setup_objects(sim_id, engine_conf),
-            fields: Self::setup_fields(sim_id, engine_conf),
+            fields:       Self::setup_fields( sim_id, engine_conf),
         }
     }
-
-    // pub fn init(&mut self) {
-    //     // TODO call self.setup_objectss/fields from here
-    // }
 
     pub fn setup_objects(
         sim_id: &str,
@@ -157,11 +154,14 @@ impl State {
 
                 let id = 0;
                 let mut fam_conf = ObjFamilyEngineConfig::new(id);
+                fam_conf.obj_variant = ObjVariant::Particle;
 
                 let mut family = ObjFamily::new(0);
 
-                let R = 0.85;
-                let W = 0.0;
+                // let R = 0.85;
+                // let W = 0.;
+                let R = 0.55;
+                let W = 0.2;
                 let speed = (nr_of_stars as f64 * M / R).powf(0.5);
 
                 for obj_idx in 0..nr_of_objects {
@@ -283,7 +283,7 @@ impl State {
                 // TODO add dampening somehow, on collision? over time?
                 let foo: usize = 5;
                 let nr_of_bodies = foo.pow(2);
-                let speed = 0.1;
+                let speed = 0.05;
                 for jdx in 0..foo {
                     for idx in 0..foo {
                         let x0 = (idx as f64 + 0.5) / foo as f64 * 2. - 1.;
@@ -321,27 +321,33 @@ impl State {
             "ising-model" => {
 
                 let GRID_SIZE = 200;
-                let dimensions = (GRID_SIZE, GRID_SIZE, 1);
-                let mut entries = Vec::new();
-                for row_idx in 0..dimensions.0 {
-                    for col_idx in 0..dimensions.1 {
+
+                let id = 0;
+                let mut field_conf = FieldEngineConfig::new(id);
+                field_conf.field_variant = FieldVariant::Ising;
+                field_conf.dimensions = Vec::from([GRID_SIZE, GRID_SIZE, 1]);
+                // field_conf.integrator = FieldIntegratorVariant::RandomBatch;
+                // field_conf.field_interactions = Vec::from([crate::interaction::field::field::Interaction::Ising]);
+
+                let mut field = Field::new(id);
+                for row_idx in 0..field_conf.dimensions[0] {
+                    for col_idx in 0..field_conf.dimensions[1] {
                         let rand: f64 = rng.gen();
                         let val = if rand > 0.5 { -1. } else { 1. };
-                        entries.push(val);
+                        field.entries.push(val);
                     }
                 }
-                let field = Field::new(
-                    0, FieldVariant::Ising, dimensions, entries
-                );
 
                 // integrator
-                let integrator = FieldIntegrator::new(
-                    FieldIntegratorVariant::RandomBatch,
-                    Vec::from([
-                        crate::interaction::field::field::Interaction::Ising,
-                    ]),
-                    Vec::new(),
-                );
+                // let integrator = FieldIntegrator::new(
+                //     FieldIntegratorVariant::RandomBatch,
+                //     Vec::from([
+                //         crate::interaction::field::field::FieldInteraction::Ising,
+                //     ]),
+                //     Vec::new(),
+                // );
+
+                engine_config.fields.push(field_conf);
                 // let integrator = ObjIntegrator::new(
                 //     OBJ_INTEGRATOR_VARIANT, 
                 //     Vec::from([]),  // object-field interactions

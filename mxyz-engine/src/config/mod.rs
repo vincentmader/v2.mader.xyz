@@ -22,6 +22,7 @@ impl EngineConfig {
 
         let fields = Vec::new();
         let obj_families = Vec::new();
+
         EngineConfig {
             fields: fields,
             obj_families: obj_families,
@@ -29,29 +30,5 @@ impl EngineConfig {
             dt: DEFAULT_TIME_STEP_SIZE,
         }
     }
-
-    // pub fn init_fields(dt: f64) -> Vec<FieldEngineConfig> {
-    //     let mut fields = Vec::new();
-
-    //     // let id = 0;
-    //     // let field = FieldEngineConfig::new(id, dt);
-    //     // fields.push(field);
-
-    //     fields
-    // }
-
-    // pub fn init_obj_families(dt: f64) -> Vec<ObjFamilyEngineConfig> {
-    //     let mut obj_families = Vec::new();
-
-    //     // let id = 0;
-    //     // let obj_fam = ObjFamilyEngineConfig::new(id, dt);
-    //     // obj_families.push(obj_fam);
-
-    //     // let id = 1;
-    //     // let obj_fam = ObjFamilyEngineConfig::new(id, dt);
-    //     // obj_families.push(obj_fam);
-
-    //     obj_families
-    // }
 }
 

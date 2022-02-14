@@ -5,7 +5,7 @@ pub mod game_of_life;
 pub mod ising;
 
 
-pub enum Interaction {
+pub enum FieldInteraction {
     Diffusion,
     ElectroMagnetic,
     GameOfLife,

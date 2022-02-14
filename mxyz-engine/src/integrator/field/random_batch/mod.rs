@@ -6,6 +6,7 @@ use crate::state::State;
 use crate::state::field::Field;
 
 use crate::interaction::field as interactions;
+use crate::config::EngineConfig;
 
 
 
@@ -20,28 +21,28 @@ pub fn step(
     iter_idx: usize,
     field: &mut Field,
     states: &Vec<State>,
+    config: &EngineConfig,
 ) {
-    const BATCH_SIZE: usize = 1000;
-    // TODO where to get batch-size from?
-
+    // math setup
     let mut rng = rand::thread_rng();
-
-    let dimensions = &field.dimensions;
-    let dim_x = dimensions.0;
-    let dim_y = dimensions.0;
-    // let dim_z = dimensions.0;
+    // numerical parameters
+    const BATCH_SIZE: usize = 1000; // TODO where to get batch-size from?
+    let B = 0.;
+    let T = 0.01;
+    let J = 1.;
+    let mu = 1.;
+    // get field dimensions
+    let dimensions = &config.fields[field.id].dimensions;
+    let dim_x = dimensions[0];
+    let dim_y = dimensions[1];
+    let dim_z = dimensions[2];  // TODO handle
 
     for _ in 0..BATCH_SIZE {
+        // choose random cell
         let x = rng.gen_range(0..dim_x);
         let y = rng.gen_range(0..dim_y);
-
         let cell = field.entries[y*dim_x+x];
-
-        let B = 0.;
-        let T = 0.01;
-        let J = 1.;
-        let mu = 1.;
-
+        // calculate flip energy
         let mut dE = 0.;
         for dx in 0..3 {
             for dy in 0..3 {
