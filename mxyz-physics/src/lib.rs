@@ -1,8 +1,5 @@
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {
-        let result = 2 + 2;
-        assert_eq!(result, 4);
-    }
-}
+
+pub mod thermo_dynamics;
+pub mod classical_mechanics;
+pub mod quantum_mechanics;
+

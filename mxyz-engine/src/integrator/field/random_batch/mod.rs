@@ -8,13 +8,7 @@ use crate::state::field::Field;
 use crate::interaction::field as interactions;
 use crate::config::EngineConfig;
 
-
-
-fn boltzmann_prob(dE: f64, T: f64) -> f64 {  // TODO -> physics
-    let kB = 1.;
-    let E_th = kB * T;
-    (-dE / E_th).exp()
-}
+use mxyz_physics::thermo_dynamics::boltzmann_prob;
 
 
 pub fn step(
@@ -44,22 +38,26 @@ pub fn step(
         let cell = field.entries[y*dim_x+x];
         // calculate flip energy
         let mut dE = 0.;
+        // loop over neighbors
         for dx in 0..3 {
             for dy in 0..3 {
+                // prevent self-interaction
                 if (dx == 1) && (dy == 1) { continue; }
+                // get coordinates of other cell
                 let mut X = x as i32 + dx - 1;
                 let mut Y = y as i32 + dy - 1;
-                
                 // apply periodic bounds
                 if X < 0 { X += dim_x as i32; }
                 if Y < 0 { Y += dim_y as i32; }
                 if X >= dim_x as i32 { X -= dim_x as i32; }
                 if Y >= dim_y as i32 { Y -= dim_y as i32; }
-
+                // get other cell 
                 let other = states[iter_idx].fields[field.id].entries[Y as usize*dim_x+X as usize];
+                // add spin-spin interaction to flip energy
                 dE += J*cell*other;
             }
         }
+        // add spin-field interaction to flip energy
         dE += mu*cell*B;
 
         let rand: f64 = rng.gen();
