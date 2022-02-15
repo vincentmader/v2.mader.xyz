@@ -4,8 +4,8 @@ use crate::state::field::Field;
 pub mod variant;
 // use variant::FieldBoundaryVariant;
 
-mod none;
-mod periodic;
+pub mod none;
+pub mod periodic;
 
 
 // pub struct FieldBoundary {

@@ -1,90 +1,38 @@
 
-// use crate::fields::state::Field;
-// use crate::fields::interactions::Interaction;
-// use crate::interactions::field::Interaction;
-// use crate::state::State;
-use crate::state::State;
-use crate::state::field::Field;
-use crate::interaction::field::field::FieldFieldInteraction;
-use crate::interaction::field::object::FieldObjInteraction;
 pub mod entire;
 pub mod random_batch;
 
 pub mod variant;
 pub use variant::FieldIntegratorVariant;
-pub use crate::config::field::FieldEngineConfig;
-pub use crate::config::EngineConfig;
+
+use crate::boundary::field::variant::FieldBoundaryVariant;
+
+use crate::boundary::field as boundary;
+use crate::integrator::field as integrator;
 
 
 pub fn step(
-    field: &mut Field,
-    states: &Vec<State>,
-    config: &EngineConfig,
+    field: &mut crate::state::field::Field,
+    states: &Vec<crate::state::State>,
+    config: &crate::config::EngineConfig,
 ) {
     // let cell_indices = match self.config.fields[field.id].integrator {
     //     FieldIntegratorVariant::Entire => (0..)
     //     FieldIntegratorVariant::RandomBatch => 
     // };
 
-    let stepper = match config.fields[field.id].integrator {
-        FieldIntegratorVariant::Entire => crate::integrator::field::entire::step,
-        FieldIntegratorVariant::RandomBatch => crate::integrator::field::random_batch::step,
+    let apply_integrator = match config.fields[field.id].integrator {
+        FieldIntegratorVariant::Entire      => integrator::entire::step,
+        FieldIntegratorVariant::RandomBatch => integrator::random_batch::step,
     };
-    stepper(field, &states, &config);
+    apply_integrator(field, &states, &config);
+
+    let apply_boundaries = match config.fields[field.id].boundary {
+        FieldBoundaryVariant::None          => boundary::none::apply,
+        FieldBoundaryVariant::Periodic      => boundary::periodic::apply,
+    };
+    apply_boundaries(field, &config.fields[field.id]);
 
     // TODO bounds?
 }
-
-
-// pub struct FieldIntegrator {
-
-//     pub variant: FieldIntegratorVariant,
-//     pub field_interactions: Vec<FieldFieldInteraction>,
-//     pub obj_interactions: Vec<FieldObjInteraction>,
-    
-// }
-// impl FieldIntegrator {
-
-//     pub fn new(
-
-//         variant: FieldIntegratorVariant,
-//         field_interactions: Vec<FieldInteraction>,
-//         obj_interactions: Vec<ObjInteraction>,
-
-//     ) -> Self {
-
-//         FieldIntegrator {
-//             variant,
-//             field_interactions,
-//             obj_interactions,
-//         }
-
-//     }
-
-//     pub fn step(
-//         &mut self,
-//         iter_idx: usize,
-//         field: &mut Field,
-//         states: &Vec<State>,
-//         config: &FieldEngineConfig,
-//     ) {
-
-//         let stepper = match self.variant {
-//             FieldIntegratorVariant::Entire => entire::step,
-//             FieldIntegratorVariant::RandomBatch => random_batch::step,
-//         };
-//         stepper(iter_idx, field, states, config);
-
-//     }
-
-// }
-
-
-// pub trait Integrator {
-//     fn step(
-//         field: &mut Field,
-//         states: &Vec<State>,
-//         // interactions: &Vec<Interaction>,
-//     );
-// }
 
