@@ -53,7 +53,7 @@ impl Canvas {
         self.context.set_font(&font);
     }
     pub fn fill_text(&mut self, text: &str, x: f64, y: f64) {
-        self.context.fill_text(&text, x, y);
+        self.context.fill_text(&text, x, y).unwrap();
     }
     pub fn reset_line_width(&mut self) {
         self.context.set_line_width(1.);
@@ -131,7 +131,7 @@ impl Canvas {
     }
     pub fn fill_rect(
         &mut self, 
-        mut center: (f64, f64), 
+        center: (f64, f64), 
         width: f64,
         height: f64,
     ) {

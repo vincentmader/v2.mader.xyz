@@ -4,7 +4,7 @@ use crate::state::object::variant::ObjVariant;
 use crate::state::object::ObjFamily;
 
 use crate::interaction::object::object::forces;
-use crate::interaction::object::field::ObjFieldInteraction;
+// use crate::interaction::object::field::ObjFieldInteraction;
 use crate::interaction::object::object::ObjObjInteraction;
 
 use crate::config::EngineConfig;

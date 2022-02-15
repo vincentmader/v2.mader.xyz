@@ -1,6 +1,4 @@
 
-pub mod entire;
-pub mod random_batch;
 pub mod cell_auto;
 
 pub mod variant;

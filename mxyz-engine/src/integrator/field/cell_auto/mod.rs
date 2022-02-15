@@ -5,7 +5,7 @@ use rand::Rng;
 use crate::state::State;
 use crate::state::field::Field;
 
-use crate::interaction::field as interactions;
+// use crate::interaction::field as interactions;
 use crate::config::EngineConfig;
 use crate::config::field::FieldEngineConfig;
 use crate::state::field::variant::FieldVariant;
@@ -43,7 +43,7 @@ pub fn get_flip_energy(
     let (B, J, mu) = (0., 1., 1.);
 
     let dimensions = &field_conf.dimensions;
-    let (dim_x, dim_y, _dim_z) = (dimensions[0], dimensions[1], dimensions[2]); // TODO handle 3D
+    let dim_x = dimensions[0]; // TODO handle 3D
 
     let cell = field.entries[y*dim_x+x];
     let mut dE = 0.;
@@ -52,10 +52,7 @@ pub fn get_flip_energy(
             // prevent self-interaction
             if (dx == 1) && (dy == 1) { continue; }
             // get coordinates of other cell
-            let mut X = x as i32 + dx - 1;
-            let mut Y = y as i32 + dy - 1;
-
-            let (X, Y) = apply_periodic_bounds(&field_conf, X, Y);
+            let (X, Y) = apply_periodic_bounds(&field_conf, x as i32 + dx-1, y as i32 + dy-1);
 
             // get other cell 
             let other = states[iter_idx].fields[field.id].entries[Y as usize*dim_x+X as usize];
@@ -82,8 +79,8 @@ pub fn step(
     let mut rng = rand::thread_rng();
     // get info about field from config
     let field_conf = &config.fields[field.id];
-    let field_interactions = &field_conf.field_interactions;
-    let obj_interactions = &field_conf.obj_interactions;
+    let _field_interactions = &field_conf.field_interactions;
+    let _obj_interactions = &field_conf.obj_interactions;
     let dimensions = &field_conf.dimensions;
     let (dim_x, dim_y, _dim_z) = (dimensions[0], dimensions[1], dimensions[2]); // TODO handle 3D
 

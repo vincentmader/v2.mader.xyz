@@ -1,3 +1,5 @@
+#![allow(non_snake_case)]
+
 
 pub fn boltzmann_prob(
     dE: f64, T: f64

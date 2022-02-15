@@ -40,8 +40,8 @@ impl State {
         use object::attribute::ObjAttribute;
         use object::variant::ObjVariant;
         use crate::boundary::object::variant::ObjBoundaryVariant;
-        use crate::integrator::object::variant::ObjIntegratorVariant;
-        use crate::interaction::object::field::ObjFieldInteraction;
+        // use crate::integrator::object::variant::ObjIntegratorVariant;
+        // use crate::interaction::object::field::ObjFieldInteraction;
         use crate::interaction::object::object::ObjObjInteraction;
 
         // math stuff
@@ -86,7 +86,7 @@ impl State {
                 let mut family = ObjFamily::new(id);
 
                 let (speed, nr_of_objects) = (0., 10);
-                for obj_idx in 0..nr_of_objects {
+                for _obj_idx in 0..nr_of_objects {
                     let rand: f64 = rng.gen(); 
                     let rand2: f64 = rng.gen(); 
                     let rand3: f64 = rng.gen(); 
@@ -261,7 +261,7 @@ impl State {
 
                 let mut family = ObjFamily::new(id);
                 let nr_of_bodies = 1;
-                for body_idx in 0..nr_of_bodies {
+                for _body_idx in 0..nr_of_bodies {
                     let rand1: f64 = rng.gen(); 
                     let rand2: f64 = rng.gen(); 
                     let x0 = rand1 * 2. - 1.;
@@ -283,7 +283,7 @@ impl State {
 
                 // TODO add dampening somehow, on collision? over time?
                 let foo: usize = 5;
-                let nr_of_bodies = foo.pow(2);
+                // let nr_of_bodies = foo.pow(2);
                 let speed = 0.05;
                 for jdx in 0..foo {
                     for idx in 0..foo {
@@ -319,7 +319,7 @@ impl State {
         use crate::boundary::field::variant::FieldBoundaryVariant;
         use crate::integrator::field::variant::FieldIntegratorVariant;
         use crate::interaction::field::field::FieldFieldInteraction;
-        use crate::interaction::field::object::FieldObjInteraction;
+        // use crate::interaction::field::object::FieldObjInteraction;
 
         // math stuff
         const _TAU: f64 = 2. * 3.14159265358979;
@@ -343,8 +343,8 @@ impl State {
                 conf.boundary           = FieldBoundaryVariant::Periodic;
 
                 let mut field = Field::new(id);
-                for row_idx in 0..conf.dimensions[0] {
-                    for col_idx in 0..conf.dimensions[1] {
+                for _row_idx in 0..conf.dimensions[0] {
+                    for _col_idx in 0..conf.dimensions[1] {
                         let rand: f64 = rng.gen();
                         let val = if rand > 0.5 { -1. } else { 1. };
                         field.entries.push(val);
