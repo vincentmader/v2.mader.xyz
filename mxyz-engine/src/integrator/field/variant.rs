@@ -1,6 +1,5 @@
 
 pub enum FieldIntegratorVariant {
-    Entire,
-    RandomBatch,
+    CellAuto,
 }
 

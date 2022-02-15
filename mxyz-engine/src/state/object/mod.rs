@@ -3,8 +3,6 @@ pub mod family;
 pub mod attribute;
 pub mod variant;
 
-use attribute::ObjAttribute;
-use variant::ObjVariant;
 use crate::config::obj_family::ObjFamilyEngineConfig;
 
 

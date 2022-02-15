@@ -1,6 +1,6 @@
 
+pub mod relevant_cells;
 pub mod variant;
-pub use variant::FieldVariant;
 
 
 #[derive(Clone)]
