@@ -320,10 +320,10 @@ impl State {
 
         let mut fields: Vec<Field> = Vec::new();
 
+        let GRID_SIZE = 200;
+
         match sim_id {
             "ising-model" => {
-
-                let GRID_SIZE = 200;
 
                 let id = 0;
                 let mut field_conf = FieldEngineConfig::new(id);
@@ -341,39 +341,31 @@ impl State {
                         field.entries.push(val);
                     }
                 }
-
-                // integrator
-                // let integrator = FieldIntegrator::new(
-                //     FieldIntegratorVariant::RandomBatch,
-                //     Vec::from([
-                //         crate::interaction::field::field::FieldInteraction::Ising,
-                //     ]),
-                //     Vec::new(),
-                // );
-
                 engine_config.fields.push(field_conf);
-                // let integrator = ObjIntegrator::new(
-                //     OBJ_INTEGRATOR_VARIANT, 
-                //     Vec::from([]),  // object-field interactions
-                //     Vec::from([
-                //         obj_interactions::object::Interaction::ForceNewtonianGravity,
-                //     ])  // object-object interactions
-                // ); 
-
-        // engine_setup.field_integrators.push(integrator);
-
-                // let field_config = FieldEngineConfig {
-                //     id: 0,
-                //     dimensions: Vec::from([100, 100]),
-                // };
-                // engine_config.fields.push(field_config);
-
-
-                // // boundaries
-                // let boundary = ObjBoundary::new(ObjBoundaryVariant::None);
-                // engine_setup.obj_boundaries.push(boundary);
-
                 fields.push(field);
+
+            }, "game-of-life" => {
+
+                let id = 0;
+                let mut field_conf = FieldEngineConfig::new(id);
+                field_conf.field_variant = FieldVariant::GameOfLife;
+                field_conf.dimensions = Vec::from([GRID_SIZE, GRID_SIZE, 1]);
+                // field_conf.integrator = FieldIntegratorVariant::Entire;
+                field_conf.integrator = FieldIntegratorVariant::RandomBatch;
+                field_conf.field_interactions = Vec::from([FieldFieldInteraction::GameOfLife]);
+                field_conf.boundary = FieldBoundaryVariant::None;
+
+                let mut field = Field::new(id);
+                for row_idx in 0..field_conf.dimensions[0] {
+                    for col_idx in 0..field_conf.dimensions[1] {
+                        let rand: f64 = rng.gen();
+                        let val = if rand > 0.5 { -1. } else { 1. };
+                        field.entries.push(val);
+                    }
+                }
+                engine_config.fields.push(field_conf);
+                fields.push(field);
+
             }, _ => {}
         }
 

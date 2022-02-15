@@ -18,7 +18,7 @@ impl NavGrid {
             ("thermo-dynamics", "thermo-dynamics"),
             // ("fluid-dynamics", "fluid dynamics"),
             ("electro-magnetism", "electro-magnetism"),
-            // ("emergent-behavior", "emergent behavior"),
+            ("emergent-behavior", "emergent behavior"),
             ("quantum-mechanics", "quantum mechanics"),
             // ("various", "various"),
             // ("optics", "optics"), // ?

@@ -69,11 +69,11 @@ impl NavGridSection {
             //     NavGridItem::new("feynman-graphs", "Feynman graphs"),
                 NavGridItem::new("lennard-jones", "Lennard-Jones potential"),
             ]),
-            // "emergent-behavior" => Vec::from([
+            "emergent-behavior" => Vec::from([
             //     NavGridItem::new("boids", "boids"),
             //     NavGridItem::new("ants", "ants"),
-            //     NavGridItem::new("game-of-life", "game of life"),
-            // ]),
+                NavGridItem::new("game-of-life", "game of life"),
+            ]),
             "various" => Vec::from([
                 // NavGridItem::new("rock-paper-scissors", "rock-paper-scissors"),
                     // NavGridItem::new("ca-rulemaker", "cell.aut. rule-maker"),
