@@ -11,7 +11,6 @@ use crate::config::EngineConfig;
 
 
 pub fn step(
-    iter_idx: usize,
     family: &mut ObjFamily,
     states: &Vec<State>,
     config: &EngineConfig,
@@ -23,6 +22,7 @@ pub fn step(
     // get numerical parameters
     let dt = config.dt;
     let epsilon = 0.05; // TODO: get from obj family? (& saved externally?)
+    let iter_idx = config.iter_idx;
     // get info about family from config
     let fam_conf = &config.obj_families[family.id];
     let obj_length = fam_conf.obj_length;

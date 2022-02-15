@@ -13,15 +13,36 @@ pub mod random_batch;
 pub mod variant;
 pub use variant::FieldIntegratorVariant;
 pub use crate::config::field::FieldEngineConfig;
+pub use crate::config::EngineConfig;
 
 
-pub struct FieldIntegrator {
+pub fn step(
+    field: &mut Field,
+    states: &Vec<State>,
+    config: &EngineConfig,
+) {
+    // let cell_indices = match self.config.fields[field.id].integrator {
+    //     FieldIntegratorVariant::Entire => (0..)
+    //     FieldIntegratorVariant::RandomBatch => 
+    // };
 
-    pub variant: FieldIntegratorVariant,
-    pub field_interactions: Vec<FieldFieldInteraction>,
-    pub obj_interactions: Vec<FieldObjInteraction>,
-    
+    let stepper = match config.fields[field.id].integrator {
+        FieldIntegratorVariant::Entire => crate::integrator::field::entire::step,
+        FieldIntegratorVariant::RandomBatch => crate::integrator::field::random_batch::step,
+    };
+    stepper(field, &states, &config);
+
+    // TODO bounds?
 }
+
+
+// pub struct FieldIntegrator {
+
+//     pub variant: FieldIntegratorVariant,
+//     pub field_interactions: Vec<FieldFieldInteraction>,
+//     pub obj_interactions: Vec<FieldObjInteraction>,
+    
+// }
 // impl FieldIntegrator {
 
 //     pub fn new(

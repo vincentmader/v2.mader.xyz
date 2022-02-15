@@ -33,10 +33,10 @@ impl ObjFamilyEngineConfig {
 
         let DEFAULT_ATTRIBUTES = Vec::from([
             ObjAttribute::Mass,
-            ObjAttribute::PositionX,
-            ObjAttribute::PositionY,
-            ObjAttribute::VelocityX,
-            ObjAttribute::VelocityY,
+            ObjAttribute::PosX,
+            ObjAttribute::PosY,
+            ObjAttribute::VelX,
+            ObjAttribute::VelY,
             // ObjAttribute::Charge,
         ]);
         let DEFAULT_OBJ_LENGTH = DEFAULT_ATTRIBUTES.len();

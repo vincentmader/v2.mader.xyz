@@ -10,7 +10,6 @@ use crate::boundary::object::variant::ObjBoundaryVariant;
 use crate::config::EngineConfig;
 use crate::config::field::FieldEngineConfig;
 use crate::config::obj_family::ObjFamilyEngineConfig;
-use crate::integrator::field::FieldIntegrator;
 use crate::integrator::field::FieldIntegratorVariant;
 use crate::interaction::field::field::FieldFieldInteraction;
 use crate::interaction::field::object::FieldObjInteraction;

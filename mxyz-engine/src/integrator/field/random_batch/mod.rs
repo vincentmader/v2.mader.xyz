@@ -69,13 +69,14 @@ pub fn get_flip_energy(
 
 
 pub fn step(
-    iter_idx: usize,
     field: &mut Field,
     states: &Vec<State>,
     config: &EngineConfig,
 ) {
     // numerical parameters
     const BATCH_SIZE: usize = 1000; // TODO where to get batch-size from?
+    
+    let iter_idx = config.iter_idx;
 
     // math setup
     let mut rng = rand::thread_rng();

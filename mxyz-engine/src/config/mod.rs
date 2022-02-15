@@ -12,6 +12,7 @@ pub struct EngineConfig {
     pub obj_families:   Vec<ObjFamilyEngineConfig>,
     pub is_paused:      bool,
     pub dt:             f64,
+    pub iter_idx:       usize,
 
 }
 impl EngineConfig {
@@ -24,10 +25,11 @@ impl EngineConfig {
         let obj_families = Vec::new();
 
         EngineConfig {
-            fields: fields,
-            obj_families: obj_families,
-            is_paused: false,
-            dt: DEFAULT_TIME_STEP_SIZE,
+            fields:         fields,
+            obj_families:   obj_families,
+            is_paused:      false,
+            dt:             DEFAULT_TIME_STEP_SIZE,
+            iter_idx:       0,
         }
     }
 }
