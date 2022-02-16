@@ -56,6 +56,7 @@ impl Renderer {
         &mut self, engine: &Engine
         // config: &mut config::EngineConfig
     ) {
+
         let states = &engine.states;
 
         let doc = mxyz_utils::dom::document();
@@ -199,6 +200,7 @@ impl Renderer {
         canvas_id: usize,
         engine: &Engine,
     ) {
+
         // const r: f64 = 0.01;  // TODO setup slider
         let r = 0.013;  // TODO setup slider
         let is_filled = true;  // TODO setup toggle-button

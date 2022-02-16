@@ -20,9 +20,7 @@ impl NavGridSection {
                     // NavGridItem::new("nbody-solar", "solar system"),
                 // basics
                 // NavGridItem::new("2body-kepler", "Kepler's laws"),
-                NavGridItem::new("nbody-misc", "misc"),
-                NavGridItem::new("nbody-cloud", "stellar cloud"),
-                    // NavGridItem::new("3body-moon", "Moon"),
+                NavGridItem::new("3body-moon", "Moon"),
                     // NavGridItem::new("3body-lagrange", "Lagrange points"),
                 NavGridItem::new("nbody-flowers", "sym. constellations"),
                 // more complex systems
@@ -32,6 +30,8 @@ impl NavGridSection {
                     // NavGridItem::new("nbody-cluster", "stellar cluster (3D)"),
                 // stable 3-body
                 NavGridItem::new("3body-fig8", "figure-8"),
+                NavGridItem::new("nbody-cloud", "stellar cloud"),
+                NavGridItem::new("nbody-misc", "misc"),
                     // NavGridItem::new("3body-broucke", "broucke"),
                     // NavGridItem::new("3body-liao", "liao"),
                     // NavGridItem::new("3body-freefall", "free-fall"),

@@ -17,6 +17,7 @@ pub struct RendererConfig {
     pub is_displaying_hud:      bool,
 
 }
+
 impl RendererConfig {
 
     pub fn new() -> Self {
@@ -41,14 +42,25 @@ impl RendererConfig {
         fields
     }
 
-    pub fn init_obj_families() -> Vec<ObjFamilyRendererConfig> {
+    pub fn init_obj_families(
+        // engine_conf: &EngineConfig
+    ) -> Vec<ObjFamilyRendererConfig> {
         let mut obj_families = Vec::new();
+
+        // for (id, obj_family) in engine_conf.obj_families.enumerate() {
+        //     let obj_fam = ObjFamilyRendererConfig::new(id);
+        //     obj_families.push(obj_fam);
+        // }
 
         let id = 0;
         let obj_fam = ObjFamilyRendererConfig::new(id);
         obj_families.push(obj_fam);
 
         let id = 1;
+        let obj_fam = ObjFamilyRendererConfig::new(id);
+        obj_families.push(obj_fam);
+
+        let id = 2;
         let obj_fam = ObjFamilyRendererConfig::new(id);
         obj_families.push(obj_fam);
 

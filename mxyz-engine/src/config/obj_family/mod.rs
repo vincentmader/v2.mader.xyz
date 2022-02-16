@@ -57,7 +57,7 @@ impl ObjFamilyEngineConfig {
         // );
     
         ObjFamilyEngineConfig {
-            id: id,
+            id,
             family_size:        0,  // TODO increment on obj-add
             obj_variant:        ObjVariant::Body,
             obj_attributes:     DEFAULT_ATTRIBUTES,
