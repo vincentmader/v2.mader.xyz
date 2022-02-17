@@ -6,7 +6,7 @@ impl Renderer {
 
     pub fn init_button_menu_1(
         &mut self, 
-        doc: &web_sys::Document
+        doc:    &web_sys::Document
     ) {
         let button_ids = Vec::from([
             ("button_toggle-pause",             "| |"),

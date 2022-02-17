@@ -101,34 +101,43 @@ impl Simulation {
             // OBJECT TAIL VARIANT
 
             "button_set-obj-tail-variant-none" => {
-                renderer.config.obj_families[thing_id].tail_variant = ObjTailVariant::None;
+                renderer.config.obj_families[thing_id].tail_variant 
+                    = ObjTailVariant::None;
             },
             "button_set-obj-tail-variant-line" => {
-                renderer.config.obj_families[thing_id].tail_variant = ObjTailVariant::Line;
+                renderer.config.obj_families[thing_id].tail_variant 
+                    = ObjTailVariant::Line;
             },
             "button_set-obj-tail-variant-area" => {
-                renderer.config.obj_families[thing_id].tail_variant = ObjTailVariant::Area;
+                renderer.config.obj_families[thing_id].tail_variant 
+                    = ObjTailVariant::Area;
             },
 
             // OBJECT MOTION VECTORS
 
             "button_toggle-display-objects" => {
-                renderer.config.obj_families[thing_id].is_displaying_objects = !renderer.config.obj_families[thing_id].is_displaying_objects 
+                renderer.config.obj_families[thing_id].is_displaying_objects 
+                    = !renderer.config.obj_families[thing_id].is_displaying_objects 
             },
             "button_toggle-display-obj-vec-pos" => {
-                renderer.config.obj_families[thing_id].is_displaying_pos_vec = !renderer.config.obj_families[thing_id].is_displaying_pos_vec 
+                renderer.config.obj_families[thing_id].is_displaying_pos_vec 
+                    = !renderer.config.obj_families[thing_id].is_displaying_pos_vec 
             },
             "button_toggle-display-obj-vec-vel" => {
-                renderer.config.obj_families[thing_id].is_displaying_vel_vec = !renderer.config.obj_families[thing_id].is_displaying_vel_vec 
+                renderer.config.obj_families[thing_id].is_displaying_vel_vec 
+                    = !renderer.config.obj_families[thing_id].is_displaying_vel_vec 
             },
             "button_toggle-display-obj-vec-acc" => {
-                renderer.config.obj_families[thing_id].is_displaying_acc_vec = !renderer.config.obj_families[thing_id].is_displaying_acc_vec 
+                renderer.config.obj_families[thing_id].is_displaying_acc_vec 
+                    = !renderer.config.obj_families[thing_id].is_displaying_acc_vec 
             },
             "button_toggle-display-obj-center-of-mass" => {
-                renderer.config.obj_families[thing_id].is_displaying_center_of_mass = !renderer.config.obj_families[thing_id].is_displaying_center_of_mass 
+                renderer.config.obj_families[thing_id].is_displaying_center_of_mass 
+                    = !renderer.config.obj_families[thing_id].is_displaying_center_of_mass 
             },
             "button_toggle-display-obj-center-of-momentum" => {
-                renderer.config.obj_families[thing_id].is_displaying_center_of_momentum = !renderer.config.obj_families[thing_id].is_displaying_center_of_momentum 
+                renderer.config.obj_families[thing_id].is_displaying_center_of_momentum 
+                    = !renderer.config.obj_families[thing_id].is_displaying_center_of_momentum 
             },
 
             // FIELD VARIANT
@@ -138,7 +147,8 @@ impl Simulation {
             // INTEGRATOR VARIANT    TODO
  
             "button_set-obj-integrator-euler-exp" => {
-                engine.config.obj_families[thing_id].integrator = ObjIntegratorVariant::EulerExplicit;
+                engine.config.obj_families[thing_id].integrator 
+                    = ObjIntegratorVariant::EulerExplicit;
             },
             "button_set-obj-integrator-euler-imp" => {},
             "button_set-obj-integrator-rk2" => {},
@@ -149,16 +159,20 @@ impl Simulation {
             // BOUNDARY VARIANT
 
             "button_set-obj-bound-none" => {  // TODO
-                engine.config.obj_families[thing_id].boundary = ObjBoundaryVariant::None;
+                engine.config.obj_families[thing_id].boundary 
+                    = ObjBoundaryVariant::None;
             },
             "button_set-obj-bound-periodic" => {
-                engine.config.obj_families[thing_id].boundary = ObjBoundaryVariant::Periodic;
+                engine.config.obj_families[thing_id].boundary 
+                    = ObjBoundaryVariant::Periodic;
             },
             "button_set-obj-bound-wall-elastic" => {
-                engine.config.obj_families[thing_id].boundary = ObjBoundaryVariant::WallCollisionElastic;
+                engine.config.obj_families[thing_id].boundary 
+                    = ObjBoundaryVariant::WallCollisionElastic;
             },
             "button_set-obj-bound-wall-inelastic" => {
-                engine.config.obj_families[thing_id].boundary = ObjBoundaryVariant::WallCollisionInelastic;
+                engine.config.obj_families[thing_id].boundary 
+                    = ObjBoundaryVariant::WallCollisionInelastic;
             },
 
             // ...
