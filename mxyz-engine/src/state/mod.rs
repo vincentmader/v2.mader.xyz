@@ -121,7 +121,7 @@ impl State {
                 // ===============================================================================
 
                 let id = 1;
-                let mut family      = ObjFamily::new(1);
+                let mut family      = ObjFamily::new(id);
                 let mut conf        = ObjFamilyEngineConfig::new(id);
                 conf.obj_variant    = ObjVariant::Static;
 
@@ -141,7 +141,7 @@ impl State {
                 // ===============================================================================
 
                 let id = 0;
-                let mut family      = ObjFamily::new(0);
+                let mut family      = ObjFamily::new(id);
                 let mut conf        = ObjFamilyEngineConfig::new(id);
                 conf.obj_variant    = ObjVariant::Particle;
 
@@ -172,7 +172,7 @@ impl State {
                 // ===============================================================================
 
                 let id = 1;
-                let mut family  = ObjFamily::new(1);
+                let mut family  = ObjFamily::new(id);
                 let mut conf    = ObjFamilyEngineConfig::new(id);
 
                 let R: f64 = 0.15;
@@ -196,7 +196,7 @@ impl State {
             }, "3body-fig8" => {
 
                 let id = 0;
-                let mut family  = ObjFamily::new(0);
+                let mut family  = ObjFamily::new(id);
                 let mut conf    = ObjFamilyEngineConfig::new(id);
 
                 let xs = [ 0.7775727187509279270,  0.,                    -0.7775727187509279270];
@@ -272,7 +272,7 @@ impl State {
                 conf.obj_length += 1;
                 engine_conf.dt = DT / 10.;
 
-                let nr_of_protons = 1;
+                let nr_of_protons = 10;
                 for _ in 0..nr_of_protons {
                     let rand1: f64 = rng.gen(); 
                     let rand2: f64 = rng.gen(); 
@@ -362,6 +362,7 @@ impl State {
 
         let mut fields: Vec<Field> = Vec::new();
         match sim_id {
+
             "ising-model" => {
 
                 let id = 0;

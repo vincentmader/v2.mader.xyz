@@ -19,17 +19,10 @@ use object::color_mode::ObjColorMode;
 
 pub struct Renderer {
 
-    sim_id: String,
-    pub frame_idx: usize,
-    canvases: Vec<Canvas>,
-    pub config: config::RendererConfig,
-    //
-    pub is_drawing_families: Vec<bool>,
-    pub is_drawing_pos_vec: Vec<bool>,
-    pub is_drawing_vel_vec: Vec<bool>,
-    pub is_drawing_acc_vec: Vec<bool>,
-    pub obj_tail_variant: Vec<ObjTailVariant>,
-    pub obj_color_mode: Vec<ObjColorMode>,
+    sim_id:                     String,
+    pub frame_idx:              usize,
+    canvases:                   Vec<Canvas>,
+    pub config:                 config::RendererConfig,
 
 }
 
@@ -37,70 +30,27 @@ impl Renderer {
 
     pub fn new(sim_id: &str) -> Self {
         Renderer {
-            sim_id: String::from(sim_id),
-            frame_idx: 0,
-            canvases: Vec::new(),
-            config: config::RendererConfig::new(),
-            //
-            is_drawing_families: Vec::new(),
-            is_drawing_pos_vec: Vec::new(),
-            is_drawing_vel_vec: Vec::new(),
-            is_drawing_acc_vec: Vec::new(),
-            obj_tail_variant: Vec::new(),
-            obj_color_mode: Vec::new(),
+            sim_id:                 String::from(sim_id),
+            frame_idx:              0,
+            canvases:               Vec::new(),
+            config:                 config::RendererConfig::new(sim_id),
             // TODO tail pre-computes (?)
         }
     }
 
-    pub fn init(
-        &mut self, engine: &Engine
-        // config: &mut config::EngineConfig
-    ) {
-
-        let states = &engine.states;
-
-        let doc = mxyz_utils::dom::document();
+    pub fn init(&mut self, engine: &Engine) {
+        self.config.init(&engine);
 
         // TODO generalize canvas initialization
         let canvas = Canvas::new("canvas_main");
         self.canvases.push(canvas);
 
-        let initial_state = &states[self.frame_idx];
-        let nr_of_families = initial_state.obj_families.len();
-
-        // setup default object-family rendering options
-        for idx in 0..nr_of_families {
-            self.is_drawing_families.push(true);
-            self.is_drawing_pos_vec.push(false);
-            self.is_drawing_vel_vec.push(false);
-            self.is_drawing_acc_vec.push(false);
-
-            let obj_tail_variant = match self.sim_id.as_str() {
-                // "2body-kepler" => ObjColorMode::Speed,
-                // "nbody-flowers" => ObjColorMode::Distance,
-                "nbody-asteroids" => ObjTailVariant::None,
-                "lennard-jones" => ObjTailVariant::None,
-                _ => ObjTailVariant::Line,
-            };
-            let obj_color_mode = match self.sim_id.as_str() {
-                "nbody-misc" => ObjColorMode::Speed,
-                "nbody-asteroids" => ObjColorMode::Distance,
-                // "nbody-flowers" => ObjColorMode::Distance,
-                "charge-interaction" => match idx {
-                    0 => ObjColorMode::Charge,
-                    _ => ObjColorMode::Default,
-                }, _ => ObjColorMode::Default,
-            };
-            self.obj_tail_variant.push(obj_tail_variant);
-            self.obj_color_mode.push(obj_color_mode);
-        }
-        // TODO setup default field rendering options
-
         // TODO initialize user inputs
         // self.init_buttons(&initial_state);
         // self.init_sliders(&initial_state);
-
+        let doc = mxyz_utils::dom::document();
         self.init_button_menu_1(&doc, );
+        let initial_state = &engine.states[self.frame_idx];
         self.init_button_menu_2(&doc, &initial_state);
         
     }
@@ -188,7 +138,7 @@ impl Renderer {
         }
         // DISPLAY HUD
         if self.config.is_displaying_hud { 
-            self.display_hud()  
+            self.display_hud(&engine);
         }
 
     }
@@ -202,7 +152,8 @@ impl Renderer {
     ) {
 
         // const r: f64 = 0.01;  // TODO setup slider
-        let r = 0.013;  // TODO setup slider
+        // let r = 0.013;  // TODO setup slider
+        let r = self.config.obj_families[family.id].obj_drawing_radius;
         let is_filled = true;  // TODO setup toggle-button
 
         let objects = &family.objects;
@@ -483,85 +434,24 @@ impl Renderer {
 
     pub fn display_hud(
         &mut self, 
-        // engine: &Engine,
+        engine: &Engine,
     ) {
         let canvas = &mut self.canvases[0];
-        // let ctx = &canvas.context;
         canvas.set_font("36px sans-serif");
-
-        // let W = canvas.dimensions.0;
-        // let H = canvas.dimensions.1;
-
         canvas.set_stroke_style("white");
         canvas.set_fill_style("white");
 
         let frame_idx = format!("{}", self.frame_idx);
         canvas.fill_text(&frame_idx, 20., 50.);
 
-        // let iter_idx = format!("{}", engine.iter_idx); 
-        // canvas.fill_text(&iter_idx, 20., 100.);
+        let iter_idx = format!("{}", engine.config.iter_idx); 
+        canvas.fill_text(&iter_idx, 20., 100.);
 
     }
 
     pub fn reset(&mut self) {
         self.frame_idx = 0;  // TODO this does not reset engine (?)
-        for canvas in self.canvases.iter_mut() {
-            canvas.clear();
-        }
+        for canvas in self.canvases.iter_mut() { canvas.clear(); }
     }
-
-    // pub fn create_button_menu_for_obj_family(
-    //     &mut self, 
-    //     obj_family: &ObjFamily,
-    // ) {
-
-    // }
-
-    // pub fn create_button_menu_for_field(
-    //     &mut self, 
-    //     field: &Field
-    // ) {
-
-    // }
-
-    // // todo: rename -> init_button_menus
-    // pub fn init_buttons(&mut self, state: &State) {
-
-    //     // ================
-
-        
-
-    //     // ================
-
-    //     // struct Input {
-
-    //     // }
-
-    //     // enum InputVariant {
-    //     //     button,
-    //     //     option,
-    //     //     slider,
-    //     // }
-
-    //     // ================
-
-
-    //     // ================
-
-
-    //     // ================
-
-    //     // let slider_ids = Vec::from([
-    //     //     "slider_dt"
-    //     // ]);
-    // }
-
-    // pub fn init_sliders(&mut self, state: &State) {
-
-    // }
-
-
-
-
 }
 

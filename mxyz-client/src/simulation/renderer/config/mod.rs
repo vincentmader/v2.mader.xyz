@@ -2,70 +2,52 @@
 pub mod field;
 pub mod obj_family;
 
-use field::FieldRendererConfig;
-use obj_family::ObjFamilyRendererConfig;
-
 
 pub struct RendererConfig {
 
-    pub fields:                 Vec<FieldRendererConfig>,
-    pub obj_families:           Vec<ObjFamilyRendererConfig>,
+    pub fields:                 Vec<field::FieldRendererConfig>,
+    pub obj_families:           Vec<obj_family::ObjFamilyRendererConfig>,
     pub zoom:                   f64,
     pub is_paused:              bool,
     pub is_clearing_canvas:     bool,
     pub is_iterating_forward:   bool,
     pub is_displaying_hud:      bool,
+    pub sim_id:                 String,
 
 }
 
 impl RendererConfig {
 
-    pub fn new() -> Self {
+    pub fn new(sim_id: &str) -> Self {
         RendererConfig {
-            fields: Self::init_fields(),
-            obj_families: Self::init_obj_families(),
-            zoom: 1.,
-            is_paused: false,
-            is_clearing_canvas: true,
-            is_iterating_forward: true,
-            is_displaying_hud: true,
+            sim_id:                 String::from(sim_id),
+            fields:                 Vec::new(),
+            obj_families:           Vec::new(),
+            zoom:                   1.,
+            is_paused:              false,
+            is_clearing_canvas:     true,
+            is_iterating_forward:   true,
+            is_displaying_hud:      true,
         }
     }
 
-    pub fn init_fields() -> Vec<FieldRendererConfig> {
-        let mut fields = Vec::new();
-
-        let id = 0;
-        let field = FieldRendererConfig::new(id);
-        fields.push(field);
-
-        fields
+    pub fn init(&mut self, engine: &mxyz_engine::Engine) {
+        self.init_fields(engine);
+        self.init_obj_families(engine);
     }
 
-    pub fn init_obj_families(
-        // engine_conf: &EngineConfig
-    ) -> Vec<ObjFamilyRendererConfig> {
-        let mut obj_families = Vec::new();
+    pub fn init_fields(&mut self, engine: &mxyz_engine::Engine) {
+        for (id, field) in engine.config.fields.iter().enumerate() {
+            let field_conf = field::FieldRendererConfig::new(id, field);
+            self.fields.push(field_conf);
+        }
+    }
 
-        // for (id, obj_family) in engine_conf.obj_families.enumerate() {
-        //     let obj_fam = ObjFamilyRendererConfig::new(id);
-        //     obj_families.push(obj_fam);
-        // }
-
-        let id = 0;
-        let obj_fam = ObjFamilyRendererConfig::new(id);
-        obj_families.push(obj_fam);
-
-        let id = 1;
-        let obj_fam = ObjFamilyRendererConfig::new(id);
-        obj_families.push(obj_fam);
-
-        let id = 2;
-        let obj_fam = ObjFamilyRendererConfig::new(id);
-        obj_families.push(obj_fam);
-
-        obj_families
+    pub fn init_obj_families(&mut self, engine: &mxyz_engine::Engine) {
+        for (id, obj_fam) in engine.config.obj_families.iter().enumerate() {
+            let obj_fam_conf = obj_family::ObjFamilyRendererConfig::new(id, obj_fam);
+            self.obj_families.push(obj_fam_conf);
+        }
     }
 }
-
 

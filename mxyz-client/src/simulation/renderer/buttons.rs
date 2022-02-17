@@ -1,6 +1,4 @@
 
-use mxyz_engine::state::State;
-
 use crate::simulation::renderer::Renderer;
 
 
@@ -10,15 +8,14 @@ impl Renderer {
         &mut self, 
         doc: &web_sys::Document
     ) {
-
         let button_ids = Vec::from([
-            ("button_toggle-pause", "| |"),
-            ("button_toggle-pause-engine", "|e|"),
-            ("button_toggle-pause-renderer", "|r|"),
-            ("button_reset", "reset"),
-            ("button_toggle-display-hud", "hud"),
-            ("button_toggle-clear-canvas", "clear canvas"),
-            ("button_toggle-time-inversion", "-t"),
+            ("button_toggle-pause",             "| |"),
+            ("button_toggle-pause-engine",      "|e|"),
+            ("button_toggle-pause-renderer",    "|r|"),
+            ("button_reset",                    "reset"),
+            ("button_toggle-display-hud",       "h.u.d."),
+            ("button_toggle-clear-canvas",      "clear canvas"),
+            ("button_toggle-time-inversion",    "-t"),
         ]);
 
         let button_menus = doc.get_element_by_id("button-menu_main").unwrap();
@@ -34,27 +31,24 @@ impl Renderer {
             button.set_attribute("class", "bm_button").unwrap();
             button.set_inner_html(title);
             button_menu.append_child(&button).unwrap();
-            // let button = document.get_element_by_id(button_id).unwrap();
-            // button.set_inner_html("ayyy");
         }
     }
 
     pub fn init_button_menu_2(
         &mut self, 
-        doc: &web_sys::Document, 
-        state: &State
+        doc:    &web_sys::Document, 
+        state:  &mxyz_engine::state::State
     ) {
-
         // let buttons = Vec::from([
         //     ("button_toggle-display-tail", "display tails"),
         // ]);
         let multibuttons = Vec::from([
-            ("object motion vectors", Vec::from([
-                ("button_toggle-display-objects", "obj"),
-                ("button_toggle-display-obj-vec-pos", "pos"),
-                ("button_toggle-display-obj-vec-vel", "vel"),
-                ("button_toggle-display-obj-center-of-mass", "com"),
-                // ("button_toggle-display-obj-vec-acc", "acc"),
+            ("", Vec::from([
+                ("button_toggle-display-objects",            "disp. obj."),
+                ("button_toggle-display-obj-vec-pos",        "pos. vec."),
+                ("button_toggle-display-obj-vec-vel",        "vel. vec."),
+                ("button_toggle-display-obj-center-of-mass", "c.o.m."),
+                // ("button_toggle-display-obj-vec-acc",        "acc. vec."),
             // ])), ("object interactions", Vec::from([
             //     ("button_set-obj-interaction-none", "none"),
             //     ("button_set-obj-interaction-newton", "Newton"),
@@ -66,31 +60,31 @@ impl Renderer {
         ]);
         let options = Vec::from([
             ("variant", Vec::from([
-                ("button_set-obj-variant-static", "static"),
-                ("button_set-obj-variant-body", "body"),
-                ("button_set-obj-variant-particle", "particle"),
+                ("button_set-obj-variant-static",       "static"),
+                ("button_set-obj-variant-body",         "body"),
+                ("button_set-obj-variant-particle",     "particle"),
             ])), ("color mode", Vec::from([
-                ("button_set-obj-col-default", "default"),
-                ("button_set-obj-col-hsv-vel", "hsv vel"),
-                ("button_set-obj-col-hsv-pos", "hsv pos"),
-                ("button_set-obj-col-speed", "speed"),
-                ("button_set-obj-col-dist", "distance"),
-                ("button_set-obj-col-charge", "charge"),
-                ("button_set-obj-col-mass", "mass"),
+                ("button_set-obj-col-default",          "default"),
+                ("button_set-obj-col-hsv-vel",          "hsv vel"),
+                ("button_set-obj-col-hsv-pos",          "hsv pos"),
+                ("button_set-obj-col-speed",            "speed"),
+                ("button_set-obj-col-dist",             "distance"),
+                ("button_set-obj-col-charge",           "charge"),
+                ("button_set-obj-col-mass",             "mass"),
             ])), ("tail variant", Vec::from([
-                ("button_set-obj-tail-variant-none", "none"),
-                ("button_set-obj-tail-variant-line", "line"),
-                ("button_set-obj-tail-variant-area", "area"),
+                ("button_set-obj-tail-variant-none",    "none"),
+                ("button_set-obj-tail-variant-line",    "line"),
+                ("button_set-obj-tail-variant-area",    "area"),
             ])), ("integrator", Vec::from([
                 ("button_set-obj-integrator-euler-imp", "euler imp."),
                 ("button_set-obj-integrator-euler-exp", "euler exp."),
-                ("button_set-obj-integrator-rk4", "rk4"),
-                ("button_set-obj-integrator-rk2", "rk2"),
-                ("button_set-obj-integrator-verlet", "verlet"),
-                ("button_set-obj-integrator-leapfrog", "leapfrog"),
+                ("button_set-obj-integrator-rk4",       "rk4"),
+                ("button_set-obj-integrator-rk2",       "rk2"),
+                ("button_set-obj-integrator-verlet",    "verlet"),
+                ("button_set-obj-integrator-leapfrog",  "leapfrog"),
             ])), ("boundary conditions", Vec::from([
-                ("button_set-obj-bound-periodic", "periodic"),
-                ("button_set-obj-bound-wall-elastic", "elastic (w)"),
+                ("button_set-obj-bound-periodic",       "periodic"),
+                ("button_set-obj-bound-wall-elastic",   "elastic (w)"),
                 ("button_set-obj-bound-wall-inelastic", "inelastic (w)"),
             ])),
         ]);
@@ -213,9 +207,9 @@ impl Renderer {
                     div_option_dropdown_item.set_attribute("class", "dropdown-item").unwrap();
                     div_option_dropdown_item.set_id(&format!("obj-fam_{}_{}", obj_family.id, button_id));
                     div_option_dropdown_item.set_inner_html(button_title);
-                //     // if button_idx == 0 {
-                //     //     div_button_dropdown_item.set_attribute("style", "border-left: 0px;").unwrap();
-                //     // }
+                    // if button_idx == 0 {
+                    //     div_button_dropdown_item.set_attribute("style", "border-left: 0px;").unwrap();
+                    // }
                     div_option_dropdown_content.append_child(&div_option_dropdown_item).unwrap();
                 }
 
