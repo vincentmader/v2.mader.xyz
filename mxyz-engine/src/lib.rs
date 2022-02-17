@@ -14,7 +14,6 @@ pub struct Engine {
 }
 
 impl Engine {
-
     // create new Engine struct instance
     pub fn new(sim_id: &str) -> Self {
         Engine { 
@@ -23,12 +22,10 @@ impl Engine {
             states:     Vec::new(),
         }
     }
-
     // initialize state vector
     pub fn init(&mut self) { 
         self.states = Vec::from([state::State::new(&self.sim_id, &mut self.config)]);
     }
-
     // get state-vector for next time-step
     pub fn step(&mut self) {
         // clone state-vector
@@ -44,7 +41,6 @@ impl Engine {
         self.states.push(next_state);
         self.config.iter_idx += 1;
     }
-
     // reset Engine struct instance
     pub fn reset(&mut self) { 
         self.init();

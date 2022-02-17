@@ -135,10 +135,10 @@ impl Simulation {
                 renderer.config.obj_families[thing_id].is_displaying_center_of_mass 
                     = !renderer.config.obj_families[thing_id].is_displaying_center_of_mass 
             },
-            "button_toggle-display-obj-center-of-momentum" => {
-                renderer.config.obj_families[thing_id].is_displaying_center_of_momentum 
-                    = !renderer.config.obj_families[thing_id].is_displaying_center_of_momentum 
-            },
+            // "button_toggle-display-obj-center-of-momentum" => {
+            //     renderer.config.obj_families[thing_id].is_displaying_center_of_momentum 
+            //         = !renderer.config.obj_families[thing_id].is_displaying_center_of_momentum 
+            // },
 
             // FIELD VARIANT
 

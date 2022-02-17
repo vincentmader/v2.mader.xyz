@@ -48,6 +48,7 @@ impl Renderer {
                 ("button_toggle-display-obj-vec-pos",        "pos. vec."),
                 ("button_toggle-display-obj-vec-vel",        "vel. vec."),
                 ("button_toggle-display-obj-center-of-mass", "c.o.m."),
+                // ("button_toggle-display-obj-center-of-momentum", "c.o.p."),
                 // ("button_toggle-display-obj-vec-acc",        "acc. vec."),
             // ])), ("object interactions", Vec::from([
             //     ("button_set-obj-interaction-none", "none"),

@@ -5,6 +5,7 @@ pub mod obj_family;
 
 pub struct RendererConfig {
 
+    pub frame_idx:              usize,
     pub fields:                 Vec<field::FieldRendererConfig>,
     pub obj_families:           Vec<obj_family::ObjFamilyRendererConfig>,
     pub zoom:                   f64,
@@ -20,6 +21,7 @@ impl RendererConfig {
 
     pub fn new(sim_id: &str) -> Self {
         RendererConfig {
+            frame_idx:              0,
             sim_id:                 String::from(sim_id),
             fields:                 Vec::new(),
             obj_families:           Vec::new(),

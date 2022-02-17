@@ -19,10 +19,9 @@ use object::color_mode::ObjColorMode;
 
 pub struct Renderer {
 
-    sim_id:                     String,
-    pub frame_idx:              usize,
-    canvases:                   Vec<Canvas>,
-    pub config:                 config::RendererConfig,
+    sim_id:            String,
+    pub canvases:          Vec<Canvas>,
+    pub config:        config::RendererConfig,
 
 }
 
@@ -30,42 +29,35 @@ impl Renderer {
 
     pub fn new(sim_id: &str) -> Self {
         Renderer {
-            sim_id:                 String::from(sim_id),
-            frame_idx:              0,
-            canvases:               Vec::new(),
-            config:                 config::RendererConfig::new(sim_id),
+            sim_id:    String::from(sim_id),
+            canvases:  Vec::new(),
+            config:    config::RendererConfig::new(sim_id),
             // TODO tail pre-computes (?)
         }
     }
 
     pub fn init(&mut self, engine: &Engine) {
         self.config.init(&engine);
-
-        // TODO generalize canvas initialization
+        // initialize canvas   (TODO generalize)
         let canvas = Canvas::new("canvas_main");
         self.canvases.push(canvas);
-
-        // TODO initialize user inputs
-        // self.init_buttons(&initial_state);
-        // self.init_sliders(&initial_state);
+        // initialize user inputs (TODO)
         let doc = mxyz_utils::dom::document();
         self.init_button_menu_1(&doc, );
-        let initial_state = &engine.states[self.frame_idx];
+        let initial_state = &engine.states[self.config.frame_idx];
         self.init_button_menu_2(&doc, &initial_state);
         
     }
 
     pub fn display(&mut self, engine: &Engine) {
         let states = &engine.states;
-
         // STATE SETUP
-        let current_state = &states[self.frame_idx];
-        let fields = &current_state.fields;
-        let families = &current_state.obj_families;
-
+        let current_state = &states[self.config.frame_idx];
+        let fields        = &current_state.fields;
+        let families      = &current_state.obj_families;
         // CANVAS SETUP
-        let canvas_id = 0;  // todo: get id 
-        let canvas = &mut self.canvases[canvas_id];
+        let canvas_id     = 0;  // todo: get id 
+        let canvas        = &mut self.canvases[canvas_id];
         if self.config.is_clearing_canvas { canvas.clear(); }
 
         // TODO put somewhere else
@@ -214,7 +206,7 @@ impl Renderer {
 
         // DISPLAY OBJECT CENTER-OF-MOMENTUM
         // if self.config.obj_families[family.id].is_displaying_center_of_momentum {
-        //     self.display_center_of_momentum(&family, canvas_id);
+        //     self.display_center_of_momentum(&family, canvas_id, &engine);
         // }
 
         // DISPLAY OBJECT TAILS
@@ -229,20 +221,28 @@ impl Renderer {
         }
     }
 
-    // pub fn display_center_of_momentum(&mut self, family: &ObjFamily, canvas_id: usize) {
-
+    // pub fn display_center_of_momentum(
+    //     &mut self, 
+    //     family: &ObjFamily, 
+    //     canvas_id: usize,
+    //     engine: &Engine,
+    // ) {
     //     let canvas = &mut self.canvases[canvas_id];
-    //     let r = 10.;
+
+    //     let conf = &engine.config.obj_families[family.id];
+    //     let obj_length = conf.obj_length;
 
     //     let mut center_of_momentum = (0., 0.);
-    //     for obj_id in 0..family.nr_of_objects {
-    //         let start_idx = obj_id * family.obj_length;
-    //         let obj = &family.objects[start_idx..start_idx+family.obj_length];
+    //     for obj_id in 0..conf.family_size {
+    //         let start_idx = obj_id * obj_length;
+    //         let obj = &family.objects[start_idx..start_idx+obj_length];
     //         center_of_momentum.0 += obj[0] * obj[3];
     //         center_of_momentum.1 += obj[0] * obj[4];
     //     };
 
-    //     canvas.draw_line(center_of_momentum, r, true);
+    //     let from = (0., 0.);
+    //     let to = (from.0 + center_of_momentum.0, from.1 + center_of_momentum.1);
+    //     canvas.draw_line(from, to);
     // }
 
     pub fn display_center_of_mass(
@@ -305,15 +305,15 @@ impl Renderer {
             ObjColorMode::Charge      => object::color_mode::get_obj_color_from_charge,
         };
 
-        let iterator = 0..usize::min(tail_length, self.frame_idx);
-        for tail_step_id in iterator.rev() {
+        let frame_idx = self.config.frame_idx;
+        for tail_step_id in (0..usize::min(tail_length, frame_idx)).rev() {
 
             for obj_id in 0..nr_of_objects {
                 let start_idx = obj_id*obj_length;
 
-                let state = &states[self.frame_idx - tail_step_id];
+                let state = &states[frame_idx - tail_step_id];
                 let obj = &state.obj_families[family.id].objects[start_idx..start_idx+obj_length];
-                let previous_state = &states[self.frame_idx - tail_step_id - 1];
+                let previous_state = &states[frame_idx - tail_step_id - 1];
                 let previous_obj = &previous_state.obj_families[family.id].objects[start_idx..start_idx+obj_length];
 
                 let (x1, y1) = (previous_obj[1], previous_obj[2]);
@@ -357,15 +357,15 @@ impl Renderer {
         let nr_of_objects = engine.config.obj_families[family.id].family_size;
         let obj_length = engine.config.obj_families[family.id].obj_length;
 
-        let iterator = 0..usize::min(tail_length, self.frame_idx);
+        let iterator = 0..usize::min(tail_length, self.config.frame_idx);
         for tail_step_id in iterator.rev() {
 
             for obj_id in 0..nr_of_objects {
                 let start_idx = obj_id*obj_length;
 
-                let state = &states[self.frame_idx - tail_step_id];
+                let state = &states[self.config.frame_idx - tail_step_id];
                 let obj = &state.obj_families[family.id].objects[start_idx..start_idx+obj_length];
-                let previous_state = &states[self.frame_idx - tail_step_id - 1];
+                let previous_state = &states[self.config.frame_idx - tail_step_id - 1];
                 let previous_obj = &previous_state.obj_families[family.id].objects[start_idx..start_idx+obj_length];
 
                 let (x1, y1) = (previous_obj[1], previous_obj[2]);
@@ -391,7 +391,6 @@ impl Renderer {
         canvas_id: usize,
         engine: &Engine,
     ) {
-
         let canvas = &mut self.canvases[canvas_id];
 
         let dimensions = &engine.config.fields[field.id].dimensions;
@@ -414,43 +413,26 @@ impl Renderer {
                 canvas.fill_rect((x, y), w, h);
             }
         }
-
-        // for (cell_idx, cell) in field.entries.iter().enumerate() {
-        //     match field.variant {
-        //         FieldVariant::Ising => {
-        //         }, _ => {}
-        //     }
-        //     // match self.sim_id {
-        //     // }
-        // }
-
-        // let canvas = &mut self.canvases[canvas_id];
-        // console::log("aaa");
-
-        // let (x, y, r) = (0., 0., 0.1);
-        // canvas.draw_circle((x,y), r, true);
-
     }
 
     pub fn display_hud(
         &mut self, 
-        engine: &Engine,
+        _engine: &Engine,
     ) {
         let canvas = &mut self.canvases[0];
         canvas.set_font("36px sans-serif");
         canvas.set_stroke_style("white");
         canvas.set_fill_style("white");
 
-        let frame_idx = format!("{}", self.frame_idx);
+        let frame_idx = format!("{}", self.config.frame_idx);
         canvas.fill_text(&frame_idx, 20., 50.);
-
-        let iter_idx = format!("{}", engine.config.iter_idx); 
-        canvas.fill_text(&iter_idx, 20., 100.);
+        // let iter_idx = format!("{}", engine.config.iter_idx); 
+        // canvas.fill_text(&iter_idx, 20., 100.);
 
     }
 
     pub fn reset(&mut self) {
-        self.frame_idx = 0;  // TODO this does not reset engine (?)
+        self.config.frame_idx = 0;  // TODO this does not reset engine (?)
         for canvas in self.canvases.iter_mut() { canvas.clear(); }
     }
 }
