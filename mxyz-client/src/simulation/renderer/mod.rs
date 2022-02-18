@@ -143,10 +143,8 @@ impl Renderer {
         engine: &Engine,
     ) {
 
-        // const r: f64 = 0.01;  // TODO setup slider
-        // let r = 0.013;  // TODO setup slider
         let r = self.config.obj_families[family.id].obj_drawing_radius;
-        let is_filled = true;  // TODO setup toggle-button
+        let is_filled = self.config.obj_families[family.id].obj_is_filled;
 
         let objects = &family.objects;
         let obj_length = engine.config.obj_families[family.id].obj_length;
@@ -191,24 +189,20 @@ impl Renderer {
                 let z = (u.powf(2.) + v.powf(2.)).powf(-0.5) / 5.; // TODO make configurable
                 canvas.draw_line((x, y), (x+u*z, y+v*z));
             }
-
             // DISPLAY ACCELERATION VECTOR
             // if self.config.obj_families[family.id].is_displaying_acc_vec {
             //     // TODO
             // }
 
         }
-
         // DISPLAY OBJECT CENTER-OF-MASS
         if self.config.obj_families[family.id].is_displaying_center_of_mass {
             self.display_center_of_mass(&family, canvas_id, &engine);
         }
-
-        // DISPLAY OBJECT CENTER-OF-MOMENTUM
-        // if self.config.obj_families[family.id].is_displaying_center_of_momentum {
-        //     self.display_center_of_momentum(&family, canvas_id, &engine);
-        // }
-
+        // DISPLAY OBJECT CENTER-OF-MOMENTUM   TODO
+            // if self.config.obj_families[family.id].is_displaying_center_of_momentum {
+            //     self.display_center_of_momentum(&family, canvas_id, &engine);
+            // }
         // DISPLAY OBJECT TAILS
         let tail_variant = &self.config.obj_families[family.id].tail_variant;
         match tail_variant {

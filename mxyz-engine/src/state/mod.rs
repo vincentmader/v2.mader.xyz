@@ -14,6 +14,19 @@ use crate::config::obj_family::ObjFamilyEngineConfig;
 use mxyz_physics::classical_mechanics::newtonian_gravity::kepler_velocity;
 
 
+pub fn get_cell_idx_from_coords(
+    x: usize,
+    y: usize,
+    field: &Field,
+    field_conf: &FieldEngineConfig,
+) -> usize {
+    let dimensions = &field_conf.dimensions;
+    let (dim_x, dim_y, dim_z) = (dimensions[0], dimensions[1], dimensions[2]);
+    y * dim_x + x
+
+}
+
+
 #[derive(Clone)]
 pub struct State {
 
@@ -47,7 +60,7 @@ impl State {
         use crate::interaction::object::object::ObjObjInteraction;
 
         // math stuff
-        const TAU: f64 = 2. * 3.14159265358979;
+        const TAU: f64 = 2.*3.14159265358979;
         let mut rng = rand::thread_rng();
 
         // default values
@@ -59,8 +72,8 @@ impl State {
 
             "3body-moon" => {
 
-                let (m, r) = (0.1, 0.8);     // Earth
-                let (mu, dr) = (0.001, 0.1); // Moon
+                let (m,   r) = (0.1,   0.8);  // Earth
+                let (mu, dr) = (0.001, 0.1);  // Moon
 
                 let id = 0;
                 let mut family      = ObjFamily::new(id);
@@ -345,7 +358,7 @@ impl State {
     ) -> Vec<Field> {
 
         // field-specific imports
-        use field::variant::FieldVariant;
+        // use field::variant::FieldVariant;
         use field::relevant_cells::FieldRelevantCells;
         use crate::boundary::field::variant::FieldBoundaryVariant;
         use crate::integrator::field::variant::FieldIntegratorVariant;
@@ -367,7 +380,7 @@ impl State {
 
                 let id = 0;
                 let mut conf            = FieldEngineConfig::new(id);
-                conf.field_variant      = FieldVariant::Ising;
+                // conf.field_variant      = FieldVariant::Ising;
                 conf.dimensions         = Vec::from([GRID_SIZE, GRID_SIZE, 1]);
                 conf.integrator         = FieldIntegratorVariant::CellAuto;
                 conf.relevant_cells     = FieldRelevantCells::RandomBatch;
@@ -385,27 +398,41 @@ impl State {
                 engine_conf.fields.push(conf);
                 fields.push(field);
 
-            // }, "game-of-life" => {
+            }, "game-of-life" => {
 
-            //     let id = 0;
-            //     let mut field_conf = FieldEngineConfig::new(id);
-            //     field_conf.field_variant = FieldVariant::GameOfLife;
-            //     field_conf.dimensions = Vec::from([GRID_SIZE, GRID_SIZE, 1]);
-            //     // field_conf.integrator = FieldIntegratorVariant::Entire;
-            //     field_conf.integrator = FieldIntegratorVariant::RandomBatch;
-            //     field_conf.field_interactions = Vec::from([FieldFieldInteraction::GameOfLife]);
-            //     field_conf.boundary = FieldBoundaryVariant::None;
+                let id = 0;
+                let mut conf            = FieldEngineConfig::new(id);
+                // conf.field_variant = FieldVariant::GameOfLife;
+                conf.dimensions         = Vec::from([20, 20, 1]);
+                conf.relevant_cells     = FieldRelevantCells::Entire;
+                conf.field_interactions = Vec::from([FieldFieldInteraction::GameOfLife]);
+                conf.boundary           = FieldBoundaryVariant::Periodic;
 
-            //     let mut field = Field::new(id);
-            //     for row_idx in 0..field_conf.dimensions[0] {
-            //         for col_idx in 0..field_conf.dimensions[1] {
-            //             let rand: f64 = rng.gen();
-            //             let val = if rand > 0.5 { -1. } else { 1. };
-            //             field.entries.push(val);
-            //         }
-            //     }
-            //     engine_config.fields.push(field_conf);
-            //     fields.push(field);
+                let mut field = Field::new(id);
+
+                let living_cells = vec![
+                    (5, 5),
+                    (5, 6),
+                    (6, 6),
+                    (6, 7),
+                ];
+
+                // for _row_idx in 0..conf.dimensions[0] {
+                //     for _col_idx in 0..conf.dimensions[1] {
+                //         let rand: f64 = rng.gen();
+                //         let val = if rand > 0.9 { -1. } else { 1. };
+                //         // let val = 1.;
+                //         field.entries.push(val);
+                //     }
+                // }
+
+                for cell_coords in living_cells.iter() {
+                    let (x, y) = (cell_coords.0, cell_coords.1);
+                    let cell_index = get_cell_idx_from_coords(x, y, &field, &conf);
+                }
+
+                engine_conf.fields.push(conf);
+                fields.push(field);
 
             }, _ => {}
         }

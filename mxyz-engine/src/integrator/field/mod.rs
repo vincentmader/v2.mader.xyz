@@ -1,6 +1,5 @@
 
 pub mod cell_auto;
-
 pub mod variant;
 use variant::FieldIntegratorVariant;
 
@@ -14,23 +13,17 @@ pub fn step(
     states:     &Vec<crate::state::State>,
     config:     &crate::config::EngineConfig,
 ) {
-    // let cell_indices = match self.config.fields[field.id].integrator {
-    //     FieldIntegratorVariant::Entire => (0..)
-    //     FieldIntegratorVariant::RandomBatch => 
-    // };
-
+    // apply integration scheme
     let apply_integrator = match config.fields[field.id].integrator {
         FieldIntegratorVariant::CellAuto    => integrator::cell_auto::step,
-        // FieldIntegratorVariant::Entire      => integrator::entire::step,
-        // FieldIntegratorVariant::RandomBatch => integrator::random_batch::step,
     };
     apply_integrator(field, &states, &config);
 
+    // apply boundaries
     let apply_boundaries = match config.fields[field.id].boundary {
         FieldBoundaryVariant::None          => boundary::none::apply,
         FieldBoundaryVariant::Periodic      => boundary::periodic::apply,
     };
-    apply_boundaries(field, &config.fields[field.id]);
-
+    apply_boundaries(field, &config.fields[field.id]); // TODO update only rel. cells
 }
 

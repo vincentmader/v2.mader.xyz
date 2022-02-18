@@ -22,6 +22,7 @@ pub struct ObjFamilyRendererConfig {
     pub obj_drawing_radius:                 f64,
     pub color_mode:                         ObjColorMode,
     pub tail_variant:                       ObjTailVariant,
+    pub obj_is_filled:                      bool,
 
 }
 impl ObjFamilyRendererConfig {
@@ -50,6 +51,7 @@ impl ObjFamilyRendererConfig {
             color_mode:                         ObjColorMode::Default,
             tail_variant:                       ObjTailVariant::None,
             obj_drawing_radius,
+            obj_is_filled:                      true,  // TODO add button
         }
     }
 }

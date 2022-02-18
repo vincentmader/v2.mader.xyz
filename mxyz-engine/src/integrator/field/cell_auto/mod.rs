@@ -5,32 +5,23 @@ use rand::Rng;
 use crate::state::State;
 use crate::state::field::Field;
 
-// use crate::interaction::field as interactions;
+use crate::interaction::field::field::FieldFieldInteraction;
+// use crate::interaction::field::object::FieldObjInteraction;
+
 use crate::config::EngineConfig;
 use crate::config::field::FieldEngineConfig;
-use crate::state::field::variant::FieldVariant;
+// use crate::state::field::variant::FieldVariant;
+use crate::state::field::relevant_cells::FieldRelevantCells;
 
 use mxyz_physics::thermo_dynamics::boltzmann_prob;
 
 
-pub fn apply_periodic_bounds(
-    field_conf: &FieldEngineConfig, 
-    X: i32, 
-    Y: i32
-) -> (i32, i32) {
-
-    let mut X = X;
-    let mut Y = Y;
-
-    let dimensions = &field_conf.dimensions;
-    let (dim_x, dim_y, _dim_z) = (dimensions[0], dimensions[1], dimensions[2]); // TODO handle 3D
-    // apply periodic bounds
-    if X < 0 { X += dim_x as i32; }
-    if Y < 0 { Y += dim_y as i32; }
-    if X >= dim_x as i32 { X -= dim_x as i32; }
-    if Y >= dim_y as i32 { Y -= dim_y as i32; }
-    (X, Y)
+pub fn apply_periodic_bounds(idx: i32, dimension: i32) -> i32 {
+    if idx < 0                  { idx + dimension } 
+    else if idx >= dimension    { idx - dimension } 
+    else                        { idx }
 }
+
 
 pub fn get_flip_energy(
     iter_idx: usize,
@@ -38,22 +29,25 @@ pub fn get_flip_energy(
     field_conf: &FieldEngineConfig, 
     states: &Vec<State>,
     x: usize, 
-    y: usize
+    y: usize,
+    _z: usize
 ) -> f64 {
     let (B, J, mu) = (0., 1., 1.);
 
     let dimensions = &field_conf.dimensions;
     let dim_x = dimensions[0]; // TODO handle 3D
+    let dim_y = dimensions[1]; // TODO handle 3D
 
-    let cell = field.entries[y*dim_x+x];
+    // let cell = field.entries[y*dim_x+x];
+    let cell = field.entries[y*dim_x+x]; // TODO generalize to 3D
     let mut dE = 0.;
     for dx in 0..3 {
         for dy in 0..3 {
             // prevent self-interaction
             if (dx == 1) && (dy == 1) { continue; }
             // get coordinates of other cell
-            let (X, Y) = apply_periodic_bounds(&field_conf, x as i32 + dx-1, y as i32 + dy-1);
-
+            let X = apply_periodic_bounds(x as i32 + dx-1, dim_x as i32);
+            let Y = apply_periodic_bounds(y as i32 + dy-1, dim_y as i32);
             // get other cell 
             let other = states[iter_idx].fields[field.id].entries[Y as usize*dim_x+X as usize];
             // add spin-spin interaction to flip energy
@@ -65,54 +59,116 @@ pub fn get_flip_energy(
 }
 
 
+pub fn get_nr_of_neighbors(
+    field: &Field, 
+    field_conf: &FieldEngineConfig, 
+    x: usize, 
+    y: usize, 
+    _z: usize,
+) -> usize {
+
+    let dimensions = &field_conf.dimensions;
+    let dim_x = dimensions[0];
+    let dim_y = dimensions[1];
+    let _dim_z = dimensions[2];
+
+    let mut nr_of_neighbors = 0;
+    for dx in 0..3 {
+        for dy in 0..3 {  // TODO handle 3D
+            // prevent self-interaction
+            if (dx == 1) && (dy == 1) { continue; }
+            // get coordinates of other cell
+            let X = apply_periodic_bounds(x as i32 + dx-1, dim_x as i32);
+            let Y = apply_periodic_bounds(y as i32 + dy-1, dim_y as i32);
+            let cell_idx = (Y * dim_x as i32 + X) as usize;
+            // 
+            if field.entries[cell_idx] == 1. { nr_of_neighbors += 1; }
+        }
+    }
+    nr_of_neighbors
+}
+
+
+pub fn step_cell(
+    field: &mut Field,
+    config: &EngineConfig,
+    states: &Vec<State>,
+    x: usize,
+    y: usize,
+    z: usize,
+) {
+
+    // get about field info from conf
+    let field_conf = &config.fields[field.id];
+    let dimensions = &field_conf.dimensions;
+    let (dim_x, _dim_y, _dim_z) = (dimensions[0], dimensions[1], dimensions[2]); // TODO handle 3D
+    // numerical parameters TODO
+    let T = 0.01;
+    // math setup
+    let mut rng = rand::thread_rng();
+
+    // FIELD-FIELD INTERACTIONS
+    let field_interactions = &config.fields[field.id].field_interactions;
+    for interaction in field_interactions.iter() {
+        match interaction {
+            FieldFieldInteraction::Ising => {
+                let dE = get_flip_energy(
+                    config.iter_idx, field, &field_conf, &states, x, y, z
+                );
+                // check if spin should be flipped
+                let flip = if dE < 0. { true } else {
+                    let rand: f64 = rng.gen();
+                    if rand < boltzmann_prob(dE, T) { true } else { false }
+                };
+                // flip spin
+                if flip { field.entries[y*dim_x+x] *= -1.; }  // TODO generalize to 3D
+            }, FieldFieldInteraction::GameOfLife => {
+                let nr_of_neighbors = get_nr_of_neighbors(field, &field_conf, x, y, z);
+                field.entries[y*dim_x+x] = match nr_of_neighbors {
+                    3 => 1.,
+                    _ => 0.
+                };
+            }, _ => {}
+        }
+    }
+    // FIELD-OBJ INTERACTIONS
+    let _obj_interactions = &config.fields[field.id].obj_interactions;
+
+    // ...
+}
+
+
 pub fn step(
     field: &mut Field,
     states: &Vec<State>,
     config: &EngineConfig,
 ) {
-    // numerical parameters
-    const BATCH_SIZE: usize = 1000; // TODO where to get batch-size from?
-    
-    let iter_idx = config.iter_idx;
-
     // math setup
     let mut rng = rand::thread_rng();
     // get info about field from config
     let field_conf = &config.fields[field.id];
+    let dimensions = &field_conf.dimensions;
+    let (dim_x, dim_y, dim_z) = (dimensions[0], dimensions[1], dimensions[2]); // TODO handle 3D
     let _field_interactions = &field_conf.field_interactions;
     let _obj_interactions = &field_conf.obj_interactions;
-    let dimensions = &field_conf.dimensions;
-    let (dim_x, dim_y, _dim_z) = (dimensions[0], dimensions[1], dimensions[2]); // TODO handle 3D
 
-    let T = 0.01;
-
-    for _ in 0..BATCH_SIZE {
-        // choose random cell
-        let x = rng.gen_range(0..dim_x);
-        let y = rng.gen_range(0..dim_y);
-        // loop over neighbors
-
-        match field_conf.field_variant {
-            FieldVariant::Ising => {
-                let dE = get_flip_energy(iter_idx, field, &field_conf, &states, x, y);
-                mxyz_utils::dom::console::log(&format!("{}", dE));
-
-                // flip spin
-                let mut flip = false;
-                if dE < 0. { flip = true; } else {
-                    let rand: f64 = rng.gen();
-                    if rand < boltzmann_prob(dE, T) {
-                        flip = true;
+    match config.fields[field.id].relevant_cells {
+        FieldRelevantCells::Entire => {
+            for x in 0..dim_x {
+                for y in 0..dim_y {
+                    for z in 0..dim_z {
+                        step_cell(field, config, states, x, y, z);
                     }
                 }
-                if flip {
-                    field.entries[y as usize*dim_x+x as usize] *= -1.;
-                }
-            }, FieldVariant::GameOfLife => {
-                // field.entries[y as usize*dim_x+x as usize] *= -1.;
-
-                // let N = get_neighbor_count()
-
+            }
+        },
+        FieldRelevantCells::RandomBatch => {
+            const BATCH_SIZE: usize = 1000; // TODO where to get batch-size from?
+            for _ in 0..BATCH_SIZE {
+                let x = rng.gen_range(0..dim_x);
+                let y = rng.gen_range(0..dim_y);
+                let z = 0; // TODO rng.gen_range(0..dim_z);
+                step_cell(field, config, states, x, y, z);
             }
         }
     }
