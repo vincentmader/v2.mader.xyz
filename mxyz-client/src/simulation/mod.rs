@@ -36,7 +36,7 @@ impl Simulation {
 
     pub fn render(&mut self) {
         let frame_idx              = self.renderer.config.frame_idx as i32;
-        let out_of_bounds          = frame_idx > self.engine.config.iter_idx as i32;
+        let out_of_bounds          = frame_idx >= self.engine.config.iter_idx as i32;
         let nr_of_steps_per_render = self.config.nr_of_steps_per_render as i32;
         let is_paused              = self.renderer.config.is_paused;
 
