@@ -1,7 +1,7 @@
 #![allow(non_snake_case)]
 
 use crate::integrator::field::variant::FieldIntegratorVariant;
-// use crate::state::field::variant::FieldVariant;
+use crate::state::field::variant::FieldVariant;
 use crate::interaction::field::field::FieldFieldInteraction;
 use crate::interaction::field::object::FieldObjInteraction;
 use crate::boundary::field::variant::FieldBoundaryVariant;
@@ -11,7 +11,7 @@ use crate::state::field::relevant_cells::FieldRelevantCells;
 pub struct FieldEngineConfig {
 
     pub id:                 usize,
-    // pub field_variant:      FieldVariant,
+    pub field_variant:      FieldVariant,
     pub dimensions:         Vec<usize>,
     pub integrator:         FieldIntegratorVariant,
     pub field_interactions: Vec<FieldFieldInteraction>,
@@ -27,7 +27,7 @@ impl FieldEngineConfig {
         // dt: f64,
     ) -> Self {
 
-        // let DEFAULT_FIELD_VARIANT       = FieldVariant::Ising;
+        let DEFAULT_FIELD_VARIANT       = FieldVariant::Ising;
         let DEFAULT_DIMENSIONS          = Vec::from([10, 10, 1]);
         let DEFAULT_INTEGRATOR          = FieldIntegratorVariant::CellAuto;
         let DEFAULT_FIELD_INTERACTIONS  = Vec::from([FieldFieldInteraction::Ising]);
@@ -37,7 +37,7 @@ impl FieldEngineConfig {
 
         FieldEngineConfig {
             id,
-            // field_variant:      DEFAULT_FIELD_VARIANT,
+            field_variant:      DEFAULT_FIELD_VARIANT,
             dimensions:         DEFAULT_DIMENSIONS,
             field_interactions: DEFAULT_FIELD_INTERACTIONS,
             obj_interactions:   DEFAULT_OBJ_INTERACTIONS,

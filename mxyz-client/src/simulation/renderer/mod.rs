@@ -52,7 +52,7 @@ impl Renderer {
     pub fn display(&mut self, engine: &Engine) {
         let states = &engine.states;
         // STATE SETUP
-        let current_state = &states[self.config.frame_idx];
+        let current_state = &states[self.config.frame_idx-1];
         let fields        = &current_state.fields;
         let families      = &current_state.obj_families;
         // CANVAS SETUP
@@ -393,18 +393,18 @@ impl Renderer {
                 let cell = &field.entries[jdx*dimensions[0]+idx];
                 let cell = *cell as i32;
 
-                let color = match cell {
-                    -1 => "black",
-                    1 => "white",
-                    _ => ""
-                };
+                // let color = match cell {
+                //     -1 => "black",
+                //     1 => "white",
+                //     _ => ""
+                // };
 
-                let x = (idx as f64 / dimensions[0] as f64)*2.-1.;
-                let y = (jdx as f64 / dimensions[1] as f64)*2.-1.;
-                let w = 1. / dimensions[0] as f64;
-                let h = 1. / dimensions[1] as f64;
-                canvas.set_fill_style(&color);
-                canvas.fill_rect((x, y), w, h);
+                // let x = (idx as f64 / dimensions[0] as f64)*2.-1.;
+                // let y = (jdx as f64 / dimensions[1] as f64)*2.-1.;
+                // let w = 1. / dimensions[0] as f64;
+                // let h = 1. / dimensions[1] as f64;
+                // canvas.set_fill_style(&color);
+                // canvas.fill_rect((x, y), w, h);
             }
         }
     }

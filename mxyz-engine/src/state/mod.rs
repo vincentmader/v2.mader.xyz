@@ -9,6 +9,7 @@ use object::ObjFamily;
 
 use crate::config::EngineConfig;
 use crate::config::field::FieldEngineConfig;
+use crate::state::field::variant::FieldVariant;
 use crate::config::obj_family::ObjFamilyEngineConfig;
 
 use mxyz_physics::classical_mechanics::newtonian_gravity::kepler_velocity;
@@ -380,7 +381,7 @@ impl State {
 
                 let id = 0;
                 let mut conf            = FieldEngineConfig::new(id);
-                // conf.field_variant      = FieldVariant::Ising;
+                conf.field_variant      = FieldVariant::Ising;
                 conf.dimensions         = Vec::from([GRID_SIZE, GRID_SIZE, 1]);
                 conf.integrator         = FieldIntegratorVariant::CellAuto;
                 conf.relevant_cells     = FieldRelevantCells::RandomBatch;
@@ -402,7 +403,7 @@ impl State {
 
                 let id = 0;
                 let mut conf            = FieldEngineConfig::new(id);
-                // conf.field_variant = FieldVariant::GameOfLife;
+                conf.field_variant = FieldVariant::GameOfLife;
                 conf.dimensions         = Vec::from([20, 20, 1]);
                 conf.relevant_cells     = FieldRelevantCells::Entire;
                 conf.field_interactions = Vec::from([FieldFieldInteraction::GameOfLife]);
@@ -412,9 +413,10 @@ impl State {
 
                 let living_cells = vec![
                     (5, 5),
-                    (5, 6),
+                    (6, 5),
                     (6, 6),
-                    (6, 7),
+                    (7, 6),
+                    (5, 7),
                 ];
 
                 // for _row_idx in 0..conf.dimensions[0] {

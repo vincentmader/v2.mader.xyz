@@ -19,7 +19,7 @@ impl Config {
             sim_id: String::from(sim_id),
             // engine: EngineConfig::new(),
             // renderer: RendererConfig::new(),
-            is_paused: false,
+            is_paused: true, // TODO unused atm
             nr_of_steps_per_render: 1,
         }
     }
