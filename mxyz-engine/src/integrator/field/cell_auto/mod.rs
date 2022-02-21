@@ -17,8 +17,11 @@ use mxyz_physics::thermo_dynamics::boltzmann_prob;
 
 
 pub fn apply_periodic_bounds(idx: i32, dimension: i32) -> i32 {
-    if idx < 0                  { idx + dimension } 
-    else if idx >= dimension    { idx - dimension } 
+    // if idx < 0                  { idx + dimension } 
+    // else if idx >= dimension    { idx - dimension } 
+    // else                        { idx }
+    if idx < 0                  { 0 } 
+    else if idx >= dimension    { dimension-1 } 
     else                        { idx }
 }
 
@@ -62,29 +65,26 @@ pub fn get_flip_energy(
 pub fn get_nr_of_neighbors(
     field: &Field, 
     field_conf: &FieldEngineConfig, 
-    x: usize, 
-    y: usize, 
-    _z: usize,
+    x: usize, y: usize, _z: usize,
 ) -> usize {
-
-    let dimensions = &field_conf.dimensions;
-    let dim_x = dimensions[0];
-    let dim_y = dimensions[1];
-    let _dim_z = dimensions[2];
+    let dim_x = field_conf.dimensions[0];
+    let dim_y = field_conf.dimensions[1];
+    let _dim_z = field_conf.dimensions[2];
 
     let mut nr_of_neighbors = 0;
-    for dx in 0..3 {
-        for dy in 0..3 {  // TODO handle 3D
-            // prevent self-interaction
-            if (dx == 1) && (dy == 1) { continue; }
-            // get coordinates of other cell
-            let X = apply_periodic_bounds(x as i32 + dx-1, dim_x as i32);
-            let Y = apply_periodic_bounds(y as i32 + dy-1, dim_y as i32);
-            let cell_idx = (Y * dim_x as i32 + X) as usize;
-            // 
-            if field.entries[cell_idx] == 1. { nr_of_neighbors += 1; }
+    for dx in [-1, 0, 1] {
+        for dy in [-1, 0, 1] {
+           // prevent self-interaction
+           if (dx == 0) && (dy == 0) { continue; }
+           // get coordinates of other cell
+           let X = apply_periodic_bounds(x as i32 + dx, dim_x as i32);
+           let Y = apply_periodic_bounds(y as i32 + dy, dim_y as i32);
+           let cell_idx = (Y * dim_x as i32 + X) as usize;
+           // increment number of neighbors
+           if field.entries[cell_idx] == 1. { nr_of_neighbors += 1; }
         }
     }
+    // mxyz_utils::dom::console::log(&format!("{}", nr_of_neighbors));
     nr_of_neighbors
 }
 
@@ -93,9 +93,7 @@ pub fn step_cell(
     field: &mut Field,
     config: &EngineConfig,
     states: &Vec<State>,
-    x: usize,
-    y: usize,
-    z: usize,
+    x: usize, y: usize, z: usize,
 ) {
 
     // get about field info from conf
@@ -161,12 +159,11 @@ pub fn step(
                     }
                 }
             }
-        },
-        FieldRelevantCells::RandomBatch => {
+        }, FieldRelevantCells::RandomBatch => {
             const BATCH_SIZE: usize = 1000; // TODO where to get batch-size from?
             for _ in 0..BATCH_SIZE {
-                let x = rng.gen_range(0..dim_x);
-                let y = rng.gen_range(0..dim_y);
+                let x = rng.gen_range(0..dim_x-1);
+                let y = rng.gen_range(0..dim_y-1);
                 let z = 0; // TODO rng.gen_range(0..dim_z);
                 step_cell(field, config, states, x, y, z);
             }

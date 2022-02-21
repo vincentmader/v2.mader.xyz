@@ -17,11 +17,11 @@ use mxyz_physics::classical_mechanics::newtonian_gravity::kepler_velocity;
 pub fn get_cell_idx_from_coords(
     x: usize,
     y: usize,
-    field: &Field,
+    _field: &Field,
     field_conf: &FieldEngineConfig,
 ) -> usize {
     let dimensions = &field_conf.dimensions;
-    let (dim_x, dim_y, dim_z) = (dimensions[0], dimensions[1], dimensions[2]);
+    let (dim_x, _dim_y, _dim_z) = (dimensions[0], dimensions[1], dimensions[2]);
     y * dim_x + x
 
 }
@@ -403,7 +403,7 @@ impl State {
                 let id = 0;
                 let mut conf            = FieldEngineConfig::new(id);
                 // conf.field_variant = FieldVariant::GameOfLife;
-                conf.dimensions         = Vec::from([20, 20, 1]);
+                conf.dimensions         = Vec::from([5, 5, 1]);
                 conf.relevant_cells     = FieldRelevantCells::Entire;
                 conf.field_interactions = Vec::from([FieldFieldInteraction::GameOfLife]);
                 conf.boundary           = FieldBoundaryVariant::Periodic;
@@ -411,25 +411,55 @@ impl State {
                 let mut field = Field::new(id);
 
                 let living_cells = vec![
-                    (5, 5),
-                    (5, 6),
-                    (6, 6),
-                    (6, 7),
+                    (1, 1),
+                    (2, 1),
+                    (3, 1),
+                    (3, 2),
+                    (2, 3),
+
+                    // (20, 20),
+                    // (20, 21),
+                    // (21, 20),
+                    // (21, 21),
+
+                    // (40, 40),
+                    // (40, 41),
+                    // (41, 40),
+                    // (41, 41),
                 ];
 
-                // for _row_idx in 0..conf.dimensions[0] {
-                //     for _col_idx in 0..conf.dimensions[1] {
-                //         let rand: f64 = rng.gen();
-                //         let val = if rand > 0.9 { -1. } else { 1. };
-                //         // let val = 1.;
-                //         field.entries.push(val);
+                // for row_idx in 0..conf.dimensions[0] {
+                //     for col_idx in 0..conf.dimensions[1] {
+                //         if living_cells.contains(&(col_idx, row_idx)) {
+                //             let (x, y) = (col_idx, row_idx);
+                //             let cell_index = get_cell_idx_from_coords(x, y, &field, &conf);
+                //         }
+                // //         let rand: f64 = rng.gen();
+                // //         let val = if rand > 0.9 { -1. } else { 1. };
+                // //         // let val = 1.;
+                // //         field.entries.push(val);
                 //     }
                 // }
 
-                for cell_coords in living_cells.iter() {
-                    let (x, y) = (cell_coords.0, cell_coords.1);
-                    let cell_index = get_cell_idx_from_coords(x, y, &field, &conf);
+                for row_idx in 0..conf.dimensions[0] {
+                    for col_idx in 0..conf.dimensions[1] {
+                        if living_cells.contains(&(col_idx, row_idx)) {
+                            field.entries.push(1.);
+                            // mxyz_utils::dom::console::log(&format!("{}", "test"));
+                        } else {
+                            field.entries.push(0.);
+                        }
+                //         let rand: f64 = rng.gen();
+                //         let val = if rand > 0.9 { -1. } else { 1. };
+                //         // let val = 1.;
+                    }
                 }
+
+                // for cell_coords in living_cells.iter() {
+                //     let (x, y) = (cell_coords.0, cell_coords.1);
+                //     let cell_index = get_cell_idx_from_coords(x, y, &field, &conf);
+                //     field.entries[cell_index] = 1.;
+                // }
 
                 engine_conf.fields.push(conf);
                 fields.push(field);

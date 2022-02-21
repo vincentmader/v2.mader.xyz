@@ -4,7 +4,6 @@ pub mod field;
 pub mod object;
 mod buttons;
 
-
 use mxyz_engine::Engine;
 use mxyz_engine::state::State;
 use mxyz_engine::state::field::Field;
@@ -15,6 +14,9 @@ pub use mxyz_utils::dom::console;
 
 use object::tail_variant::ObjTailVariant;
 use object::color_mode::ObjColorMode;
+
+use mxyz_engine::config::field::FieldEngineConfig;
+use mxyz_engine::integrator::field::cell_auto::apply_periodic_bounds;
 
 
 pub struct Renderer {
@@ -46,7 +48,6 @@ impl Renderer {
         self.init_button_menu_1(&doc, );
         let initial_state = &engine.states[self.config.frame_idx];
         self.init_button_menu_2(&doc, &initial_state);
-        
     }
 
     pub fn display(&mut self, engine: &Engine) {
@@ -60,65 +61,63 @@ impl Renderer {
         let canvas        = &mut self.canvases[canvas_id];
         if self.config.is_clearing_canvas { canvas.clear(); }
 
-        // TODO put somewhere else
-        let canvas = &mut self.canvases[canvas_id];
-        // DISPLAY FIELD
-        const FIELD_RESOLUTION: (usize, usize) = (40, 40);
-        for row_idx in 0..FIELD_RESOLUTION.0 {
-            for col_idx in 0..FIELD_RESOLUTION.1 {
+//         // TODO put somewhere else
+//         let canvas = &mut self.canvases[canvas_id];
+//         // DISPLAY FIELD
+//         const FIELD_RESOLUTION: (usize, usize) = (40, 40);
+//         for row_idx in 0..FIELD_RESOLUTION.0 {
+//             for col_idx in 0..FIELD_RESOLUTION.1 {
 
-                let x = (2.*(col_idx as f64 + 0.5) / FIELD_RESOLUTION.0 as f64) - 1.;  // TODO zoom
-                let y = (2.*(row_idx as f64 + 0.5) / FIELD_RESOLUTION.1 as f64) - 1.;
-                let (m, u, v, q) = (1., 0., 0., 1.);
-                let mut force = Vec::from([0., 0.]);
+//                 let x = (2.*(col_idx as f64 + 0.5) / FIELD_RESOLUTION.0 as f64) - 1.;  // TODO zoom
+//                 let y = (2.*(row_idx as f64 + 0.5) / FIELD_RESOLUTION.1 as f64) - 1.;
+//                 let (m, u, v, q) = (1., 0., 0., 1.);
+//                 let mut force = Vec::from([0., 0.]);
 
-                for family in families.iter() {
-                    use mxyz_engine::state::object::variant::ObjVariant;
-                    match engine.config.obj_families[family.id].obj_variant {
-                        ObjVariant::Particle => { continue; },
-                        _ => {}
-                    }
+//                 for family in families.iter() {
+//                     use mxyz_engine::state::object::variant::ObjVariant;
+//                     match engine.config.obj_families[family.id].obj_variant {
+//                         ObjVariant::Particle => { continue; },
+//                         _ => {}
+//                     }
 
-                    let nr_of_objects = engine.config.obj_families[family.id].family_size;
-                    let obj_length = &engine.config.obj_families[family.id].obj_attributes.len();
-                    let objects = &family.objects;
-                    for obj_id in 0..nr_of_objects {
-                        let obj = Vec::from(&objects[obj_id*obj_length..(obj_id+1)*obj_length]);
+//                     let nr_of_objects = engine.config.obj_families[family.id].family_size;
+//                     let obj_length = &engine.config.obj_families[family.id].obj_attributes.len();
+//                     let objects = &family.objects;
+//                     for obj_id in 0..nr_of_objects {
+//                         let obj = Vec::from(&objects[obj_id*obj_length..(obj_id+1)*obj_length]);
 
-                        use mxyz_engine::interaction::object::object::forces as obj_obj_forces;
-                        let eps = 0.;
+//                         use mxyz_engine::interaction::object::object::forces as obj_obj_forces;
+//                         let eps = 0.;
 
-                        let force_getter = match self.sim_id.as_str() {
-                            "lennard-jones" => obj_obj_forces::lennard_jones::force,
-                            "charge-interaction" => obj_obj_forces::coulomb::force,
-                            _ => obj_obj_forces::newtonian_gravity::force,
-                        };
+//                         let force_getter = match self.sim_id.as_str() {
+//                             "lennard-jones" => obj_obj_forces::lennard_jones::force,
+//                             "charge-interaction" => obj_obj_forces::coulomb::force,
+//                             _ => obj_obj_forces::newtonian_gravity::force,
+//                         };
 
-                        let f = force_getter(
-                            &[m, x, y, u, v, q], &obj, eps,
-                        );
-                        force[0] += f[0];
-                        force[1] += f[1];
-                    }
-                }
+//                         let f = force_getter(
+//                             &[m, x, y, u, v, q], &obj, eps,
+//                         );
+//                         force[0] += f[0];
+//                         force[1] += f[1];
+//                     }
+//                 }
 
-                let norm = (force[0].powf(2.) + force[1].powf(2.)).sqrt();
-                let from = (x, y);
-                let to = (x + force[0] / norm/FIELD_RESOLUTION.0 as f64, y + force[1] / norm/FIELD_RESOLUTION.1 as f64);
+//                 let norm = (force[0].powf(2.) + force[1].powf(2.)).sqrt();
+//                 let from = (x, y);
+//                 let to = (x + force[0] / norm/FIELD_RESOLUTION.0 as f64, y + force[1] / norm/FIELD_RESOLUTION.1 as f64);
 
-                let radius = 0.001;
-                let max_force = 10.;  // TODO make slider
-                let r = 255. * norm / max_force;
-                let (g, b) = (r, r);
-                let color = format!("rgb({}, {}, {})", r, g, b);
-                canvas.set_stroke_style(&color);
-                canvas.set_fill_style(&color);
-                canvas.draw_line(from, to);
-                canvas.draw_circle(to, radius, true);
-            }
-        }
-
-
+//                 let radius = 0.001;
+//                 let max_force = 10.;  // TODO make slider
+//                 let r = 255. * norm / max_force;
+//                 let (g, b) = (r, r);
+//                 let color = format!("rgb({}, {}, {})", r, g, b);
+//                 canvas.set_stroke_style(&color);
+//                 canvas.set_fill_style(&color);
+//                 canvas.draw_line(from, to);
+//                 canvas.draw_circle(to, radius, true);
+//             }
+//         }
 
         // DISPLAY FIELDS
         for field in fields.iter() {
@@ -132,7 +131,6 @@ impl Renderer {
         if self.config.is_displaying_hud { 
             self.display_hud(&engine);
         }
-
     }
 
     pub fn display_objects(
@@ -305,10 +303,10 @@ impl Renderer {
             for obj_id in 0..nr_of_objects {
                 let start_idx = obj_id*obj_length;
 
-                let state = &states[frame_idx - tail_step_id];
-                let obj = &state.obj_families[family.id].objects[start_idx..start_idx+obj_length];
-                let previous_state = &states[frame_idx - tail_step_id - 1];
-                let previous_obj = &previous_state.obj_families[family.id].objects[start_idx..start_idx+obj_length];
+                let state           = &states[frame_idx-tail_step_id];
+                let obj             = &state.obj_families[family.id].objects[start_idx..start_idx+obj_length];
+                let previous_state  = &states[frame_idx-tail_step_id-1];
+                let previous_obj    = &previous_state.obj_families[family.id].objects[start_idx..start_idx+obj_length];
 
                 let (x1, y1) = (previous_obj[1], previous_obj[2]);
                 let (x2, y2) = (obj[1], obj[2]);
@@ -390,19 +388,51 @@ impl Renderer {
         let dimensions = &engine.config.fields[field.id].dimensions;
         for idx in 0..dimensions[0] {
             for jdx in 0..dimensions[1] {  // TODO handle z ?
-                let cell = &field.entries[jdx*dimensions[0]+idx];
-                let cell = *cell as i32;
+                let cell = field.entries[jdx*dimensions[0]+idx];
+                let cell = cell as i32;
 
-                let color = match cell {
+                let (x, y) = (
+                    (idx as f64 + 0.5) / dimensions[0] as f64 * canvas.dimensions.0, 
+                    (jdx as f64 + 0.5) / dimensions[1] as f64 * canvas.dimensions.1, 
+                );
+                let nr = get_nr_of_neighbors(
+                    field, &engine.config.fields[field.id], idx, jdx, 0
+                );
+                canvas.set_stroke_style("red");
+                canvas.set_fill_style("red");
+                canvas.fill_text(&format!("{}", nr), x, y);
+
+                // if cell == 0. {
+                //     mxyz_utils::dom::console::log(&format!("{}", "test"));
+                // }
+
+
+
+                // match self.sim_id {
+                //     "game-of-life" => {
+
+                //     }, "ising" => {
+
+                //     }, _ => {
+
+                //     }
+                // }
+
+                let color = match cell {  // TODO
                     -1 => "black",
                     1 => "white",
+                    0 => "black",
                     _ => ""
                 };
 
-                let x = (idx as f64 / dimensions[0] as f64)*2.-1.;
-                let y = (jdx as f64 / dimensions[1] as f64)*2.-1.;
-                let w = 1. / dimensions[0] as f64;
-                let h = 1. / dimensions[1] as f64;
+                let s = match self.sim_id.as_str() {
+                    "game-of-life" => 0.9,
+                    _ => 0.5
+                };
+                let x = ((idx as f64 + (1.-s)/2.) / dimensions[0] as f64)*2.-1.;
+                let y = ((jdx as f64 + (1.-s)/2.) / dimensions[1] as f64)*2.-1.;
+                let w = s * 2. / dimensions[0] as f64;
+                let h = s * 2. / dimensions[1] as f64;
                 canvas.set_fill_style(&color);
                 canvas.fill_rect((x, y), w, h);
             }
@@ -429,5 +459,32 @@ impl Renderer {
         self.config.frame_idx = 0;  // TODO this does not reset engine (?)
         for canvas in self.canvases.iter_mut() { canvas.clear(); }
     }
+}
+
+
+pub fn get_nr_of_neighbors(
+    field: &Field, 
+    field_conf: &FieldEngineConfig, 
+    x: usize, y: usize, _z: usize,
+) -> usize {
+    let dim_x = field_conf.dimensions[0];
+    let dim_y = field_conf.dimensions[1];
+    let _dim_z = field_conf.dimensions[2];
+
+    let mut nr_of_neighbors = 0;
+    for dx in [-1, 0, 1] {
+        for dy in [-1, 0, 1] {
+           // prevent self-interaction
+           if (dx == 0) && (dy == 0) { continue; }
+           // get coordinates of other cell
+           let X = apply_periodic_bounds(x as i32 + dx, dim_x as i32);
+           let Y = apply_periodic_bounds(y as i32 + dy, dim_y as i32);
+           let cell_idx = (Y * dim_x as i32 + X) as usize;
+           // increment number of neighbors
+           if field.entries[cell_idx] == 1. { nr_of_neighbors += 1; }
+        }
+    }
+    mxyz_utils::dom::console::log(&format!("{}", nr_of_neighbors));
+    nr_of_neighbors
 }
 

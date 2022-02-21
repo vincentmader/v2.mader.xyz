@@ -3,8 +3,8 @@ pub mod cell_auto;
 pub mod variant;
 use variant::FieldIntegratorVariant;
 
-use crate::boundary::field::variant::FieldBoundaryVariant;
-use crate::boundary::field as boundary;
+// use crate::boundary::field::variant::FieldBoundaryVariant;
+// use crate::boundary::field as boundary;
 use crate::integrator::field as integrator;
 
 
@@ -20,10 +20,10 @@ pub fn step(
     apply_integrator(field, &states, &config);
 
     // apply boundaries
-    let apply_boundaries = match config.fields[field.id].boundary {
-        FieldBoundaryVariant::None          => boundary::none::apply,
-        FieldBoundaryVariant::Periodic      => boundary::periodic::apply,
-    };
-    apply_boundaries(field, &config.fields[field.id]); // TODO update only rel. cells
+    // let apply_boundaries = match config.fields[field.id].boundary {
+    //     FieldBoundaryVariant::None          => boundary::none::apply,
+    //     FieldBoundaryVariant::Periodic      => boundary::periodic::apply,
+    // };
+    // apply_boundaries(field, &config.fields[field.id]); // TODO update only rel. cells
 }
 
