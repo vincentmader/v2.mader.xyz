@@ -17,12 +17,12 @@ use mxyz_physics::thermo_dynamics::boltzmann_prob;
 
 
 pub fn apply_periodic_bounds(idx: i32, dimension: i32) -> i32 {
-    // if idx < 0                  { idx + dimension } 
-    // else if idx >= dimension    { idx - dimension } 
-    // else                        { idx }
-    if idx < 0                  { 0 } 
-    else if idx >= dimension    { dimension-1 } 
+    if idx < 0                  { idx + dimension } 
+    else if idx >= dimension    { idx - dimension } 
     else                        { idx }
+    // if idx < 0                  { 0 } 
+    // else if idx >= dimension    { dimension-1 } 
+    // else                        { idx }
 }
 
 
@@ -67,9 +67,8 @@ pub fn get_nr_of_neighbors(
     field_conf: &FieldEngineConfig, 
     x: usize, y: usize, _z: usize,
 ) -> usize {
-    let dim_x = field_conf.dimensions[0];
-    let dim_y = field_conf.dimensions[1];
-    let _dim_z = field_conf.dimensions[2];
+    let dimensions = &field_conf.dimensions;
+    let (dim_x, dim_y, _dim_z) = (dimensions[0], dimensions[1], dimensions[2]);
 
     let mut nr_of_neighbors = 0;
     for dx in [-1, 0, 1] {
@@ -84,7 +83,6 @@ pub fn get_nr_of_neighbors(
            if field.entries[cell_idx] == 1. { nr_of_neighbors += 1; }
         }
     }
-    // mxyz_utils::dom::console::log(&format!("{}", nr_of_neighbors));
     nr_of_neighbors
 }
 
@@ -99,7 +97,7 @@ pub fn step_cell(
     // get about field info from conf
     let field_conf = &config.fields[field.id];
     let dimensions = &field_conf.dimensions;
-    let (dim_x, _dim_y, _dim_z) = (dimensions[0], dimensions[1], dimensions[2]); // TODO handle 3D
+    let (dim_x, dim_y, _dim_z) = (dimensions[0], dimensions[1], dimensions[2]); // TODO handle 3D
     // numerical parameters TODO
     let T = 0.01;
     // math setup
@@ -122,8 +120,9 @@ pub fn step_cell(
                 if flip { field.entries[y*dim_x+x] *= -1.; }  // TODO generalize to 3D
             }, FieldFieldInteraction::GameOfLife => {
                 let nr_of_neighbors = get_nr_of_neighbors(field, &field_conf, x, y, z);
-                field.entries[y*dim_x+x] = match nr_of_neighbors {
-                    3 => 1.,
+                // field.entries[z*dim_x*dim_y+y*dim_x+x] = match nr_of_neighbors {
+                field.entries[y*dim_y+x] = match nr_of_neighbors {
+                    3 => 1., 
                     _ => 0.
                 };
             }, _ => {}

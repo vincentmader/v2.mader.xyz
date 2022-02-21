@@ -391,23 +391,6 @@ impl Renderer {
                 let cell = field.entries[jdx*dimensions[0]+idx];
                 let cell = cell as i32;
 
-                let (x, y) = (
-                    (idx as f64 + 0.5) / dimensions[0] as f64 * canvas.dimensions.0, 
-                    (jdx as f64 + 0.5) / dimensions[1] as f64 * canvas.dimensions.1, 
-                );
-                let nr = get_nr_of_neighbors(
-                    field, &engine.config.fields[field.id], idx, jdx, 0
-                );
-                canvas.set_stroke_style("red");
-                canvas.set_fill_style("red");
-                canvas.fill_text(&format!("{}", nr), x, y);
-
-                // if cell == 0. {
-                //     mxyz_utils::dom::console::log(&format!("{}", "test"));
-                // }
-
-
-
                 // match self.sim_id {
                 //     "game-of-life" => {
 
@@ -420,9 +403,9 @@ impl Renderer {
 
                 let color = match cell {  // TODO
                     -1 => "black",
-                    1 => "white",
-                    0 => "black",
-                    _ => ""
+                     1 => "white",
+                     0 => "black",
+                     _ => ""
                 };
 
                 let s = match self.sim_id.as_str() {
@@ -435,6 +418,20 @@ impl Renderer {
                 let h = s * 2. / dimensions[1] as f64;
                 canvas.set_fill_style(&color);
                 canvas.fill_rect((x, y), w, h);
+
+
+
+                let (x, y) = (
+                    (idx as f64+0.5) / dimensions[0] as f64 * canvas.dimensions.0, 
+                    (jdx as f64+0.5) / dimensions[1] as f64 * canvas.dimensions.1, 
+                );
+                let nr = get_nr_of_neighbors(
+                    field, &engine.config.fields[field.id], idx, jdx, 0
+                );
+                canvas.set_font("20px sans-serif");
+                canvas.set_stroke_style("green");
+                canvas.set_fill_style("green");
+                canvas.fill_text(&format!("{}", nr), x, y);
             }
         }
     }
