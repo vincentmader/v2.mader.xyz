@@ -55,17 +55,17 @@ let sim_id = document.getElementById("simulation.js").getAttribute("sim_id");
     simulation.render();
     // let date_2 = Date.now();
 
-    // let date_1 = Date.now();
+    let date_1 = Date.now();
     simulation.step(); // TODO move render into sim.step() ?
-    // let date_2 = Date.now();
+    let date_2 = Date.now();
 
-    // let dt = (date_2 - date_1) / 1000;
-    // let fps = 1 / dt;
+    let dt = (date_2 - date_1) / 1000;
+    let fps = 1 / dt;
     // console.log(fps);
 
-    // setTimeout(function () {
-    requestAnimationFrame(loop);
-    // }, 500);
+    setTimeout(function () {
+      requestAnimationFrame(loop);
+    }, 1000);
   };
   loop();
 })();

@@ -389,7 +389,7 @@ impl Renderer {
         for idx in 0..dimensions[0] {
             for jdx in 0..dimensions[1] {  // TODO handle z ?
                 let cell = field.entries[jdx*dimensions[0]+idx];
-                // let cell = cell as i32;
+                let cell = cell as i32;
 
                 // match self.sim_id {
                 //     "game-of-life" => {
@@ -401,9 +401,12 @@ impl Renderer {
                 //     }
                 // }
 
-                let color = if cell == 1. { "white" } 
-                    else if cell == 2. { "red" } 
-                    else { "black" };
+                let color = match cell {  // TODO
+                    -1 => "black",
+                     1 => "white",
+                     0 => "black",
+                     _ => ""
+                };
 
                 let s = match self.sim_id.as_str() {
                     "game-of-life" => 0.9,
@@ -418,24 +421,17 @@ impl Renderer {
 
 
 
-                // let (x, y) = (
-                //     (idx as f64+0.5) / dimensions[0] as f64 * canvas.dimensions.0, 
-                //     (jdx as f64+0.5) / dimensions[1] as f64 * canvas.dimensions.1, 
-                // );
-                // let nr_of_neighbors = get_nr_of_neighbors(
-                //     field, &engine.config.fields[field.id], idx, jdx, 0
-                // );
-                // let next = match nr_of_neighbors {
-                //     2 => if cell == 1. {1.} else {0.}, 3 => 1., _ => 0.
-                // };
-                // canvas.set_font("20px sans-serif");
-                // canvas.set_stroke_style("green");
-                // canvas.set_fill_style("green");
-                // if nr_of_neighbors != 0 {
-                //     // canvas.fill_text(&format!("{}", nr_of_neighbors), x, y);
-                //     canvas.fill_text(&format!("{}", next), x, y);
-                //     // canvas.fill_text(&format!("{} -> {}", nr, next), x, y);
-                // }
+                let (x, y) = (
+                    (idx as f64+0.5) / dimensions[0] as f64 * canvas.dimensions.0, 
+                    (jdx as f64+0.5) / dimensions[1] as f64 * canvas.dimensions.1, 
+                );
+                let nr = get_nr_of_neighbors(
+                    field, &engine.config.fields[field.id], idx, jdx, 0
+                );
+                canvas.set_font("20px sans-serif");
+                canvas.set_stroke_style("green");
+                canvas.set_fill_style("green");
+                canvas.fill_text(&format!("{}", nr), x, y);
             }
         }
     }
@@ -485,7 +481,7 @@ pub fn get_nr_of_neighbors(
            if field.entries[cell_idx] == 1. { nr_of_neighbors += 1; }
         }
     }
-    // mxyz_utils::dom::console::log(&format!("{}", nr_of_neighbors));
+    mxyz_utils::dom::console::log(&format!("{}", nr_of_neighbors));
     nr_of_neighbors
 }
 
