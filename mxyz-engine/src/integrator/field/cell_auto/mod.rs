@@ -14,6 +14,8 @@ use crate::config::field::FieldEngineConfig;
 use crate::state::field::relevant_cells::FieldRelevantCells;
 
 use mxyz_physics::thermo_dynamics::boltzmann_prob;
+use crate::state::get_cell_idx_from_coords;
+
 
 
 pub fn apply_periodic_bounds(idx: i32, dimension: i32) -> i32 {
@@ -33,7 +35,7 @@ pub fn get_flip_energy(
     states: &Vec<State>,
     x: usize, 
     y: usize,
-    _z: usize
+    z: usize
 ) -> f64 {
     let (B, J, mu) = (0., 1., 1.);
 
@@ -41,18 +43,19 @@ pub fn get_flip_energy(
     let dim_x = dimensions[0]; // TODO handle 3D
     let dim_y = dimensions[1]; // TODO handle 3D
 
-    // let cell = field.entries[y*dim_x+x];
-    let cell = field.entries[y*dim_x+x]; // TODO generalize to 3D
+    let cell_idx = get_cell_idx_from_coords(x, y, z, &field, &field_conf);
+    let cell = field.entries[cell_idx]; // TODO generalize to 3D
     let mut dE = 0.;
     for dx in 0..3 {
         for dy in 0..3 {
             // prevent self-interaction
             if (dx == 1) && (dy == 1) { continue; }
             // get coordinates of other cell
-            let X = apply_periodic_bounds(x as i32 + dx-1, dim_x as i32);
-            let Y = apply_periodic_bounds(y as i32 + dy-1, dim_y as i32);
+            let X = apply_periodic_bounds(x as i32 + dx-1, dim_x as i32) as usize;
+            let Y = apply_periodic_bounds(y as i32 + dy-1, dim_y as i32) as usize;
             // get other cell 
-            let other = states[iter_idx].fields[field.id].entries[Y as usize*dim_x+X as usize];
+            let cell_idx = get_cell_idx_from_coords(X, Y, 0, &field, &field_conf);
+            let other = states[iter_idx].fields[field.id].entries[cell_idx];
             // add spin-spin interaction to flip energy
             dE += J*cell*other;
         }
@@ -117,14 +120,36 @@ pub fn step_cell(
                     if rand < boltzmann_prob(dE, T) { true } else { false }
                 };
                 // flip spin
-                if flip { field.entries[y*dim_x+x] *= -1.; }  // TODO generalize to 3D
+                let cell_idx = get_cell_idx_from_coords(x, y, z, &field, &field_conf);
+                if flip { field.entries[cell_idx] *= -1.; }  // TODO generalize to 3D
+
             }, FieldFieldInteraction::GameOfLife => {
-                let nr_of_neighbors = get_nr_of_neighbors(field, &field_conf, x, y, z);
-                // field.entries[z*dim_x*dim_y+y*dim_x+x] = match nr_of_neighbors {
-                field.entries[y*dim_y+x] = match nr_of_neighbors {
+
+                // let (x, y) = (
+                //     (idx as f64+0.5) / dimensions[0] as f64 * canvas.dimensions.0, 
+                //     (jdx as f64+0.5) / dimensions[1] as f64 * canvas.dimensions.1, 
+                // );
+                // if config.iter_idx < 2 { continue }
+
+                let cell_idx = get_cell_idx_from_coords(x, y, z, &field, &field_conf);
+                let cell = field.entries[cell_idx];
+                let nr_of_neighbors = get_nr_of_neighbors(
+                    field, &config.fields[field.id], x, y, 0
+                );
+                let next = match nr_of_neighbors {
+                    2 => if cell == 1. {1.} else {0.}, 
                     3 => 1., 
                     _ => 0.
                 };
+                field.entries[cell_idx] = next;
+
+                // let nr_of_neighbors = get_nr_of_neighbors(field, &field_conf, x, y, z);
+                // field.entries[y*dim_x+x] = match nr_of_neighbors {
+                //     2 => if field.entries[y*dim_x+x] == 1. {1.} else {0.}, 
+                //     3 => 1., 
+                //     _ => 0.
+                // };
+                // mxyz_utils::dom::console::log(&format!("{}, {}, {}", x, y, z));
             }, _ => {}
         }
     }
