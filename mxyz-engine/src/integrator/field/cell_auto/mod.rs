@@ -19,12 +19,9 @@ use crate::state::get_cell_idx_from_coords;
 
 
 pub fn apply_periodic_bounds(idx: i32, dimension: i32) -> i32 {
-    if idx < 0                  { idx + dimension } 
-    else if idx >= dimension    { idx - dimension } 
+    if idx < 0                  { idx + dimension }  // 0
+    else if idx >= dimension    { idx - dimension }  // dimension - 1
     else                        { idx }
-    // if idx < 0                  { 0 } 
-    // else if idx >= dimension    { dimension-1 } 
-    // else                        { idx }
 }
 
 
@@ -94,20 +91,20 @@ pub fn step_cell(
     field: &mut Field,
     config: &EngineConfig,
     states: &Vec<State>,
-    x: usize, y: usize, z: usize,
+    x: usize, 
+    y: usize, 
+    z: usize,
 ) {
-
     // get about field info from conf
     let field_conf = &config.fields[field.id];
-    let dimensions = &field_conf.dimensions;
-    let (dim_x, dim_y, _dim_z) = (dimensions[0], dimensions[1], dimensions[2]); // TODO handle 3D
+    let cell_idx = get_cell_idx_from_coords(x, y, z, &field, &field_conf);
     // numerical parameters TODO
     let T = 0.01;
     // math setup
     let mut rng = rand::thread_rng();
 
     // FIELD-FIELD INTERACTIONS
-    let field_interactions = &config.fields[field.id].field_interactions;
+    let field_interactions = &field_conf.field_interactions;
     for interaction in field_interactions.iter() {
         match interaction {
             FieldFieldInteraction::Ising => {
@@ -120,36 +117,29 @@ pub fn step_cell(
                     if rand < boltzmann_prob(dE, T) { true } else { false }
                 };
                 // flip spin
-                let cell_idx = get_cell_idx_from_coords(x, y, z, &field, &field_conf);
                 if flip { field.entries[cell_idx] *= -1.; }  // TODO generalize to 3D
 
             }, FieldFieldInteraction::GameOfLife => {
 
-                // let (x, y) = (
-                //     (idx as f64+0.5) / dimensions[0] as f64 * canvas.dimensions.0, 
-                //     (jdx as f64+0.5) / dimensions[1] as f64 * canvas.dimensions.1, 
-                // );
-                // if config.iter_idx < 2 { continue }
-
-                let cell_idx = get_cell_idx_from_coords(x, y, z, &field, &field_conf);
-                let cell = field.entries[cell_idx];
-                let nr_of_neighbors = get_nr_of_neighbors(
-                    field, &config.fields[field.id], x, y, 0
-                );
+                let nr_of_neighbors = get_nr_of_neighbors(field, &field_conf, x, y, 0);
+                // let next;
+                // if nr_of_neighbors == 3 {
+                //     next = 1.;
+                // } else {
+                //     next = 0.;
+                // }
                 let next = match nr_of_neighbors {
-                    2 => if cell == 1. {1.} else {0.}, 
+                    2 => if field.entries[cell_idx] == 1. { 1. } else { 0. }, 
                     3 => 1., 
                     _ => 0.
                 };
+                // if nr_of_neighbors > 0 {
+                    mxyz_utils::dom::console::log(&format!("({}, {}):   {} -> {}", y, x, nr_of_neighbors, next));
+                    // mxyz_utils::dom::console::log(&format!("{}, {} -> {}", x, y, cell_idx));
+                // }
+                // mxyz_utils::dom::console::log(&format!("{}", cell_idx));
                 field.entries[cell_idx] = next;
 
-                // let nr_of_neighbors = get_nr_of_neighbors(field, &field_conf, x, y, z);
-                // field.entries[y*dim_x+x] = match nr_of_neighbors {
-                //     2 => if field.entries[y*dim_x+x] == 1. {1.} else {0.}, 
-                //     3 => 1., 
-                //     _ => 0.
-                // };
-                // mxyz_utils::dom::console::log(&format!("{}, {}, {}", x, y, z));
             }, _ => {}
         }
     }
@@ -175,14 +165,16 @@ pub fn step(
     let _obj_interactions = &field_conf.obj_interactions;
 
     match config.fields[field.id].relevant_cells {
+
         FieldRelevantCells::Entire => {
-            for x in 0..dim_x {
+            for z in 0..dim_z {
                 for y in 0..dim_y {
-                    for z in 0..dim_z {
+                    for x in 0..dim_x {
                         step_cell(field, config, states, x, y, z);
                     }
                 }
             }
+
         }, FieldRelevantCells::RandomBatch => {
             const BATCH_SIZE: usize = 1000; // TODO where to get batch-size from?
             for _ in 0..BATCH_SIZE {

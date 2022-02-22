@@ -1,3 +1,5 @@
+#![allow(non_snake_case)]
+
 
 pub mod config;
 pub mod field;
@@ -406,7 +408,7 @@ impl Renderer {
                     else { "black" };
 
                 let s = match self.sim_id.as_str() {
-                    "game-of-life" => 0.9,
+                    "game-of-life" => 1.,
                     _ => 0.5
                 };
                 let x = ((idx as f64 + (1.-s)/2.) / dimensions[0] as f64)*2.-1.;
@@ -418,24 +420,25 @@ impl Renderer {
 
 
 
-                // let (x, y) = (
-                //     (idx as f64+0.5) / dimensions[0] as f64 * canvas.dimensions.0, 
-                //     (jdx as f64+0.5) / dimensions[1] as f64 * canvas.dimensions.1, 
-                // );
-                // let nr_of_neighbors = get_nr_of_neighbors(
-                //     field, &engine.config.fields[field.id], idx, jdx, 0
-                // );
-                // let next = match nr_of_neighbors {
-                //     2 => if cell == 1. {1.} else {0.}, 3 => 1., _ => 0.
-                // };
-                // canvas.set_font("20px sans-serif");
-                // canvas.set_stroke_style("green");
-                // canvas.set_fill_style("green");
-                // if nr_of_neighbors != 0 {
-                //     // canvas.fill_text(&format!("{}", nr_of_neighbors), x, y);
-                //     canvas.fill_text(&format!("{}", next), x, y);
-                //     // canvas.fill_text(&format!("{} -> {}", nr, next), x, y);
-                // }
+                let (x, y) = (
+                    (idx as f64+0.2) / dimensions[0] as f64 * canvas.dimensions.0, 
+                    (jdx as f64+0.2) / dimensions[1] as f64 * canvas.dimensions.1, 
+                );
+                use mxyz_engine::integrator::field::cell_auto::get_nr_of_neighbors;
+                let nr_of_neighbors = get_nr_of_neighbors(
+                    field, &engine.config.fields[field.id], idx, jdx, 0
+                );
+                let next = match nr_of_neighbors {
+                    2 => if cell == 1. {1.} else {0.}, 3 => 1., _ => 0.
+                };
+                canvas.set_font("18px sans-serif");
+                canvas.set_stroke_style("green");
+                canvas.set_fill_style("green");
+                if nr_of_neighbors != 0 {
+                    // canvas.fill_text(&format!("{}", nr_of_neighbors), x, y);
+                    // canvas.fill_text(&format!("{}", next), x, y);
+                    canvas.fill_text(&format!("({}, {}):  {} -> {}", jdx, idx, nr_of_neighbors, next), x, y);
+                }
             }
         }
     }
@@ -460,32 +463,5 @@ impl Renderer {
         self.config.frame_idx = 0;  // TODO this does not reset engine (?)
         for canvas in self.canvases.iter_mut() { canvas.clear(); }
     }
-}
-
-
-pub fn get_nr_of_neighbors(
-    field: &Field, 
-    field_conf: &FieldEngineConfig, 
-    x: usize, y: usize, _z: usize,
-) -> usize {
-    let dim_x = field_conf.dimensions[0];
-    let dim_y = field_conf.dimensions[1];
-    let _dim_z = field_conf.dimensions[2];
-
-    let mut nr_of_neighbors = 0;
-    for dx in [-1, 0, 1] {
-        for dy in [-1, 0, 1] {
-           // prevent self-interaction
-           if (dx == 0) && (dy == 0) { continue; }
-           // get coordinates of other cell
-           let X = apply_periodic_bounds(x as i32 + dx, dim_x as i32);
-           let Y = apply_periodic_bounds(y as i32 + dy, dim_y as i32);
-           let cell_idx = (Y * dim_x as i32 + X) as usize;
-           // increment number of neighbors
-           if field.entries[cell_idx] == 1. { nr_of_neighbors += 1; }
-        }
-    }
-    // mxyz_utils::dom::console::log(&format!("{}", nr_of_neighbors));
-    nr_of_neighbors
 }
 

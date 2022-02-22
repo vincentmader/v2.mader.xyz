@@ -43,8 +43,8 @@ impl Simulation {
             match self.renderer.config.is_iterating_forward { true => 1, false => -1 }
         } else { 0 } * self.config.nr_of_steps_per_render as i32;
 
-        self.renderer.config.frame_idx = i32::max(0, frame_idx+forward) as usize; 
         self.renderer.display(&self.engine);
+        self.renderer.config.frame_idx = i32::max(0, frame_idx+forward) as usize; 
     }
 }
 

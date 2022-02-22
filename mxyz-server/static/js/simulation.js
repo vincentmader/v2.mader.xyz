@@ -63,9 +63,9 @@ let sim_id = document.getElementById("simulation.js").getAttribute("sim_id");
     // let fps = 1 / dt;
     // console.log(fps);
 
-    // setTimeout(function () {
-    requestAnimationFrame(loop);
-    // }, 500);
+    setTimeout(function () {
+      requestAnimationFrame(loop);
+    }, 500);
   };
   loop();
 })();

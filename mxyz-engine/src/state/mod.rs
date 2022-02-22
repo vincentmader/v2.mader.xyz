@@ -403,7 +403,7 @@ impl State {
                 let id = 0;
                 let mut conf            = FieldEngineConfig::new(id);
                 // conf.field_variant = FieldVariant::GameOfLife;
-                conf.dimensions         = Vec::from([30, 30, 1]);
+                conf.dimensions         = Vec::from([5, 5, 1]);
                 conf.relevant_cells     = FieldRelevantCells::Entire;
                 conf.field_interactions = Vec::from([FieldFieldInteraction::GameOfLife]);
                 conf.boundary           = FieldBoundaryVariant::Periodic;
@@ -411,18 +411,18 @@ impl State {
                 let mut field = Field::new(id);
 
                 let living_cells = vec![
-                    (12, 12),
-                    (13, 12),
-                    (14, 12),
-                    (14, 13),
-                    (13, 14),
-
-                    (2, 2),
-                    (2, 3),
+                    (1, 1),
+                    (2, 1),
+                    (3, 1),
                     (3, 2),
-                    (3, 3),
-                    (3, 4),
-                    (3, 5),
+                    (2, 3),
+
+                    // (2, 2),
+                    // (2, 3),
+                    // (3, 2),
+                    // (3, 3),
+                    // (3, 4),
+                    // (3, 5),
 
                     // (30, 40),
                     // (30, 41),
