@@ -159,10 +159,10 @@ impl State {
                 conf.obj_variant    = ObjVariant::Particle;
 
                 // let R = 0.85;
-                // let W = 0.;
+                let W = 0.;
                 let R = 0.55;
-                let W = 0.2;
-                let speed = (nr_of_stars as f64 * M / R).powf(0.5);
+                // let W = 0.2;
+                let speed = (nr_of_stars as f64 * 1.2 * M / R).powf(0.5);
 
                 for obj_idx in 0..nr_of_objects {
                     let rand: f64 = rng.gen();
@@ -283,6 +283,26 @@ impl State {
                 conf.boundary         = ObjBoundaryVariant::WallCollisionElastic;
                 conf.obj_attributes.push(ObjAttribute::Charge);
                 conf.obj_length += 1;
+
+                let nr_of_electrons = 10;
+                for _body_idx in 0..nr_of_electrons {
+                    let rand1: f64 = rng.gen(); 
+                    let rand2: f64 = rng.gen(); 
+                    let x0 = rand1 * 2. - 1.;
+                    let y0 = rand2 * 2. - 1.;
+                    let object = Vec::from([0.04, x0, y0, 0., 0., -1.]);
+                    family.add_object(&object, &mut conf);
+                }
+                engine_conf.obj_families.push(conf);
+                obj_families.push(family);
+
+                let id = 1;
+                let mut family        = ObjFamily::new(id);
+                let mut conf          = ObjFamilyEngineConfig::new(id);
+                conf.obj_interactions = Vec::from([ObjObjInteraction::ForceCoulomb]);
+                conf.boundary         = ObjBoundaryVariant::WallCollisionElastic;
+                conf.obj_attributes.push(ObjAttribute::Charge);
+                conf.obj_length += 1;
                 engine_conf.dt = DT / 10.;
 
                 let nr_of_protons = 10;
@@ -297,26 +317,6 @@ impl State {
                 engine_conf.obj_families.push(conf);
                 obj_families.push(family);
 
-                let id = 1;
-                let mut family        = ObjFamily::new(id);
-                let mut conf          = ObjFamilyEngineConfig::new(id);
-                conf.obj_interactions = Vec::from([ObjObjInteraction::ForceCoulomb]);
-                conf.boundary         = ObjBoundaryVariant::WallCollisionElastic;
-                conf.obj_attributes.push(ObjAttribute::Charge);
-                conf.obj_length += 1;
-
-                let nr_of_electrons = 1;
-                for _body_idx in 0..nr_of_electrons {
-                    let rand1: f64 = rng.gen(); 
-                    let rand2: f64 = rng.gen(); 
-                    let x0 = rand1 * 2. - 1.;
-                    let y0 = rand2 * 2. - 1.;
-                    let object = Vec::from([0.01, x0, y0, 0., 0., -1.]);
-                    family.add_object(&object, &mut conf);
-                }
-                engine_conf.obj_families.push(conf);
-                obj_families.push(family);
-
             }, "lennard-jones" => {
 
                 let id = 0;
@@ -326,7 +326,7 @@ impl State {
                 conf.boundary         = ObjBoundaryVariant::WallCollisionElastic;
 
                 // TODO add dampening somehow, on collision? over time?
-                let foo: usize = 5;
+                let foo: usize = 8;
                 // let nr_of_bodies = foo.pow(2);
                 let speed = 0.05;
                 for jdx in 0..foo {
@@ -403,65 +403,35 @@ impl State {
                 let id = 0;
                 let mut conf            = FieldEngineConfig::new(id);
                 // conf.field_variant = FieldVariant::GameOfLife;
-                conf.dimensions         = Vec::from([5, 5, 1]);
+                conf.dimensions         = Vec::from([100, 100, 1]);
                 conf.relevant_cells     = FieldRelevantCells::Entire;
                 conf.field_interactions = Vec::from([FieldFieldInteraction::GameOfLife]);
                 conf.boundary           = FieldBoundaryVariant::Periodic;
 
                 let mut field = Field::new(id);
 
-                let living_cells = vec![
-                    (1, 1),
-                    (2, 1),
-                    (3, 1),
-                    (3, 2),
-                    (2, 3),
+                let objects = Vec::from([
+                    get_initial_state_for_GOL_glider((1, 1)),
+                    get_initial_state_for_GOL_LWSS_glider((80, 25)),
+                    get_initial_state_for_GOL_MWSS_glider((75, 35)),
+                    get_initial_state_for_GOL_HWSS_glider((70, 45)),
+                ]);
 
-                    // (2, 2),
-                    // (2, 3),
-                    // (3, 2),
-                    // (3, 3),
-                    // (3, 4),
-                    // (3, 5),
-
-                    // (30, 40),
-                    // (30, 41),
-                    // (31, 40),
-                    // (31, 41),
-                ];
-
-                // for row_idx in 0..conf.dimensions[0] {
-                //     for col_idx in 0..conf.dimensions[1] {
-                //         if living_cells.contains(&(col_idx, row_idx)) {
-                //             let (x, y) = (col_idx, row_idx);
-                //             let cell_index = get_cell_idx_from_coords(x, y, &field, &conf);
-                //         }
-                // //         let rand: f64 = rng.gen();
-                // //         let val = if rand > 0.9 { -1. } else { 1. };
-                // //         // let val = 1.;
-                // //         field.entries.push(val);
-                //     }
-                // }
-
+                let mut living_cells = Vec::new();
+                for obj in objects {
+                    for cell in obj {
+                        living_cells.push(cell);
+                    }
+                }
                 for row_idx in 0..conf.dimensions[0] {
                     for col_idx in 0..conf.dimensions[1] {
                         if living_cells.contains(&(col_idx, row_idx)) {
                             field.entries.push(1.);
-                            // mxyz_utils::dom::console::log(&format!("{}", "test"));
                         } else {
                             field.entries.push(0.);
                         }
-                //         let rand: f64 = rng.gen();
-                //         let val = if rand > 0.9 { -1. } else { 1. };
-                //         // let val = 1.;
                     }
                 }
-
-                // for cell_coords in living_cells.iter() {
-                //     let (x, y) = (cell_coords.0, cell_coords.1);
-                //     let cell_index = get_cell_idx_from_coords(x, y, &field, &conf);
-                //     field.entries[cell_index] = 1.;
-                // }
 
                 engine_conf.fields.push(conf);
                 fields.push(field);
@@ -472,5 +442,76 @@ impl State {
         fields
     }
 
+}
+
+
+pub fn get_initial_state_for_GOL_glider(
+    initial_position: (usize, usize)
+) -> Vec<(usize, usize)> {
+    let (x0, y0) = (initial_position.0, initial_position.1);
+    Vec::from([
+        (x0 + 2, y0 + 0),
+        (x0 + 0, y0 + 1),
+        (x0 + 2, y0 + 2),
+        (x0 + 1, y0 + 2),
+        (x0 + 2, y0 + 1),
+    ])
+}
+
+pub fn get_initial_state_for_GOL_LWSS_glider(
+    initial_position: (usize, usize)
+) -> Vec<(usize, usize)> {
+    let (x0, y0) = (initial_position.0, initial_position.1);
+    Vec::from([
+        (x0 + 0, y0 + 0),
+        (x0 + 0, y0 + 1),
+        (x0 + 0, y0 + 2),
+        (x0 + 1, y0 + 0),
+        (x0 + 1, y0 + 3),
+        (x0 + 2, y0 + 0),
+        (x0 + 3, y0 + 0),
+        (x0 + 4, y0 + 1),
+        (x0 + 4, y0 + 3),
+    ])
+}
+
+pub fn get_initial_state_for_GOL_MWSS_glider(
+    initial_position: (usize, usize)
+) -> Vec<(usize, usize)> {
+    let (x0, y0) = (initial_position.0, initial_position.1);
+    Vec::from([
+        (x0 + 0, y0 + 0),
+        (x0 + 0, y0 + 1),
+        (x0 + 0, y0 + 2),
+        (x0 + 1, y0 + 0),
+        (x0 + 1, y0 + 3),
+        (x0 + 2, y0 + 0),
+        (x0 + 3, y0 + 0),
+        (x0 + 3, y0 + 4),
+        (x0 + 4, y0 + 0),
+        (x0 + 5, y0 + 1),
+        (x0 + 5, y0 + 3),
+    ])
+}
+
+pub fn get_initial_state_for_GOL_HWSS_glider(
+    initial_position: (usize, usize)
+) -> Vec<(usize, usize)> {
+    let (x0, y0) = (initial_position.0, initial_position.1);
+    Vec::from([
+        (x0 + 0, y0 + 0),
+        (x0 + 0, y0 + 1),
+        (x0 + 0, y0 + 2),
+        (x0 + 1, y0 + 0),
+        (x0 + 1, y0 + 3),
+        (x0 + 2, y0 + 0),
+        (x0 + 3, y0 + 0),
+        (x0 + 3, y0 + 4),
+        (x0 + 4, y0 + 0),
+        (x0 + 4, y0 + 4),
+        (x0 + 5, y0 + 0),
+        (x0 + 6, y0 + 1),
+        (x0 + 6, y0 + 3),
+    ])
 }
 

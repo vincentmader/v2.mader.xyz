@@ -98,6 +98,7 @@ pub fn step_cell(
     // get about field info from conf
     let field_conf = &config.fields[field.id];
     let cell_idx = get_cell_idx_from_coords(x, y, z, &field, &field_conf);
+    let last_field = &states[config.iter_idx].fields[field.id];
     // numerical parameters TODO
     let T = 0.01;
     // math setup
@@ -121,23 +122,12 @@ pub fn step_cell(
 
             }, FieldFieldInteraction::GameOfLife => {
 
-                let nr_of_neighbors = get_nr_of_neighbors(field, &field_conf, x, y, 0);
-                // let next;
-                // if nr_of_neighbors == 3 {
-                //     next = 1.;
-                // } else {
-                //     next = 0.;
-                // }
+                let nr_of_neighbors = get_nr_of_neighbors(&last_field, &field_conf, x, y, 0);
                 let next = match nr_of_neighbors {
                     2 => if field.entries[cell_idx] == 1. { 1. } else { 0. }, 
                     3 => 1., 
                     _ => 0.
                 };
-                // if nr_of_neighbors > 0 {
-                    mxyz_utils::dom::console::log(&format!("({}, {}):   {} -> {}", y, x, nr_of_neighbors, next));
-                    // mxyz_utils::dom::console::log(&format!("{}, {} -> {}", x, y, cell_idx));
-                // }
-                // mxyz_utils::dom::console::log(&format!("{}", cell_idx));
                 field.entries[cell_idx] = next;
 
             }, _ => {}

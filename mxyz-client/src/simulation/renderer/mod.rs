@@ -277,11 +277,12 @@ impl Renderer {
         canvas_id: usize,
         engine: &Engine,
     ) {
-        let tail_length = 100; // TODO make configurable
-        let tail_width = 2.; // TODO make configurable
-
+        // get info from engine-config
         let nr_of_objects = engine.config.obj_families[family.id].family_size;
         let obj_length = engine.config.obj_families[family.id].obj_length;
+        // get info from renderer-config
+        let tail_length = self.config.obj_families[family.id].tail_length;
+        let tail_width = self.config.obj_families[family.id].tail_width;
 
         // SETUP CANVAS
         let canvas = &mut self.canvases[canvas_id];
@@ -318,7 +319,7 @@ impl Renderer {
                 let color = get_obj_color( &Vec::from(obj), alpha );
                 canvas.set_stroke_style(&color);
                 canvas.set_fill_style(&color);
-
+                // draw tail
                 canvas.draw_line( (x1, y1), (x2, y2) );
 
             }  // TODO apply alpha   (from input?)
@@ -333,8 +334,14 @@ impl Renderer {
         canvas_id: usize,
         engine: &Engine,
     ) {
+        // get info from engine-config
+        let nr_of_objects = engine.config.obj_families[family.id].family_size;
+        let obj_length = engine.config.obj_families[family.id].obj_length;
+        // get info from renderer-config
+        let tail_length = self.config.obj_families[family.id].tail_length;
+
+        // SETUP CANVAS
         let canvas = &mut self.canvases[canvas_id];
-        let tail_length = 200; // TODO make configurable
 
         // setup color
         let obj_color_mode = &self.config.obj_families[family.id].color_mode;
@@ -347,9 +354,6 @@ impl Renderer {
             ObjColorMode::Distance    => object::color_mode::get_obj_color_from_distance, // NOTE from origin
             ObjColorMode::Charge      => object::color_mode::get_obj_color_from_charge,
         };
-
-        let nr_of_objects = engine.config.obj_families[family.id].family_size;
-        let obj_length = engine.config.obj_families[family.id].obj_length;
 
         let iterator = 0..usize::min(tail_length, self.config.frame_idx);
         for tail_step_id in iterator.rev() {
@@ -371,7 +375,7 @@ impl Renderer {
                 let color = get_obj_color( &Vec::from(obj), alpha );
                 canvas.set_stroke_style(&color);
                 canvas.set_fill_style(&color);
-
+                // draw tail
                 canvas.draw_triangle( (x1, y1), (x2, y2), (x3, y3) )
 
             }  // TODO apply alpha   (from input?)
@@ -391,7 +395,6 @@ impl Renderer {
         for idx in 0..dimensions[0] {
             for jdx in 0..dimensions[1] {  // TODO handle z ?
                 let cell = field.entries[jdx*dimensions[0]+idx];
-                // let cell = cell as i32;
 
                 // match self.sim_id {
                 //     "game-of-life" => {
@@ -418,27 +421,26 @@ impl Renderer {
                 canvas.set_fill_style(&color);
                 canvas.fill_rect((x, y), w, h);
 
-
-
-                let (x, y) = (
-                    (idx as f64+0.2) / dimensions[0] as f64 * canvas.dimensions.0, 
-                    (jdx as f64+0.2) / dimensions[1] as f64 * canvas.dimensions.1, 
-                );
-                use mxyz_engine::integrator::field::cell_auto::get_nr_of_neighbors;
-                let nr_of_neighbors = get_nr_of_neighbors(
-                    field, &engine.config.fields[field.id], idx, jdx, 0
-                );
-                let next = match nr_of_neighbors {
-                    2 => if cell == 1. {1.} else {0.}, 3 => 1., _ => 0.
-                };
-                canvas.set_font("18px sans-serif");
-                canvas.set_stroke_style("green");
-                canvas.set_fill_style("green");
-                if nr_of_neighbors != 0 {
-                    // canvas.fill_text(&format!("{}", nr_of_neighbors), x, y);
-                    // canvas.fill_text(&format!("{}", next), x, y);
-                    canvas.fill_text(&format!("({}, {}):  {} -> {}", jdx, idx, nr_of_neighbors, next), x, y);
-                }
+                // let (x, y) = (
+                //     (idx as f64+0.2) / dimensions[0] as f64 * canvas.dimensions.0, 
+                //     (jdx as f64+0.2) / dimensions[1] as f64 * canvas.dimensions.1, 
+                // );
+                // use mxyz_engine::integrator::field::cell_auto::get_nr_of_neighbors;
+                // let nr_of_neighbors = get_nr_of_neighbors(
+                //     field, &engine.config.fields[field.id], idx, jdx, 0
+                // );
+                // let next = match nr_of_neighbors {
+                //     2 => if cell == 1. {1.} else {0.}, 3 => 1., _ => 0.
+                // };
+                // canvas.set_font("18px sans-serif");
+                // canvas.set_stroke_style("green");
+                // canvas.set_fill_style("green");
+                // if nr_of_neighbors != 0 {
+                //     // canvas.fill_text(&format!("{}", nr_of_neighbors), x, y);
+                //     // canvas.fill_text(&format!("{}", next), x, y);
+                //     // canvas.fill_text(&format!("({}, {}):  {} -> {}", jdx, idx, nr_of_neighbors, next), x, y);
+                //     canvas.fill_text(&format!("({}, {}):  {}", jdx, idx, nr_of_neighbors), x, y);
+                // }
             }
         }
     }

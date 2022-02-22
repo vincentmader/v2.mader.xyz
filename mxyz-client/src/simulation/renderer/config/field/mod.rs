@@ -10,7 +10,7 @@ pub struct FieldRendererConfig {
 }
 impl FieldRendererConfig {
 
-    pub fn new(id: usize, _field: &FieldEngineConfig) -> Self {
+    pub fn new(sim_id: &str, id: usize, _field: &FieldEngineConfig) -> Self {
         FieldRendererConfig {
             id: id,
             is_displayed: true,
