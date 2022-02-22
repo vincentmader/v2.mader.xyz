@@ -37,12 +37,11 @@ impl Simulation {
     pub fn render(&mut self) {
         let frame_idx              = self.renderer.config.frame_idx as i32;
         let out_of_bounds          = frame_idx >= self.engine.config.iter_idx as i32;
-        let nr_of_steps_per_render = self.config.nr_of_steps_per_render as i32;
         let is_paused              = self.renderer.config.is_paused;
 
         let forward = if !is_paused && !out_of_bounds {
             match self.renderer.config.is_iterating_forward { true => 1, false => -1 }
-        } else { 0 } * nr_of_steps_per_render;
+        } else { 0 } * self.config.nr_of_steps_per_render as i32;
 
         self.renderer.config.frame_idx = i32::max(0, frame_idx+forward) as usize; 
         self.renderer.display(&self.engine);
