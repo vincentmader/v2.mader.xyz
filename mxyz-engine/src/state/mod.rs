@@ -75,31 +75,31 @@ impl State {
                 let (m,   r) = (0.1,   0.8);  // Earth
                 let (mu, dr) = (0.001, 0.1);  // Moon
 
-                let id = 0;
+                let id              = 0;
                 let mut family      = ObjFamily::new(id);
                 let mut conf        = ObjFamilyEngineConfig::new(id);
                 conf.obj_variant    = ObjVariant::Static;
-                let (x, y, u, v) = (0., 0., 0., 0.);
+                let (x, y, u, v)    = (0., 0., 0., 0.);
                 let object = Vec::from([M, x, y, u, v]);
                 family.add_object(&object, &mut conf);
                 engine_conf.obj_families.push(conf);
                 obj_families.push(family);
 
-                let id = 1;
+                let id              = 1;
                 let mut family      = ObjFamily::new(id);
                 let mut conf        = ObjFamilyEngineConfig::new(id);
                 conf.obj_variant    = ObjVariant::Body;
-                let (x, y, u, v) = (r, 0., 0., kepler_velocity(M, r));
+                let (x, y, u, v)    = (r, 0., 0., kepler_velocity(M, r));
                 let object = Vec::from([m, x, y, u, v]);
                 family.add_object(&object, &mut conf);
                 engine_conf.obj_families.push(conf);
                 obj_families.push(family);
 
-                let id = 2;
+                let id              = 2;
                 let mut family      = ObjFamily::new(id);
                 let mut conf        = ObjFamilyEngineConfig::new(id);
                 conf.obj_variant    = ObjVariant::Particle;
-                let (x, y, u, v) = (r+dr, 0., 0., v);
+                let (x, y, u, v)    = (r+dr, 0., 0., v);
                 let object = Vec::from([mu, x, y, u, v+kepler_velocity(m, dr)]);
                 family.add_object(&object, &mut conf);
                 engine_conf.obj_families.push(conf);
@@ -433,6 +433,16 @@ impl State {
                     }
                 }
 
+                engine_conf.fields.push(conf);
+                fields.push(field);
+
+            } "3body-moon" => {
+
+                let id              = 0;
+                let field           = Field::new(id);
+                let mut conf        = FieldEngineConfig::new(id);
+                conf.integrator     = FieldIntegratorVariant::FromObjects;
+                conf.dimensions     = Vec::from([0, 0, 0]);
                 engine_conf.fields.push(conf);
                 fields.push(field);
 

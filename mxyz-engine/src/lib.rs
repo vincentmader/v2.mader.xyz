@@ -18,7 +18,7 @@ impl Engine {
     pub fn new(sim_id: &str) -> Self {
         Engine { 
             sim_id:     String::from(sim_id),
-            config:     config::EngineConfig::new(),
+            config:     config::EngineConfig::new(sim_id),
             states:     Vec::new(),
         }
     }

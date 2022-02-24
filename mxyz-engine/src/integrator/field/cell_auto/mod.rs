@@ -168,8 +168,8 @@ pub fn step(
         }, FieldRelevantCells::RandomBatch => {
             const BATCH_SIZE: usize = 1000; // TODO where to get batch-size from?
             for _ in 0..BATCH_SIZE {
-                let x = rng.gen_range(0..dim_x-1);
-                let y = rng.gen_range(0..dim_y-1);
+                let x = rng.gen_range(0..dim_x);
+                let y = rng.gen_range(0..dim_y);
                 let z = 0; // TODO rng.gen_range(0..dim_z);
                 step_cell(field, config, states, x, y, z);
             }

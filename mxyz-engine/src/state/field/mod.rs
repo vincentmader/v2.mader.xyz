@@ -21,3 +21,14 @@ impl Field {
     }
 }
 
+
+
+// enum FieldCell {
+//     Bool(bool),
+//     Float(f64),
+//     Vector(Vec<Vector>),
+// }
+
+// pub struct Vector {
+
+// }

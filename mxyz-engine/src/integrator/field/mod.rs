@@ -1,5 +1,6 @@
 
 pub mod cell_auto;
+pub mod from_objects;
 pub mod variant;
 use variant::FieldIntegratorVariant;
 
@@ -16,6 +17,7 @@ pub fn step(
     // apply integration scheme
     let apply_integrator = match config.fields[field.id].integrator {
         FieldIntegratorVariant::CellAuto    => integrator::cell_auto::step,
+        FieldIntegratorVariant::FromObjects => integrator::from_objects::get,
     };
     apply_integrator(field, &states, &config);
 
