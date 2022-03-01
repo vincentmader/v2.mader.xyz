@@ -5,12 +5,14 @@ pub mod integrator;
 pub mod interaction;
 pub mod partitioner;
 pub mod state;
+pub mod system;
 
 
 pub struct Engine {
         sim_id:         String,
     pub config:         config::EngineConfig,
     pub states:         Vec<state::State>,
+    pub systems:        Vec<system::System>,
 }
 
 impl Engine {
@@ -20,6 +22,7 @@ impl Engine {
             sim_id:     String::from(sim_id),
             config:     config::EngineConfig::new(sim_id),
             states:     Vec::new(),
+            systems:    Vec::new(),
         }
     }
     // initialize state vector
