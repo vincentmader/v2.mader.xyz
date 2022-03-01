@@ -8,6 +8,11 @@ impl Renderer {
         &mut self, 
         doc:    &web_sys::Document
     ) {
+        let button_menus = doc.get_element_by_id("button-menu_main").unwrap();
+        let button_menu = doc.create_element("div").unwrap();
+        button_menu.set_id(&format!("bm-{}", 0));  // default
+        button_menus.append_child(&button_menu).unwrap();
+
         let button_ids = Vec::from([
             ("button_toggle-pause",             "| |"),
             ("button_toggle-pause-engine",      "|e|"),
@@ -17,21 +22,33 @@ impl Renderer {
             ("button_toggle-clear-canvas",      "clear canvas"),
             ("button_toggle-time-inversion",    "-t"),
         ]);
-
-        let button_menus = doc.get_element_by_id("button-menu_main").unwrap();
-        let button_menu = doc.create_element("div").unwrap();
-        button_menu.set_id(&format!("bm-{}", 0));  // default
-        // button_menu.set_attribute("class", "section"); // not needed, defined in tera
-        button_menus.append_child(&button_menu).unwrap();
         for entry in button_ids {
             let button_id = entry.0;
-            let title = entry.1;
+            let button_title = entry.1;
             let button = doc.create_element("button").unwrap();
             button.set_id(button_id);
             button.set_attribute("class", "bm_button").unwrap();
-            button.set_inner_html(title);
+            button.set_inner_html(button_title);
             button_menu.append_child(&button).unwrap();
         }
+
+        let info_textfield_ids = Vec::from([
+            ("textfield_iter_idx",              "iter: 0"),
+            ("textfield_frame_idx",             "frame: 0"),
+            ("textfield_fps_engine",            "fps_e: 0"),
+            ("textfield_fps_renderer",          "fps_r: 0"),
+        ]);
+        let textfield_container = doc.create_element("div").unwrap();
+        for entry in info_textfield_ids {
+            let textfield_id = entry.0;
+            let textfield_title = entry.1;
+            let textfield = doc.create_element("span").unwrap();
+            textfield.set_id(textfield_id);
+            textfield.set_attribute("class", "bm_info_textfield").unwrap();
+            textfield.set_inner_html(textfield_title);
+            textfield_container.append_child(&textfield).unwrap();
+        }
+        button_menu.append_child(&textfield_container).unwrap();
     }
 
     pub fn init_button_menu_2(
@@ -39,9 +56,6 @@ impl Renderer {
         doc:    &web_sys::Document, 
         state:  &mxyz_engine::state::State
     ) {
-        // let buttons = Vec::from([
-        //     ("button_toggle-display-tail", "display tails"),
-        // ]);
         let multibuttons = Vec::from([
             ("", Vec::from([
                 ("button_toggle-display-objects",            "disp. obj."),

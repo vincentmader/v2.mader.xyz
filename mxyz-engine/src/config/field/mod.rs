@@ -62,6 +62,18 @@ impl FieldEngineConfig {
 }
 
 
+// enum StateVector {
+//     Float(Vec<f64>),
+//     Vector(Vec<Vec<T>>),
+// }
+
+
+// pub enum Field {
+//     VectorField(VectorField),
+//     BooleanField(BooleanField),
+//     F64Field(F64Field),
+// }
+
 
 // pub enum FieldDimensionalityVariant {
 //     Uninitialized,

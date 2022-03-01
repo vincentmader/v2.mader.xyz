@@ -131,6 +131,7 @@ impl Renderer {
             self.display_objects(family, states, canvas_id, &engine);
         }
         // DISPLAY HUD
+        self.display_info_textfields(&engine);
         if self.config.is_displaying_hud { 
             self.display_hud(&engine);
         }
@@ -470,6 +471,18 @@ impl Renderer {
         //         // }
             }
         }
+    }
+
+    pub fn display_info_textfields(
+        &mut self, 
+        engine: &Engine,
+    ) {
+        let doc = mxyz_utils::dom::document();
+
+        let textfield = doc.get_element_by_id("textfield_iter_idx").unwrap();
+        textfield.set_inner_html(&format!("iter: {}", engine.config.iter_idx));
+        let textfield = doc.get_element_by_id("textfield_frame_idx").unwrap();
+        textfield.set_inner_html(&format!("frame: {}", self.config.frame_idx));
     }
 
     pub fn display_hud(

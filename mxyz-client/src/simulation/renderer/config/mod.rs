@@ -29,7 +29,7 @@ impl RendererConfig {
             is_paused:              false,
             is_clearing_canvas:     true,
             is_iterating_forward:   true,
-            is_displaying_hud:      true,
+            is_displaying_hud:      false,
         }
     }
 

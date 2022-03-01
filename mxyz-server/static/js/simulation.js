@@ -51,13 +51,20 @@ let sim_id = document.getElementById("simulation.js").getAttribute("sim_id");
 
   // let last_date = Date.now();
   const loop = () => {
-    // let date_1 = Date.now();
+    let date_1 = Date.now();
     simulation.render();
-    // let date_2 = Date.now();
+    let date_2 = Date.now();
+    let fps_renderer = 1000 / (date_2 - date_1);
 
-    // let date_1 = Date.now();
+    let date_3 = Date.now();
     simulation.step(); // TODO move render into sim.step() ?
-    // let date_2 = Date.now();
+    let date_4 = Date.now();
+    let fps_engine = 1000 / (date_4 - date_3);
+
+    let textfield_fps_e = document.getElementById("textfield_fps_engine");
+    textfield_fps_e.innerHTML = "fps_e: " + Math.round(fps_engine);
+    let textfield_fps_r = document.getElementById("textfield_fps_renderer");
+    textfield_fps_r.innerHTML = "fps_r: " + Math.round(fps_renderer);
 
     // let dt = (date_2 - date_1) / 1000;
     // let fps = 1 / dt;
