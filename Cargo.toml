@@ -5,6 +5,7 @@
         "mxyz-client",
         "mxyz-database",
         "mxyz-engine",
+        "mxyz-init",
         "mxyz-physics",
         "mxyz-utils",
         "mxyz-server",

@@ -1,0 +1,11 @@
+
+[package]
+    name = "mxyz-init"
+    version = "0.1.0"
+    authors = ["Vincent C. Mader <vincent@mader.xyz>"]
+    edition = "2018"
+
+[dependencies]
+    mxyz-server = { path="../mxyz-server" }
+    mxyz-engine = { path="../mxyz-engine" }
+    mxyz-chronos = { path="../mxyz-chronos" }

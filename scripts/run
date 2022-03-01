@@ -23,7 +23,7 @@
 # build & run server
 # -----------------------------------------------------------------------------
 
-    cd "$PATH_TO_PROJECT/mxyz-server"
+    cd "$PATH_TO_PROJECT/mxyz-init"
     if [ "$1" = "--release" ]; then
         cargo run --release
     else
