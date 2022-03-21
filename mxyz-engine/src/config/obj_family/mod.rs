@@ -14,6 +14,9 @@ use crate::interaction::object::object::ObjObjInteraction;
 
 pub struct ObjFamilyEngineConfig {
 
+    pub integrators:        Vec<ObjIntegratorVariant>,
+
+
     pub id:                 usize,
     // matrix for interactions (?)
     // pub family_size: usize,
@@ -57,6 +60,9 @@ impl ObjFamilyEngineConfig {
         // );
     
         ObjFamilyEngineConfig {
+
+            integrators:        Vec::new(),
+
             id,
             family_size:        0,  // TODO increment on obj-add
             obj_variant:        ObjVariant::Body,

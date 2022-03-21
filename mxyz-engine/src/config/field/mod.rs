@@ -10,6 +10,8 @@ use crate::state::field::relevant_cells::FieldRelevantCells;
 
 pub struct FieldEngineConfig {
 
+    pub integrators:        Vec<FieldIntegratorVariant>,
+
     pub id:                 usize,
 
     pub dimensions:         Vec<usize>,
@@ -42,6 +44,9 @@ impl FieldEngineConfig {
         let DEFAULT_BOUNDARY_VARIANT    = FieldBoundaryVariant::None;
 
         FieldEngineConfig {
+        
+            integrators:        Vec::new(),
+
             id,
             // field_variant:      DEFAULT_FIELD_VARIANT,
             dimensions:         DEFAULT_DIMENSIONS,

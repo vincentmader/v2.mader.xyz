@@ -1,11 +1,13 @@
-#!/opt/homebrew/bin/python3
+#!/usr/bin/env python3
 
 import os
 import pathlib
 
 
-pwd = pathlib.Path(__file__).parent.resolve()
-proj_root = f"{pwd}/../.."
+# pwd = pathlib.Path(__file__).parent.resolve()
+# proj_root = f"{pwd}/../.."
+PATH_TO_PROJECT = pathlib.Path(__file__).parent.resolve()
+proj_root = f"{PATH_TO_PROJECT}/../.."
 
 
 def check_dir(path, length):
