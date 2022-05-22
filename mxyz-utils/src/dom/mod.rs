@@ -1,18 +1,11 @@
-
 pub mod canvas;
 pub mod console;
 
-
-
-
-
+use gloo::events::EventListener;
 use wasm_bindgen::JsCast;
-use gloo::{events::EventListener};
-
 
 pub fn window() -> web_sys::Window {
-    web_sys::window()
-        .expect("no global `window` exists")
+    web_sys::window().expect("no global `window` exists")
 }
 
 pub fn document() -> web_sys::Document {
@@ -27,16 +20,11 @@ pub fn body() -> web_sys::HtmlElement {
         .expect("document expect to have have a body")
 }
 
-
-
-
-
 // pub fn request_animation_frame(f: &Closure<dyn FnMut()>) {
 //     window()
 //         .request_animation_frame(f.as_ref().unchecked_ref())
 //         .expect("should register 'requestAnimationFrame' OK");
 // }
-
 
 // pub fn body() -> web_sys::HtmlElement {
 //     document()
@@ -44,27 +32,23 @@ pub fn body() -> web_sys::HtmlElement {
 //         .expect("document should have a body")
 // }
 
-
-
-
-
-
-
-
-
-pub fn eventlistener_new_p_mousedown()
-{
-    let window = web_sys::window().expect("global window does not exists");    
+pub fn eventlistener_new_p_mousedown() {
+    let window = web_sys::window().expect("global window does not exists");
     let document = window.document().expect("expecting a document on window");
-    let body = document.body().expect("document expect to have have a body");
+    let body = document
+        .body()
+        .expect("document expect to have have a body");
 
-    let paragraph = document.create_element("p").unwrap()
-    .dyn_into::<web_sys::HtmlParagraphElement>()
-    .map_err(|_| ())
-    .unwrap();
+    let paragraph = document
+        .create_element("p")
+        .unwrap()
+        .dyn_into::<web_sys::HtmlParagraphElement>()
+        .map_err(|_| ())
+        .unwrap();
     paragraph.set_align("center");
     paragraph.set_inner_html("<br />Click within this boundary to test the mousedown event. <br />Check the results in your web console.<br /><br />");
-    paragraph.style()
+    paragraph
+        .style()
         .set_property("border", "solid")
         .map_err(|_| ())
         .unwrap();
@@ -74,23 +58,26 @@ pub fn eventlistener_new_p_mousedown()
     });
     on_down.forget();
     body.append_child(&paragraph).unwrap();
-
 }
-pub fn eventlistener_new_p_mousemove()
-{
-    let window = web_sys::window().expect("global window does not exists");    
+pub fn eventlistener_new_p_mousemove() {
+    let window = web_sys::window().expect("global window does not exists");
     let document = window.document().expect("expecting a document on window");
-    let body = document.body().expect("document expect to have have a body");
+    let body = document
+        .body()
+        .expect("document expect to have have a body");
 
-    let paragraph = document.create_element("p").unwrap()
-    .dyn_into::<web_sys::HtmlParagraphElement>()
-    .map_err(|_| ())
-    .unwrap();
+    let paragraph = document
+        .create_element("p")
+        .unwrap()
+        .dyn_into::<web_sys::HtmlParagraphElement>()
+        .map_err(|_| ())
+        .unwrap();
 
     paragraph.set_align("center");
     paragraph.set_inner_html("<br />Move within this boundary to test the mousemove event. <br />Check the results in your web console.<br /><br />");
 
-    paragraph.style()
+    paragraph
+        .style()
         .set_property("border", "solid")
         .map_err(|_| ())
         .unwrap();
@@ -100,24 +87,27 @@ pub fn eventlistener_new_p_mousemove()
     });
     on_move.forget();
     body.append_child(&paragraph).unwrap();
-
 }
 
-pub fn eventlistener_new_p_mouseup()
-{
-    let window = web_sys::window().expect("global window does not exists");    
+pub fn eventlistener_new_p_mouseup() {
+    let window = web_sys::window().expect("global window does not exists");
     let document = window.document().expect("expecting a document on window");
-    let body = document.body().expect("document expect to have have a body");
+    let body = document
+        .body()
+        .expect("document expect to have have a body");
 
-    let paragraph = document.create_element("p").unwrap()
-    .dyn_into::<web_sys::HtmlParagraphElement>()
-    .map_err(|_| ())
-    .unwrap();
+    let paragraph = document
+        .create_element("p")
+        .unwrap()
+        .dyn_into::<web_sys::HtmlParagraphElement>()
+        .map_err(|_| ())
+        .unwrap();
 
     paragraph.set_align("center");
     paragraph.set_inner_html("<br />Move within this boundary to test the mouseup event. <br />Check the results in your web console.<br /><br />");
 
-    paragraph.style()
+    paragraph
+        .style()
         .set_property("border", "solid")
         .map_err(|_| ())
         .unwrap();
@@ -129,15 +119,10 @@ pub fn eventlistener_new_p_mouseup()
     body.append_child(&paragraph).unwrap();
 }
 
-
-
-
-
-
 pub fn set_panic_hook() {
-    // When the `console_error_panic_hook` feature is enabled, 
-    // we can call the `set_panic_hook` function at least 
-    // once during initialization, and then we will get 
+    // When the `console_error_panic_hook` feature is enabled,
+    // we can call the `set_panic_hook` function at least
+    // once during initialization, and then we will get
     // better error messages if our code ever panics.
     //
     // For more details see
@@ -146,15 +131,14 @@ pub fn set_panic_hook() {
     console_error_panic_hook::set_once();
 }
 
-
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
-extern {
+extern "C" {
     pub fn alert(s: &str);
 }
 
-pub fn add_button_to_menu <F> (
+pub fn add_button_to_menu<F>(
     text: &str,
     // callback: &mut Box<F() -> ()>,
     // callback: Fn() -> (),
@@ -163,19 +147,22 @@ pub fn add_button_to_menu <F> (
     callback: &'static mut Box<F>,
     // callback: FnMut (),
     // callback: fn(&mut Simulation),
-) 
-where F: FnMut () 
+) where
+    F: FnMut(),
 {
     let document = document();
     let section = document.get_element_by_id("button_menu-0").unwrap();
-	
-	let button = document.create_element("button").unwrap()
-		.dyn_into::<web_sys::HtmlButtonElement>().unwrap();
+
+    let button = document
+        .create_element("button")
+        .unwrap()
+        .dyn_into::<web_sys::HtmlButtonElement>()
+        .unwrap();
     // button.set_id("button");
-	button.set_text_content(Some(text));
-	
-	// let paragraph = document.create_element("p").unwrap()
-	// 	.dyn_into::<web_sys::HtmlParagraphElement>().unwrap();                    
+    button.set_text_content(Some(text));
+
+    // let paragraph = document.create_element("p").unwrap()
+    // 	.dyn_into::<web_sys::HtmlParagraphElement>().unwrap();
     // section.append_child(&paragraph).unwrap();
 
     // use js_sys::Function;
@@ -185,26 +172,23 @@ where F: FnMut ()
     // let optionn = Option::from(&f);
     // button.set_onclick(optionn);
 
-	let on_click = EventListener::new(
-        &button, "click", 
-        move |_event| {
-		    // web_sys::console::log_2(
-                // &"Hello World Gloo :%s".into(),
-				// &"WebAssemblyMan".into()
-            // );
-		    // paragraph.set_text_content(Some("Gloo: Hello World"));
-            // let a = (*callback);
-            callback();
-	    }
-    );
-	on_click.forget();     
-	section.append_child(&button).unwrap();
-}	
-
+    let on_click = EventListener::new(&button, "click", move |_event| {
+        // web_sys::console::log_2(
+        // &"Hello World Gloo :%s".into(),
+        // &"WebAssemblyMan".into()
+        // );
+        // paragraph.set_text_content(Some("Gloo: Hello World"));
+        // let a = (*callback);
+        callback();
+    });
+    on_click.forget();
+    section.append_child(&button).unwrap();
+}
 
 pub fn set_inner_html(id: &str, inner: &str) {
     let document = document();
-    document.get_element_by_id(id)
+    document
+        .get_element_by_id(id)
         .unwrap()
         .set_inner_html(inner);
 }

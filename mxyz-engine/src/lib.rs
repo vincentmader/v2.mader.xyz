@@ -1,4 +1,3 @@
-
 pub mod boundary;
 pub mod config;
 pub mod integrator;
@@ -7,26 +6,25 @@ pub mod partitioner;
 pub mod state;
 pub mod system;
 
-
 pub struct Engine {
-        sim_id:         String,
-    pub config:         config::EngineConfig,
-    pub states:         Vec<state::State>,
-    pub systems:        Vec<system::System>,
+    sim_id: String,
+    pub config: config::EngineConfig,
+    pub states: Vec<state::State>,
+    pub systems: Vec<system::System>,
 }
 
 impl Engine {
     // create new Engine struct instance
     pub fn new(sim_id: &str) -> Self {
-        Engine { 
-            sim_id:     String::from(sim_id),
-            config:     config::EngineConfig::new(sim_id),
-            states:     Vec::new(),
-            systems:    Vec::new(),
+        Engine {
+            sim_id: String::from(sim_id),
+            config: config::EngineConfig::new(sim_id),
+            states: Vec::new(),
+            systems: Vec::new(),
         }
     }
     // initialize state vector
-    pub fn init(&mut self) { 
+    pub fn init(&mut self) {
         self.states = Vec::from([state::State::new(&self.sim_id, &mut self.config)]);
     }
     // get state-vector for next time-step
@@ -39,7 +37,6 @@ impl Engine {
         }
         for mut family in next_state.obj_families.iter_mut() {
             integrator::object::step(&mut family, &self.states, &self.config);
-
         }
         for system in self.systems.iter_mut() {
             match system {
@@ -47,7 +44,7 @@ impl Engine {
                     use crate::integrator::field::variant::FieldIntegratorVariant;
 
                     // let state_vector    = &mut field.state_vector;
-                    let config          = &field.config;
+                    let config = &field.config;
 
                     // for i in match state_vector {
                     //     crate::system::StateVector::Bool(e) => {e},
@@ -60,21 +57,20 @@ impl Engine {
                         match integrator {
                             FieldIntegratorVariant::CellAuto => {
                                 // for interaction
-                            },
-                            FieldIntegratorVariant::FromObjects => {},
+                            }
+                            FieldIntegratorVariant::FromObjects => {}
                         }
                     }
-                }, crate::system::System::ObjectFamily(obj_fam) => {
+                }
+                crate::system::System::ObjectFamily(obj_fam) => {
                     use crate::integrator::object::variant::ObjIntegratorVariant;
 
                     // let state_vector    = &mut obj_fam.state_vector;
-                    let config          = &obj_fam.config;
+                    let config = &obj_fam.config;
 
                     for integrator in &config.integrators {
                         match integrator {
-                            ObjIntegratorVariant::EulerExplicit => {
-
-                            },
+                            ObjIntegratorVariant::EulerExplicit => {}
                             // ObjIntegratorVariant::EulerImplicit => {},
                             // ObjIntegratorVariant::RungeKutta2   => {},
                             // ObjIntegratorVariant::RungeKutta4   => {},
@@ -82,7 +78,7 @@ impl Engine {
                             // ObjIntegratorVariant::Verlet        => {},
                         }
                     }
-                }, 
+                }
             }
         }
 
@@ -91,9 +87,8 @@ impl Engine {
         self.config.iter_idx += 1;
     }
     // reset Engine struct instance
-    pub fn reset(&mut self) { 
+    pub fn reset(&mut self) {
         self.init();
         self.config.iter_idx = 0;
     }
 }
-

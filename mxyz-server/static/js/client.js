@@ -19,6 +19,8 @@ console.log("TODO: move simulation stuff here?");
 //       simulation.handle_option_event(option.id);
 //     });
 //   }
+//
+//   Xu
 
 //   // event listeners for buttons
 //   var buttons = document.getElementsByTagName("button");
