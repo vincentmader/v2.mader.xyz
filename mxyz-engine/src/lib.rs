@@ -38,49 +38,49 @@ impl Engine {
         for mut family in next_state.obj_families.iter_mut() {
             integrator::object::step(&mut family, &self.states, &self.config);
         }
-        for system in self.systems.iter_mut() {
-            match system {
-                crate::system::System::Field(field) => {
-                    use crate::integrator::field::variant::FieldIntegratorVariant;
+        // for system in self.systems.iter_mut() {
+        //     match system {
+        //         crate::system::System::Field(field) => {
+        //             use crate::integrator::field::variant::FieldIntegratorVariant;
 
-                    // let state_vector    = &mut field.state_vector;
-                    let config = &field.config;
+        //             // let state_vector    = &mut field.state_vector;
+        //             let config = &field.config;
 
-                    // for i in match state_vector {
-                    //     crate::system::StateVector::Bool(e) => {e},
-                    //     crate::system::StateVector::Float(e) => {e},
-                    // } {}
+        //             // for i in match state_vector {
+        //             //     crate::system::StateVector::Bool(e) => {e},
+        //             //     crate::system::StateVector::Float(e) => {e},
+        //             // } {}
 
-                    // let old_state       = state_vector[0].clone();
+        //             // let old_state       = state_vector[0].clone();
 
-                    for integrator in &config.integrators {
-                        match integrator {
-                            FieldIntegratorVariant::CellAuto => {
-                                // for interaction
-                            }
-                            FieldIntegratorVariant::FromObjects => {}
-                        }
-                    }
-                }
-                crate::system::System::ObjectFamily(obj_fam) => {
-                    use crate::integrator::object::variant::ObjIntegratorVariant;
+        //             for integrator in &config.integrators {
+        //                 match integrator {
+        //                     FieldIntegratorVariant::CellAuto => {
+        //                         // for interaction
+        //                     }
+        //                     FieldIntegratorVariant::FromObjects => {}
+        //                 }
+        //             }
+        //         }
+        //         crate::system::System::ObjectFamily(obj_fam) => {
+        //             use crate::integrator::object::variant::ObjIntegratorVariant;
 
-                    // let state_vector    = &mut obj_fam.state_vector;
-                    let config = &obj_fam.config;
+        //             // let state_vector    = &mut obj_fam.state_vector;
+        //             let config = &obj_fam.config;
 
-                    for integrator in &config.integrators {
-                        match integrator {
-                            ObjIntegratorVariant::EulerExplicit => {}
-                            // ObjIntegratorVariant::EulerImplicit => {},
-                            // ObjIntegratorVariant::RungeKutta2   => {},
-                            // ObjIntegratorVariant::RungeKutta4   => {},
-                            // ObjIntegratorVariant::LeapFrog      => {},
-                            // ObjIntegratorVariant::Verlet        => {},
-                        }
-                    }
-                }
-            }
-        }
+        //             for integrator in &config.integrators {
+        //                 match integrator {
+        //                     ObjIntegratorVariant::EulerExplicit => {}
+        //                     // ObjIntegratorVariant::EulerImplicit => {},
+        //                     // ObjIntegratorVariant::RungeKutta2   => {},
+        //                     // ObjIntegratorVariant::RungeKutta4   => {},
+        //                     // ObjIntegratorVariant::LeapFrog      => {},
+        //                     // ObjIntegratorVariant::Verlet        => {},
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
         // update state-vector & increment iteration-index
         self.states.push(next_state);
