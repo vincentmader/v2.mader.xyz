@@ -25,6 +25,7 @@ pub fn routes(category: &str, sim_id: &str) -> Template {
         "3body-fig8" => "3body orbits - figure-8",
         "3body-broucke" => "3body orbits - Broucke orbit",
         "charge-interaction" => "Coulomb interaction of charged particles",
+        "electric-fields" => "Electric Field",
         "ising-model" => "Ising model",
         "diffusion" => "fluid diffusion",
         "lennard-jones" => "Lennard-Jones interaction",

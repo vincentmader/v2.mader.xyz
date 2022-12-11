@@ -1,19 +1,14 @@
-
-#[macro_use] extern crate rocket;
-use rocket::fs::{ FileServer, relative };
+#[macro_use]
+extern crate rocket;
+use rocket::fs::{relative, FileServer};
 use rocket_dyn_templates::Template;
 
 mod views;
 
-
 #[rocket::main]
 pub async fn main() -> Result<(), rocket::Error> {
-
-    let file_server = FileServer::from(relative!("static"));
-    let routes = routes![
-        views::index::route,
-        views::routes,
-    ];
+    let file_server = FileServer::from(relative!("../mxyz-server/static"));
+    let routes = routes![views::index::route, views::routes,];
 
     rocket::build()
         .mount("/static", file_server)
@@ -22,7 +17,6 @@ pub async fn main() -> Result<(), rocket::Error> {
         .launch()
         .await
 }
-
 
 // use rocket::{Rocket, Build};
 
@@ -43,8 +37,6 @@ pub async fn main() -> Result<(), rocket::Error> {
 //         // .await
 // }
 
-
-
 // #[launch]
 // pub fn rocket() -> _ {  // TODO: async
 
@@ -60,4 +52,3 @@ pub async fn main() -> Result<(), rocket::Error> {
 //         .attach(Template::fairing()
 //     )
 // }
-
