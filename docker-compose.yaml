@@ -1,0 +1,20 @@
+version: "3.3"
+
+services:
+  my-server:
+    build:
+      context: ./website
+    restart: always
+    environment:
+      VIRTUAL_HOST: v4.mader.lo
+      # LETSENCRYPT_HOST: mader.xyz, www.mader.xyz, vincentmader.com, www.vincentmader.com
+      # LETSENCRYPT_EMAIL: vincent.mader@icloud.com
+    ports:
+      - 5010:8000
+    networks:
+      - reverse-proxy
+
+networks:
+  reverse-proxy:
+    external: true
+    name: proxy_my_awesome_proxy_network # same name as in `./proxy/docker-compose.yml` + prefix (see "docker network ls")

@@ -1,7 +1,4 @@
-run:
-	./bin/run
-build:
-	./bin/build
-setup:
-	./bin/setup
-
+start:
+	docker-compose up -d --build
+stop:
+	docker-compose stop

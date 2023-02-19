@@ -1,0 +1,110 @@
+body {
+    --main-bg-color: #111111;
+    --main-section-color: #222222;
+    --main-border-color: #555555;
+    --main-text-color: #dddddd;
+    --main-font-family: Arial, Helvetica, sans-serif;
+    --main-border: 2px solid var(--main-border-color);
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    overflow-x: hidden;
+    font-family: var(--main-font-family);
+    background-color: var(--main-bg-color);
+    color: var(--main-text-color);
+}
+
+/* HEADER ====================================== */
+
+#header {
+    width: calc(100% - 14px);
+    text-align: right;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    margin-bottom: 13px;
+}
+
+#header_home {
+    cursor: pointer;
+    background-color: black;
+    color: var(--main-text-color);
+    font-size: 18px;
+    font-weight: 690;
+    text-decoration: none;
+    outline: none;
+}
+
+/* CONTENT ====================================== */
+
+#content {
+    width: 60%;
+    padding-left: 20%;
+    padding-right: 20%;
+}
+
+@media only screen and (max-width: 1201px) {
+    #content {
+        width: 90%;
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+}
+
+@media only screen and (max-width: 751px) {
+    #content {
+        width: 96%;
+        padding-left: 2%;
+        padding-right: 2%;
+    }
+}
+
+/* SECTION ====================================== */
+
+.section {
+    background-color: var(--main-section-color);
+    border-radius: 20px;
+    /* if changed: also change for navgrid_section? */
+    border: var(--main-border);
+    margin-bottom: 25px;
+    text-align: center;
+    padding: 10px;
+}
+
+.section_title {
+    width: 100%;
+    text-align: center;
+    font-weight: 690;
+    margin-bottom: 8px;
+    height: 1em;
+    /* needed for smooth reload  (semi, text "blinks") */
+}
+
+/* CANVAS ====================================== */
+
+.canvas_holder {
+    /* border: var(--main-border) */
+    border-radius: 20px;
+    /* width: 94%; */
+    /* margin-top: 3%; */
+    margin-bottom: 3%;
+    /* margin-left: 3%; */
+    /* margin-right: 3%; */
+}
+
+canvas {
+    border: var(--main-border);
+    background-color: black;
+    border-radius: 20px;
+    /* if changed: also change for section/navgrid_section? */
+    /* overflow: hidden; */
+    width: 100%;
+
+    box-shadow: inset 0px 0px 0px 0px black;
+    box-sizing: border-box;
+}
+
+/* OTHER ====================================== */
+
+.slider {
+    outline: none;
+}
