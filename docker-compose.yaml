@@ -11,8 +11,6 @@ services:
       LETSENCRYPT_EMAIL: vincent.mader@icloud.com
     ports:
       - 8001:8000
-    volumes: 
-      - database:/var/www/sono-server/database
     networks:
       - reverse-proxy
 
