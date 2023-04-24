@@ -1,20 +1,27 @@
-version: "3.3"
-
 services:
   my-server:
     build:
       context: ./website
     restart: always
     environment:
-      VIRTUAL_HOST: v4.mader.lo
-      # LETSENCRYPT_HOST: mader.xyz, www.mader.xyz, vincentmader.com, www.vincentmader.com
-      # LETSENCRYPT_EMAIL: vincent.mader@icloud.com
+      VIRTUAL_HOST: v4.mader.xyz, v4.mader.lo
+      LETSENCRYPT_HOST: v4.mader.xyz
+      LETSENCRYPT_EMAIL: vincent.mader@icloud.com
     ports:
-      - 5010:8000
+      - 8001:8000
+    volumes: 
+      - database:/var/www/sono-server/database
     networks:
       - reverse-proxy
+
+volumes:
+  database:
+    external: false
 
 networks:
   reverse-proxy:
     external: true
-    name: proxy_my_awesome_proxy_network # same name as in `./proxy/docker-compose.yml` + prefix (see "docker network ls")
+    name: proxy_mxyz_proxy_network 
+    # ^ This has to be the same name as specified in `./proxy/docker-compose.yml`.
+    #   Additionally, it it prefixed by the proxy directory name (see "docker network ls").
+
