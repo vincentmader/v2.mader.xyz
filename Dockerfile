@@ -20,6 +20,7 @@ RUN cargo build --release;\
     rm ./src/*.rs;\
     rm ./target/release/deps/src*
 
+ENV RUSTFLAGS="-C target-feature=-crt-static"
 COPY ./rust-toolchain.toml ./rust-toolchain.toml
 
 # Compile server.
