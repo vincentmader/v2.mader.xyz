@@ -8,7 +8,7 @@ mod views;
 
 #[rocket::main]
 pub async fn main() -> Result<Rocket<Ignite>, rocket::Error> {
-    let file_server = FileServer::from(relative!("../mxyz-server/static"));
+    let file_server = FileServer::from(relative!("static"));
     let routes = routes![views::index::route, views::routes,];
 
     rocket::build()

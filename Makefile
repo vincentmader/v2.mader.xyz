@@ -1,6 +1,8 @@
 up:
 	docker-compose up -d --build
 down:
-	docker-compose stop
+	docker-compose down
 logs:
 	docker-compose logs -f -t
+rocket:
+	./entrypoint.sh
