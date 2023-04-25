@@ -1,20 +1,32 @@
-FROM alpine:3.14
+FROM rust:1.67-alpine
 
-RUN apk add curl gcc make musl-dev ca-certificates
+# Install dependencies.
+RUN apk add musl-dev
+RUN apk add sqlite
 
-# Install Nightly Rust Toolchain
-RUN curl --proto '=https' \
-         --tlsv1.2 -sSf https://sh.rustup.rs | \
-         sh -s -- --default-toolchain nightly -y
-ENV PATH=$PATH:/root/.cargo/bin
-
-# Install wasm-bindgen-cli & Add WASM32 Rust Target
-RUN source /root/.cargo/env; \
-    cargo install -f wasm-bindgen-cli; \
-    rustup target add wasm32-unknown-unknown; 
-
-ENV ROCKET_ADDRESS=0.0.0.0
+# Define server details.
 EXPOSE 8000
-COPY ./ ./
+ENV ROCKET_ADDRESS=0.0.0.0
 
+# Setup working directory & initialize binary crate.
+WORKDIR /var/www/
+RUN USER=root cargo new --bin src
+WORKDIR /var/www/src
+
+# Pre-compile dependencies.
+COPY ./src/Cargo.lock ./src/Cargo.lock
+COPY ./src/Cargo.toml ./src/Cargo.toml
+RUN cargo build --release;\
+    rm ./src/*.rs;\
+    rm ./target/release/deps/src*
+
+# ENV RUSTFLAGS="-C target-feature=-crt-static"
+COPY ./rust-toolchain.toml ./rust-toolchain.toml
+
+# Compile server.
+COPY ./src ./src
+RUN cd src && cargo build --release
+
+# Start server.
+COPY ./entrypoint.sh ./entrypoint.sh
 ENTRYPOINT ./entrypoint.sh
