@@ -1,3 +1,3 @@
 #!/bin/sh
 
-cargo run --release
+cd src && cargo run --release
