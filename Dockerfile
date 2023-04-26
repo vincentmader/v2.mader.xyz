@@ -7,6 +7,7 @@ RUN apk add pkgconfig  # TODO Move `apk add` & `cargo install` to top.
 RUN apk add openssl 
 RUN apk add openssl-dev
 RUN cargo install -f wasm-bindgen-cli
+# RUN rustup update && rustup install nightly && rustup default nightly && rustup target add wasm32-unknown-unknown --toolchain nightly
 
 # VOLUME /var/www/src/src/mxyz-server/static/pkg
 
