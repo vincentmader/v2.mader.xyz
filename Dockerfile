@@ -27,6 +27,9 @@ COPY ./rust-toolchain.toml ./rust-toolchain.toml
 # Compile server.
 COPY ./src ./src
 RUN cd src && cargo build --release
+
+# Compile client.
+RUN cargo install -f wasm-bindgen-cli
 COPY ./bin/build_client ./bin/build_client
 RUN cd bin && ./build_client --release
 
