@@ -3,6 +3,12 @@ FROM rust:1.67-alpine
 # Install dependencies.
 RUN apk add musl-dev
 RUN apk add sqlite
+RUN apk add pkgconfig  # TODO Move `apk add` & `cargo install` to top.
+RUN apk add openssl 
+RUN apk add openssl-dev
+RUN cargo install -f wasm-bindgen-cli
+
+# VOLUME /var/www/src/src/mxyz-server/static/pkg
 
 # Define server details.
 EXPOSE 8000
@@ -29,10 +35,6 @@ COPY ./src ./src
 RUN cd src && cargo build --release
 
 # Compile client.
-RUN apk add pkgconfig  # TODO Move `apk add` & `cargo install` to top.
-RUN apk add openssl 
-RUN apk add openssl-dev
-RUN cargo install -f wasm-bindgen-cli
 COPY ./bin/build_client ./bin/build_client
 RUN cd bin && ./build_client --release
 
