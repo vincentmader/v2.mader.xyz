@@ -18,7 +18,7 @@
 # build client (to web-assembly)
 # -----------------------------------------------------------------------------
 
-    cd "$PATH_TO_PROJECT/mxyz-client"
+    cd "$PATH_TO_PROJECT/src/mxyz-client"
     if [ "$1" = "--release" ]; then
         cargo build --target wasm32-unknown-unknown --release
     else
@@ -29,7 +29,6 @@
 # create js-executable from wasm
 # -----------------------------------------------------------------------------
 
-    PATH_TO_OUT_PKG="$PATH_TO_PROJECT/mxyz-server/static/pkg"
-    PATH_TO_WASM="$PATH_TO_PROJECT/target/wasm32-unknown-unknown/debug/mxyz_client.wasm"
+    PATH_TO_OUT_PKG="$PATH_TO_PROJECT/src/mxyz-server/static/pkg"
+    PATH_TO_WASM="$PATH_TO_PROJECT/src/target/wasm32-unknown-unknown/debug/mxyz_client.wasm"
     wasm-bindgen --target web --out-dir "$PATH_TO_OUT_PKG" "$PATH_TO_WASM"
-
