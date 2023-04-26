@@ -13,6 +13,8 @@ services:
       - 8001:8000
     networks:
       - reverse-proxy
+    volumes:
+      - ./src/mxyz-server/static/pkg:/var/www/src/src/mxyz-server/static/pkg
 
 volumes:
   database:
