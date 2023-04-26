@@ -9,8 +9,6 @@ RUN apk add openssl-dev
 RUN cargo install -f wasm-bindgen-cli
 # RUN rustup update && rustup install nightly && rustup default nightly && rustup target add wasm32-unknown-unknown --toolchain nightly
 
-# VOLUME /var/www/src/src/mxyz-server/static/pkg
-
 # Define server details.
 EXPOSE 8000
 ENV ROCKET_ADDRESS=0.0.0.0
@@ -19,6 +17,8 @@ ENV ROCKET_ADDRESS=0.0.0.0
 WORKDIR /var/www/
 RUN USER=root cargo new --bin src
 WORKDIR /var/www/src
+
+VOLUME /var/www/src/src/target
 
 # Pre-compile dependencies.
 COPY ./src/Cargo.lock ./src/Cargo.lock
