@@ -29,7 +29,9 @@ COPY ./src ./src
 RUN cd src && cargo build --release
 
 # Compile client.
-RUN cargo install -f wasm-bindgen-cli
+RUN apk add pkgconfig; # TODO Move `apk add` & `cargo install` to top.
+    apk add openssl;
+    cargo install -f wasm-bindgen-cli
 COPY ./bin/build_client ./bin/build_client
 RUN cd bin && ./build_client --release
 
