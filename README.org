@@ -1,1 +1,16 @@
 * mader.xyz
+
+*** What is this?
+This is a 
+- rocket.rs based
+- high-speed,
+- high-security,
+- Docker virtualized,
+- asynchronously executed,
+- HTTPS
+web-server written in Rust running at near-native speeds implementing a
+- (in principle) highly generalized,
+- high-performance,
+- (soon) multi-threaded, and
+- cross-platform
+computational physics simulation engine.
