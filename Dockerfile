@@ -31,6 +31,7 @@ RUN cd src && cargo build --release
 # Compile client.
 RUN apk add pkgconfig  # TODO Move `apk add` & `cargo install` to top.
 RUN apk add openssl 
+RUN apk add openssl-dev
 RUN cargo install -f wasm-bindgen-cli
 COPY ./bin/build_client ./bin/build_client
 RUN cd bin && ./build_client --release
