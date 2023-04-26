@@ -20,6 +20,7 @@ RUN cargo build --release;\
     rm ./src/*.rs;\
     rm ./target/release/deps/src*
 
+# Configure Rust runtime.
 ENV RUSTFLAGS="-C target-feature=-crt-static"
 COPY ./rust-toolchain.toml ./rust-toolchain.toml
 
