@@ -31,4 +31,5 @@
 
     PATH_TO_OUT_PKG="$PATH_TO_PROJECT/src/mxyz-server/static/pkg"
     PATH_TO_WASM="$PATH_TO_PROJECT/src/target/wasm32-unknown-unknown/debug/mxyz_client.wasm"
+    mkdir -p "$PATH_TO_OUT_PKG"
     wasm-bindgen --target web --out-dir "$PATH_TO_OUT_PKG" "$PATH_TO_WASM"
