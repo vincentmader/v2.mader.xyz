@@ -6,7 +6,7 @@ RUN apk add sqlite
 RUN apk add pkgconfig  # TODO Move `apk add` & `cargo install` to top.
 RUN apk add openssl 
 RUN apk add openssl-dev
-RUN cargo install -f wasm-bindgen-cli
+RUN cargo install -f wasm-bindgen-cli --version 0.2.80
 # RUN rustup update && rustup install nightly && rustup default nightly && rustup target add wasm32-unknown-unknown --toolchain nightly
 
 # Define server details.
@@ -18,7 +18,8 @@ WORKDIR /var/www/
 RUN USER=root cargo new --bin src
 WORKDIR /var/www/src
 
-VOLUME /var/www/src/src/target
+VOLUME /var/www/src/src/target  
+# ^ TODO volume even needed?
 
 # Pre-compile dependencies.
 COPY ./src/Cargo.lock ./src/Cargo.lock
