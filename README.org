@@ -1,7 +1,7 @@
 * mader.xyz
 
-*** What is this?
-This is a 
+*** What is the goal here?
+We want to implement a
 - rocket.rs based
 - high-speed,
 - high-security,
